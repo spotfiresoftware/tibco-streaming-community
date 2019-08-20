@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_f41909f95b1384a8a5d4750e8bd46264a1087f49">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.amsclient.publish-model-to-ams"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <named-schemas>
+            <schema name="AMSClientInputSchema">
+                <field name="command" type="string"/>
+                <field name="projectName" type="string"/>
+                <field name="artifactPath" type="string"/>
+                <field name="version" type="long"/>
+                <field name="type" type="string"/>
+                <field name="description" type="string"/>
+                <field name="content" type="string"/>
+                <field name="binaryContent" type="blob"/>
+                <field name="encoding" type="string"/>
+                <field name="metadata" type="string"/>
+                <field name="artifactPaths" type="list">
+                    <element-type type="string"/>
+                </field>
+                <field name="message" type="string"/>
+            </schema>
+        </named-schemas>
+        <parameter-definitions>
+            <parameter default="&quot;test&quot;" name="AMS_PROJECT_NAME"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="InputStream" schema="AMSClientInputSchema"/>
+        <box name="MonitorFiles" type="inputadapter">
+            <output port="1" stream="out:MonitorFiles_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.filemonitor.FileMonitor"/>
+            <param name="enableControlPort" value="false"/>
+            <param name="enableStatusPort" value="false"/>
+            <param name="ignoreDuplicateUpdates" value="false"/>
+            <param name="ignoreDuplicateUpdatesMilliseconds" value="5000"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="notifyOnCreateFieldName" value="NotifyOnCreate"/>
+            <param name="notifyOnDeleteFieldName" value="NotifyOnDelete"/>
+            <param name="notifyOnModifiedFieldName" value="NotifyOnModified"/>
+            <param name="outputFileNamesOnMonitor" value="true"/>
+            <param name="outputFileNamesOnMonitorFieldName" value=""/>
+            <param name="pathFieldName" value="Path"/>
+            <param name="watchCreate" value="true"/>
+            <param name="watchDelete" value="false"/>
+            <param name="watchModified" value="true"/>
+            <param name="watchPath" value="."/>
+            <param name="watchSubDirectories" value="true"/>
+            <param name="watchSubDirectoriesFieldName" value="WatchSubDirectories"/>
+        </box>
+        <box name="FilterRDataFiles" type="filter">
+            <input port="1" stream="out:MonitorFiles_1"/>
+            <output port="1" stream="out:FilterRDataFiles_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="endswith(Path, '.RData')"/>
+        </box>
+        <box name="ReadDataFile" type="inputadapter">
+            <input port="1" stream="out:FilterRDataFiles_1"/>
+            <output port="1" stream="out:ReadDataFile_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.filereader.FileReader"/>
+            <param name="Charset" value=""/>
+            <param name="UseDefaultCharset" value="true"/>
+            <param name="blobData" value="true"/>
+            <param name="defaultFileName" value=""/>
+            <param name="enableControlPort" value="true"/>
+            <param name="enableStatusPort" value="false"/>
+            <param name="extractCompressedBlobData" value="true"/>
+            <param name="fileContentsFieldName" value="binaryContent"/>
+            <param name="filenameField" value="Path"/>
+            <param name="lineSeparator" value=""/>
+            <param name="logLevel" value="INFO"/>
+            <param name="oneTuplePerLine" value="false"/>
+            <param name="passThroughFields" value="true"/>
+            <param name="preserveNewLines" value="false"/>
+            <param name="readDefaultFileAtStartup" value="false"/>
+            <param name="readFilesSynchronously" value="true"/>
+            <param name="replacementDataFieldName" value=""/>
+        </box>
+        <box name="PrepareCommand" type="map">
+            <input port="1" stream="out:ReadDataFile_1"/>
+            <output port="1" stream="out:PrepareCommand_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"AddOrUpdateArtifact"</include>
+                    <include field="projectName">${AMS_PROJECT_NAME}</include>
+                    <include field="artifactPath">regexreplace(Path, ".*/([^/]+)", "$1")</include>
+                    <include field="binaryContent">binaryContent</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="InputStream"/>
+            <input port="2" stream="out:PrepareCommand_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="PublishToAMS" type="java">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="PublishOut"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.sb.compexch.amsclient.AMSClient"/>
+            <param name="amsServerHostName" value="localhost"/>
+            <param name="amsServerPassword" value="admin"/>
+            <param name="amsServerPortNumber" value="2185"/>
+            <param name="amsServerSecureChannel" value="false"/>
+            <param name="amsServerUsername" value="admin"/>
+            <param name="autoCommit" value="true"/>
+            <param name="autoCommitMessage" value="Auto-commit message"/>
+            <param name="logInAtStartup" value="true"/>
+        </box>
+        <output-stream name="PublishOut"/>
+        <gui.note name="Note">
+            <property name="description" value="Read the content of the file that was added or updated."/>
+            <note-target name="ReadDataFile"/>
+        </gui.note>
+        <gui.note name="Note2">
+            <property name="description" value="Publish artifact changes to the TIBCO Artifact Management Server"/>
+            <note-target name="PublishToAMS"/>
+        </gui.note>
+        <gui.note name="Note3">
+            <property name="description" value="Emit notification tuples when files are added or updated in the directory being monitored."/>
+            <note-target name="MonitorFiles"/>
+        </gui.note>
+    </add>
+</modify>

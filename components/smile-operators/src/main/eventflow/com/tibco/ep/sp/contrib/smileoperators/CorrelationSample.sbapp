@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.smileoperators.CorrelationSample"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <named-schemas>
+            <schema name="sensorCorr">
+                <field name="name" type="string"/>
+                <field name="value" type="double"/>
+            </schema>
+        </named-schemas>
+        <dynamic-variables/>
+        <stream name="DataTuple">
+            <schema>
+                <field name="Outcome" type="double"/>
+                <field name="data" type="tuple">
+                    <schema>
+                        <field name="SNSR1_C1" type="double"/>
+                        <field name="SNSR1_C2" type="double"/>
+                        <field name="SNSR1_C3" type="double"/>
+                        <field name="SNSR1_C4" type="double"/>
+                        <field name="SNSR1_C5" type="double"/>
+                        <field name="SNSR1_C6" type="double"/>
+                        <field name="SNSR1_C7" type="double"/>
+                        <field name="SNSR1_C8" type="double"/>
+                        <field name="SNSR1_C9" type="double"/>
+                        <field name="SNSR1_C10" type="double"/>
+                        <field name="SNSR1_C11" type="double"/>
+                        <field name="SNSR1_C12" type="double"/>
+                        <field name="SNSR1_C13" type="double"/>
+                        <field name="SNSR1_C14" type="double"/>
+                        <field name="SNSR1_C15" type="double"/>
+                        <field name="SNSR2_C1" type="double"/>
+                        <field name="SNSR2_C2" type="double"/>
+                        <field name="SNSR2_C3" type="double"/>
+                        <field name="SNSR2_C4" type="double"/>
+                        <field name="SNSR2_C5" type="double"/>
+                        <field name="SNSR2_C6" type="double"/>
+                        <field name="SNSR2_C7" type="double"/>
+                        <field name="SNSR2_C8" type="double"/>
+                        <field name="SNSR2_C9" type="double"/>
+                        <field name="SNSR2_C10" type="double"/>
+                        <field name="SNSR2_C11" type="double"/>
+                        <field name="SNSR2_C12" type="double"/>
+                        <field name="SNSR2_C13" type="double"/>
+                        <field name="SNSR2_C14" type="double"/>
+                        <field name="SNSR2_C15" type="double"/>
+                        <field name="SNSR3_C1" type="double"/>
+                        <field name="SNSR3_C2" type="double"/>
+                        <field name="SNSR3_C3" type="double"/>
+                        <field name="SNSR3_C4" type="double"/>
+                        <field name="SNSR3_C5" type="double"/>
+                        <field name="SNSR3_C6" type="double"/>
+                        <field name="SNSR3_C7" type="double"/>
+                        <field name="SNSR3_C8" type="double"/>
+                        <field name="SNSR3_C9" type="double"/>
+                        <field name="SNSR3_C10" type="double"/>
+                        <field name="SNSR3_C11" type="double"/>
+                        <field name="SNSR3_C12" type="double"/>
+                        <field name="SNSR3_C13" type="double"/>
+                        <field name="SNSR3_C14" type="double"/>
+                        <field name="SNSR3_C15" type="double"/>
+                        <field name="SNSR4_C1" type="double"/>
+                        <field name="SNSR4_C2" type="double"/>
+                        <field name="SNSR4_C3" type="double"/>
+                        <field name="SNSR4_C4" type="double"/>
+                        <field name="SNSR4_C5" type="double"/>
+                        <field name="SNSR4_C6" type="double"/>
+                        <field name="SNSR4_C7" type="double"/>
+                        <field name="SNSR4_C8" type="double"/>
+                        <field name="SNSR4_C9" type="double"/>
+                        <field name="SNSR4_C10" type="double"/>
+                        <field name="SNSR4_C11" type="double"/>
+                        <field name="SNSR4_C12" type="double"/>
+                        <field name="SNSR4_C13" type="double"/>
+                        <field name="SNSR4_C14" type="double"/>
+                        <field name="SNSR4_C15" type="double"/>
+                        <field name="SNSR5_C1" type="double"/>
+                        <field name="SNSR5_C2" type="double"/>
+                        <field name="SNSR5_C3" type="double"/>
+                        <field name="SNSR5_C4" type="double"/>
+                        <field name="SNSR5_C5" type="double"/>
+                        <field name="SNSR5_C6" type="double"/>
+                        <field name="SNSR5_C7" type="double"/>
+                        <field name="SNSR5_C8" type="double"/>
+                        <field name="SNSR5_C9" type="double"/>
+                        <field name="SNSR5_C10" type="double"/>
+                        <field name="SNSR5_C11" type="double"/>
+                        <field name="SNSR5_C12" type="double"/>
+                        <field name="SNSR5_C13" type="double"/>
+                        <field name="SNSR5_C14" type="double"/>
+                        <field name="SNSR5_C15" type="double"/>
+                        <field name="SNSR6_C1" type="double"/>
+                        <field name="SNSR6_C2" type="double"/>
+                        <field name="SNSR6_C3" type="double"/>
+                        <field name="SNSR6_C4" type="double"/>
+                        <field name="SNSR6_C5" type="double"/>
+                        <field name="SNSR6_C6" type="double"/>
+                        <field name="SNSR6_C7" type="double"/>
+                        <field name="SNSR6_C8" type="double"/>
+                        <field name="SNSR6_C9" type="double"/>
+                        <field name="SNSR6_C10" type="double"/>
+                        <field name="SNSR6_C11" type="double"/>
+                        <field name="SNSR6_C12" type="double"/>
+                        <field name="SNSR6_C13" type="double"/>
+                        <field name="SNSR6_C14" type="double"/>
+                        <field name="SNSR6_C15" type="double"/>
+                    </schema>
+                </field>
+            </schema>
+        </stream>
+        <box name="CorrCalc" type="java">
+            <input port="1" stream="DataTuple"/>
+            <output port="1" stream="AllOutTuple"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Cramer's V"/>
+            <param name="correlationField" value="Outcome"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="Tuple"/>
+            <param name="frequency" value="10"/>
+            <param name="nullValue" value="0.0"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value=".75"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="data"/>
+            <param name="windowSize" value="100"/>
+        </box>
+        <output-stream name="AllOutTuple"/>
+        <box name="RemoveNaN" type="map">
+            <input port="1" stream="AllOutTuple"/>
+            <output port="1" stream="out:RemoveNaN_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="correlations">filterlist(correlations, function notNan(pair sensorCorr) {notnan(pair.value)})</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterHigh" type="iterate">
+            <input port="1" stream="out:RemoveNaN_1"/>
+            <output port="1" stream="HighCorrelation"/>
+            <param name="iterate-expr" value="correlations"/>
+            <param name="iterate-where" value="each.element.value &gt;= 0.75"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="name">each.element.name</include>
+                    <include field="value">each.element.value</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterMed" type="iterate">
+            <input port="1" stream="out:RemoveNaN_1"/>
+            <output port="1" stream="MediumCorrelation"/>
+            <param name="iterate-expr" value="correlations"/>
+            <param name="iterate-where" value="each.element.value &gt;= 0.45 and each.element.value &lt; 0.75"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="element.name">each.element.name</include>
+                    <include field="value">each.element.value</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="HighCorrelation"/>
+        <output-stream name="MediumCorrelation"/>
+    </add>
+</modify>

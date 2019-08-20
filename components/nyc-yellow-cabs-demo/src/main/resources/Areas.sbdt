@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Table:Table xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Table="http:///com/tibco/cep/decision/table/model/DecisionTable.ecore" name="Areas.sbdt" folder="src/main/resources">
+  <md>
+    <prop name="Priority" value="5"/>
+  </md>
+  <decisionTable>
+    <rule id="9">
+      <cond id="9_0" colId="0" expr=">= 40.700028 &amp;&amp; &lt; 40.72241475"/>
+      <cond id="9_1" colId="1" expr="&lt; -71.7"/>
+      <act id="9_2" colId="2" expr="Area 1"/>
+    </rule>
+    <rule id="10">
+      <cond id="10_0" colId="0" expr=">= 40.72241475 &amp;&amp; &lt; 40.7448015"/>
+      <cond id="10_1" colId="1" expr="&lt; -71.7"/>
+      <act id="10_2" colId="2" expr="Area 2"/>
+    </rule>
+    <rule id="11">
+      <cond id="11_0" colId="0" expr=">= 40.7448015 &amp;&amp; &lt; 40.76718825"/>
+      <cond id="11_1" colId="1" expr="&lt; -71.7"/>
+      <act id="11_2" colId="2" expr="Area 3"/>
+    </rule>
+    <rule id="12">
+      <cond id="12_0" colId="0" expr=">= 40.76718825 &amp;&amp; &lt; 40.789575"/>
+      <cond id="12_1" colId="1" expr="&lt; -71.7"/>
+      <act id="12_2" colId="2" expr="Area 4"/>
+    </rule>
+    <rule id="13">
+      <cond id="13_0" colId="0" expr=">= 40.789575 &amp;&amp; &lt; 40.81196175"/>
+      <cond id="13_1" colId="1" expr="&lt; -71.7"/>
+      <act id="13_2" colId="2" expr="Area 5"/>
+    </rule>
+    <rule id="14">
+      <cond id="14_0" colId="0" expr=">= 40.81196175 &amp;&amp; &lt; 40.8343485"/>
+      <cond id="14_1" colId="1" expr="&lt; -71.7"/>
+      <act id="14_2" colId="2" expr="Area 6"/>
+    </rule>
+    <rule id="15">
+      <cond id="15_0" colId="0" expr=">= 40.8343485 &amp;&amp; &lt; 40.85673525"/>
+      <cond id="15_1" colId="1" expr="&lt; -71.7"/>
+      <act id="15_2" colId="2" expr="Area 7"/>
+    </rule>
+    <rule id="16">
+      <cond id="16_0" colId="0" expr=">= 40.85673525 &amp;&amp; &lt; 40.879122"/>
+      <cond id="16_1" colId="1" expr="&lt; -71.7"/>
+      <act id="16_2" colId="2" expr="Area 8"/>
+    </rule>
+    <columns>
+      <column id="0" name="Latitude" propertyPath="Latitude" propertyType="3" columnType="CONDITION"/>
+      <column id="1" name="Longitude" propertyPath="Longitude" propertyType="3" columnType="CONDITION"/>
+      <column id="2" name="Report" propertyPath="Report" columnType="ACTION"/>
+    </columns>
+  </decisionTable>
+</Table:Table>

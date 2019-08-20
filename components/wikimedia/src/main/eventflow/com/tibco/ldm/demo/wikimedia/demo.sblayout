@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="WikiEditsRecorded">
+        <param name="gui:x" value="-483"/>
+        <param name="gui:y" value="231"/>
+    </component>
+    <component name="IPLocate">
+        <param name="gui:x" value="-167"/>
+        <param name="gui:y" value="183"/>
+        <param name="gui:bends:1" value="-190,251;-182,213"/>
+    </component>
+    <component name="DesktopMapsSupport">
+        <param name="gui:x" value="200"/>
+        <param name="gui:y" value="330"/>
+        <param name="gui:bends:1" value="134,271;156,360"/>
+    </component>
+    <component name="AddCurrentTime">
+        <param name="gui:x" value="-364"/>
+        <param name="gui:y" value="231"/>
+    </component>
+    <component name="IsIP">
+        <param name="gui:x" value="-264"/>
+        <param name="gui:y" value="231"/>
+    </component>
+    <component name="PublishEdits">
+        <param name="gui:x" value="200"/>
+        <param name="gui:y" value="216"/>
+        <param name="gui:bends:1" value="157,261;159,246"/>
+    </component>
+    <component name="PublishStateData">
+        <param name="gui:x" value="334"/>
+        <param name="gui:y" value="330"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="43"/>
+        <param name="gui:y" value="231"/>
+    </component>
+    <component name="U">
+        <param name="gui:x" value="-37"/>
+        <param name="gui:y" value="231"/>
+        <param name="gui:bends:1" value="-78,213;-70,251"/>
+    </component>
+    <component name="WikiEditsLive">
+        <param name="gui:x" value="-485"/>
+        <param name="gui:y" value="132"/>
+        <param name="gui:width" value="64"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="WikiEditsLocated">
+        <param name="gui:x" value="200"/>
+        <param name="gui:y" value="102"/>
+        <param name="gui:bends:1" value="118,251;146,132"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-371"/>
+        <param name="gui:y" value="116"/>
+        <param name="gui:width" value="147"/>
+        <param name="gui:height" value="98"/>
+    </component>
+</application-layout>

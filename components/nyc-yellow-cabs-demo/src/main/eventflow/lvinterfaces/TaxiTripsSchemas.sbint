@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.0">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the TaxiTrips LiveView table."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.TaxiTripsSchemas"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <named-schemas>
+        <schema name="TaxiTripsDataInSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+            <field name="Trip_Key" type="string"/>
+            <field name="Type" type="string"/>
+            <field name="Time" type="timestamp"/>
+            <field name="TimeInterval" type="timestamp"/>
+            <field name="Longitude" type="double"/>
+            <field name="Latitude" type="double"/>
+            <field name="Num_Passengers" type="int"/>
+            <field name="Distance" type="double"/>
+            <field name="Total_Fare" type="double"/>
+            <field name="Tip" type="double"/>
+            <field name="Vendor_Id" type="int"/>
+            <field name="Rate_Code" type="int"/>
+            <field name="Flag" type="string"/>
+            <field name="Payment_Type" type="int"/>
+            <field name="Fare_Amount" type="double"/>
+            <field name="Extra" type="double"/>
+            <field name="Tax" type="double"/>
+            <field name="Tolls" type="double"/>
+        </schema>
+        <schema name="TaxiTripsDataOutSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field name="Trip_Key" type="string"/>
+            <field name="Type" type="string"/>
+            <field name="Time" type="timestamp"/>
+            <field name="TimeInterval" type="timestamp"/>
+            <field name="Longitude" type="double"/>
+            <field name="Latitude" type="double"/>
+            <field name="Num_Passengers" type="int"/>
+            <field name="Distance" type="double"/>
+            <field name="Total_Fare" type="double"/>
+            <field name="Tip" type="double"/>
+            <field name="Vendor_Id" type="int"/>
+            <field name="Rate_Code" type="int"/>
+            <field name="Flag" type="string"/>
+            <field name="Payment_Type" type="int"/>
+            <field name="Fare_Amount" type="double"/>
+            <field name="Extra" type="double"/>
+            <field name="Tax" type="double"/>
+            <field name="Tolls" type="double"/>
+        </schema>
+        <schema name="TaxiTripsTableSchema">
+            <field name="Trip_Key" type="string"/>
+            <field name="Type" type="string"/>
+            <field name="Time" type="timestamp"/>
+            <field name="TimeInterval" type="timestamp"/>
+            <field name="Longitude" type="double"/>
+            <field name="Latitude" type="double"/>
+            <field name="Num_Passengers" type="int"/>
+            <field name="Distance" type="double"/>
+            <field name="Total_Fare" type="double"/>
+            <field name="Tip" type="double"/>
+            <field name="Vendor_Id" type="int"/>
+            <field name="Rate_Code" type="int"/>
+            <field name="Flag" type="string"/>
+            <field name="Payment_Type" type="int"/>
+            <field name="Fare_Amount" type="double"/>
+            <field name="Extra" type="double"/>
+            <field name="Tax" type="double"/>
+            <field name="Tolls" type="double"/>
+        </schema>
+        <schema name="TaxiTripsInputControlFields">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+</application>

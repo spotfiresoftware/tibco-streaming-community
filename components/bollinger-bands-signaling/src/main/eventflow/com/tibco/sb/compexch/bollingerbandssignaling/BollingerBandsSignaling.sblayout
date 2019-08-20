@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataInput">
+        <param name="gui:x" value="85"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="PositionTable">
+        <param name="gui:x" value="658"/>
+        <param name="gui:y" value="419"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="AggregateSMA">
+        <param name="gui:x" value="171"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="BollingerBands">
+        <param name="gui:x" value="273"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="FormatOutput">
+        <param name="gui:x" value="1043"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="InvestmentDecision">
+        <param name="gui:x" value="477"/>
+        <param name="gui:y" value="208"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="LongPosition">
+        <param name="gui:x" value="668"/>
+        <param name="gui:y" value="309"/>
+        <param name="gui:bends:1" value="591,253;611,339"/>
+    </component>
+    <component name="ReadPosition">
+        <param name="gui:x" value="368"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="ShortPostion">
+        <param name="gui:x" value="668"/>
+        <param name="gui:y" value="214"/>
+    </component>
+    <component name="UnionOfPositions">
+        <param name="gui:x" value="830"/>
+        <param name="gui:y" value="208"/>
+        <param name="gui:height" value="65"/>
+        <param name="gui:bends:1" value="748,54;790,228"/>
+        <param name="gui:bends:2" value="772,149;792,236"/>
+        <param name="gui:bends:4" value="746,339;766,253"/>
+    </component>
+    <component name="UnwindLongPosition">
+        <param name="gui:x" value="668"/>
+        <param name="gui:y" value="24"/>
+        <param name="gui:bends:1" value="606,228;648,54"/>
+    </component>
+    <component name="UnwindShortPosition">
+        <param name="gui:x" value="668"/>
+        <param name="gui:y" value="119"/>
+        <param name="gui:bends:1" value="604,236;624,149"/>
+    </component>
+    <component name="WritePosition">
+        <param name="gui:x" value="949"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="TradeOutput">
+        <param name="gui:x" value="1134"/>
+        <param name="gui:y" value="210"/>
+    </component>
+</application-layout>

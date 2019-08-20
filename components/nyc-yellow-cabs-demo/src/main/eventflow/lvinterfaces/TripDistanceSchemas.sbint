@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.0">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the TripDistance LiveView table."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.TripDistanceSchemas"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <named-schemas>
+        <schema name="TripDistanceDataInSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+            <field name="Group_ID" type="string"/>
+            <field name="Description" type="string"/>
+            <field name="Count" type="int"/>
+        </schema>
+        <schema name="TripDistanceDataOutSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field name="Group_ID" type="string"/>
+            <field name="Description" type="string"/>
+            <field name="Count" type="int"/>
+        </schema>
+        <schema name="TripDistanceTableSchema">
+            <field name="Group_ID" type="string"/>
+            <field name="Description" type="string"/>
+            <field name="Count" type="int"/>
+        </schema>
+        <schema name="TripDistanceInputControlFields">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+</application>

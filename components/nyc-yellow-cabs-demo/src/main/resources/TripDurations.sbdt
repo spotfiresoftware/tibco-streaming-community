@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Table:Table xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Table="http:///com/tibco/cep/decision/table/model/DecisionTable.ecore" name="TripDurations.sbdt" folder="src/main/resources">
+  <md>
+    <prop name="Priority" value="5"/>
+  </md>
+  <decisionTable>
+    <rule id="1">
+      <cond id="1_0" colId="0" expr="> 0 &amp;&amp; &lt; 300"/>
+      <act id="1_1" colId="1" expr="Less than 5 minutes"/>
+    </rule>
+    <rule id="2">
+      <cond id="2_0" colId="0" expr=">= 300 &amp;&amp; &lt; 600"/>
+      <act id="2_1" colId="1" expr="Between 5 and 10 minutes"/>
+    </rule>
+    <rule id="3">
+      <cond id="3_0" colId="0" expr=">= 600 &amp;&amp; &lt; 1200"/>
+      <act id="3_1" colId="1" expr="Between 10 and 20 minutes"/>
+    </rule>
+    <rule id="4">
+      <cond id="4_0" colId="0" expr=">= 1200 &amp;&amp; &lt; 1800"/>
+      <act id="4_1" colId="1" expr="Between 20 and 30 minutes"/>
+    </rule>
+    <rule id="5">
+      <cond id="5_0" colId="0" expr=">= 1800"/>
+      <act id="5_1" colId="1" expr="More than 30 minutes"/>
+    </rule>
+    <columns>
+      <column id="0" name="TripTime" propertyPath="TripTime" propertyType="5" columnType="CONDITION"/>
+      <column id="1" name="Report" propertyPath="Report" columnType="ACTION"/>
+    </columns>
+  </decisionTable>
+</Table:Table>

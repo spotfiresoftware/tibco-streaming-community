@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.0">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.AreaBasedTaxiFlowTaxiTripsTripDistanceTripDurationPublisher"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <import from="lvinterfaces.AreaBasedTaxiFlowSchemas"/>
+    <import from="lvinterfaces.TaxiTripsSchemas"/>
+    <import from="lvinterfaces.TripDistanceSchemas"/>
+    <import from="lvinterfaces.TripDurationSchemas"/>
+    <named-schemas>
+        <schema name="ServerStatusSchema">
+            <field name="IsReady" type="bool"/>
+        </schema>
+        <schema name="ServerStateSchema">
+            <field name="Name" type="string"/>
+            <field description="0=recovery in progress, 1=recovery complete, 2=recovery failed" name="CurrentState" type="int"/>
+        </schema>
+        <schema name="PublishSchemasSchema">
+            <field name="AreaBasedTaxiFlow" type="tuple" value="AreaBasedTaxiFlowDataInSchema"/>
+            <field name="TaxiTrips" type="tuple" value="TaxiTripsDataInSchema"/>
+            <field name="TripDistance" type="tuple" value="TripDistanceDataInSchema"/>
+            <field name="TripDuration" type="tuple" value="TripDurationDataInSchema"/>
+        </schema>
+        <schema name="QueryTheLastGoodRecordSchema">
+            <field description="A unique string that identifies the connection" name="CQSConnectionID" type="string"/>
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field name="Tablename" type="string"/>
+        </schema>
+        <schema name="TheLastGoodRecordSchema">
+            <field description="A unique string that identifies the connection" name="CQSConnectionID" type="string"/>
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform." name="LowestPublishedSN" type="long"/>
+            <field description="It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform." name="LowestPersistedSN" type="long"/>
+            <field description="It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform." name="HighestPublishedSN" type="long"/>
+            <field description="It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform." name="HighestPersistedSN" type="long"/>
+            <field description="It defines the interface to which the publisher for LiveView tables [AreaBasedTaxiFlow, TaxiTrips, TripDistance, TripDuration] must conform." name="Tablename" type="string"/>
+        </schema>
+    </named-schemas>
+    <constant description="State when the server is requesting Publishers to recover" expr="0" name="RECOVERY_IN_PROGRESS"/>
+    <constant description="State Publishers send to the server to indicate they have completed recovery" expr="1" name="RECOVERY_COMPLETE"/>
+    <constant description="State Publishers send to the server to indicate they have failed recovery" expr="2" name="RECOVERY_FAILED"/>
+    <constant description="State when the server requesting Publishers to shutdown" expr="3" name="SHUTDOWN_IN_PROGRESS"/>
+    <constant description="State Publishers send to the server to indicate they have completed their shutdown" expr="4" name="SHUTDOWN_COMPLETE"/>
+    <dynamic-variables/>
+    <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
+    <stream name="ServerStateIn" schema="ServerStateSchema"/>
+    <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
+    <stream name="TheLastGoodRecordIn" schema="TheLastGoodRecordSchema"/>
+    <output-stream name="PublisherStateOut" schema="ServerStateSchema"/>
+    <output-stream name="PublishToAreaBasedTaxiFlowOut" schema="AreaBasedTaxiFlowDataInSchema"/>
+    <output-stream name="PublishToTaxiTripsOut" schema="TaxiTripsDataInSchema"/>
+    <output-stream name="PublishToTripDistanceOut" schema="TripDistanceDataInSchema"/>
+    <output-stream name="PublishToTripDurationOut" schema="TripDurationDataInSchema"/>
+    <output-stream name="QueryTheLastGoodRecordOut" schema="QueryTheLastGoodRecordSchema"/>
+</application>

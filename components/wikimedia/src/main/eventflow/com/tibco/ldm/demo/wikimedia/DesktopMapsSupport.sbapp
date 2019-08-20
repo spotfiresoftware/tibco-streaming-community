@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.DesktopMapsSupport"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <data name="StateShapes" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="shapedata" type="string"/>
+                    <field name="statecode" type="string"/>
+                </schema>
+                <primary-index type="hash">
+                    <field name="statecode"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload file="usstates.csv" format="csv" header="ignore" mode="file"/>
+        </data>
+        <stream name="InputStream">
+            <schema>
+                <field name="editor_statecode" type="string"/>
+                <field name="rest" type="capture" type-name="rest"/>
+            </schema>
+        </stream>
+        <box name="LVReadyAdapter" type="inputadapter">
+            <output port="1" stream="out:LVReadyAdapter_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.liveview.LiveViewReady"/>
+            <param name="encapsulatingLV" value="false"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="uri" value="lv://localhost"/>
+        </box>
+        <box name="GetStateShape" type="query">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:GetStateShape_1"/>
+            <dataref id="querytable" name="StateShapes"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="statecode"/>
+            <param name="key-value.0" value="input.editor_statecode"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="state_shapedata">shapedata</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="UponConnect" type="filter">
+            <input port="1" stream="out:LVReadyAdapter_1"/>
+            <output port="1" stream="out:UponConnect_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Action == 'CONNECTED'"/>
+        </box>
+        <box name="ReadAll" type="query">
+            <input port="1" stream="out:UponConnect_1"/>
+            <output port="1" stream="out:ReadAll_1"/>
+            <dataref id="querytable" name="StateShapes"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="editor_statecode">statecode</include>
+                    <include field="state_shapedata">shapedata</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:GetStateShape_1"/>
+            <input port="2" stream="out:ReadAll_1"/>
+            <output port="1" stream="OutputStream"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="OutputStream"/>
+    </add>
+</modify>

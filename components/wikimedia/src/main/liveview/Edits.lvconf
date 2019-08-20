@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+    <data-table id="Edits">
+        <fields>
+            <field name="pageName" type="string"/>
+            <field name="diffURL" type="string"/>
+            <field name="editor" type="string"/>
+            <field name="lineDelta" type="int"/>
+            <field name="comment" type="string"/>
+            <field name="ts" type="timestamp"/>
+            <!-- for anonymous users (ip addresses), geo-location information -->
+            <field name="editor_continent" type="string"/>
+            <field name="editor_countrycode" type="string"/>
+            <field name="editor_statecode" type="string"/>
+            <field name="editor_city" type="string"/>
+            <field name="editor_lat" type="double"/>
+            <field name="editor_lon" type="double"/>
+        </fields>
+        <primary-key>
+            <field ref="diffURL"/>
+        </primary-key>
+        <indices>
+            <index>
+                <field ref="editor"/>
+            </index>
+        </indices>
+    </data-table>
+</liveview-configuration>

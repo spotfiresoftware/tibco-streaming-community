@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <external-server-connection id="InfluxData" type="custom-table-provider" table-provider-class="com.tibco.contrib.sb.ldm.influxdb.InfluxDBTableProvider">
+    <parameters>
+      <parameter key="connection-url">http://localhost:8086</parameter>
+    </parameters>
+    <retry-parameters/>
+  </external-server-connection>
+</liveview-configuration>

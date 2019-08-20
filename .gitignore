@@ -1,0 +1,13 @@
+# dot files
+.DS_Store
+.settings
+.project
+.classpath
+.metadata
+.vscode
+
+# directories
+target/
+
+# files with extension
+*lvweb.war

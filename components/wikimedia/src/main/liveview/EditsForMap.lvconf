@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+	<data-table id="EditsForMap">
+		<fields>
+		    <field name="editor_continent" type="string" />
+			<field name="editor_countrycode" type="string" />
+			<field name="editor_statecode" type="string" />
+			<field name="editcount" type="int">
+				<insert-rule>1</insert-rule>
+				<update-rule>old.editcount+1</update-rule>
+			</field>
+			<!-- field below is applicable for US only, used by desktop -->
+			<field name="state_shapedata" type="string" />
+		</fields>
+		<primary-key>
+		    <field ref="editor_continent" />
+			<field ref="editor_countrycode" />
+			<field ref="editor_statecode" />
+		</primary-key>
+	</data-table>
+</liveview-configuration>

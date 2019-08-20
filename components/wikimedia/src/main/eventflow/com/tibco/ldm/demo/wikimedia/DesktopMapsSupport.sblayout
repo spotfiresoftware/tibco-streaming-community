@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-635"/>
+        <param name="gui:y" value="-25"/>
+    </component>
+    <component name="StateShapes">
+        <param name="gui:x" value="-575"/>
+        <param name="gui:y" value="230"/>
+        <param name="gui:width" value="154"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="GetStateShape">
+        <param name="gui:x" value="-528"/>
+        <param name="gui:y" value="-25"/>
+    </component>
+    <component name="LVReadyAdapter">
+        <param name="gui:x" value="-749"/>
+        <param name="gui:y" value="85"/>
+    </component>
+    <component name="ReadAll">
+        <param name="gui:x" value="-528"/>
+        <param name="gui:y" value="85"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="-373"/>
+        <param name="gui:y" value="30"/>
+        <param name="gui:bends:1" value="-419,5;-409,50"/>
+        <param name="gui:bends:2" value="-406,115;-396,70"/>
+    </component>
+    <component name="UponConnect">
+        <param name="gui:x" value="-635"/>
+        <param name="gui:y" value="85"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="-289"/>
+        <param name="gui:y" value="30"/>
+    </component>
+</application-layout>

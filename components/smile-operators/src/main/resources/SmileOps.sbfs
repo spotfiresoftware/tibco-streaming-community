@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="SimpleCoded">
+    <ProcessingOptions DataRatePerSecond="20.0" DataGenerationMethod="DataFile">
+      <DataSource Name="DataSource" DataSourceURI="SimpleTestCoded.csv" QuoteChar="34" SkipLineCount="1"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="ORDINAL">
+      <Fields Name="Y" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="Y"/>
+      </Fields>
+      <Fields Name="data" DataTypeName="tuple" Description="">
+        <DataSourceMapping DestFieldNum="2" DestFieldName=""/>
+        <Schema>
+          <Fields Name="X1Categorical" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="2" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X2" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="3" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X3EarlyCause" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="4" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X4" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="5" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X5LaterCause" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="6" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X6Categorical" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="7" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X7LaterCause" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="8" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X8EarlyCause" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="9" DestFieldName=""/>
+          </Fields>
+          <Fields Name="X9" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="10" DestFieldName=""/>
+          </Fields>
+          <Fields Name="YCatCoded" DataTypeName="double" Description="">
+            <DataSourceMapping DestFieldNum="11" DestFieldName=""/>
+          </Fields>
+        </Schema>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.LocateGeoIP"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+        <import from="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+        <dynamic-variables/>
+        <stream name="WikiEdits" schema="WikiEditsTimestampedSchema"/>
+        <box disabled="true" name="Java" type="java">
+            <input port="1" stream="WikiEdits"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.streambase.ipgeo.GeoIP2"/>
+            <param name="CityOutputFieldName" value="editor_city"/>
+            <param name="ContinentOutputFieldName" value="editor_continent"/>
+            <param name="CountryCodeOutputFieldName" value="editor_countrycode"/>
+            <param name="IPInputFieldName" value="editor"/>
+            <param name="LatOutputFieldName" value="editor_lat"/>
+            <param name="LonOutputFieldName" value="editor_lon"/>
+            <param name="StateCodeOutputFieldName" value="editor_statecode"/>
+            <param name="cityDBFile" value="GeoLite2-City.mmdb"/>
+            <param name="countryDBFile" value="GeoLite2-Country.mmdb"/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="WikiEdits"/>
+            <output port="1" stream="WikiEditsLocated"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="editor_continent">""</include>
+                    <include field="editor_countrycode">""</include>
+                    <include field="editor_statecode">""</include>
+                    <include field="editor_city">""</include>
+                    <include field="editor_lat">double(null)</include>
+                    <include field="editor_lon">double(null)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="WikiEditsLocated" schema="WikiEditsLocatedSchema"/>
+        <gui.note name="Note">
+            <property name="description" value="Once GeoLite2-Country.mmdb and GeoLite2-City.mmdb have been downloaded and available on the resource search path (for example, by placing them at the project root), delete the Map operator, and Enable the Java operator by right-click and selecting Enable Component. Finally, connect the Java operator to WikiEditsLocated, save, and this module is now ready for use in demo.sbapp."/>
+        </gui.note>
+    </add>
+</modify>

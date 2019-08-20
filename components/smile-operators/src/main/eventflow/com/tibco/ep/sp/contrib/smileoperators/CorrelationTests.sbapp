@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.smileoperators.CorrelationTests"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="InBigKendall">
+            <schema>
+                <field name="value" type="double"/>
+                <field name="data" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InCramer">
+            <schema>
+                <field name="Y" type="double"/>
+                <field name="X" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InKendall">
+            <schema>
+                <field name="Y" type="double"/>
+                <field name="X" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InPearson">
+            <schema>
+                <field name="Y" type="double"/>
+                <field name="X" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InSpearman">
+            <schema>
+                <field name="Y" type="double"/>
+                <field name="X" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InTupleFields">
+            <schema>
+                <field name="Value" type="double"/>
+                <field name="Data" type="tuple">
+                    <schema>
+                        <field name="One" type="double"/>
+                        <field name="Two" type="double"/>
+                        <field name="Three" type="double"/>
+                    </schema>
+                </field>
+            </schema>
+        </stream>
+        <stream name="InTupleList">
+            <schema>
+                <field name="Value" type="double"/>
+                <field name="Data" type="tuple">
+                    <schema>
+                        <field name="One" type="double"/>
+                        <field name="Two" type="double"/>
+                        <field name="Three" type="double"/>
+                    </schema>
+                </field>
+            </schema>
+        </stream>
+        <box name="BigKendall" type="java">
+            <input port="1" stream="InBigKendall"/>
+            <output port="1" stream="OutBigKendall"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Kendall's τ"/>
+            <param name="correlationField" value="value"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Time"/>
+            <param name="format" value="List"/>
+            <param name="frequency" value="10"/>
+            <param name="nullValue" value="0.0"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value=".5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="data"/>
+            <param name="windowSize" value="1000000"/>
+        </box>
+        <box name="Cramer" type="java">
+            <input port="1" stream="InCramer"/>
+            <output port="1" stream="OutCramer"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Cramer's V"/>
+            <param name="correlationField" value="Y"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="List"/>
+            <param name="frequency" value="1"/>
+            <param name="nullValue" value="0.5"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="2"/>
+            <param name="variablesField" value="X"/>
+            <param name="windowSize" value="200"/>
+        </box>
+        <box name="Kendall" type="java">
+            <input port="1" stream="InKendall"/>
+            <output port="1" stream="OutKendall"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Kendall's τ"/>
+            <param name="correlationField" value="Y"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="List"/>
+            <param name="frequency" value="1"/>
+            <param name="nullValue" value="0.5"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="1.0"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="X"/>
+            <param name="windowSize" value="10"/>
+        </box>
+        <box name="Pearson" type="java">
+            <input port="1" stream="InPearson"/>
+            <output port="1" stream="OutPearson"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Pearson's r"/>
+            <param name="correlationField" value="Y"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="List"/>
+            <param name="frequency" value="1"/>
+            <param name="nullValue" value="0.5"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="X"/>
+            <param name="windowSize" value="200"/>
+        </box>
+        <box name="Spearman" type="java">
+            <input port="1" stream="InSpearman"/>
+            <output port="1" stream="OutSpearman"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Spearman's ρ"/>
+            <param name="correlationField" value="Y"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="List"/>
+            <param name="frequency" value="1"/>
+            <param name="nullValue" value="0.5"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="X"/>
+            <param name="windowSize" value="200"/>
+        </box>
+        <box name="TupleFields" type="java">
+            <input port="1" stream="InTupleFields"/>
+            <output port="1" stream="OutTupleFields"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Pearson's r"/>
+            <param name="correlationField" value="Value"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="Tuple"/>
+            <param name="frequency" value="3"/>
+            <param name="nullValue" value="0.0"/>
+            <param name="outputType" value="Double Fields"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="Data"/>
+            <param name="windowSize" value="100"/>
+        </box>
+        <box name="TupleList" type="java">
+            <input port="1" stream="InTupleList"/>
+            <output port="1" stream="OutTupleList"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Pearson's r"/>
+            <param name="correlationField" value="Value"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Tuples"/>
+            <param name="format" value="Tuple"/>
+            <param name="frequency" value="3"/>
+            <param name="nullValue" value="0.0"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="Data"/>
+            <param name="windowSize" value="100"/>
+        </box>
+        <output-stream name="OutBigKendall"/>
+        <output-stream name="OutCramer"/>
+        <output-stream name="OutKendall"/>
+        <output-stream name="OutPearson"/>
+        <output-stream name="OutSpearman"/>
+        <output-stream name="OutTupleFields"/>
+        <output-stream name="OutTupleList"/>
+    </add>
+</modify>

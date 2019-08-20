@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.app.nyc_yellow_cabs_demo.TaxiTrips_Publisher"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="lvinterfaces.AreaBasedTaxiFlowTaxiTripsTripDistanceTripDurationPublisher"/>
+        <import from="lvinterfaces.AreaBasedTaxiFlowSchemas"/>
+        <import from="lvinterfaces.AreaBasedTaxiFlowTaxiTripsTripDistanceTripDurationPublisher"/>
+        <import from="lvinterfaces.TaxiTripsSchemas"/>
+        <import from="lvinterfaces.TripDistanceSchemas"/>
+        <import from="lvinterfaces.TripDurationSchemas"/>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="false" name="AlreadyRunning" setter-expression="true" setter-stream="SetRunning"/>
+        </dynamic-variables>
+        <data name="AreaBasedFluxTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="Group_ID" type="string"/>
+                    <field name="Description" type="string"/>
+                    <field name="Count_Pickups" type="int"/>
+                    <field name="Count_Dropoffs" type="int"/>
+                    <field name="Flux" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="Group_ID"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">Area 1,Description,0,0,0
+Area 2,Description,0,0,0
+Area 3,Description,0,0,0
+Area 4,Description,0,0,0
+Area 5,Description,0,0,0
+Area 6,Description,0,0,0
+Area 7,Description,0,0,0
+Area 8,Description,0,0,0</preload>
+        </data>
+        <data name="TripDistancesTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="Group_ID" type="string"/>
+                    <field name="Description" type="string"/>
+                    <field name="Count" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="Group_ID"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">Less than 0.5 miles,Description,0
+Between 0.5 and 1.0 miles,Description,0
+Between 1.0 and 2.0 miles,Description,0
+Between 2.0 and 3.0 miles,Description,0
+Between 3.0 and 5.0 miles,Description,0
+Between 5.0 and 10.0 miles,Description,0
+More than 10.0 miles,Description,0</preload>
+        </data>
+        <data name="TripDurationsTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="Group_ID" type="string"/>
+                    <field name="Description" type="string"/>
+                    <field name="Count" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="Group_ID"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">Less than 5 minutes,Description,0
+Between 5 and 10 minutes,Description,0
+Between 10 and 20 minutes,Description,0
+Between 20 and 30 minutes,Description,0
+More than 30 minutes,Description,0</preload>
+        </data>
+        <stream name="AccelerationRate" scope="public">
+            <schema>
+                <field name="command" type="string"/>
+                <field name="value" type="double"/>
+            </schema>
+        </stream>
+        <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
+        <stream name="ServerStateIn" schema="ServerStateSchema"/>
+        <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
+        <stream name="TheLastGoodRecordIn" schema="TheLastGoodRecordSchema"/>
+        <output-stream name="QueryTheLastGoodRecordOut" schema="QueryTheLastGoodRecordSchema"/>
+        <box name="Metronome" type="metronome">
+            <output port="1" stream="out:Metronome_1"/>
+            <param name="interval" value="0.5"/>
+            <param name="timestamp-field" value="time"/>
+        </box>
+        <box name="GetLatestData" type="query">
+            <input port="1" stream="out:Metronome_1"/>
+            <output port="1" stream="out:GetLatestData_1"/>
+            <dataref id="querytable" name="AreaBasedFluxTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="IsReady" type="filter">
+            <input port="1" stream="ServerStatusIn"/>
+            <output port="1" stream="SetRunning"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(IsReady == true) &amp;&amp; (AlreadyRunning == false)"/>
+        </box>
+        <box name="MakeGood" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="ServerStateIn"/>
+            <output port="1" stream="PublisherStateOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="CurrentState">RECOVERY_COMPLETE</replace>
+                    <replace field="Name">"TaxiTrips_Publisher"</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="PublisherStateOut" schema="ServerStateSchema"/>
+        <output-stream name="SetRunning"/>
+        <box name="AddControlFieldsFlux" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:GetLatestData_1"/>
+            <output port="1" stream="PublishToAreaBasedTaxiFlowOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">AreaBasedTaxiFlowInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CreateStartCommand" type="map">
+            <property name="description" value="Send a start command to the input adapter when the server is ready."/>
+            <input port="1" stream="SetRunning"/>
+            <output port="1" stream="out:CreateStartCommand_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"start"</include>
+                    <include field="value">0.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="PublishToAreaBasedTaxiFlowOut" schema="AreaBasedTaxiFlowDataInSchema"/>
+        <box name="InitialData" type="inputadapter">
+            <input port="1" stream="out:CreateStartCommand_1"/>
+            <output port="1" stream="out:InitialData_1"/>
+            <output port="2" stream="out:InitialData_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.sbfeedsim.SBFeedsim"/>
+            <param name="enableControlPort" value="true"/>
+            <param name="filenameFieldName" value=""/>
+            <param name="logLevel" value="INFO"/>
+            <param name="reportRateS" value="0"/>
+            <param name="sbfsFileName" value="TaxiTrip_InitialData.sbfs"/>
+            <param name="waitForStartCommand" value="true"/>
+        </box>
+        <box name="FilterAllFileData" type="filter">
+            <input port="1" stream="out:InitialData_2"/>
+            <output port="1" stream="out:FilterAllFileData_1"/>
+            <output port="2" stream="out:FilterAllFileData_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Type != &quot;FINAL&quot;"/>
+            <param name="expression.1" value="Type == &quot;FINAL&quot;"/>
+        </box>
+        <box name="CreateSecondStartCommand" type="map">
+            <property name="description" value="Send a start command to the input adapter when the server is ready."/>
+            <input port="1" stream="out:FilterAllFileData_2"/>
+            <output port="1" stream="out:CreateSecondStartCommand_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"start"</include>
+                    <include field="value">0.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CreateScaleCommandd" type="map">
+            <input port="1" stream="out:CreateSecondStartCommand_1"/>
+            <output port="1" stream="out:CreateScaleCommandd_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="command">"scale"</replace>
+                    <replace field="value">25.0</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="UnionSimulationCommands" type="union">
+            <input port="1" stream="out:CreateSecondStartCommand_1"/>
+            <input port="2" stream="out:CreateScaleCommandd_1"/>
+            <input port="3" stream="AccelerationRate"/>
+            <output port="1" stream="out:UnionSimulationCommands_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="SimulationData" type="inputadapter">
+            <input port="1" stream="out:UnionSimulationCommands_1"/>
+            <output port="1" stream="out:SimulationData_1"/>
+            <output port="2" stream="out:SimulationData_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.sbfeedsim.SBFeedsim"/>
+            <param name="enableControlPort" value="true"/>
+            <param name="filenameFieldName" value=""/>
+            <param name="logLevel" value="INFO"/>
+            <param name="reportRateS" value="0"/>
+            <param name="sbfsFileName" value="TaxiTrip_Simulation.sbfs"/>
+            <param name="waitForStartCommand" value="true"/>
+        </box>
+        <box name="UnionTaxiData" type="union">
+            <input port="1" stream="out:SimulationData_2"/>
+            <input port="2" stream="out:FilterAllFileData_1"/>
+            <output port="1" stream="out:UnionTaxiData_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="ValidData" type="filter">
+            <input port="1" stream="out:UnionTaxiData_1"/>
+            <output port="1" stream="out:ValidData_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="if (Type == &quot;DROPOFF&quot;) then double(Total_Fare) &gt; 0 &amp;&amp; double(Distance) &lt; 70 &amp;&amp; double(Distance) != 0 &amp;&amp; double(Tolls) &lt; 100 &amp;&amp;  int(Num_Passengers) != 0 &amp;&amp; int(Num_Passengers) != 9 else int(Num_Passengers) != 0 &amp;&amp; int(Num_Passengers) != 9"/>
+        </box>
+        <box name="TripType" type="filter">
+            <input port="1" stream="out:ValidData_1"/>
+            <output port="1" stream="out:TripType_1"/>
+            <output port="2" stream="out:TripType_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Type == &quot;PICKUP&quot;"/>
+            <param name="expression.1" value="Type == &quot;DROPOFF&quot;"/>
+        </box>
+        <box name="CastCoorDropoffs" type="map">
+            <input port="1" stream="out:TripType_2"/>
+            <output port="1" stream="out:CastCoorDropoffs_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="Latitude"/>
+                    <include field="Longitude"/>
+                </item>
+                <expressions>
+                    <replace field="Latitude">double(Latitude)</replace>
+                    <replace field="Longitude">double(Longitude)</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CastCoorPickups" type="map">
+            <input port="1" stream="out:TripType_1"/>
+            <output port="1" stream="out:CastCoorPickups_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="Latitude"/>
+                    <include field="Longitude"/>
+                </item>
+                <expressions>
+                    <replace field="Latitude">double(Latitude)</replace>
+                    <replace field="Longitude">double(Longitude)</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CastDistance" type="map">
+            <input port="1" stream="out:TripType_2"/>
+            <output port="1" stream="out:CastDistance_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="Distance"/>
+                </item>
+                <expressions>
+                    <replace field="Distance">double(Distance)</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CastFields" type="map">
+            <input port="1" stream="out:TripType_2"/>
+            <output port="1" stream="out:CastFields_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TimeInterval">set_minute(set_second(Time,0),int(get_minute(Time)/10)*10)</include>
+                    <replace field="Longitude">double(Longitude)</replace>
+                    <replace field="Latitude">double(Latitude)</replace>
+                    <replace field="Num_Passengers">int(Num_Passengers)</replace>
+                    <replace field="Distance">double(Distance)</replace>
+                    <replace field="Total_Fare">double(Total_Fare)</replace>
+                    <replace field="Tip">double(Tip)</replace>
+                    <replace field="Vendor_Id">int(Vendor_Id)</replace>
+                    <replace field="Rate_Code">int(Rate_Code)</replace>
+                    <replace field="Payment_Type">int(Payment_Type)</replace>
+                    <replace field="Fare_Amount">double(Fare_Amount)</replace>
+                    <replace field="Extra">double(Extra)</replace>
+                    <replace field="Tax">double(Tax)</replace>
+                    <replace field="Tolls">double(Tolls)</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CombinePickupsDropoffs" type="gather">
+            <input port="1" stream="out:TripType_1"/>
+            <input port="2" stream="out:TripType_2"/>
+            <output port="1" stream="out:CombinePickupsDropoffs_1"/>
+            <target-list>
+                <item name="input1" prefix="input1_" selection="none"/>
+                <item name="input2" prefix="input2_" selection="none"/>
+                <expressions>
+                    <include field="TripTime">input2.Time - input1.Time</include>
+                </expressions>
+            </target-list>
+            <param name="key-field" value="Trip_Key"/>
+            <param name="output-last-time-field" value="false"/>
+            <param name="emit-on-completion" value="true"/>
+            <param name="replacement-type" value="keep_first"/>
+        </box>
+        <box name="AddControlFieldsTaxiTrips" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:CastFields_1"/>
+            <output port="1" stream="PublishToTaxiTripsOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">TaxiTripsInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="DecideAreaDropoffs" type="decision-table">
+            <input port="1" stream="out:CastCoorDropoffs_1"/>
+            <output port="1" stream="out:DecideAreaDropoffs_1"/>
+            <param name="load-from-ams" value="false"/>
+            <param name="use-ads" value="false"/>
+            <param name="ams-server-secure-channel" value="false"/>
+            <param name="default-rule-file" value="Areas.sbdt"/>
+            <param name="emit-non-matching-tuples" value="false"/>
+            <schema>
+                <field name="Report" type="string"/>
+            </schema>
+        </box>
+        <box name="DecideAreaPickups" type="decision-table">
+            <input port="1" stream="out:CastCoorPickups_1"/>
+            <output port="1" stream="out:DecideAreaPickups_1"/>
+            <param name="load-from-ams" value="false"/>
+            <param name="use-ads" value="false"/>
+            <param name="ams-server-secure-channel" value="false"/>
+            <param name="default-rule-file" value="Areas.sbdt"/>
+            <param name="emit-non-matching-tuples" value="false"/>
+            <schema>
+                <field name="Report" type="string"/>
+            </schema>
+        </box>
+        <box name="DecideTripDistance" type="decision-table">
+            <input port="1" stream="out:CastDistance_1"/>
+            <output port="1" stream="out:DecideTripDistance_1"/>
+            <param name="load-from-ams" value="false"/>
+            <param name="use-ads" value="false"/>
+            <param name="ams-server-secure-channel" value="false"/>
+            <param name="default-rule-file" value="TripDistance.sbdt"/>
+            <param name="emit-non-matching-tuples" value="false"/>
+            <schema>
+                <field name="Report" type="string"/>
+            </schema>
+        </box>
+        <box name="DecideTripDuration" type="decision-table">
+            <input port="1" stream="out:CombinePickupsDropoffs_1"/>
+            <output port="1" stream="out:DecideTripDuration_1"/>
+            <param name="load-from-ams" value="false"/>
+            <param name="use-ads" value="false"/>
+            <param name="ams-server-secure-channel" value="false"/>
+            <param name="default-rule-file" value="TripDurations.sbdt"/>
+            <param name="emit-non-matching-tuples" value="false"/>
+            <schema>
+                <field name="Report" type="string"/>
+            </schema>
+        </box>
+        <output-stream name="PublishToTaxiTripsOut" schema="TaxiTripsDataInSchema"/>
+        <box name="QueryFluxTableDropoffs" type="query">
+            <input port="1" stream="out:DecideAreaDropoffs_1"/>
+            <dataref id="querytable" name="AreaBasedFluxTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Group_ID"/>
+            <param name="key-value.0" value="action.Report"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Count_Dropoffs">Count_Dropoffs + 1</set>
+                    <set field="Flux">Flux + 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="QueryFluxTablePickups" type="query">
+            <input port="1" stream="out:DecideAreaPickups_1"/>
+            <dataref id="querytable" name="AreaBasedFluxTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Group_ID"/>
+            <param name="key-value.0" value="action.Report"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Count_Pickups">Count_Pickups + 1</set>
+                    <set field="Flux">Flux - 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="QueryTripDistances" type="query">
+            <input port="1" stream="out:DecideTripDistance_1"/>
+            <output port="1" stream="out:QueryTripDistances_1"/>
+            <dataref id="querytable" name="TripDistancesTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Group_ID"/>
+            <param name="key-value.0" value="action.Report"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Count">Count + 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="QueryTripDurations" type="query">
+            <input port="1" stream="out:DecideTripDuration_1"/>
+            <output port="1" stream="out:QueryTripDurations_1"/>
+            <dataref id="querytable" name="TripDurationsTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Group_ID"/>
+            <param name="key-value.0" value="action.Report"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Count">Count + 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="AddControlFieldsTripDistances" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:QueryTripDistances_1"/>
+            <output port="1" stream="PublishToTripDistanceOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">TripDistanceInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="AddControlFieldsTrips" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:QueryTripDurations_1"/>
+            <output port="1" stream="PublishToTripDurationOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">TripDurationInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="PublishToTripDistanceOut" schema="TripDistanceDataInSchema"/>
+        <output-stream name="PublishToTripDurationOut" schema="TripDurationDataInSchema"/>
+        <gui.note name="Note">
+            <property name="description" value="Reads some initial data as fast as possible to start the application."/>
+            <note-target name="InitialData"/>
+        </gui.note>
+        <gui.note name="Note2">
+            <property name="description" value="Reads the simulation data at a specified rate (default: x25)."/>
+            <note-target name="SimulationData"/>
+        </gui.note>
+    </add>
+</modify>

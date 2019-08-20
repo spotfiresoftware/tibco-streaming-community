@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_6df2e06995296ec4867f5d0b72ea9a7f8a556bc3">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.redisadapter.TestRedisAdapters"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="ToRedis">
+            <schema>
+                <field name="key" type="string"/>
+                <field name="value" type="string"/>
+            </schema>
+        </stream>
+        <box name="RedisInput" type="inputadapter">
+            <output port="1" stream="FromRedis"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.cityindex.redis.RedisInput"/>
+            <param name="channelPath" value="*"/>
+            <param name="redisHost" value="localhost"/>
+            <param name="redisPort" value="6379"/>
+        </box>
+        <output-stream name="FromRedis"/>
+        <box name="RedisOutput" type="outputadapter">
+            <input port="1" stream="ToRedis"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.cityindex.redis.RedisOutput"/>
+            <param name="redisHost" value="127.0.0.1"/>
+            <param name="redisPort" value="6379"/>
+        </box>
+    </add>
+</modify>

@@ -1,0 +1,15 @@
+{
+
+    "name": "my.geomap.extensions",
+
+    "module": {
+
+        "core" : ["geomap-extensions.js"]
+
+    },
+
+    "staticContents": [],
+
+    "dependencies": []
+
+}

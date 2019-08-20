@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="DataApp.WikiEditsRecorded">
+    <ProcessingOptions DataRatePerSecond="4.0" DataGenerationMethod="DataFile">
+      <DataSource Name="DataSource" DataSourceURI="recording.csv" QuoteChar="34"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="NAME">
+      <Fields Name="pageName" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="pageName"/>
+      </Fields>
+      <Fields Name="diffURL" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="diffURL"/>
+      </Fields>
+      <Fields Name="editor" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="editor"/>
+      </Fields>
+      <Fields Name="lineDelta" DataTypeName="int" Description="">
+        <DataSourceMapping DestFieldName="lineDelta"/>
+      </Fields>
+      <Fields Name="comment" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="comment"/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

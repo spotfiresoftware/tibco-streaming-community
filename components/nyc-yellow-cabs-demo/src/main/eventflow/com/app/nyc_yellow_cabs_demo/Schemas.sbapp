@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.app.nyc_yellow_cabs_demo.Schemas"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <named-schemas>
+            <schema name="AccelerationRate_Schema">
+                <field name="command" type="string"/>
+                <field name="value" type="double"/>
+            </schema>
+            <schema name="AreaBasedTaxiFlow_Schema">
+                <field name="Group_ID" type="string"/>
+                <field name="Description" type="string"/>
+                <field name="Count_Pickups" type="int"/>
+                <field name="Count_Dropoffs" type="int"/>
+                <field name="Flux" type="int"/>
+            </schema>
+            <schema name="RunningAggs_Schema">
+                <field name="Type" type="string"/>
+                <field name="TotalTrips" type="int"/>
+                <field name="TotalPassengers" type="int"/>
+                <field name="TotalFares" type="double"/>
+                <field name="TotalTips" type="double"/>
+                <field name="TotalTolls" type="double"/>
+                <field name="TotalTaxes" type="double"/>
+                <field name="TotalDistance" type="double"/>
+                <field name="AverageFare" type="double"/>
+                <field name="AverageDistance" type="double"/>
+                <field name="AverageNumPassengers" type="double"/>
+            </schema>
+            <schema name="TaxiTripsInput_Schema">
+                <field name="Trip_Key" type="string"/>
+                <field name="Type" type="string"/>
+                <field name="Time" type="timestamp"/>
+                <field name="Longitude" type="string"/>
+                <field name="Latitude" type="string"/>
+                <field name="Num_Passengers" type="string"/>
+                <field name="Distance" type="string"/>
+                <field name="Total_Fare" type="string"/>
+                <field name="Tip" type="string"/>
+                <field name="Vendor_Id" type="string"/>
+                <field name="Rate_Code" type="string"/>
+                <field name="Flag" type="string"/>
+                <field name="Payment_Type" type="string"/>
+                <field name="Fare_Amount" type="string"/>
+                <field name="Extra" type="string"/>
+                <field name="Tax" type="string"/>
+                <field name="Tolls" type="string"/>
+            </schema>
+            <schema name="TaxiTrips_Schema">
+                <field name="Trip_Key" type="string"/>
+                <field name="Type" type="string"/>
+                <field name="Time" type="timestamp"/>
+                <field name="TimeInterval" type="timestamp"/>
+                <field name="Longitude" type="double"/>
+                <field name="Latitude" type="double"/>
+                <field name="Num_Passengers" type="int"/>
+                <field name="Distance" type="double"/>
+                <field name="Total_Fare" type="double"/>
+                <field name="Tip" type="double"/>
+                <field name="Vendor_Id" type="int"/>
+                <field name="Rate_Code" type="int"/>
+                <field name="Flag" type="string"/>
+                <field name="Payment_Type" type="int"/>
+                <field name="Fare_Amount" type="double"/>
+                <field name="Extra" type="double"/>
+                <field name="Tax" type="double"/>
+                <field name="Tolls" type="double"/>
+            </schema>
+            <schema name="TimeBinsAggs_Schema">
+                <field name="TimeInterval" type="timestamp"/>
+                <field name="Description" type="string"/>
+                <field name="Fares" type="double"/>
+                <field name="Tips" type="double"/>
+                <field name="PercentTips" type="double"/>
+                <field name="MinTip" type="double"/>
+                <field name="MaxTip" type="double"/>
+                <field name="NumTrips" type="int"/>
+            </schema>
+            <schema name="TripDistance_Schema">
+                <field name="Group_ID" type="string"/>
+                <field name="Description" type="string"/>
+                <field name="Count" type="int"/>
+            </schema>
+            <schema name="TripDuration_Schema">
+                <field name="Group_ID" type="string"/>
+                <field name="Description" type="string"/>
+                <field name="Count" type="int"/>
+            </schema>
+        </named-schemas>
+        <dynamic-variables/>
+    </add>
+</modify>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.demo"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.ldm.demo.wikimedia.schemas"/>
+        <dynamic-variables/>
+        <stream name="WikiEditsRecorded" schema="WikiEditsSchema" scope="public"/>
+        <box disabled="true" name="WikiEditsLive" type="inputadapter">
+            <output port="1" stream="out:WikiEditsLive_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.streambase.ircdemo.WikimediaEditsAdapter"/>
+            <param name="channel" value="#en.wikipedia"/>
+            <param name="connectTimeoutSecs" value="20"/>
+            <param name="nick" value="sbeditsbot"/>
+            <param name="port" value="6667"/>
+            <param name="realName" value="SB Wikimedia Edits Input Adapter (Bot)"/>
+            <param name="server" value="irc.wikimedia.org"/>
+        </box>
+        <box name="AddCurrentTime" type="map">
+            <input port="1" stream="WikiEditsRecorded"/>
+            <output port="1" stream="out:AddCurrentTime_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="ts">now()</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="IsIP" type="filter">
+            <input port="1" stream="out:AddCurrentTime_1"/>
+            <output port="1" stream="out:IsIP_1"/>
+            <output port="2" stream="out:IsIP_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="calljava(&quot;sun.net.util.IPAddressUtil&quot;,&quot;isIPv4LiteralAddress&quot;, editor)"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <extension-point name="IPLocate">
+            <input dispatch="broadcast" name="WikiEdits" port="1" stream="out:IsIP_1"/>
+            <output name="WikiEditsLocated" port="1" stream="out:IPLocate_1"/>
+            <multiplicity type="interface">
+                <instance file="com.tibco.ldm.demo.wikimedia.LocateFake" name="LocateFake"/>
+            </multiplicity>
+            <param name="file" value="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+        </extension-point>
+        <box name="U" type="union">
+            <input port="1" stream="out:IPLocate_1"/>
+            <input port="2" stream="out:IsIP_2"/>
+            <output port="1" stream="out:U_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:U_1"/>
+            <output port="1" stream="WikiEditsLocated"/>
+            <output port="2" stream="out:Split_2"/>
+            <output port="3" stream="out:Split_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <output-stream name="WikiEditsLocated" scope="public"/>
+        <module-reference name="DesktopMapsSupport">
+            <input name="InputStream" port="1" stream="out:Split_3"/>
+            <output name="OutputStream" port="1" stream="out:DesktopMapsSupport_1"/>
+            <param name="file" value="com.tibco.ldm.demo.wikimedia.DesktopMapsSupport"/>
+        </module-reference>
+        <box name="PublishEdits" type="outputadapter">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:PublishEdits_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.liveview.LiveViewPublish"/>
+            <param name="bufferSize" value="100"/>
+            <param name="connectInline" value="true"/>
+            <param name="dynamicTableName" value="false"/>
+            <param name="encapsulatingLV" value="true"/>
+            <param name="flushInterval" value="250"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="lvTableName" value="Edits"/>
+            <param name="strictSchema" value="false"/>
+            <param name="uri" value="lv://localhost"/>
+        </box>
+        <box name="PublishStateData" type="outputadapter">
+            <input port="1" stream="out:DesktopMapsSupport_1"/>
+            <output port="1" stream="out:PublishStateData_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.liveview.LiveViewPublish"/>
+            <param name="bufferSize" value="100"/>
+            <param name="connectInline" value="true"/>
+            <param name="dynamicTableName" value="false"/>
+            <param name="encapsulatingLV" value="true"/>
+            <param name="flushInterval" value="250"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="lvTableName" value="EditsForMap"/>
+            <param name="strictSchema" value="false"/>
+            <param name="uri" value="lv://localhost"/>
+        </box>
+        <gui.note name="Note">
+            <property name="description" value="You can try this demo out against live data! See this demo's Cheat Sheet by clicking Edit in Authoring Perspective."/>
+            <note-target name="WikiEditsLive"/>
+        </gui.note>
+    </add>
+</modify>

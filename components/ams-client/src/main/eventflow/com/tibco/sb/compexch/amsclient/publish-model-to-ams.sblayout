@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-10"/>
+        <param name="gui:y" value="249"/>
+    </component>
+    <component name="FilterRDataFiles">
+        <param name="gui:x" value="-231"/>
+        <param name="gui:y" value="344"/>
+    </component>
+    <component name="MonitorFiles">
+        <param name="gui:x" value="-341"/>
+        <param name="gui:y" value="344"/>
+    </component>
+    <component name="PrepareCommand">
+        <param name="gui:x" value="-10"/>
+        <param name="gui:y" value="344"/>
+    </component>
+    <component name="PublishToAMS">
+        <param name="gui:x" value="235"/>
+        <param name="gui:y" value="332"/>
+    </component>
+    <component name="ReadDataFile">
+        <param name="gui:x" value="-117"/>
+        <param name="gui:y" value="344"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="120"/>
+        <param name="gui:y" value="332"/>
+        <param name="gui:bends:1" value="73,279;91,352"/>
+        <param name="gui:bends:2" value="82,374;82,372"/>
+    </component>
+    <component name="PublishOut">
+        <param name="gui:x" value="349"/>
+        <param name="gui:y" value="332"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-154"/>
+        <param name="gui:y" value="202"/>
+        <param name="gui:width" value="133"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="Note2">
+        <param name="gui:x" value="181"/>
+        <param name="gui:y" value="194"/>
+        <param name="gui:width" value="168"/>
+        <param name="gui:height" value="69"/>
+    </component>
+    <component name="Note3">
+        <param name="gui:x" value="-390"/>
+        <param name="gui:y" value="191"/>
+        <param name="gui:width" value="159"/>
+        <param name="gui:height" value="84"/>
+    </component>
+</application-layout>

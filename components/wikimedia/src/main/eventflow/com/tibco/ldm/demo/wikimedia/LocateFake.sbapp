@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.0">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.LocateFake"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+        <import from="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+        <dynamic-variables/>
+        <data name="IPToLocation_fake" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="editor" type="string"/>
+                    <field name="editor_countrycode" type="string"/>
+                    <field name="editor_statecode" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="editor"/>
+                </primary-index>
+                <index type="hash">
+                    <field name="substr(editor, 0, 6)"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">172.16.1,US,MA
+172.16.2,GB,ENG
+172.16.3,GB,ENG
+172.16.4,GB,ENG
+172.16.5,GB,ENG
+172.16.6,GB,BIR
+172.16.7,GB,BIR
+172.16.8,GB,KEN
+172.16.9,GB,KEN
+172.17.1,US,CA
+172.17.2,FR,76
+172.17.3,FR,76
+172.17.4,FR,76
+172.17.5,FR,91
+172.17.6,DE,BE
+172.17.7,DE,BE
+172.17.8,DE,BE
+172.17.9,DE,NW
+172.18,US,TX
+172.19,US,VA
+172.20,US,NV
+172.21.1,US,MS
+172.21.2,US,MS
+172.21.3,US,MS
+172.21.4,US,ND
+172.21.5,US,ND
+172.21.6,US,ND
+172.21.7,US,ME
+172.21.8,US,ME
+172.21.9,US,ME
+172.22.1,US,RI
+172.22.2,US,RI
+172.22.3,US,RI
+172.22.4,US,AZ
+172.22.5,US,AZ
+172.22.6,US,AZ
+172.22.7,US,NM
+172.22.8,US,NM
+172.22.9,US,NM
+172.23.1,US,OH
+172.23.2,US,OH
+172.23.3,US,OH
+172.23.4,US,OH
+172.23.5,US,FL
+172.23.6,US,FL
+172.23.7,US,FL
+172.23.8,US,FL
+172.23.9,US,FL
+172.24,US,WA
+172.25,US,MI
+172.26,US,NH
+172.27,US,NY
+172.28,US,CT
+172.29,US,NE
+172.30,US,GA
+172.31,US,KY</preload>
+        </data>
+        <stream name="WikiEdits" schema="WikiEditsTimestampedSchema"/>
+        <box name="Query" type="query">
+            <input port="1" stream="WikiEdits"/>
+            <output port="1" stream="out:Query_1"/>
+            <dataref id="querytable" name="IPToLocation_fake"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="substr(editor, 0, 6)"/>
+            <param name="key-value.0" value="substr(input.editor,0,6)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="editor"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Query_1"/>
+            <output port="1" stream="WikiEditsLocated"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="editor_continent">if (editor_countrycode == "US") then "North America"
+else if (editor_countrycode == 'DE' || editor_countrycode == 'FR' || editor_countrycode == 'GB') then "Europe"
+else "Unknown"</include>
+                    <include field="editor_city">""</include>
+                    <include field="editor_lat">double(null)</include>
+                    <include field="editor_lon">double(null)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="WikiEditsLocated" schema="WikiEditsLocatedSchema"/>
+    </add>
+</modify>

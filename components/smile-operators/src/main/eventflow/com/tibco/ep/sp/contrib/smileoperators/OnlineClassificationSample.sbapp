@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.smileoperators.OnlineClassificationSample"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <data name="Data" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="id" type="long"/>
+                    <field name="class" type="int"/>
+                    <field name="attributes" type="list">
+                        <element-type type="double"/>
+                    </field>
+                </schema>
+                <primary-index type="hash">
+                    <field name="id"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="Dataset">
+            <schema>
+                <field name="attributes" type="list">
+                    <element-type type="double"/>
+                </field>
+                <field name="class" type="int"/>
+            </schema>
+        </stream>
+        <stream name="OnlineLearning">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="attributes" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <box name="Interval" type="metronome">
+            <output port="1" stream="out:Interval_1"/>
+            <param name="interval" value="2"/>
+            <param name="timestamp-field" value="time"/>
+        </box>
+        <box name="Tag" type="seqnum">
+            <input port="1" stream="Dataset"/>
+            <output port="1" stream="out:Tag_1"/>
+            <param name="output-field" value="id"/>
+            <param name="sequence-id" value="sequenceid"/>
+            <param name="update-expression" value="sequenceid + 1"/>
+        </box>
+        <box name="Test" type="query">
+            <input port="1" stream="out:Interval_1"/>
+            <output port="1" stream="out:Test_1"/>
+            <dataref id="querytable" name="Data"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Classify" type="java">
+            <input port="1" stream="out:Test_1"/>
+            <input port="2" stream="OnlineLearning"/>
+            <output port="1" stream="out:Classify_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="K-Nearest Neighbor"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.05"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Least Squares"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="4, 5, 3"/>
+            <param name="learningRate" value="0.2"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.5"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="true"/>
+            <param name="onlineType" value="Support Vector Machines"/>
+            <param name="paramField" value="attributes"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.01"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="Store" type="query">
+            <input port="1" stream="out:Tag_1"/>
+            <dataref id="querytable" name="Data"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="id"/>
+            <param name="key-value.0" value="input.id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="CorrectOrNot" type="aggregate">
+            <input port="1" stream="out:Classify_1"/>
+            <output port="1" stream="out:CorrectOrNot_1"/>
+            <param name="dimension-name.0" value="Dimension1"/>
+            <param name="dimension-type.0" value="Time"/>
+            <param name="dimension-offset.0" value="1"/>
+            <param name="dimension-advance.0" value="2"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="2"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="correct">countif(prediction == class)</include>
+                    <include field="incorrect">countif(prediction != class)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Rate" type="map">
+            <input port="1" stream="out:CorrectOrNot_1"/>
+            <output port="1" stream="ModelStatus"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="rate">correct / (incorrect + correct)</include>
+                    <remove field="correct"/>
+                    <remove field="incorrect"/>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ModelStatus"/>
+        <gui.note name="Classifier">
+            <property name="description" value="Though this sample will not work with batch models as is, the classifier operator's General Properties tab's &quot;Online Classifier Type&quot; and any field in the Online properties tab may be changed."/>
+        </gui.note>
+        <gui.note name="SampleExplanation">
+            <property name="description" value="This sample demonstrates how the online learning models can learn over time. &#10;&#10;Contunious learning is simulated by having the training data set trickle in. Every two seconds, the predictions of the current model are compared to the whole dataset, and its accuracy is outputted."/>
+        </gui.note>
+    </add>
+</modify>

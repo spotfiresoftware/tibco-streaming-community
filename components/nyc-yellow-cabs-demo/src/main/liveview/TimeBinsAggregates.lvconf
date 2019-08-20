@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ASCII"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="TimeBinsAggregates">
+    <fields>
+      <field name="TimeInterval" type="timestamp"/>
+      <field name="Description" type="string"/>
+      <field name="Fares" type="double"/>
+      <field name="Tips" type="double"/>
+      <field name="PercentTips" type="double"/>
+      <field name="MinTip" type="double"/>
+      <field name="MaxTip" type="double"/>
+      <field name="NumTrips" type="int"/>
+    </fields>
+    <primary-key>
+      <field ref="TimeInterval"/>
+    </primary-key>
+    <data-sources>
+      <data-source>
+        <aggregation table-ref="TaxiTrips">
+          <query>
+            <projection>sum(Total_Fare) AS Fares, sum(Tip) AS Tips, avg(100*Tip/Total_Fare) AS PercentTips, min(100*Tip/Total_Fare) AS MinTip, max(100*Tip/Total_Fare) AS MaxTip, count() AS NumTrips</projection>
+          </query>
+        </aggregation>
+      </data-source>
+    </data-sources>
+  </data-table>
+</liveview-configuration>

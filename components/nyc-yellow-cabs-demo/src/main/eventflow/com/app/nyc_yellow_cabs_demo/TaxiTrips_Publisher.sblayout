@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="AccelerationRate">
+        <param name="gui:x" value="85"/>
+        <param name="gui:y" value="-1639"/>
+    </component>
+    <component name="PublishSchemasIn">
+        <param name="gui:x" value="-852"/>
+        <param name="gui:y" value="-1210"/>
+    </component>
+    <component name="ServerStateIn">
+        <param name="gui:x" value="-852"/>
+        <param name="gui:y" value="-1495"/>
+    </component>
+    <component name="ServerStatusIn">
+        <param name="gui:x" value="-1006"/>
+        <param name="gui:y" value="-1675"/>
+    </component>
+    <component name="TheLastGoodRecordIn">
+        <param name="gui:x" value="-852"/>
+        <param name="gui:y" value="-1305"/>
+    </component>
+    <component name="AreaBasedFluxTable">
+        <param name="gui:x" value="-714"/>
+        <param name="gui:y" value="-2154"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="TripDistancesTable">
+        <param name="gui:x" value="276"/>
+        <param name="gui:y" value="-2056"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="TripDurationsTable">
+        <param name="gui:x" value="-419"/>
+        <param name="gui:y" value="-1301"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="AddControlFieldsFlux">
+        <param name="gui:x" value="-394"/>
+        <param name="gui:y" value="-2400"/>
+    </component>
+    <component name="AddControlFieldsTaxiTrips">
+        <param name="gui:x" value="379"/>
+        <param name="gui:y" value="-1458"/>
+    </component>
+    <component name="AddControlFieldsTripDistances">
+        <param name="gui:x" value="452"/>
+        <param name="gui:y" value="-2186"/>
+    </component>
+    <component name="AddControlFieldsTrips">
+        <param name="gui:x" value="-270"/>
+        <param name="gui:y" value="-1431"/>
+    </component>
+    <component name="CastCoorDropoffs">
+        <param name="gui:x" value="-833"/>
+        <param name="gui:y" value="-2290"/>
+        <param name="gui:bends:1" value="782,-1663;780,-1946;-940,-1955;-939,-2258"/>
+    </component>
+    <component name="CastCoorPickups">
+        <param name="gui:x" value="-833"/>
+        <param name="gui:y" value="-2073"/>
+        <param name="gui:bends:1" value="768,-1682;765,-1934;-899,-1943;-899,-2043"/>
+    </component>
+    <component name="CastDistance">
+        <param name="gui:x" value="47"/>
+        <param name="gui:y" value="-2186"/>
+        <param name="gui:bends:1" value="796,-1660;795,-1958;8,-1961;8,-2152"/>
+    </component>
+    <component name="CastFields">
+        <param name="gui:x" value="256"/>
+        <param name="gui:y" value="-1458"/>
+        <param name="gui:bends:1" value="785,-1663;785,-1511;177,-1510;178,-1426"/>
+    </component>
+    <component name="CombinePickupsDropoffs">
+        <param name="gui:x" value="-686"/>
+        <param name="gui:y" value="-1431"/>
+        <param name="gui:bends:1" value="766,-1684;766,-1312;68,-1314;66,-1507;-772,-1503;-772,-1407"/>
+        <param name="gui:bends:2" value="786,-1663;785,-1268;33,-1271;30,-1474;-807,-1474;-807,-1388"/>
+    </component>
+    <component name="CreateScaleCommandd">
+        <param name="gui:x" value="85"/>
+        <param name="gui:y" value="-1734"/>
+    </component>
+    <component name="CreateSecondStartCommand">
+        <param name="gui:x" value="-85"/>
+        <param name="gui:y" value="-1734"/>
+        <param name="gui:bends:1" value="-293,-1698;-291,-1707"/>
+    </component>
+    <component name="CreateStartCommand">
+        <param name="gui:x" value="-773"/>
+        <param name="gui:y" value="-1760"/>
+        <param name="gui:bends:1" value="-826,-1649;-806,-1732"/>
+    </component>
+    <component name="DecideAreaDropoffs">
+        <param name="gui:x" value="-704"/>
+        <param name="gui:y" value="-2290"/>
+    </component>
+    <component name="DecideAreaPickups">
+        <param name="gui:x" value="-704"/>
+        <param name="gui:y" value="-2073"/>
+    </component>
+    <component name="DecideTripDistance">
+        <param name="gui:x" value="157"/>
+        <param name="gui:y" value="-2186"/>
+    </component>
+    <component name="DecideTripDuration">
+        <param name="gui:x" value="-538"/>
+        <param name="gui:y" value="-1431"/>
+    </component>
+    <component name="FilterAllFileData">
+        <param name="gui:x" value="-550"/>
+        <param name="gui:y" value="-1735"/>
+        <param name="gui:bends:1" value="-563,-1723;-563,-1708"/>
+    </component>
+    <component name="GetLatestData">
+        <param name="gui:x" value="-513"/>
+        <param name="gui:y" value="-2400"/>
+    </component>
+    <component name="InitialData">
+        <param name="gui:x" value="-628"/>
+        <param name="gui:y" value="-1760"/>
+    </component>
+    <component name="IsReady">
+        <param name="gui:x" value="-911"/>
+        <param name="gui:y" value="-1675"/>
+    </component>
+    <component name="MakeGood">
+        <param name="gui:x" value="-764"/>
+        <param name="gui:y" value="-1495"/>
+    </component>
+    <component name="Metronome">
+        <param name="gui:x" value="-704"/>
+        <param name="gui:y" value="-2400"/>
+    </component>
+    <component name="QueryFluxTableDropoffs">
+        <param name="gui:x" value="-513"/>
+        <param name="gui:y" value="-2290"/>
+    </component>
+    <component name="QueryFluxTablePickups">
+        <param name="gui:x" value="-513"/>
+        <param name="gui:y" value="-2073"/>
+    </component>
+    <component name="QueryTripDistances">
+        <param name="gui:x" value="286"/>
+        <param name="gui:y" value="-2186"/>
+    </component>
+    <component name="QueryTripDurations">
+        <param name="gui:x" value="-409"/>
+        <param name="gui:y" value="-1431"/>
+    </component>
+    <component name="SimulationData">
+        <param name="gui:x" value="419"/>
+        <param name="gui:y" value="-1734"/>
+    </component>
+    <component name="TripType">
+        <param name="gui:x" value="690"/>
+        <param name="gui:y" value="-1699"/>
+    </component>
+    <component name="UnionSimulationCommands">
+        <param name="gui:x" value="267"/>
+        <param name="gui:y" value="-1734"/>
+        <param name="gui:bends:1" value="20,-1707;46,-1814;207,-1814;231,-1717"/>
+        <param name="gui:bends:3" value="196,-1613;216,-1697"/>
+    </component>
+    <component name="UnionTaxiData">
+        <param name="gui:x" value="515"/>
+        <param name="gui:y" value="-1699"/>
+        <param name="gui:bends:1" value="500,-1697;501,-1682"/>
+        <param name="gui:bends:2" value="-242,-1718;-226,-1789;487,-1789;502,-1662"/>
+    </component>
+    <component name="ValidData">
+        <param name="gui:x" value="610"/>
+        <param name="gui:y" value="-1699"/>
+    </component>
+    <component name="PublishToAreaBasedTaxiFlowOut">
+        <param name="gui:x" value="-217"/>
+        <param name="gui:y" value="-2400"/>
+    </component>
+    <component name="PublishToTaxiTripsOut">
+        <param name="gui:x" value="540"/>
+        <param name="gui:y" value="-1458"/>
+    </component>
+    <component name="PublishToTripDistanceOut">
+        <param name="gui:x" value="637"/>
+        <param name="gui:y" value="-2186"/>
+    </component>
+    <component name="PublishToTripDurationOut">
+        <param name="gui:x" value="-111"/>
+        <param name="gui:y" value="-1431"/>
+    </component>
+    <component name="PublisherStateOut">
+        <param name="gui:x" value="-665"/>
+        <param name="gui:y" value="-1495"/>
+    </component>
+    <component name="QueryTheLastGoodRecordOut">
+        <param name="gui:x" value="-852"/>
+        <param name="gui:y" value="-1400"/>
+    </component>
+    <component name="SetRunning">
+        <param name="gui:x" value="-773"/>
+        <param name="gui:y" value="-1675"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-809"/>
+        <param name="gui:y" value="-1852"/>
+        <param name="gui:width" value="133"/>
+        <param name="gui:height" value="87"/>
+    </component>
+    <component name="Note2">
+        <param name="gui:x" value="382"/>
+        <param name="gui:y" value="-1890"/>
+        <param name="gui:width" value="133"/>
+        <param name="gui:height" value="87"/>
+    </component>
+    <component name="AreaBasedTaxiFlow">
+        <param name="gui:x" value="-861"/>
+        <param name="gui:y" value="-2422"/>
+        <param name="gui:width" value="777"/>
+        <param name="gui:height" value="445"/>
+    </component>
+    <component name="InitialSettings">
+        <param name="gui:x" value="-1023"/>
+        <param name="gui:y" value="-1877"/>
+        <param name="gui:width" value="551"/>
+        <param name="gui:height" value="283"/>
+    </component>
+    <component name="Simulation">
+        <param name="gui:x" value="-145"/>
+        <param name="gui:y" value="-1912"/>
+        <param name="gui:width" value="896"/>
+        <param name="gui:height" value="353"/>
+    </component>
+    <component name="TaxiTrips">
+        <param name="gui:x" value="253"/>
+        <param name="gui:y" value="-1480"/>
+        <param name="gui:width" value="388"/>
+        <param name="gui:height" value="102"/>
+    </component>
+    <component name="TripDistances">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-2208"/>
+        <param name="gui:width" value="714"/>
+        <param name="gui:height" value="228"/>
+    </component>
+    <component name="TripDurations">
+        <param name="gui:x" value="-736"/>
+        <param name="gui:y" value="-1453"/>
+        <param name="gui:width" value="737"/>
+        <param name="gui:height" value="228"/>
+    </component>
+    <component name="Unused">
+        <param name="gui:x" value="-916"/>
+        <param name="gui:y" value="-1517"/>
+        <param name="gui:width" value="338"/>
+        <param name="gui:height" value="387"/>
+    </component>
+    <gui.group color="251,217,165" color-header="243,149,3" name="AreaBasedTaxiFlow" visual-state="open">
+        <member name="CastCoorPickups"/>
+        <member name="AreaBasedFluxTable"/>
+        <member name="GetLatestData"/>
+        <member name="DecideAreaPickups"/>
+        <member name="Metronome"/>
+        <member name="QueryFluxTablePickups"/>
+        <member name="AddControlFieldsFlux"/>
+        <member name="CastCoorDropoffs"/>
+        <member name="PublishToAreaBasedTaxiFlowOut"/>
+        <member name="DecideAreaDropoffs"/>
+        <member name="QueryFluxTableDropoffs"/>
+        <param name="gui:x" value="-861"/>
+        <param name="gui:y" value="-2422"/>
+        <param name="gui:width" value="777"/>
+        <param name="gui:height" value="445"/>
+    </gui.group>
+    <gui.group color="252,239,190" color-header="231,220,93" name="InitialSettings" visual-state="open">
+        <member name="CreateStartCommand"/>
+        <member name="InitialData"/>
+        <member name="FilterAllFileData"/>
+        <member name="IsReady"/>
+        <member name="SetRunning"/>
+        <member name="ServerStatusIn"/>
+        <member name="Note"/>
+        <param name="gui:x" value="-1023"/>
+        <param name="gui:y" value="-1877"/>
+        <param name="gui:width" value="551"/>
+        <param name="gui:height" value="283"/>
+    </gui.group>
+    <gui.group color="164,211,193" color-header="3,169,134" name="Simulation" visual-state="open">
+        <member name="SimulationData"/>
+        <member name="UnionSimulationCommands"/>
+        <member name="CreateSecondStartCommand"/>
+        <member name="ValidData"/>
+        <member name="UnionTaxiData"/>
+        <member name="AccelerationRate"/>
+        <member name="TripType"/>
+        <member name="CreateScaleCommandd"/>
+        <member name="Note2"/>
+        <param name="gui:x" value="-145"/>
+        <param name="gui:y" value="-1912"/>
+        <param name="gui:width" value="896"/>
+        <param name="gui:height" value="353"/>
+    </gui.group>
+    <gui.group color="255,185,192" color-header="209,0,1" name="TaxiTrips" visual-state="open">
+        <member name="CastFields"/>
+        <member name="PublishToTaxiTripsOut"/>
+        <member name="AddControlFieldsTaxiTrips"/>
+        <param name="gui:x" value="253"/>
+        <param name="gui:y" value="-1480"/>
+        <param name="gui:width" value="388"/>
+        <param name="gui:height" value="102"/>
+    </gui.group>
+    <gui.group color="214,191,231" color-header="160,113,196" name="TripDistances" visual-state="open">
+        <member name="DecideTripDistance"/>
+        <member name="AddControlFieldsTripDistances"/>
+        <member name="CastDistance"/>
+        <member name="QueryTripDistances"/>
+        <member name="PublishToTripDistanceOut"/>
+        <member name="TripDistancesTable"/>
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-2208"/>
+        <param name="gui:width" value="714"/>
+        <param name="gui:height" value="228"/>
+    </gui.group>
+    <gui.group color="201,210,255" color-header="80,110,240" name="TripDurations" visual-state="open">
+        <member name="DecideTripDuration"/>
+        <member name="AddControlFieldsTrips"/>
+        <member name="CombinePickupsDropoffs"/>
+        <member name="PublishToTripDurationOut"/>
+        <member name="QueryTripDurations"/>
+        <member name="TripDurationsTable"/>
+        <param name="gui:x" value="-736"/>
+        <param name="gui:y" value="-1453"/>
+        <param name="gui:width" value="737"/>
+        <param name="gui:height" value="228"/>
+    </gui.group>
+    <gui.group name="Unused" visual-state="closed">
+        <property name="description" value="These advanced features of the publisher interface are not used in this demo"/>
+        <member name="PublishSchemasIn"/>
+        <member name="MakeGood"/>
+        <member name="PublisherStateOut"/>
+        <member name="TheLastGoodRecordIn"/>
+        <member name="ServerStateIn"/>
+        <member name="QueryTheLastGoodRecordOut"/>
+        <param name="gui:x" value="-916"/>
+        <param name="gui:y" value="-1517"/>
+        <param name="gui:width" value="338"/>
+        <param name="gui:height" value="387"/>
+    </gui.group>
+</application-layout>

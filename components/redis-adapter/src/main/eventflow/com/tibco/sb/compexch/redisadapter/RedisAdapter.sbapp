@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_6df2e06995296ec4867f5d0b72ea9a7f8a556bc3">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.redisadapter.RedisAdapter"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="InputStream">
+            <schema>
+                <field name="time" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="Metronome" type="metronome">
+            <output port="1" stream="out:Metronome_1"/>
+            <param name="interval" value="1"/>
+            <param name="timestamp-field" value="time"/>
+        </box>
+        <box name="RedisInput" type="inputadapter">
+            <output port="1" stream="OutputStream"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.cityindex.redis.RedisInput"/>
+            <param name="channelPath" value="*"/>
+            <param name="redisHost" value="localhost"/>
+            <param name="redisPort" value="6379"/>
+        </box>
+        <output-stream name="OutputStream"/>
+        <box name="Union" type="union">
+            <input port="1" stream="out:Metronome_1"/>
+            <input port="2" stream="InputStream"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="true"/>
+        </box>
+        <box name="IDsValuesMap" type="map">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:IDsValuesMap_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="ids">range(1,101)</include>
+                    <include field="value">random() * 1000</include>
+                    <include field="keyid">round(random() * 1000)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="IterateOverIDs" type="iterate">
+            <input port="1" stream="out:IDsValuesMap_1"/>
+            <output port="1" stream="out:IterateOverIDs_1"/>
+            <param name="iterate-expr" value="input1.ids"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="id">each.element</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="OneIDMap" type="map">
+            <input port="1" stream="out:IterateOverIDs_1"/>
+            <output port="1" stream="out:OneIDMap_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="value">string(value)</replace>
+                    <remove field="ids"/>
+                </item>
+                <expressions>
+                    <include field="key">"SampleKey" + string(id)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="RedisOutput" type="outputadapter">
+            <input port="1" stream="out:OneIDMap_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.cityindex.redis.RedisOutput"/>
+            <param name="redisHost" value="127.0.0.1"/>
+            <param name="redisPort" value="6379"/>
+        </box>
+    </add>
+</modify>

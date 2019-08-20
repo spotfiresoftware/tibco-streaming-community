@@ -1,0 +1,30 @@
+08-23 15:20:52 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "SYSTEMINFO" already exists; SQL statement:
+CREATE TABLE SystemInfo (Key VARCHAR(256) PRIMARY KEY, Value VARCHAR(1000)) [42101-166]
+08-23 15:20:52 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "NAMEVALUE" already exists; SQL statement:
+CREATE TABLE NameValue (Name VARCHAR(256), User VARCHAR(256), Value CLOB) [42101-166]
+08-23 15:20:52 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ALERTS" already exists; SQL statement:
+CREATE TABLE Alerts (Id BIGINT PRIMARY KEY, User VARCHAR(256), Alert CLOB) [42101-166]
+08-23 15:20:52 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "WORKSPACE" already exists; SQL statement:
+CREATE TABLE Workspace (Id BIGINT PRIMARY KEY, User VARCHAR(256), Metadata CLOB, Workspace BLOB) [42101-166]
+08-23 15:20:52 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "QUERIES" already exists; SQL statement:
+CREATE TABLE Queries (Id BIGINT PRIMARY KEY, User VARCHAR(256), Query CLOB) [42101-166]
+08-23 15:29:21 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "SYSTEMINFO" already exists; SQL statement:
+CREATE TABLE SystemInfo (Key VARCHAR(256) PRIMARY KEY, Value VARCHAR(1000)) [42101-166]
+08-23 15:29:21 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "NAMEVALUE" already exists; SQL statement:
+CREATE TABLE NameValue (Name VARCHAR(256), User VARCHAR(256), Value CLOB) [42101-166]
+08-23 15:29:21 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ALERTS" already exists; SQL statement:
+CREATE TABLE Alerts (Id BIGINT PRIMARY KEY, User VARCHAR(256), Alert CLOB) [42101-166]
+08-23 15:29:21 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "WORKSPACE" already exists; SQL statement:
+CREATE TABLE Workspace (Id BIGINT PRIMARY KEY, User VARCHAR(256), Metadata CLOB, Workspace BLOB) [42101-166]
+08-23 15:29:21 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "QUERIES" already exists; SQL statement:
+CREATE TABLE Queries (Id BIGINT PRIMARY KEY, User VARCHAR(256), Query CLOB) [42101-166]

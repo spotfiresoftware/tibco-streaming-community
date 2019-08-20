@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.example.planetracker.PlanePublisher"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="lvinterfaces.PlanesPublisher"/>
+        <import from="lvinterfaces.PlanesPublisher"/>
+        <import from="lvinterfaces.PlanesSchemas"/>
+        <dynamic-variables/>
+        <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
+        <stream name="ServerStateIn" schema="ServerStateSchema"/>
+        <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
+        <stream name="TheLastGoodRecordIn" schema="TheLastGoodRecordSchema"/>
+        <output-stream name="QueryTheLastGoodRecordOut" schema="QueryTheLastGoodRecordSchema"/>
+        <box name="InputAdapter" type="inputadapter">
+            <output port="1" stream="out:InputAdapter_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.example.planetracker.Telnet2Tuple"/>
+            <param name="Region" value="Na-Wal"/>
+            <param name="TelnetUri" value="localhost:30003"/>
+            <param name="schema0" value="PlanesTableSchema"/>
+        </box>
+        <box name="AddControlFields" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#13;&#10;The app can use these fields to support udpate/delete rules,&#13;&#10;or table persistence."/>
+            <input port="1" stream="out:InputAdapter_1"/>
+            <output port="1" stream="PublishToPlanesOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">PlanesInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="MakeGood" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="ServerStateIn"/>
+            <output port="1" stream="PublisherStateOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="CurrentState">RECOVERY_COMPLETE</replace>
+                    <replace field="Name">"PlanePublisher"</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="PublisherStateOut" schema="ServerStateSchema"/>
+        <output-stream name="PublishToPlanesOut" schema="PlanesDataInSchema" scope="public"/>
+    </add>
+</modify>

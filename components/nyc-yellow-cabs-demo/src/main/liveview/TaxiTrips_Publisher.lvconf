@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <publisher id="TaxiTrips_Publisher" filename="com.app.nyc_yellow_cabs_demo.TaxiTrips_Publisher">
+    <tables>
+      <table table-ref="AreaBasedTaxiFlow"/>
+      <table table-ref="TaxiTrips"/>
+      <table table-ref="TripDistance"/>
+      <table table-ref="TripDuration"/>
+    </tables>
+  </publisher>
+</liveview-configuration>

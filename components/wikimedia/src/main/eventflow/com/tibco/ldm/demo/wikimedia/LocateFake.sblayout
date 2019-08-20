@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="WikiEdits">
+        <param name="gui:x" value="-190"/>
+        <param name="gui:y" value="8"/>
+    </component>
+    <component name="IPToLocation_fake">
+        <param name="gui:x" value="-110"/>
+        <param name="gui:y" value="138"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-20"/>
+        <param name="gui:y" value="8"/>
+    </component>
+    <component name="Query">
+        <param name="gui:x" value="-100"/>
+        <param name="gui:y" value="8"/>
+    </component>
+    <component name="WikiEditsLocated">
+        <param name="gui:x" value="72"/>
+        <param name="gui:y" value="8"/>
+    </component>
+</application-layout>

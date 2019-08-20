@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DelayIn">
+        <param name="gui:x" value="63"/>
+        <param name="gui:y" value="119"/>
+    </component>
+    <component name="VariableDelayIn">
+        <param name="gui:x" value="63"/>
+        <param name="gui:y" value="5"/>
+    </component>
+    <component name="DelayFiveSeconds">
+        <param name="gui:x" value="177"/>
+        <param name="gui:y" value="119"/>
+    </component>
+    <component name="DelayVariable">
+        <param name="gui:x" value="177"/>
+        <param name="gui:y" value="5"/>
+    </component>
+    <component name="DelayOut">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="119"/>
+    </component>
+    <component name="VariableDelayOut">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="5"/>
+    </component>
+</application-layout>

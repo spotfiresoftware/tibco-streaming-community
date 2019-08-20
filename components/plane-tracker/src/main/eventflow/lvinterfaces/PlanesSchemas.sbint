@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="Unknown version">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the Planes LiveView table."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.PlanesSchemas"/>
+    </type-metadata>
+    <named-schemas>
+        <schema name="PlanesDataInSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+            <field description="Unique plane identification number provided by International Civil Aviation Organization" name="ICAO" type="string"/>
+            <field description="Flight number provided by airline company" name="FlightId" type="string"/>
+            <field description="Height relative to 1013.2mb (Flight Level)" name="Altitude" type="int"/>
+            <field description="North positive and South negative." name="Latitude" type="double"/>
+            <field description="East positive and West negative." name="Longitude" type="double"/>
+            <field description="Track of aircraft derived from the velocity E/W and velocity N/S." name="Heading" type="double"/>
+            <field description="Speed over ground (mph)" name="Speed" type="int"/>
+            <field description="Latest timestamp to receive signal from the plane" name="LastReceiveTime" type="timestamp"/>
+            <field description="First timestamp to reveive signal from the plane" name="StartReceiveTime" type="timestamp"/>
+            <field description="Location of the transponder receiver." name="Region" type="string"/>
+        </schema>
+        <schema name="PlanesDataOutSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="Unique plane identification number provided by International Civil Aviation Organization" name="ICAO" type="string"/>
+            <field description="Flight number provided by airline company" name="FlightId" type="string"/>
+            <field description="Height relative to 1013.2mb (Flight Level)" name="Altitude" type="int"/>
+            <field description="North positive and South negative." name="Latitude" type="double"/>
+            <field description="East positive and West negative." name="Longitude" type="double"/>
+            <field description="Track of aircraft derived from the velocity E/W and velocity N/S." name="Heading" type="double"/>
+            <field description="Speed over ground (mph)" name="Speed" type="int"/>
+            <field description="Latest timestamp to receive signal from the plane" name="LastReceiveTime" type="timestamp"/>
+            <field description="First timestamp to reveive signal from the plane" name="StartReceiveTime" type="timestamp"/>
+            <field description="Location of the transponder receiver." name="Region" type="string"/>
+        </schema>
+        <schema name="PlanesTableSchema">
+            <field description="Unique plane identification number provided by International Civil Aviation Organization" name="ICAO" type="string"/>
+            <field description="Flight number provided by airline company" name="FlightId" type="string"/>
+            <field description="Height relative to 1013.2mb (Flight Level)" name="Altitude" type="int"/>
+            <field description="North positive and South negative." name="Latitude" type="double"/>
+            <field description="East positive and West negative." name="Longitude" type="double"/>
+            <field description="Track of aircraft derived from the velocity E/W and velocity N/S." name="Heading" type="double"/>
+            <field description="Speed over ground (mph)" name="Speed" type="int"/>
+            <field description="Latest timestamp to receive signal from the plane" name="LastReceiveTime" type="timestamp"/>
+            <field description="First timestamp to reveive signal from the plane" name="StartReceiveTime" type="timestamp"/>
+            <field description="Location of the transponder receiver." name="Region" type="string"/>
+        </schema>
+        <schema name="PlanesInputControlFields">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+        </schema>
+    </named-schemas>
+</application>

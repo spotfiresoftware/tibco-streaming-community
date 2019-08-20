@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_6df2e06995296ec4867f5d0b72ea9a7f8a556bc3">
+    <add>
+        <gui.metadata>
+            <property name="description" value="Title: Delay Operator&#13;&#10;Description: Demonstrates the delay operator&#13;&#10;&#13;&#10;This component demonstrates how to use the delay operator. There are many instances in which delaying the start of a stream in useful. &#13;&#10;For example, one may want to load trading parameters prior to receiving market data. &#13;&#10;Further, a trader may want to build up a trading metric by analyzing market data over an given interval before initiating their trading strategies. &#13;&#10;The delay operator would, in both cases, be useful when creating the respective StreamBase programs. &#13;&#10;The examples implemented here show how one can delay the start of a stream by a constant amount of time (see the DelayFiveSeconds operator) &#13;&#10;or by a variable amount of time (see the DelayVariable operator)."/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.delayoperator.DelayOperator"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="DelayIn">
+            <schema>
+                <field description="The input we want to delay" name="Payload" type="string"/>
+            </schema>
+            <param name="gui:x" value="75"/>
+            <param name="gui:y" value="118"/>
+        </stream>
+        <stream name="VariableDelayIn">
+            <schema>
+                <field description="The amount of time we want to delay the Payload by" name="Delay" type="timestamp"/>
+                <field description="The input we want to delay" name="Payload" type="string"/>
+            </schema>
+            <param name="gui:x" value="75"/>
+            <param name="gui:y" value="5"/>
+        </stream>
+        <box name="DelayFiveSeconds" type="java">
+            <property name="description" value="Delay the Payload by 5 seconds."/>
+            <input port="1" stream="DelayIn"/>
+            <output port="1" stream="DelayOut"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.contrib.delay.DelayOperator"/>
+            <param name="delay" value="seconds(5)"/>
+            <param name="gui:x" value="185"/>
+            <param name="gui:y" value="118"/>
+        </box>
+        <box name="DelayVariable" type="java">
+            <property name="description" value="Delay the payload by the time stored in Delay."/>
+            <input port="1" stream="VariableDelayIn"/>
+            <output port="1" stream="VariableDelayOut"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.contrib.delay.DelayOperator"/>
+            <param name="delay" value="Delay"/>
+            <param name="gui:x" value="185"/>
+            <param name="gui:y" value="5"/>
+        </box>
+        <output-stream name="DelayOut">
+            <property name="description" value="Output the payload after delaying it for 5 seconds."/>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="118"/>
+        </output-stream>
+        <output-stream name="VariableDelayOut">
+            <property name="description" value="Output the Payload after delaying it a variable amount of time."/>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="5"/>
+        </output-stream>
+    </add>
+</modify>

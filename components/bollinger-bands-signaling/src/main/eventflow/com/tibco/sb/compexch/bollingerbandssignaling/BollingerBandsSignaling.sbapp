@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_a8f4a008b96ea7ff9200c11cd2c5388579e1621f">
+    <add>
+        <gui.metadata>
+            <property name="description" value="Title: Bollinger Band Signaling Algorithm&#13;&#10;Description: Automated trading simulation using Bollinger Bands trading indicator&#13;&#10;&#13;&#10;Bollinger Bands are a technical analysis tool that can be used to measure the highness or lowness of the price relative to previous trades.&#13;&#10;Bollinger Bands consist of a middle band being an N-period simple moving average (SMA), an upper band at +K times the standard deviation&#13;&#10;of the simple moving average (SMA+K*sigma) and a lower band at -K times the standard deviation of the simple moving average (SMA-K*sigma).&#13;&#10;&#13;&#10;The parameters for this component can be set in the &quot;Definitions&quot; section:&#13;&#10;&#9;WindowSize:&#9;The period or number of observations of the simple moving average&#13;&#10;&#9;K:&#9;&#9;&#9;&#9;The number of standard deviations to use for the high and low Bollinger bands&#13;&#10;&#9;OrderSize:&#9;&#9;The number of shares to trade with&#13;&#10;&#13;&#10;The security symbol, price and the timestamp is used as input to this component. For each symbol, the simple moving average and the high and low bollinger bands&#13;&#10;are calculated. If the current price of the stock ever jumps above the high Bollinger band, then according to theory, this indicator predicts that the stock price should&#13;&#10;drop. Thus, the signaling algorithm takes a short position until the price of the stock passes the middle band from above (at which point the position is unwound).&#13;&#10;Alternatively,  if the current price of the stock ever dips below the low Bollinger band, then according to theory, this indicator predicts that the stock price should&#13;&#10;increase. Thus, the signaling algorithm takes a long position until the price of the stock passes the middle band from below (at which point the position is unwound).&#13;&#10;Trades are assumed to be immediately executed with no lag or partial fills and the number of shares to trade are given by the &quot;OrderSize&quot; variable.&#13;&#10;&#13;&#10;Two short feed simulations are provided. The first demonstrates how the component works while monitoring one stock symbol, while the second demonstrates how the component works &#13;&#10;while monitoring two stock symbols. The model can be extended to monitor as many symbols as desired though they must all trade have the same parameters (K, WindowSize, OrderSize).&#13;&#10;&#13;&#10;Values for WindowSize,  K and OrderSize can vary (and can be set manually) but the default is, WindowSize = 20 and K = 1.96, OrderSize=1000."/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.bollingerbandssignaling.BollingerBandsSignaling"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <constant expr="1.96" name="K"/>
+        <constant expr="1000" name="OrderSize"/>
+        <constant expr="10" name="WindowSize"/>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="double(0.0)" name="GainsArithmetic" setter-expression="ArithmeticGains" setter-stream="TradeOutput"/>
+        </dynamic-variables>
+        <data name="PositionTable" shared="false" source="concrete" type="querytable">
+            <property name="description" value="This query table keeps track of the current position one has in a paticular stock."/>
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field description="Symbol of security where a position has been taken" name="Symbol" type="string"/>
+                    <field description="Either &quot;Short&quot;, &quot;Long&quot; or &quot;Neutral&quot;" name="Position" type="string"/>
+                    <field description="Amount invested in strategy" name="Investment" type="double"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="Symbol"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="950"/>
+            <param name="gui:y" value="435"/>
+            <param name="gui:width" value="150"/>
+            <param name="gui:height" value="79"/>
+        </data>
+        <stream name="DataInput">
+            <property name="description" value="Market data input stream: (symbol, price, date)"/>
+            <schema>
+                <field description="Symbol of security that is traded" name="Symbol" type="string"/>
+                <field description="Current price per share of security" name="Price" type="double"/>
+                <field description="Current date and time" name="Date" type="timestamp"/>
+            </schema>
+            <param name="gui:x" value="75"/>
+            <param name="gui:y" value="375"/>
+        </stream>
+        <box name="AggregateSMA" type="aggregate">
+            <property name="description" value="Calculates a simple moving average of securities prices as well as the standard deviation.&#13;&#10;The window size is set in the definitions section."/>
+            <input port="1" stream="DataInput"/>
+            <output port="1" stream="out:AggregateSMA_1"/>
+            <param name="dimension-name.0" value="Aggregate1Dim"/>
+            <param name="dimension-type.0" value="predicate"/>
+            <param name="dimension-offset.0" value="0"/>
+            <param name="dimension-advance.0" value="1"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="10"/>
+            <param name="dimension-close-predicate.0" value="count() == WindowSize"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="SimpleMovingAverage">avg(Price)</include>
+                    <include field="StandardDeviation">stdev(Price)</include>
+                    <include field="Price">lastval(Price)</include>
+                    <include field="Date">lastval(Date)</include>
+                </expressions>
+            </target-list>
+            <param name="group-by-name.0" value="Symbol"/>
+            <param name="group-by.0" value="Symbol"/>
+            <param name="gui:x" value="185"/>
+            <param name="gui:y" value="375"/>
+        </box>
+        <box name="BollingerBands" type="map">
+            <property name="description" value="K-standard deviations are used to compute upper and lower band (where K is set in the definitions section)"/>
+            <input port="1" stream="out:AggregateSMA_1"/>
+            <output port="1" stream="out:BollingerBands_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="UpperBand">SimpleMovingAverage + (K * StandardDeviation)</include>
+                    <include field="MiddleBand">SimpleMovingAverage</include>
+                    <include field="LowerBand">SimpleMovingAverage - (K * StandardDeviation)</include>
+                    <include field="Price">Price</include>
+                    <include field="Date">Date</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="375"/>
+        </box>
+        <box name="ReadPosition" type="query">
+            <property name="description" value="Read the current investment position from the query table."/>
+            <input port="1" stream="out:BollingerBands_1"/>
+            <output port="1" stream="out:ReadPosition_1"/>
+            <dataref id="querytable" name="PositionTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Symbol"/>
+            <param name="key-lowerbound-value.0" value="input1.Symbol"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-explicit"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="table_" selection="all"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <param name="no-match-field.0" value="Symbol"/>
+            <param name="no-match-field.1" value="Position"/>
+            <param name="no-match-field.2" value="Investment"/>
+            <param name="no-match-value.0" value="input1.Symbol"/>
+            <param name="no-match-value.1" value="&quot;Neutral&quot;"/>
+            <param name="no-match-value.2" value="double(0.0)"/>
+            <param name="gui:x" value="405"/>
+            <param name="gui:y" value="375"/>
+        </box>
+        <box name="InvestmentDecision" type="filter">
+            <property name="description" value="Make an investment decision based on where the current price is relative to the Bollinger Bands."/>
+            <input port="1" stream="out:ReadPosition_1"/>
+            <output port="1" stream="out:InvestmentDecision_1"/>
+            <output port="2" stream="out:InvestmentDecision_2"/>
+            <output port="3" stream="out:InvestmentDecision_3"/>
+            <output port="4" stream="out:InvestmentDecision_4"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="table_Position == &quot;Long&quot; &amp;&amp; Price &gt;= MiddleBand"/>
+            <param name="expression.1" value="table_Position == &quot;Short&quot; &amp;&amp; Price &lt;= MiddleBand"/>
+            <param name="expression.2" value="Price &gt;= UpperBand &amp;&amp; table_Position ==&quot;Neutral&quot;"/>
+            <param name="expression.3" value="Price &lt;= LowerBand &amp;&amp; table_Position ==&quot;Neutral&quot;"/>
+            <param name="gui:x" value="515"/>
+            <param name="gui:y" value="255"/>
+        </box>
+        <box name="LongPosition" type="map">
+            <property name="description" value="In this case, we did not take a position in the stock but the price has dipped below the lowe rband. Thus, we must now take a long position in the stock."/>
+            <input port="1" stream="out:InvestmentDecision_4"/>
+            <output port="1" stream="out:LongPosition_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="Position">"Long"</include>
+                    <include field="UpperBand">UpperBand</include>
+                    <include field="MiddleBand">MiddleBand</include>
+                    <include field="LowerBand">LowerBand</include>
+                    <include field="Price">Price</include>
+                    <include field="Investment">Price*OrderSize</include>
+                    <include field="CapitalGain">double(0.0)</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="625"/>
+            <param name="gui:y" value="358"/>
+        </box>
+        <box name="ShortPostion" type="map">
+            <property name="description" value="In this case, we did not take a position in the stock but the price has risen above the upper band. Thus, we must now take a short position in the stock."/>
+            <input port="1" stream="out:InvestmentDecision_3"/>
+            <output port="1" stream="out:ShortPostion_1"/>
+            <param name="delta-mode" value="false"/>
+            <param name="expression-name.0" value="Symbol"/>
+            <param name="expression-name.1" value="Position"/>
+            <param name="expression-name.2" value="UpperBand"/>
+            <param name="expression-name.3" value="MiddleBand"/>
+            <param name="expression-name.4" value="LowerBand"/>
+            <param name="expression-name.5" value="Price"/>
+            <param name="expression-name.6" value="Investment"/>
+            <param name="expression-name.7" value="CapitalGain"/>
+            <param name="expression.0" value="Symbol"/>
+            <param name="expression.1" value="&quot;Short&quot;"/>
+            <param name="expression.2" value="UpperBand"/>
+            <param name="expression.3" value="MiddleBand"/>
+            <param name="expression.4" value="LowerBand"/>
+            <param name="expression.5" value="Price"/>
+            <param name="expression.6" value="Price*OrderSize"/>
+            <param name="expression.7" value="double(0.0)"/>
+            <param name="gui:x" value="625"/>
+            <param name="gui:y" value="262"/>
+        </box>
+        <box name="UnwindLongPosition" type="map">
+            <property name="description" value="In this case, we have already taken a long position in the stock but the price has risen above the middle band. Thus, we must now unwind our position."/>
+            <input port="1" stream="out:InvestmentDecision_1"/>
+            <output port="1" stream="out:UnwindLongPosition_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Symbol">Symbol</include>
+                    <include field="Position">"Neutral"</include>
+                    <include field="UpperBand">UpperBand</include>
+                    <include field="MiddleBand">MiddleBand</include>
+                    <include field="LowerBand">LowerBand</include>
+                    <include field="Price">Price</include>
+                    <include field="Investment">double(0.0)</include>
+                    <include field="CapitalGain">Price*OrderSize - table_Investment</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="625"/>
+            <param name="gui:y" value="5"/>
+        </box>
+        <box name="UnwindShortPosition" type="map">
+            <property name="description" value="In this case, we have already taken a short position in the stock but the price has dropped below the middle band. Thus, we must now unwind our position."/>
+            <input port="1" stream="out:InvestmentDecision_2"/>
+            <output port="1" stream="out:UnwindShortPosition_1"/>
+            <param name="delta-mode" value="false"/>
+            <param name="expression-name.0" value="Symbol"/>
+            <param name="expression-name.1" value="Position"/>
+            <param name="expression-name.2" value="UpperBand"/>
+            <param name="expression-name.3" value="MiddleBand"/>
+            <param name="expression-name.4" value="LowerBand"/>
+            <param name="expression-name.5" value="Price"/>
+            <param name="expression-name.6" value="Investment"/>
+            <param name="expression-name.7" value="CapitalGain"/>
+            <param name="expression.0" value="Symbol"/>
+            <param name="expression.1" value="&quot;Neutral&quot;"/>
+            <param name="expression.2" value="UpperBand"/>
+            <param name="expression.3" value="MiddleBand"/>
+            <param name="expression.4" value="LowerBand"/>
+            <param name="expression.5" value="Price"/>
+            <param name="expression.6" value="double(0.0)"/>
+            <param name="expression.7" value="table_Investment - Price*OrderSize"/>
+            <param name="gui:x" value="625"/>
+            <param name="gui:y" value="145"/>
+        </box>
+        <box name="UnionOfPositions" type="union">
+            <input port="1" stream="out:UnwindLongPosition_1"/>
+            <input port="2" stream="out:UnwindShortPosition_1"/>
+            <input port="3" stream="out:ShortPostion_1"/>
+            <input port="4" stream="out:LongPosition_1"/>
+            <output port="1" stream="out:UnionOfPositions_1"/>
+            <param name="strict" value="true"/>
+            <param name="gui:x" value="735"/>
+            <param name="gui:y" value="255"/>
+        </box>
+        <box name="WritePosition" type="query">
+            <property name="description" value="Write the new investment position into the query table."/>
+            <input port="1" stream="out:UnionOfPositions_1"/>
+            <output port="1" stream="out:WritePosition_1"/>
+            <dataref id="querytable" name="PositionTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="Symbol"/>
+            <param name="key-value.0" value="input1.Symbol"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <param name="update-field.0" value="Position"/>
+            <param name="update-field.1" value="Investment"/>
+            <param name="update-value.0" value="input1.Position"/>
+            <param name="update-value.1" value="input1.Investment"/>
+            <param name="gui:x" value="845"/>
+            <param name="gui:y" value="255"/>
+        </box>
+        <box name="FormatOutput" type="map">
+            <property name="description" value="Formats the simulation and trading information for outputting."/>
+            <input port="1" stream="out:WritePosition_1"/>
+            <output port="1" stream="TradeOutput"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="ArithmeticGains">GainsArithmetic + CapitalGain</include>
+                    <include field="Symbol">Symbol</include>
+                    <include field="Position">Position</include>
+                    <include field="Price">Price</include>
+                    <include field="Investment">abs(Investment)</include>
+                    <include field="UpperBand">UpperBand</include>
+                    <include field="MiddleBand">MiddleBand</include>
+                    <include field="LowerBand">LowerBand</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="995"/>
+            <param name="gui:y" value="255"/>
+        </box>
+        <output-stream name="TradeOutput">
+            <property name="description" value="Output of simulation and trading data."/>
+            <param name="gui:x" value="1145"/>
+            <param name="gui:y" value="255"/>
+        </output-stream>
+    </add>
+</modify>

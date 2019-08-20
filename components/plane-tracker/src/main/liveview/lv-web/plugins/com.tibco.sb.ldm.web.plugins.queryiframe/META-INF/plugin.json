@@ -1,0 +1,14 @@
+{
+	"name": "com.tibco.sb.ldm.web.plugins.queryiframe",
+	"module": {
+		"core" : ["com.tibco.sb.ldm.web.plugins.queryiframe.js"],
+		"addons" : [
+			"lvQueryIframeVis.js",
+			"lvQueryIframeVisEditor.js"
+		]
+	},
+	"staticContents": [{
+		"core" : ["css/com.tibco.sb.ldm.web.plugins.queryiframe.css"]
+	}],
+	"dependencies": []
+}

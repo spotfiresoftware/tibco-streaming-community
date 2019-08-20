@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.smileoperators.BatchClassificationSample"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="TestingSet">
+            <schema>
+                <field name="attributes" type="list">
+                    <element-type type="double"/>
+                </field>
+                <field name="class" type="int"/>
+            </schema>
+        </stream>
+        <stream name="TrainingSet">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="attributes" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <box name="Tag" type="seqnum">
+            <input port="1" stream="TestingSet"/>
+            <output port="1" stream="out:Tag_1"/>
+            <param name="output-field" value="id"/>
+            <param name="sequence-id" value="sequenceid"/>
+            <param name="update-expression" value="sequenceid + 1"/>
+        </box>
+        <box name="Declass" type="map">
+            <input port="1" stream="out:Tag_1"/>
+            <output port="1" stream="out:Declass_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <remove field="class"/>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Classifier" type="java">
+            <input port="1" stream="out:Declass_1"/>
+            <input port="2" stream="TrainingSet"/>
+            <output port="1" stream="out:Classifier_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Gradient Boosted Trees"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="7"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Support Vector Machines"/>
+            <param name="paramField" value="attributes"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="Gather" type="gather">
+            <input port="1" stream="out:Tag_1"/>
+            <input port="2" stream="out:Classifier_1"/>
+            <output port="1" stream="Prediction"/>
+            <target-list>
+                <item name="input1" selection="all"/>
+                <item name="input2" selection="all">
+                    <remove field="attributes"/>
+                    <remove field="id"/>
+                </item>
+            </target-list>
+            <param name="key-field" value="id"/>
+            <param name="output-last-time-field" value="false"/>
+            <param name="emit-on-completion" value="true"/>
+            <param name="replacement-type" value="keep_first"/>
+        </box>
+        <output-stream name="Prediction"/>
+        <box name="Correctness" type="aggregate">
+            <input port="1" stream="Prediction"/>
+            <output port="1" stream="ModelStatus"/>
+            <param name="dimension-name.0" value="Dimension1"/>
+            <param name="dimension-type.0" value="Tuple"/>
+            <param name="dimension-emit.0" value="100"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="correct">countif(prediction == class)</include>
+                    <include field="incorrect">countif(prediction != class)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ModelStatus"/>
+        <gui.note name="Note">
+            <property name="description" value="This sample demonstrates how to use the SMILE Classification operator in batch learning and predicting. It also gauges the accuracy of the model using SMILE's Toy Testing and Training datasets. &#10;&#10;The operator has two ports. The lower is for training, and the upper is for predicting. The data set should be fed into the training port, followed by a tuple containing all nulls to signal the operator to train its model. Until the model is trained, any tuples recieved in the predicting port will cause error messages.&#10;&#10;This sample is suited to any prediction model. It is built for batch but online will work."/>
+            <note-target name="Note"/>
+        </gui.note>
+    </add>
+</modify>

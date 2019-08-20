@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="Planes">
+    <fields>
+      <field name="ICAO" type="string" description="Unique plane identification number provided by International Civil Aviation Organization"/>
+      <field name="FlightId" type="string" description="Flight number provided by airline company"/>
+      <field name="Altitude" type="int" description="Height relative to 1013.2mb (Flight Level)"/>
+      <field name="Latitude" type="double" description="North positive and South negative."/>
+      <field name="Longitude" type="double" description="East positive and West negative."/>
+      <field name="Heading" type="double" description="Track of aircraft derived from the velocity E/W and velocity N/S."/>
+      <field name="Speed" type="int" description="Speed over ground (mph)"/>
+      <field name="LastReceiveTime" type="timestamp" description="Latest timestamp to receive signal from the plane"/>
+      <field name="StartReceiveTime" type="timestamp" description="First timestamp to reveive signal from the plane"/>
+      <field name="Region" type="string" description="Location of the transponder receiver."/>
+    </fields>
+    <primary-key>
+      <field ref="ICAO"/>
+      <field ref="LastReceiveTime"/>
+      <field ref="Region"/>
+    </primary-key>
+    <indices>
+      <index>
+        <field ref="LastReceiveTime"/>
+      </index>
+      <index>
+        <field ref="StartReceiveTime"/>
+      </index>
+    </indices>
+    <variables/>
+    <field-rules/>
+  </data-table>
+</liveview-configuration>

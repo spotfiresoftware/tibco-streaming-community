@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.community.components</groupId>
+    <artifactId>smile-operators</artifactId>
+    <packaging>ep-eventflow-fragment</packaging>
+    <version>1.0.0</version>
+    <name>SMILE Operators</name>
+    <description>SMILE Stat and ML library integration operators</description>
+
+    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
+    
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOguillonapa/streaming-community/master/docs/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-eventflow-fragment</artifactId>
+        <version>[10.5.0-SNAPSHOT,99.99.99)</version>
+        <relativePath/>
+    </parent>
+    
+    <dependencies>
+        <dependency>
+		    <groupId>com.github.haifengl</groupId>
+		    <artifactId>smile-core</artifactId>
+		    <version>1.5.3</version>
+	    </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>fileio</artifactId>
+        	<version>10.5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb</groupId>
+        	<artifactId>dt-manager</artifactId>
+        	<version>10.5.0-SNAPSHOT</version>
+        	<scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>feedsim</artifactId>
+        	<version>10.5.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

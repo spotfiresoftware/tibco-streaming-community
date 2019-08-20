@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.0">
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.LocateWikiEdit"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <import from="com.tibco.ldm.demo.wikimedia.schemas"/>
+    <named-schemas>
+        <schema name="WikiEditsLocatedSchema">
+            <parent-schemas>
+                <parent-schema name="WikiEditsSchema"/>
+            </parent-schemas>
+            <field name="ts" type="timestamp"/>
+            <field name="editor_continent" type="string"/>
+            <field name="editor_countrycode" type="string"/>
+            <field name="editor_statecode" type="string"/>
+            <field name="editor_city" type="string"/>
+            <field name="editor_lat" type="double"/>
+            <field name="editor_lon" type="double"/>
+        </schema>
+        <schema name="WikiEditsTimestampedSchema">
+            <parent-schemas>
+                <parent-schema name="WikiEditsSchema"/>
+            </parent-schemas>
+            <field name="ts" type="timestamp"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+    <stream name="WikiEdits" schema="WikiEditsTimestampedSchema"/>
+    <output-stream name="WikiEditsLocated" schema="WikiEditsLocatedSchema"/>
+</application>

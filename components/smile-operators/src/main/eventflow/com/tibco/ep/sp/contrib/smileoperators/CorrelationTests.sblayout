@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InBigKendall">
+        <param name="gui:x" value="-179"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+    <component name="InCramer">
+        <param name="gui:x" value="-179"/>
+        <param name="gui:y" value="212"/>
+    </component>
+    <component name="InKendall">
+        <param name="gui:x" value="-179"/>
+        <param name="gui:y" value="-16"/>
+    </component>
+    <component name="InPearson">
+        <param name="gui:x" value="-179"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="InSpearman">
+        <param name="gui:x" value="-179"/>
+        <param name="gui:y" value="98"/>
+    </component>
+    <component name="InTupleList">
+        <param name="gui:x" value="143"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="InTupleFields">
+        <param name="gui:x" value="143"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+    <component name="BigKendall">
+        <param name="gui:x" value="-68"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+    <component name="Cramer">
+        <param name="gui:x" value="-68"/>
+        <param name="gui:y" value="212"/>
+    </component>
+    <component name="Kendall">
+        <param name="gui:x" value="-68"/>
+        <param name="gui:y" value="-16"/>
+    </component>
+    <component name="Pearson">
+        <param name="gui:x" value="-68"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="Spearman">
+        <param name="gui:x" value="-68"/>
+        <param name="gui:y" value="98"/>
+    </component>
+    <component name="TupleList">
+        <param name="gui:x" value="257"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="TupleFields">
+        <param name="gui:x" value="257"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+    <component name="OutBigKendall">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+    <component name="OutCramer">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="212"/>
+    </component>
+    <component name="OutKendall">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-16"/>
+    </component>
+    <component name="OutPearson">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="OutSpearman">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="98"/>
+    </component>
+    <component name="OutTupleList">
+        <param name="gui:x" value="378"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="OutTupleFields">
+        <param name="gui:x" value="378"/>
+        <param name="gui:y" value="-130"/>
+    </component>
+</application-layout>

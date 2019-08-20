@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="predictABoost">
+        <param name="gui:x" value="749"/>
+        <param name="gui:y" value="-652"/>
+    </component>
+    <component name="predictBayes">
+        <param name="gui:x" value="964"/>
+        <param name="gui:y" value="-1097"/>
+    </component>
+    <component name="predictDTree">
+        <param name="gui:x" value="760"/>
+        <param name="gui:y" value="-1365"/>
+    </component>
+    <component name="predictGBTrees">
+        <param name="gui:x" value="647"/>
+        <param name="gui:y" value="-1049"/>
+    </component>
+    <component name="predictKNN">
+        <param name="gui:x" value="292"/>
+        <param name="gui:y" value="-1001"/>
+    </component>
+    <component name="predictLDA">
+        <param name="gui:x" value="546"/>
+        <param name="gui:y" value="-1214"/>
+    </component>
+    <component name="predictLogReg">
+        <param name="gui:x" value="236"/>
+        <param name="gui:y" value="-1182"/>
+    </component>
+    <component name="predictQDA">
+        <param name="gui:x" value="546"/>
+        <param name="gui:y" value="-775"/>
+    </component>
+    <component name="predictRanFor">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="-1345"/>
+    </component>
+    <component name="predictSVM">
+        <param name="gui:x" value="969"/>
+        <param name="gui:y" value="-885"/>
+    </component>
+    <component name="trainABoost">
+        <param name="gui:x" value="749"/>
+        <param name="gui:y" value="-567"/>
+    </component>
+    <component name="trainBayes">
+        <param name="gui:x" value="964"/>
+        <param name="gui:y" value="-1012"/>
+    </component>
+    <component name="trainDTree">
+        <param name="gui:x" value="760"/>
+        <param name="gui:y" value="-1280"/>
+    </component>
+    <component name="trainGBTrees">
+        <param name="gui:x" value="647"/>
+        <param name="gui:y" value="-964"/>
+    </component>
+    <component name="trainKNN">
+        <param name="gui:x" value="292"/>
+        <param name="gui:y" value="-916"/>
+    </component>
+    <component name="trainLDA">
+        <param name="gui:x" value="546"/>
+        <param name="gui:y" value="-1129"/>
+    </component>
+    <component name="trainLogReg">
+        <param name="gui:x" value="236"/>
+        <param name="gui:y" value="-1097"/>
+    </component>
+    <component name="trainQDA">
+        <param name="gui:x" value="546"/>
+        <param name="gui:y" value="-690"/>
+    </component>
+    <component name="trainRanFor">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="-1260"/>
+    </component>
+    <component name="trainSVM">
+        <param name="gui:x" value="969"/>
+        <param name="gui:y" value="-800"/>
+    </component>
+    <component name="ABoost">
+        <param name="gui:x" value="859"/>
+        <param name="gui:y" value="-615"/>
+        <param name="gui:bends:1" value="837,-622;843,-595"/>
+        <param name="gui:bends:2" value="836,-537;844,-575"/>
+    </component>
+    <component name="Bayes">
+        <param name="gui:x" value="1071"/>
+        <param name="gui:y" value="-1060"/>
+        <param name="gui:bends:1" value="1039,-1067;1045,-1040"/>
+        <param name="gui:bends:2" value="1038,-982;1046,-1020"/>
+    </component>
+    <component name="DTree">
+        <param name="gui:x" value="866"/>
+        <param name="gui:y" value="-1328"/>
+        <param name="gui:bends:1" value="841,-1335;847,-1308"/>
+        <param name="gui:bends:2" value="840,-1250;848,-1288"/>
+    </component>
+    <component name="GBTrees">
+        <param name="gui:x" value="761"/>
+        <param name="gui:y" value="-1012"/>
+        <param name="gui:bends:1" value="714,-1019;717,-992"/>
+        <param name="gui:bends:2" value="736,-934;744,-972"/>
+    </component>
+    <component name="KNN">
+        <param name="gui:x" value="394"/>
+        <param name="gui:y" value="-964"/>
+        <param name="gui:bends:1" value="375,-971;381,-944"/>
+        <param name="gui:bends:2" value="374,-886;382,-924"/>
+    </component>
+    <component name="LDA">
+        <param name="gui:x" value="647"/>
+        <param name="gui:y" value="-1177"/>
+        <param name="gui:bends:1" value="619,-1184;625,-1157"/>
+        <param name="gui:bends:2" value="618,-1099;626,-1137"/>
+    </component>
+    <component name="LogReg">
+        <param name="gui:x" value="347"/>
+        <param name="gui:y" value="-1145"/>
+        <param name="gui:bends:1" value="316,-1152;322,-1125"/>
+        <param name="gui:bends:2" value="315,-1067;323,-1105"/>
+    </component>
+    <component name="QDA">
+        <param name="gui:x" value="648"/>
+        <param name="gui:y" value="-738"/>
+        <param name="gui:bends:1" value="619,-745;625,-718"/>
+        <param name="gui:bends:2" value="618,-660;626,-698"/>
+    </component>
+    <component name="RanFor">
+        <param name="gui:x" value="417"/>
+        <param name="gui:y" value="-1308"/>
+        <param name="gui:bends:1" value="398,-1315;404,-1288"/>
+        <param name="gui:bends:2" value="384,-1230;392,-1268"/>
+    </component>
+    <component name="SVM">
+        <param name="gui:x" value="1071"/>
+        <param name="gui:y" value="-848"/>
+        <param name="gui:bends:1" value="1052,-855;1058,-828"/>
+        <param name="gui:bends:2" value="1051,-770;1059,-808"/>
+    </component>
+    <component name="OutABoost">
+        <param name="gui:x" value="969"/>
+        <param name="gui:y" value="-615"/>
+    </component>
+    <component name="OutBayes">
+        <param name="gui:x" value="1184"/>
+        <param name="gui:y" value="-1060"/>
+    </component>
+    <component name="OutDTree">
+        <param name="gui:x" value="979"/>
+        <param name="gui:y" value="-1328"/>
+    </component>
+    <component name="OutGBTrees">
+        <param name="gui:x" value="867"/>
+        <param name="gui:y" value="-1012"/>
+    </component>
+    <component name="OutKNN">
+        <param name="gui:x" value="507"/>
+        <param name="gui:y" value="-964"/>
+    </component>
+    <component name="OutLDA">
+        <param name="gui:x" value="760"/>
+        <param name="gui:y" value="-1177"/>
+    </component>
+    <component name="OutLogReg">
+        <param name="gui:x" value="456"/>
+        <param name="gui:y" value="-1145"/>
+    </component>
+    <component name="OutQDA">
+        <param name="gui:x" value="761"/>
+        <param name="gui:y" value="-738"/>
+    </component>
+    <component name="OutRanFor">
+        <param name="gui:x" value="528"/>
+        <param name="gui:y" value="-1308"/>
+    </component>
+    <component name="OutSVM">
+        <param name="gui:x" value="1184"/>
+        <param name="gui:y" value="-848"/>
+    </component>
+</application-layout>

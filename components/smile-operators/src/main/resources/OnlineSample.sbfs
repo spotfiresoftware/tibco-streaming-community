@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="OnlineLearning">
+    <ProcessingOptions DataGenerationMethod="DataFile" TimeSynchronized="true">
+      <DataSource Name="DataSource" DataSourceURI="toyTraining.csv" QuoteChar="34"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="NAME">
+      <Fields Name="class" DataTypeName="int" Description="">
+        <DataSourceMapping DestFieldName="class"/>
+      </Fields>
+      <Fields Name="attributes" DataTypeName="list" Description="">
+        <DataSourceMapping DestFieldName="attributes"/>
+        <DataType DataTypeName="list">
+          <ElementType DataTypeName="double">
+            <Distribution GenerationMethod="Random"/>
+          </ElementType>
+          <Distribution GenerationMethod="ListSize"/>
+        </DataType>
+      </Fields>
+    </Schema>
+  </SimStreams>
+  <SimStreams Name="Dataset">
+    <ProcessingOptions DataGenerationMethod="DataFile" DataGenRateMethod="AsFastAsPossible">
+      <DataSource Name="DataSource" DataSourceURI="toyTesting.csv" QuoteChar="34"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="NAME">
+      <Fields Name="attributes" DataTypeName="list" Description="">
+        <DataSourceMapping DestFieldName="attributes"/>
+        <DataType DataTypeName="list">
+          <ElementType DataTypeName="double">
+            <Distribution GenerationMethod="Random"/>
+          </ElementType>
+          <Distribution GenerationMethod="ListSize"/>
+        </DataType>
+      </Fields>
+      <Fields Name="class" DataTypeName="int" Description="">
+        <DataSourceMapping DestFieldName="class"/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

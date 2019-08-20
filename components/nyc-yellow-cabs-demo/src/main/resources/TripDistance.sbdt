@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Table:Table xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Table="http:///com/tibco/cep/decision/table/model/DecisionTable.ecore" name="TripDistance.sbdt" folder="src/main/resources">
+  <md>
+    <prop name="Priority" value="5"/>
+  </md>
+  <decisionTable>
+    <rule id="1">
+      <cond id="1_0" colId="0" expr="> 0 &amp;&amp; &lt; 0.5"/>
+      <act id="1_1" colId="1" expr="Less than 0.5 miles"/>
+    </rule>
+    <rule id="2">
+      <cond id="2_0" colId="0" expr=">= 0.5 &amp;&amp; &lt; 1"/>
+      <act id="2_1" colId="1" expr="Between 0.5 and 1.0 miles"/>
+    </rule>
+    <rule id="3">
+      <cond id="3_0" colId="0" expr=">= 1 &amp;&amp; &lt; 2"/>
+      <act id="3_1" colId="1" expr="Between 1.0 and 2.0 miles"/>
+    </rule>
+    <rule id="4">
+      <cond id="4_0" colId="0" expr=">= 2 &amp;&amp; &lt; 3"/>
+      <act id="4_1" colId="1" expr="Between 2.0 and 3.0 miles"/>
+    </rule>
+    <rule id="5">
+      <cond id="5_0" colId="0" expr=">= 3 &amp;&amp; &lt; 5"/>
+      <act id="5_1" colId="1" expr="Between 3.0 and 5.0 miles"/>
+    </rule>
+    <rule id="6">
+      <cond id="6_0" colId="0" expr=">= 5 &amp;&amp; &lt; 10"/>
+      <act id="6_1" colId="1" expr="Between 5.0 and 10.0 miles"/>
+    </rule>
+    <rule id="7">
+      <cond id="7_0" colId="0" expr=">= 10"/>
+      <act id="7_1" colId="1" expr="More than 10.0 miles"/>
+    </rule>
+    <columns>
+      <column id="0" name="Distance" propertyPath="Distance" propertyType="3" columnType="CONDITION"/>
+      <column id="1" name="Report" propertyPath="Report" columnType="ACTION"/>
+    </columns>
+  </decisionTable>
+</Table:Table>

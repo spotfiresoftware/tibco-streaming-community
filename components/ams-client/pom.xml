@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.community.components</groupId>
+    <artifactId>ams-client</artifactId>
+    <packaging>ep-eventflow-fragment</packaging>
+    <version>1.0.0</version>
+    <name>AMS Client</name>
+    <description>AMS client operator demonstrates the use of the TIBCO Artifact Management Server REST API</description>
+
+    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
+    
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOguillonapa/streaming-community/master/docs/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-eventflow-fragment</artifactId>
+        <version>[10.5.0-SNAPSHOT,99.99.99)</version>
+        <relativePath/>
+    </parent>
+
+    <!-- maven repository -->
+    <repositories>
+        <repository>
+            <id>TIBCOEP</id>
+            <url>file://${env.TIBCO_EP_HOME}/sdk/maven/repo</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>TIBCOEP</id>
+            <url>file://${env.TIBCO_EP_HOME}/sdk/maven/repo</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+    	<dependency>
+    		<groupId>com.tibco.ep.sb.adapter</groupId>
+    		<artifactId>fileio</artifactId>
+    		<version>10.5.0-SNAPSHOT</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>com.tibco.ep.sb.adapter</groupId>
+    		<artifactId>ams-client</artifactId>
+    		<version>10.5.0-SNAPSHOT</version>
+    	</dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--  deploy site documentation to github pages -->
+            <!--  in CI use mvn site com.github.github:site-maven-plugin:site -->
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.12</version>
+                <configuration>
+                    <server>github</server>
+                    <message>Updated site documentation from jenkins</message>
+                    <path>component-exchange/${project.artifactId}</path>
+                    <merge>true</merge>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

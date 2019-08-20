@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="TestingSet">
+    <ProcessingOptions DataRatePerSecond="500.0" DataGenerationMethod="DataFile">
+      <DataSource Name="DataSource" DataSourceURI="toyTesting.csv" QuoteChar="34"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="NAME">
+      <Fields Name="attributes" DataTypeName="list" Description="">
+        <DataSourceMapping DestFieldName="attributes"/>
+        <DataType DataTypeName="list">
+          <ElementType DataTypeName="double">
+            <Distribution GenerationMethod="Random"/>
+          </ElementType>
+          <Distribution GenerationMethod="ListSize"/>
+        </DataType>
+      </Fields>
+      <Fields Name="class" DataTypeName="int" Description="">
+        <DataSourceMapping DestFieldName="class"/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

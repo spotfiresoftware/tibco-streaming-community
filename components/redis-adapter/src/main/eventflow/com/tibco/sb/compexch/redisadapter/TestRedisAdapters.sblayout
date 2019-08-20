@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ToRedis">
+        <param name="gui:x" value="-322"/>
+        <param name="gui:y" value="-71"/>
+    </component>
+    <component name="RedisInput">
+        <param name="gui:x" value="-322"/>
+        <param name="gui:y" value="40"/>
+    </component>
+    <component name="RedisOutput">
+        <param name="gui:x" value="-218"/>
+        <param name="gui:y" value="-71"/>
+    </component>
+    <component name="FromRedis">
+        <param name="gui:x" value="-218"/>
+        <param name="gui:y" value="40"/>
+    </component>
+</application-layout>

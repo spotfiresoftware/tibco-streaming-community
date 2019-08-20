@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.sb.compexch</groupId>
+    <artifactId>delay-operator</artifactId>
+    <packaging>ep-eventflow-fragment</packaging>
+    <version>1.0.0</version>
+    <name>Delay Operator</name>
+    <description>Delays the transmission of data along a stream by a specified amount of time</description>
+
+    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
+    
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOguillonapa/streaming-community/master/docs/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-eventflow-fragment</artifactId>
+        <version>[10.5.0-SNAPSHOT,99.99.99)</version>
+        <relativePath/>
+    </parent>
+
+</project>

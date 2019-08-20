@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="AddArtifact">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="617"/>
+    </component>
+    <component name="Commit">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="902"/>
+    </component>
+    <component name="DeleteArtifact">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="807"/>
+    </component>
+    <component name="FetchArtifact">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="522"/>
+    </component>
+    <component name="ListProjectArtifacts">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="427"/>
+    </component>
+    <component name="ListProjects">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="332"/>
+    </component>
+    <component name="Login">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="142"/>
+    </component>
+    <component name="Logout">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="237"/>
+    </component>
+    <component name="UpdateArtifact">
+        <param name="gui:x" value="-2275"/>
+        <param name="gui:y" value="712"/>
+    </component>
+    <component name="AddArtifactCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="617"/>
+    </component>
+    <component name="CommitCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="902"/>
+    </component>
+    <component name="DeleteArtifactCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="807"/>
+    </component>
+    <component name="FetchArtifactCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="522"/>
+    </component>
+    <component name="ListProjectArtifactSCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="427"/>
+    </component>
+    <component name="ListProjectsCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="332"/>
+    </component>
+    <component name="LoginCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="142"/>
+    </component>
+    <component name="LogoutCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="237"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="-1878"/>
+        <param name="gui:y" value="463"/>
+        <param name="gui:height" value="179"/>
+        <param name="gui:bends:1" value="-2026,172;-1950,483"/>
+        <param name="gui:bends:2" value="-1978,267;-1920,500"/>
+        <param name="gui:bends:3" value="-1955,362;-1917,517"/>
+        <param name="gui:bends:4" value="-1971,457;-1953,535"/>
+        <param name="gui:bends:6" value="-1932,647;-1914,569"/>
+        <param name="gui:bends:7" value="-1994,742;-1956,587"/>
+        <param name="gui:bends:8" value="-1939,837;-1888,604"/>
+        <param name="gui:bends:9" value="-1935,932;-1888,622"/>
+    </component>
+    <component name="UpdateArtifactCommand">
+        <param name="gui:x" value="-2116"/>
+        <param name="gui:y" value="712"/>
+    </component>
+    <component name="AMS">
+        <param name="gui:x" value="-1690"/>
+        <param name="gui:y" value="523"/>
+        <param name="gui:bends:1" value="-1799,552;-1799,553"/>
+    </component>
+    <component name="AMSOut">
+        <param name="gui:x" value="-1514"/>
+        <param name="gui:y" value="523"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-1806"/>
+        <param name="gui:y" value="353"/>
+        <param name="gui:width" value="292"/>
+        <param name="gui:height" value="101"/>
+    </component>
+</application-layout>

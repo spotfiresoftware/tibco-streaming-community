@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="PublishSchemasIn">
+        <param name="gui:x" value="-12"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="ServerStateIn">
+        <param name="gui:x" value="300"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="ServerStatusIn">
+        <param name="gui:x" value="-23"/>
+        <param name="gui:y" value="102"/>
+    </component>
+    <component name="TheLastGoodRecordIn">
+        <param name="gui:x" value="10"/>
+        <param name="gui:y" value="310"/>
+    </component>
+    <component name="AddControlFields">
+        <param name="gui:x" value="600"/>
+        <param name="gui:y" value="90"/>
+    </component>
+    <component name="InputAdapter">
+        <param name="gui:x" value="124"/>
+        <param name="gui:y" value="-58"/>
+    </component>
+    <component name="MakeGood">
+        <param name="gui:x" value="600"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="PublishToPlanesOut">
+        <param name="gui:x" value="750"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="PublisherStateOut">
+        <param name="gui:x" value="750"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="QueryTheLastGoodRecordOut">
+        <param name="gui:x" value="750"/>
+        <param name="gui:y" value="10"/>
+    </component>
+</application-layout>

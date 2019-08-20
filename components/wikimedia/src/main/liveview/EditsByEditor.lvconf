@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="EditsByEditor">
+    <fields>
+      <field name="editor" type="string"/>
+      <field name="numedits" type="int"/>
+      <field name="avgeditsize" type="int"/>
+      <field name="lastedit" type="timestamp"/>
+      <field name="lasteditedpage" type="string"/>
+    </fields>
+    <primary-key>
+      <field ref="editor"/>
+    </primary-key>
+    <data-sources>
+      <data-source>
+        <aggregation table-ref="Edits">
+          <query>
+            <projection>count() as numedits, int(avg(abs(lineDelta))) as avgeditsize, lastval(ts) as lastedit, lastval(pageName) as lasteditedpage</projection>
+          </query>
+        </aggregation>
+      </data-source>
+    </data-sources>
+  </data-table>
+</liveview-configuration>

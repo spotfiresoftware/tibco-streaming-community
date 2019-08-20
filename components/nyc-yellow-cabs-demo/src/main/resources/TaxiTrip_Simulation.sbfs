@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="DataOut">
+    <ProcessingOptions TimeStampColumn="3" DataGenerationMethod="DataFile" DataGenRateMethod="TimestampFromColumn" TimeSynchronized="true">
+      <DataSource Name="DataSource" DataSourceURI="TAXI_SimuData.csv.bz2" QuoteChar="34" TimestampFormat="yyyy-MM-dd HH:mm:ss"/>
+    </ProcessingOptions>
+    <Schema ColumnMappingMethod="NAME">
+      <Fields Name="Trip_Key" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TRIP_KEY"/>
+      </Fields>
+      <Fields Name="Type" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TRIP_TYPE"/>
+      </Fields>
+      <Fields Name="Time" DataTypeName="timestamp" Description="">
+        <DataSourceMapping DestFieldName="TIME"/>
+      </Fields>
+      <Fields Name="Longitude" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="LONGITUDE"/>
+      </Fields>
+      <Fields Name="Latitude" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="LATITUDE"/>
+      </Fields>
+      <Fields Name="Num_Passengers" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="NUM_PASSENGERS"/>
+      </Fields>
+      <Fields Name="Distance" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="DISTANCE"/>
+      </Fields>
+      <Fields Name="Total_Fare" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TOTAL_FARE"/>
+      </Fields>
+      <Fields Name="Tip" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TIP"/>
+      </Fields>
+      <Fields Name="Vendor_Id" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="VENDOR_ID"/>
+      </Fields>
+      <Fields Name="Rate_Code" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="RATE_CODE"/>
+      </Fields>
+      <Fields Name="Flag" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="FLAG"/>
+      </Fields>
+      <Fields Name="Payment_Type" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="PAYMENT_TYPE"/>
+      </Fields>
+      <Fields Name="Fare_Amount" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="FARE_AMOUNT"/>
+      </Fields>
+      <Fields Name="Extra" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="EXTRA"/>
+      </Fields>
+      <Fields Name="Tax" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TAX"/>
+      </Fields>
+      <Fields Name="Tolls" DataTypeName="string" Description="">
+        <DataSourceMapping DestFieldName="TOLLS"/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

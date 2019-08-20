@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.smileoperators.ClassificationTests"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="predictABoost">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictBayes">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictDTree">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictGBTrees">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictKNN">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictLDA">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictLogReg">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictQDA">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictRanFor">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="predictSVM">
+            <schema>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainABoost">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainBayes">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainDTree">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainGBTrees">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainKNN">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainLDA">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainLogReg">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainQDA">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainRanFor">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <stream name="trainSVM">
+            <schema>
+                <field name="class" type="int"/>
+                <field name="params" type="list">
+                    <element-type type="double"/>
+                </field>
+            </schema>
+        </stream>
+        <box name="ABoost" type="java">
+            <input port="1" stream="predictABoost"/>
+            <input port="2" stream="trainABoost"/>
+            <output port="1" stream="OutABoost"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="AdaBoost"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="3"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.01"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="Bayes" type="java">
+            <input port="1" stream="predictBayes"/>
+            <input port="2" stream="trainBayes"/>
+            <output port="1" stream="OutBayes"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Decision Tree"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="true"/>
+            <param name="onlineType" value="Naive Bayes"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="DTree" type="java">
+            <input port="1" stream="predictDTree"/>
+            <input port="2" stream="trainDTree"/>
+            <output port="1" stream="OutDTree"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Decision Tree"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="3"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="GBTrees" type="java">
+            <input port="1" stream="predictGBTrees"/>
+            <input port="2" stream="trainGBTrees"/>
+            <output port="1" stream="OutGBTrees"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Gradient Boosted Trees"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="3"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.6"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="KNN" type="java">
+            <input port="1" stream="predictKNN"/>
+            <input port="2" stream="trainKNN"/>
+            <output port="1" stream="OutKNN"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="K-Nearest Neighbor"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="LDA" type="java">
+            <input port="1" stream="predictLDA"/>
+            <input port="2" stream="trainLDA"/>
+            <output port="1" stream="OutLDA"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="K-Nearest Neighbor"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs all"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.01"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="LogReg" type="java">
+            <input port="1" stream="predictLogReg"/>
+            <input port="2" stream="trainLogReg"/>
+            <output port="1" stream="OutLogReg"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Regularized Discriminant Analysis"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="QDA" type="java">
+            <input port="1" stream="predictQDA"/>
+            <input port="2" stream="trainQDA"/>
+            <output port="1" stream="OutQDA"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Quadratic Discriminant Analysis"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="RanFor" type="java">
+            <input port="1" stream="predictRanFor"/>
+            <input port="2" stream="trainRanFor"/>
+            <output port="1" stream="OutRanFor"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Random Forest"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="3"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="false"/>
+            <param name="onlineType" value="Multilayer Perceptron Neural Network"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <box name="SVM" type="java">
+            <input port="1" stream="predictSVM"/>
+            <input port="2" stream="trainSVM"/>
+            <output port="1" stream="OutSVM"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Classification"/>
+            <param name="batchType" value="Decision Tree"/>
+            <param name="bayesModel" value="Multinomial"/>
+            <param name="bayesSmoother" value="1.0"/>
+            <param name="classOut" value="prediction"/>
+            <param name="classes" value="2"/>
+            <param name="decay" value="0.0"/>
+            <param name="distType" value="Euclidean"/>
+            <param name="errorType" value="Cross Entropy"/>
+            <param name="kernel" value="Gaussian"/>
+            <param name="kernelParam" value="0.5"/>
+            <param name="labelField" value="class"/>
+            <param name="layerUnits" value="2, 2"/>
+            <param name="learningRate" value="0.1"/>
+            <param name="maxLeaves" value="6"/>
+            <param name="minLeaves" value="1"/>
+            <param name="momentum" value="0.0"/>
+            <param name="multiStrat" value="One vs one"/>
+            <param name="neighbors" value="3"/>
+            <param name="numTrees" value="50"/>
+            <param name="online" value="true"/>
+            <param name="onlineType" value="Support Vector Machines"/>
+            <param name="paramField" value="params"/>
+            <param name="regFactor" value="0.0"/>
+            <param name="reset" value="true"/>
+            <param name="ruleType" value="Gini Impurity"/>
+            <param name="samplingRate" value="0.7"/>
+            <param name="shrinkage" value="0.005"/>
+            <param name="softMargin" value="1.0"/>
+        </box>
+        <output-stream name="OutABoost"/>
+        <output-stream name="OutBayes"/>
+        <output-stream name="OutDTree"/>
+        <output-stream name="OutGBTrees"/>
+        <output-stream name="OutKNN"/>
+        <output-stream name="OutLDA"/>
+        <output-stream name="OutLogReg"/>
+        <output-stream name="OutQDA"/>
+        <output-stream name="OutRanFor"/>
+        <output-stream name="OutSVM"/>
+    </add>
+</modify>

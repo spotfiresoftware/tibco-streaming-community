@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Dataset">
+        <param name="gui:x" value="-260"/>
+        <param name="gui:y" value="143"/>
+    </component>
+    <component name="OnlineLearning">
+        <param name="gui:x" value="-260"/>
+        <param name="gui:y" value="51"/>
+    </component>
+    <component name="Data">
+        <param name="gui:x" value="-35"/>
+        <param name="gui:y" value="228"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Classify">
+        <param name="gui:x" value="-25"/>
+        <param name="gui:y" value="28"/>
+        <param name="gui:bends:1" value="-66,3;-66,48"/>
+        <param name="gui:bends:2" value="-66,81;-66,68"/>
+    </component>
+    <component name="CorrectOrNot">
+        <param name="gui:x" value="65"/>
+        <param name="gui:y" value="28"/>
+    </component>
+    <component name="Interval">
+        <param name="gui:x" value="-260"/>
+        <param name="gui:y" value="-27"/>
+    </component>
+    <component name="Rate">
+        <param name="gui:x" value="162"/>
+        <param name="gui:y" value="28"/>
+    </component>
+    <component name="Store">
+        <param name="gui:x" value="-25"/>
+        <param name="gui:y" value="143"/>
+    </component>
+    <component name="Tag">
+        <param name="gui:x" value="-157"/>
+        <param name="gui:y" value="143"/>
+    </component>
+    <component name="Test">
+        <param name="gui:x" value="-157"/>
+        <param name="gui:y" value="-27"/>
+    </component>
+    <component name="ModelStatus">
+        <param name="gui:x" value="259"/>
+        <param name="gui:y" value="28"/>
+    </component>
+    <component name="Classifier">
+        <param name="gui:x" value="-35"/>
+        <param name="gui:y" value="-87"/>
+        <param name="gui:width" value="363"/>
+        <param name="gui:height" value="87"/>
+    </component>
+    <component name="SampleExplanation">
+        <param name="gui:x" value="-445"/>
+        <param name="gui:y" value="-27"/>
+        <param name="gui:width" value="161"/>
+        <param name="gui:height" value="269"/>
+    </component>
+</application-layout>

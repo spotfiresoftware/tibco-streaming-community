@@ -1,0 +1,1139 @@
+{
+  "alerts" : [ {
+    "statusMessage" : "OK",
+    "alertQueryConfig" : {
+      "predicate" : "WHEN LastReceiveTime between epoch() and now()-seconds(180)",
+      "table" : "PlanesTracked",
+      "queryType" : "CONTINUOUS",
+      "predicateDelayInMillis" : 0,
+      "isAggregate" : false,
+      "includeInternal" : false
+    },
+    "type" : "QUERY_ALERT",
+    "messageTemplate" : "Removing $ICAO because it has not been heard from in 3 minutes",
+    "actions" : {
+      "action" : [ {
+        "publishAlert" : {
+          "alertRecipient" : "*"
+        },
+        "enabled" : true
+      }, {
+        "deleteAlert" : {
+          "table" : "Planes",
+          "deletePredicate" : "ICAO == \"$ICAO\""
+        },
+        "enabled" : true
+      } ]
+    },
+    "name" : "Remove planes not heard from recently",
+    "severity" : 3,
+    "quiescence" : 0,
+    "enabled" : true,
+    "owner" : "",
+    "created" : 1564765531111,
+    "lastUpdated" : 1564765946542,
+    "id" : 0,
+    "guid" : "db93e237-baba-4e02-8ab6-f890e17ae045",
+    "status" : "VALID"
+  }, {
+    "statusMessage" : "OK",
+    "alertQueryConfig" : {
+      "projection" : "count() =1",
+      "predicate" : "group by ICAO",
+      "table" : "PlanesTracked",
+      "queryType" : "SNAPSHOT_AND_CONTINUOUS",
+      "predicateDelayInMillis" : 0,
+      "isAggregate" : false,
+      "includeInternal" : false
+    },
+    "type" : "QUERY_ALERT",
+    "messageTemplate" : "Start listening to $ICAO",
+    "actions" : {
+      "action" : [ {
+        "publishAlert" : {
+          "alertRecipient" : "*"
+        },
+        "enabled" : true
+      } ]
+    },
+    "name" : "New Plane",
+    "severity" : 1,
+    "quiescence" : 0,
+    "enabled" : true,
+    "owner" : "",
+    "created" : 1563299997315,
+    "lastUpdated" : 1564765968222,
+    "id" : -1,
+    "guid" : "ff3296fb-bb65-4db3-b9c3-4875d1caae8a",
+    "status" : "VALID"
+  } ],
+  "personalizations" : [ ],
+  "preferences" : [ ],
+  "cards" : [ {
+    "id" : "3141982d-d1a9-4ddf-b154-1cea6e94acc1",
+    "createdDate" : 1564686257708,
+    "modifiedDate" : 1564687970254,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Region data",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "heatmap",
+      "config" : {
+        "categoryAxis" : {
+          "name" : "Region"
+        },
+        "valueAxis" : {
+          "name" : "Data"
+        },
+        "legend" : {
+          "anchor" : "s",
+          "orientation" : "horizontal"
+        },
+        "border" : {
+          "color" : "#FFFFFF"
+        },
+        "color" : {
+          "minColor" : "#FFFFFF",
+          "maxColor" : "#7CB5EC",
+          "nullColor" : "#111111"
+        },
+        "plots" : [ {
+          "name" : "default",
+          "datasetId" : "#dataset1",
+          "showDataLabels" : true,
+          "categories" : [ {
+            "extractorField" : "Region"
+          } ],
+          "values" : [ {
+            "name" : "",
+            "extractorField" : "planeNumber",
+            "displayValueTemplate" : "${planeNumber|number:0}",
+            "tooltipTemplate" : "${planeNumber|number:0}",
+            "visible" : true
+          } ]
+        } ],
+        "colorStops" : [ {
+          "color" : "#FFFFFF",
+          "value" : 0
+        }, {
+          "color" : "#7CB5EC",
+          "value" : 100
+        } ]
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT count(ICAO) AS planeNumber , Region FROM Planes group by Region, ICAO as number",
+        "parameters" : { }
+      }
+    }
+  }, {
+    "id" : "bcb45bb9-3bd8-4369-ac39-f94350fcbe29",
+    "createdDate" : 1563197465068,
+    "modifiedDate" : 1564690879275,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Altitude Map",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "chart",
+      "config" : {
+        "categoryAxis" : {
+          "name" : "ICAO",
+          "staticZero" : false
+        },
+        "valueAxis" : [ {
+          "logarithmic" : false,
+          "staticZero" : false,
+          "name" : "feet"
+        } ],
+        "legend" : {
+          "anchor" : "s",
+          "orientation" : "horizontal"
+        },
+        "bands" : [ ],
+        "lines" : [ ],
+        "gridDisabled" : false,
+        "plots" : [ {
+          "name" : "Plot",
+          "datasetId" : "#dataset1",
+          "type" : "column",
+          "stackedColBars" : false,
+          "stackedSeries" : false,
+          "negativeColor" : "#000000",
+          "negativeColorEnabled" : false,
+          "flipNegativeValues" : false,
+          "stackTotal" : {
+            "extractorField" : "total",
+            "labelEnabled" : false,
+            "displayValueTemplate" : "${total|number:0}",
+            "tooltipEnabled" : false,
+            "tooltipTemplate" : "Total: ${total|number:0}"
+          },
+          "series" : {
+            "enabled" : false,
+            "extractorField" : "",
+            "limit" : 10
+          },
+          "categories" : [ {
+            "extractorField" : "ICAO"
+          } ],
+          "values" : [ {
+            "name" : "Altitude",
+            "extractorField" : "Altitude",
+            "displayValueTemplate" : "${Altitude|number:0}",
+            "tooltipTemplate" : "${Altitude|number:0}",
+            "axisRef" : "0",
+            "marker" : {
+              "enabled" : true,
+              "hideOnDense" : true,
+              "symbol" : null,
+              "url" : "",
+              "height" : 32,
+              "width" : 32,
+              "size" : 4
+            },
+            "conditionalFormats" : [ {
+              "name" : "Condition#0",
+              "condition" : "true",
+              "enabled" : true,
+              "format" : {
+                "pointColor" : {
+                  "enabled" : true,
+                  "value" : "#389a43"
+                },
+                "marker" : {
+                  "enabled" : false,
+                  "value" : {
+                    "symbol" : null,
+                    "url" : "",
+                    "height" : 32,
+                    "width" : 32
+                  }
+                },
+                "markerSize" : {
+                  "enabled" : false,
+                  "value" : 4
+                }
+              }
+            } ]
+          } ]
+        } ]
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT ICAO, lastval(Altitude) as Altitude FROM Planes \nGroup by ICAO",
+        "parameters" : { }
+      }
+    }
+  }, {
+    "id" : "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac",
+    "createdDate" : 1563815647223,
+    "modifiedDate" : 1564766272955,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Info (click on plane icon in Live Map)",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "grid",
+      "config" : {
+        "pinnedColumnCount" : 0,
+        "filter" : {
+          "enabled" : true,
+          "value" : ""
+        },
+        "sortMode" : "multi",
+        "fontSize" : 14,
+        "rowHeight" : 100,
+        "dynamicRowHeight" : false,
+        "theme" : "ag-theme-fresh",
+        "grids" : [ {
+          "datasetId" : "#dataset1",
+          "columns" : [ {
+            "name" : "ICAO",
+            "extractorField" : "ICAO",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : ""
+          }, {
+            "name" : "FlightId",
+            "extractorField" : "FlightId",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : ""
+          }, {
+            "name" : "Altitude",
+            "extractorField" : "Altitude",
+            "displayValueTemplate" : "${Altitude|number:0}",
+            "tooltipTemplate" : "${Altitude|number:0}",
+            "visible" : true,
+            "conditionalFormats" : [ ]
+          }, {
+            "name" : "Latitude",
+            "extractorField" : "Latitude",
+            "displayValueTemplate" : "${Latitude|number:2}",
+            "tooltipTemplate" : "${Latitude|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ]
+          }, {
+            "name" : "Longitude",
+            "extractorField" : "Longitude",
+            "displayValueTemplate" : "${Longitude|number:2}",
+            "tooltipTemplate" : "${Longitude|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ]
+          }, {
+            "name" : "Heading",
+            "extractorField" : "Heading",
+            "displayValueTemplate" : "${Heading|number:2}",
+            "tooltipTemplate" : "${Heading|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ]
+          }, {
+            "name" : "Speed",
+            "extractorField" : "Speed",
+            "displayValueTemplate" : "${Speed|number:0}",
+            "tooltipTemplate" : "${Speed|number:0}",
+            "visible" : true,
+            "conditionalFormats" : [ ]
+          } ],
+          "resizeMode" : "enabled",
+          "conditionalFormats" : [ ]
+        } ]
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "Select ICAO, lastval(FlightId) as FlightId, lastval(Altitude) as Altitude, lastval(Latitude) as Latitude, lastval(Longitude) as Longitude, lastval(Heading) as Heading, lastval(Speed) as Speed\nfrom Planes WHERE $ICAO = ICAO\nGROUP by ICAO\n",
+        "parameters" : {
+          "ICAO" : "AA8A83"
+        }
+      }
+    }
+  }, {
+    "id" : "622d2470-de8a-42e1-a02b-8247f0a9be23",
+    "createdDate" : 1564688103223,
+    "modifiedDate" : 1564767390044,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Speed",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "chart",
+      "config" : {
+        "categoryAxis" : {
+          "name" : "ICAO",
+          "staticZero" : false
+        },
+        "valueAxis" : [ {
+          "logarithmic" : false,
+          "staticZero" : false,
+          "name" : "Speed (mph)"
+        } ],
+        "legend" : {
+          "anchor" : "n",
+          "orientation" : "horizontal"
+        },
+        "bands" : [ ],
+        "lines" : [ ],
+        "gridDisabled" : false,
+        "plots" : [ {
+          "name" : "Plot",
+          "datasetId" : "#dataset1",
+          "type" : "bar",
+          "stackedColBars" : false,
+          "stackedSeries" : false,
+          "negativeColor" : "#000000",
+          "negativeColorEnabled" : false,
+          "flipNegativeValues" : false,
+          "stackTotal" : {
+            "extractorField" : "total",
+            "labelEnabled" : false,
+            "displayValueTemplate" : "${total|number:0}",
+            "tooltipEnabled" : false,
+            "tooltipTemplate" : "Total: ${total|number:0}"
+          },
+          "series" : {
+            "enabled" : false,
+            "extractorField" : "",
+            "limit" : 10
+          },
+          "categories" : [ {
+            "extractorField" : "ICAO"
+          } ],
+          "values" : [ {
+            "name" : "",
+            "axisRef" : "0",
+            "extractorField" : "lastspeed",
+            "displayValueTemplate" : "${lastspeed|number:0}",
+            "tooltipTemplate" : "${lastspeed|number:0}",
+            "marker" : {
+              "enabled" : true,
+              "hideOnDense" : true,
+              "symbol" : null,
+              "url" : "",
+              "height" : 32,
+              "width" : 32,
+              "size" : 4
+            },
+            "conditionalFormats" : [ {
+              "name" : "Condition#0",
+              "condition" : "true",
+              "enabled" : true,
+              "format" : {
+                "pointColor" : {
+                  "enabled" : true,
+                  "value" : "#281eda"
+                },
+                "marker" : {
+                  "enabled" : false,
+                  "value" : {
+                    "symbol" : null,
+                    "url" : "",
+                    "height" : 32,
+                    "width" : 32
+                  }
+                },
+                "markerSize" : {
+                  "enabled" : false,
+                  "value" : 4
+                }
+              }
+            } ]
+          } ]
+        } ]
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT ICAO, lastval(Speed) as lastspeed FROM Planes GROUP by ICAO",
+        "parameters" : { }
+      }
+    }
+  }, {
+    "id" : "e3dd1bdc-a556-4386-9631-cede13830ab9",
+    "createdDate" : 1562954081316,
+    "modifiedDate" : 1564769829302,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Average speed (click on plane icon in Live Map)",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "gauge",
+      "config" : {
+        "plots" : [ {
+          "datasetId" : "#dataset1",
+          "name" : "solidgauge",
+          "values" : [ {
+            "extractorField" : "Speed",
+            "displayValueTemplate" : "${Speed|number:0}",
+            "tooltipTemplate" : "${Speed|number:0}"
+          } ],
+          "pane" : {
+            "startAngle" : -90,
+            "endAngle" : 90
+          },
+          "yAxis" : {
+            "autoScaleMin" : true,
+            "autoScaleMax" : true,
+            "min" : 0,
+            "max" : 800
+          },
+          "aggregation" : "avg",
+          "type" : "gauge"
+        } ]
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "Select * from Planes WHERE $ICAO = ICAO\nAND isnull(Speed) = FALSE",
+        "parameters" : {
+          "ICAO" : "C03DA9"
+        }
+      }
+    }
+  }, {
+    "id" : "77914f51-d9fa-4ab5-8fad-953822878489",
+    "createdDate" : 1563290972817,
+    "modifiedDate" : 1565018239869,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Planes ",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "grid",
+      "config" : {
+        "pinnedColumnCount" : 0,
+        "filter" : {
+          "enabled" : true,
+          "value" : ""
+        },
+        "sortMode" : "multi",
+        "fontSize" : 14,
+        "rowHeight" : 100,
+        "dynamicRowHeight" : false,
+        "theme" : "ag-theme-fresh",
+        "grids" : [ {
+          "datasetId" : "#dataset1",
+          "columns" : [ {
+            "name" : "ICAO",
+            "extractorField" : "ICAO",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "width" : 124
+          }, {
+            "name" : "FlightId",
+            "extractorField" : "FlightId",
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          }, {
+            "name" : "Altitude",
+            "extractorField" : "Altitude",
+            "displayValueTemplate" : "${Altitude|number:0}",
+            "tooltipTemplate" : "${Altitude|number:0}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 111
+          }, {
+            "name" : "Longitude",
+            "extractorField" : "Longitude",
+            "displayValueTemplate" : "${Longitude|number:2}",
+            "tooltipTemplate" : "${Longitude|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          }, {
+            "name" : "Latitude",
+            "extractorField" : "Latitude",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "${Latitude|number:2}",
+            "tooltipTemplate" : "${Latitude|number:2}",
+            "width" : 127
+          }, {
+            "name" : "Heading",
+            "extractorField" : "Heading",
+            "displayValueTemplate" : "${Heading|number:2}",
+            "tooltipTemplate" : "${Heading|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          }, {
+            "name" : "Speed",
+            "extractorField" : "Speed",
+            "displayValueTemplate" : "${Speed|number:0}",
+            "tooltipTemplate" : "${Speed|number:0}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          }, {
+            "name" : "Region",
+            "extractorField" : "Region",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "width" : 127
+          }, {
+            "name" : "StartReceiveTime",
+            "extractorField" : "StartReceiveTime",
+            "displayValueTemplate" : "${StartReceiveTime|date:M/d/yy h:mm:ss a}",
+            "tooltipTemplate" : "${StartReceiveTime|date:M/d/yy h:mm:ss a}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          }, {
+            "name" : "LastReceiveTime",
+            "extractorField" : "LastReceiveTime",
+            "displayValueTemplate" : "${LastReceiveTime|date:M/d/yy h:mm:ss a}",
+            "tooltipTemplate" : "${LastReceiveTime|date:M/d/yy h:mm:ss a}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 127
+          } ],
+          "resizeMode" : "enabled",
+          "conditionalFormats" : [ ]
+        } ],
+        "pinnedRightColumnCount" : 0
+      }
+    } ],
+    "actions" : {
+      "#dataset1" : [ {
+        "config" : {
+          "url" : "https://flightaware.com/live/flight/$flight_Id"
+        },
+        "type" : "com.tibco.sb.ldm.plugins.actions.launchurl",
+        "typeHumanReadable" : "Launch URL",
+        "name" : "Flight Look Up"
+      } ]
+    },
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT ICAO, lastval(FlightId) as FlightId, lastval(Longitude) as Longitude,lastval(Altitude) as Altitude, lastval(Latitude) as Latitude, lastval(Heading) as Heading,lastval(Speed) as Speed,lastval(Region) as Region, lastval(StartReceiveTime) as StartReceiveTime, lastval(LastReceiveTime) as LastReceiveTime\nFROM Planes \ngroup by ICAO\n",
+        "parameters" : { }
+      }
+    }
+  }, {
+    "id" : "7bc9dc55-9988-4559-bbdf-6a373cce59d5",
+    "createdDate" : 1563222642268,
+    "modifiedDate" : 1565018271334,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "SDR Input",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "grid",
+      "config" : {
+        "pinnedColumnCount" : 0,
+        "filter" : {
+          "enabled" : true,
+          "value" : ""
+        },
+        "sortMode" : "multi",
+        "fontSize" : 14,
+        "rowHeight" : 100,
+        "dynamicRowHeight" : false,
+        "theme" : "ag-theme-fresh",
+        "grids" : [ {
+          "datasetId" : "#dataset1",
+          "columns" : [ {
+            "name" : "ICAO",
+            "extractorField" : "ICAO",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "width" : 255
+          }, {
+            "name" : "FlightId",
+            "extractorField" : "FlightId",
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "Altitude",
+            "extractorField" : "Altitude",
+            "displayValueTemplate" : "${Altitude|number:0}",
+            "tooltipTemplate" : "${Altitude|number:0}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "Latitude",
+            "extractorField" : "Latitude",
+            "displayValueTemplate" : "${Latitude|number:2}",
+            "tooltipTemplate" : "${Latitude|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "Longitude",
+            "extractorField" : "Longitude",
+            "displayValueTemplate" : "${Longitude|number:2}",
+            "tooltipTemplate" : "${Longitude|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "Heading",
+            "extractorField" : "Heading",
+            "displayValueTemplate" : "${Heading|number:2}",
+            "tooltipTemplate" : "${Heading|number:2}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "Speed",
+            "extractorField" : "Speed",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "${Speed|number:0}",
+            "tooltipTemplate" : "${Speed|number:0}",
+            "width" : 263
+          }, {
+            "name" : "Region",
+            "extractorField" : "Region",
+            "displayValueTemplate" : "",
+            "tooltipTemplate" : "",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 263
+          }, {
+            "name" : "StartReceiveTime",
+            "extractorField" : "StartReceiveTime",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "displayValueTemplate" : "${StartReceiveTime|date:M/d/yy h:mm:ss a}",
+            "tooltipTemplate" : "${StartReceiveTime|date:M/d/yy h:mm:ss a}",
+            "width" : 263
+          }, {
+            "name" : "LastReceiveTime",
+            "extractorField" : "LastReceiveTime",
+            "displayValueTemplate" : "${LastReceiveTime|date:M/d/yy h:mm:ss a}",
+            "tooltipTemplate" : "${LastReceiveTime|date:M/d/yy h:mm:ss a}",
+            "visible" : true,
+            "conditionalFormats" : [ ],
+            "width" : 149
+          } ],
+          "resizeMode" : "enabled",
+          "conditionalFormats" : [ ]
+        } ],
+        "pinnedRightColumnCount" : 0
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT * FROM Planes LIMIT 100 ORDER BY LastReceiveTime DESC",
+        "parameters" : { }
+      }
+    }
+  }, {
+    "id" : "176bfc45-ff11-4fc4-8f23-f29974ede87b",
+    "createdDate" : 1563815352510,
+    "modifiedDate" : 1565025566339,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Flightaware Lookup (click on plane icon in Live Map)",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "queryIframe",
+      "config" : {
+        "datasetId" : "#dataset1"
+      }
+    } ],
+    "data" : {
+      "#dataset1" : {
+        "query" : "Select * from PlanesTracked WHERE $ICAO = ICAO\n\n",
+        "parameters" : {
+          "ICAO" : "406814"
+        }
+      }
+    }
+  }, {
+    "id" : "d2bef8ec-b5db-4f66-9422-6746d98eab88",
+    "createdDate" : 1562768516683,
+    "modifiedDate" : 1565025640511,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Live Map",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "visualizations" : [ {
+      "type" : "geomap",
+      "config" : {
+        "datasetId" : "#dataset1",
+        "categories" : [ {
+          "extractorField" : "flight_Id",
+          "displayValueTemplate" : "",
+          "tooltipTemplate" : ""
+        } ],
+        "value" : {
+          "extractorField" : "altitude",
+          "displayValueTemplate" : "",
+          "tooltipTemplate" : ""
+        },
+        "points" : [ {
+          "name" : "Point#1",
+          "lonField" : "lastlong",
+          "latField" : "lastlat",
+          "conditionalMarkers" : [ ],
+          "heatPointEnable" : false,
+          "addPointToRoute" : false,
+          "isCustomIconUrl" : false,
+          "iconUrl" : "system-plugins/com.tibco.sb.ldm.plugins.visualizations/geomap/img/icons/airplane.png",
+          "tooltipTemplate" : "$ICAO"
+        } ],
+        "region" : {
+          "name" : "America",
+          "lat" : 37.09024,
+          "lon" : -95.712891,
+          "zoomLevel" : 4
+        },
+        "defaultZoomLevel" : 4,
+        "connectPoints" : false,
+        "connectTuples" : false,
+        "useItinerary" : false,
+        "defaultRouteColor" : "#F50F1A",
+        "defaultRouteColorForTuples" : "#00afff",
+        "heatMapLayerConfig" : {
+          "blur" : 10,
+          "heatPointField" : "",
+          "isEnable" : false,
+          "maxValue" : 0,
+          "radius" : 20,
+          "gradient" : {
+            "1" : "rgba(255, 0, 0, 1)",
+            "0.2" : "rgba(0, 0, 255, 1)",
+            "0.4" : "rgba(0, 255, 255, 1)",
+            "0.6" : "rgba(0, 255, 0, 1)"
+          }
+        },
+        "useDefaultTileService" : true,
+        "tileServiceUrl" : "",
+        "routeConditionalFormats" : [ ],
+        "routePerTupleConditionalFormats" : [ ],
+        "trackedTuples" : [ {
+          "idField" : "ICAO",
+          "latlng" : {
+            "lat" : "latitude",
+            "lon" : "longitude"
+          }
+        } ],
+        "userData" : {
+          "lat" : 42.604558351430406,
+          "lon" : -71.28567484130859,
+          "zoom" : 11
+        }
+      }
+    } ],
+    "actions" : {
+      "#dataset1" : [ ]
+    },
+    "data" : {
+      "#dataset1" : {
+        "query" : "SELECT lastval(Longitude) as lastlong, lastval(Latitude) as lastlat, ICAO FROM Planes \nWHERE isnull(Latitude) = FALSE \nAnd isnull(Longitude) = FALSE\ngroup by ICAO\n",
+        "parameters" : { }
+      }
+    }
+  } ],
+  "pages" : [ {
+    "id" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795",
+    "createdDate" : 1562768513291,
+    "modifiedDate" : 1565025614986,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Tracker",
+    "tags" : "",
+    "desc" : "",
+    "attributes" : { },
+    "cardIds" : [ "d2bef8ec-b5db-4f66-9422-6746d98eab88", "e3dd1bdc-a556-4386-9631-cede13830ab9", "bcb45bb9-3bd8-4369-ac39-f94350fcbe29", "7bc9dc55-9988-4559-bbdf-6a373cce59d5", "77914f51-d9fa-4ab5-8fad-953822878489", "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac", "3141982d-d1a9-4ddf-b154-1cea6e94acc1", "622d2470-de8a-42e1-a02b-8247f0a9be23", "176bfc45-ff11-4fc4-8f23-f29974ede87b" ],
+    "layout" : {
+      "positions" : [ {
+        "row" : 0,
+        "col" : 0,
+        "sizeX" : 3,
+        "sizeY" : 6
+      }, {
+        "row" : 4,
+        "col" : 5,
+        "sizeX" : 1,
+        "sizeY" : 2
+      }, {
+        "row" : 10,
+        "col" : 3,
+        "sizeX" : 3,
+        "sizeY" : 4
+      }, {
+        "row" : 14,
+        "col" : 0,
+        "sizeX" : 6,
+        "sizeY" : 4
+      }, {
+        "row" : 0,
+        "col" : 3,
+        "sizeX" : 3,
+        "sizeY" : 4
+      }, {
+        "row" : 4,
+        "col" : 3,
+        "sizeX" : 2,
+        "sizeY" : 2
+      }, {
+        "row" : 6,
+        "col" : 5,
+        "sizeX" : 1,
+        "sizeY" : 4
+      }, {
+        "row" : 6,
+        "col" : 3,
+        "sizeX" : 2,
+        "sizeY" : 4
+      }, {
+        "sizeX" : 3,
+        "sizeY" : 8,
+        "row" : 6,
+        "col" : 0
+      } ],
+      "columns" : 6,
+      "pushing" : true,
+      "floating" : true,
+      "swapping" : true,
+      "width" : "auto",
+      "margins" : [ 10, 10 ],
+      "outerMargin" : false,
+      "isMobile" : false,
+      "minColumns" : 6,
+      "rowHeight" : 130,
+      "minSizeY" : 2,
+      "minRows" : 4,
+      "maxRows" : 20,
+      "defaultSizeX" : 2,
+      "defaultSizeY" : 2,
+      "mobileModeEnabled" : false,
+      "resize" : {
+        "enabled" : true,
+        "handles" : [ "e", "s", "w", "se", "sw" ]
+      },
+      "resizable" : { },
+      "draggable" : {
+        "handle" : ".box-header-title"
+      },
+      "colWidth" : 424.6666666666667
+    }
+  } ],
+  "permissions" : [ {
+    "id" : "e11113bc-e373-4e41-abd4-1a136c733a03",
+    "createdDate" : 1561661259723,
+    "modifiedDate" : 1561661259723,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "principal" : "admin",
+    "resourceType" : "ANY",
+    "resourceId" : "-1",
+    "value" : -1
+  }, {
+    "id" : "55fb24ca-b951-451a-929c-716efcc69b37",
+    "createdDate" : 1561661259848,
+    "modifiedDate" : 1561661259848,
+    "author" : "reader",
+    "version" : "1.5.0-SNAPSHOT",
+    "principal" : "reader",
+    "resourceType" : "ANY",
+    "resourceId" : "-1",
+    "value" : 2
+  } ],
+  "workspaces" : [ ],
+  "queries" : [ ],
+  "dashboards" : [ {
+    "id" : "bd9f3d28-3c17-469f-b0db-0024d0934c62",
+    "createdDate" : 1561662848047,
+    "modifiedDate" : 1563818261174,
+    "author" : "anonymous",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "",
+    "tags" : "",
+    "desc" : "The default dashboard for anonymous",
+    "attributes" : {
+      "disableTutorial" : true
+    },
+    "pageIds" : [ "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795" ],
+    "defaultPageId" : ""
+  } ],
+  "linkages" : [ {
+    "id" : "96133b1e-8b00-44a5-8ff5-5f186a2d6404",
+    "createdDate" : 1563815688630,
+    "modifiedDate" : 1564768526014,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Tracker_Live Map_Plane Info (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Live Map Plane Info (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "d2bef8ec-b5db-4f66-9422-6746d98eab88",
+    "targetCardId" : "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "43b3680a-5d18-45bc-8227-b54db36b4a6b",
+    "createdDate" : 1564688468889,
+    "modifiedDate" : 1564768526198,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Altitude Map_Plane Info (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Altitude Map Plane Info (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "bcb45bb9-3bd8-4369-ac39-f94350fcbe29",
+    "targetCardId" : "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "baf1bda1-ed5c-4d30-952d-ca4c9ee8dc0e",
+    "createdDate" : 1563896884711,
+    "modifiedDate" : 1564768526399,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Tracker_Planes _Plane Info (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Planes  Plane Info (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "77914f51-d9fa-4ab5-8fad-953822878489",
+    "targetCardId" : "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "98964a1e-af14-4246-a072-67d2b41c1254",
+    "createdDate" : 1564688468889,
+    "modifiedDate" : 1564768526539,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Speed_Plane Info (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Speed Plane Info (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "622d2470-de8a-42e1-a02b-8247f0a9be23",
+    "targetCardId" : "ded2f26a-75a5-4d32-90a6-d0de37bbe7ac",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "8e4b80cf-e1e4-40a5-8dbd-e4663fa90a46",
+    "createdDate" : 1563220522424,
+    "modifiedDate" : 1564770927672,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Tracker_Live Map_Average speed (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Live Map Average speed (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "d2bef8ec-b5db-4f66-9422-6746d98eab88",
+    "targetCardId" : "e3dd1bdc-a556-4386-9631-cede13830ab9",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "2062f6bf-3d21-4453-a06e-f2c891b56cdb",
+    "createdDate" : 1563896903051,
+    "modifiedDate" : 1564770927722,
+    "author" : "admin",
+    "version" : "1.5.0-SNAPSHOT",
+    "name" : "Plane Tracker_Planes _Average speed (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Planes  Average speed (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "77914f51-d9fa-4ab5-8fad-953822878489",
+    "targetCardId" : "e3dd1bdc-a556-4386-9631-cede13830ab9",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "22ebc4f7-2a4a-4d2a-9a14-e5a941eef4fd",
+    "createdDate" : 1564688487405,
+    "modifiedDate" : 1564770927756,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Altitude Map_Average speed (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Altitude Map Average speed (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "bcb45bb9-3bd8-4369-ac39-f94350fcbe29",
+    "targetCardId" : "e3dd1bdc-a556-4386-9631-cede13830ab9",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "bd94ec90-0a9d-46f9-8847-e1d176193e19",
+    "createdDate" : 1564688487405,
+    "modifiedDate" : 1564770927776,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Speed_Average speed (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Speed Average speed (click on plane icon in Live Map)",
+    "attributes" : { },
+    "sourceCardId" : "622d2470-de8a-42e1-a02b-8247f0a9be23",
+    "targetCardId" : "e3dd1bdc-a556-4386-9631-cede13830ab9",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "78e7bc4d-ed92-4b22-bb08-978f7b8b1289",
+    "createdDate" : 1565025070574,
+    "modifiedDate" : 1565025070574,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Live Map_ICAO (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Live Map ICAO (click on plane icon in Live Map)",
+    "sourceCardId" : "d2bef8ec-b5db-4f66-9422-6746d98eab88",
+    "targetCardId" : "176bfc45-ff11-4fc4-8f23-f29974ede87b",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  }, {
+    "id" : "d7ffb937-61b3-41c0-a799-0153580f6e05",
+    "createdDate" : 1565025352957,
+    "modifiedDate" : 1565025352957,
+    "author" : "admin",
+    "version" : "1.4.1",
+    "name" : "Plane Tracker_Planes _ICAO (click on plane icon in Live Map)",
+    "tags" : "Plane Tracker Planes  ICAO (click on plane icon in Live Map)",
+    "sourceCardId" : "77914f51-d9fa-4ab5-8fad-953822878489",
+    "targetCardId" : "176bfc45-ff11-4fc4-8f23-f29974ede87b",
+    "mapping" : {
+      "configs" : [ {
+        "transform" : "simple",
+        "key" : "#dataset1/ICAO",
+        "sourceField" : "ICAO"
+      } ]
+    },
+    "pageId" : "d1f3ecd3-d61a-44ae-91d7-1b19b6b1a795"
+  } ]
+}

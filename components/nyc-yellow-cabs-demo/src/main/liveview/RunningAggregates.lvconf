@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="RunningAggregates">
+    <fields>
+      <field name="Type" type="string"/>
+      <field name="TotalTrips" type="int"/>
+      <field name="TotalPassengers" type="int"/>
+      <field name="TotalFares" type="double"/>
+      <field name="TotalTips" type="double"/>
+      <field name="TotalTolls" type="double"/>
+      <field name="TotalTaxes" type="double"/>
+      <field name="TotalDistance" type="double"/>
+      <field name="AverageFare" type="double"/>
+      <field name="AverageDistance" type="double"/>
+      <field name="AverageNumPassengers" type="double"/>
+    </fields>
+    <primary-key>
+      <field ref="Type"/>
+    </primary-key>
+    <data-sources>
+      <data-source>
+        <aggregation table-ref="TaxiTrips">
+          <query>
+            <projection>count() AS TotalTrips, sum(Num_Passengers) AS TotalPassengers, sum(Total_Fare) AS TotalFares, sum(Tip) AS TotalTips, sum(Tolls) AS TotalTolls, sum(Tax) AS TotalTaxes, sum(Distance) AS TotalDistance, avg(Total_Fare) AS AverageFare, avg(Distance) AS AverageDistance, avg(Num_Passengers) AS AverageNumPassengers</projection>
+          </query>
+        </aggregation>
+      </data-source>
+    </data-sources>
+  </data-table>
+</liveview-configuration>

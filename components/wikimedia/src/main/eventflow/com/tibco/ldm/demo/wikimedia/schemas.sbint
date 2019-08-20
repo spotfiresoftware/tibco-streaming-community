@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.0">
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.tibco.ldm.demo.wikimedia.schemas"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <named-schemas>
+        <schema name="WikiEditsSchema">
+            <field name="pageName" type="string"/>
+            <field name="diffURL" type="string"/>
+            <field name="editor" type="string"/>
+            <field name="lineDelta" type="int"/>
+            <field name="comment" type="string"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+</application>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="TestingSet">
+        <param name="gui:x" value="-375"/>
+        <param name="gui:y" value="-32"/>
+    </component>
+    <component name="TrainingSet">
+        <param name="gui:x" value="-196"/>
+        <param name="gui:y" value="63"/>
+    </component>
+    <component name="Classifier">
+        <param name="gui:x" value="-98"/>
+        <param name="gui:y" value="12"/>
+        <param name="gui:bends:1" value="-123,-1;-113,32"/>
+        <param name="gui:bends:2" value="-122,94;-114,52"/>
+    </component>
+    <component name="Correctness">
+        <param name="gui:x" value="140"/>
+        <param name="gui:y" value="-74"/>
+    </component>
+    <component name="Declass">
+        <param name="gui:x" value="-196"/>
+        <param name="gui:y" value="-31"/>
+    </component>
+    <component name="Gather">
+        <param name="gui:x" value="18"/>
+        <param name="gui:y" value="-74"/>
+        <param name="gui:bends:1" value="-213,-2;-201,-54"/>
+        <param name="gui:bends:2" value="-16,42;-1,-34"/>
+    </component>
+    <component name="Tag">
+        <param name="gui:x" value="-293"/>
+        <param name="gui:y" value="-32"/>
+    </component>
+    <component name="ModelStatus">
+        <param name="gui:x" value="222"/>
+        <param name="gui:y" value="-74"/>
+    </component>
+    <component name="Prediction">
+        <param name="gui:x" value="140"/>
+        <param name="gui:y" value="-169"/>
+        <param name="gui:bends:1" value="106,-44;128,-139"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-530"/>
+        <param name="gui:y" value="-260"/>
+        <param name="gui:width" value="620"/>
+        <param name="gui:height" value="173"/>
+    </component>
+</application-layout>

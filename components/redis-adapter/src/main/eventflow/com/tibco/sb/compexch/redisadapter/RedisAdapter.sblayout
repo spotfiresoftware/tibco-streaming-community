@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-500"/>
+        <param name="gui:y" value="-49"/>
+    </component>
+    <component name="IDsValuesMap">
+        <param name="gui:x" value="-310"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="IterateOverIDs">
+        <param name="gui:x" value="-228"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="Metronome">
+        <param name="gui:x" value="-500"/>
+        <param name="gui:y" value="-145"/>
+    </component>
+    <component name="OneIDMap">
+        <param name="gui:x" value="-146"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="RedisInput">
+        <param name="gui:x" value="-500"/>
+        <param name="gui:y" value="64"/>
+    </component>
+    <component name="RedisOutput">
+        <param name="gui:x" value="-41"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="-392"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="-392"/>
+        <param name="gui:y" value="64"/>
+    </component>
+</application-layout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="WikiEdits">
+        <param name="gui:x" value="-190"/>
+        <param name="gui:y" value="9"/>
+    </component>
+    <component name="Java">
+        <param name="gui:x" value="-61"/>
+        <param name="gui:y" value="9"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-61"/>
+        <param name="gui:y" value="104"/>
+    </component>
+    <component name="WikiEditsLocated">
+        <param name="gui:x" value="62"/>
+        <param name="gui:y" value="10"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-270"/>
+        <param name="gui:y" value="-115"/>
+        <param name="gui:width" value="500"/>
+        <param name="gui:height" value="116"/>
+    </component>
+</application-layout>
