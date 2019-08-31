@@ -36,5 +36,3 @@ This sample decodes airplane information using SDR (Software Defined Radio) and 
 	
 	![custom card](images/planetracker3.png)
 	  
-	
-	  

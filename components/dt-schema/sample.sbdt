@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><Table:Table xmlns:Table="http:///com/tibco/cep/decision/table/model/DecisionTable.ecore" xmlns:xmi="http://www.omg.org/XMI" version="2.0">
+    <md>
+        <prop name="Priority" value="5"/>
+        <prop name="EffectiveDate" type="String" value="2019-08-22"/>
+        <prop name="ExpiryDate" type="String" value="2020-08-22"/>
+        <prop name="SingleRowExecution" type="Boolean" value="true"/>
+    </md>
+    <decisionTable>
+        <rule id="1">
+            <cond colId="0" expr="Alice" id="1_0"/>
+            <cond colId="1" expr="34" id="1_1"/>
+            <act colId="2" expr="true" id="1_2"/>
+            <act colId="3" expr="2500" id="1_3"/>
+            <act colId="4" expr="Visa Granted" id="1_4"/>
+        </rule>
+        <rule id="2">
+            <cond colId="0" expr="Bob" id="2_0"/>
+            <cond colId="1" expr="61" id="2_1"/>
+            <act colId="2" expr="false" id="2_2"/>
+            <act colId="3" expr="5000" id="2_3"/>
+            <act colId="4" expr="N/A" id="2_4"/>
+        </rule>
+        <columns>
+            <column columnType="CONDITION" id="0" name="Name" propertyPath="Name"/>
+            <column columnType="CONDITION" id="1" name="Age" propertyPath="Age" propertyType="1"/>
+            <column columnType="ACTION" id="2" name="Eligible" propertyPath="Eligible" propertyType="4"/>
+            <column columnType="ACTION" id="3" name="CreditLimit" propertyPath="CreditLimit" propertyType="1"/>
+            <column columnType="ACTION" id="4" name="Status" propertyPath="Status"/>
+        </columns>
+    </decisionTable>
+</Table:Table>

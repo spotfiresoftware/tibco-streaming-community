@@ -1,33 +1,47 @@
 # SB LDM InfluxDB Table Provider
 
-Live Datamart Table Provider example for querying an InfluxDB database
+This is a LDM Table Provider example that connects to InfluxData's InfluxDB open source offering (https://github.com/influxdata/influxdb).
 
-* [SB LDM InfluxDB Table Provider](src/site/markdown/index.md)
+This is a Liveview Project, intended to be loaded and run in StreamBase Studio.
+The project was developed in Studio 10.2.1, and targets Live Datamart 10.2.1 or higher.
+To run, the project will require setting up InfluxDB, and to have it running on some accessible server to the machine
+running this sample.
 
----
-Copyright (c) 2018-2019, TIBCO Software Inc.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+## Implementation Notes
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
+The focus of this project is to illustrate a working table provider, not for production use. 
+InfluxDB schemas are flexible (may change during a query in various circumstances) but the sample will create the schema
+only once, at startup. Additionally, to detect a series' schema, there must be at least one value already.
 
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
+For simplicity, this table provider will delete/create a database called "LiveDataMartSample", and populate with sample data in
+a table (measurement) called "cpu" on the target InfluxDB instance.
 
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+## Project Details
+
+InfluxData.lvconf - declares the Table Provider to the Live Datamart server. A single parameter configures the connection URI
+                    (out of the box this is set to http://localhost:8086, the default URI for an InfluxDB local instance.)
+                    
+
+## Running This Example
+
+This Studio project is also a LiveView project complete with a single configuration file (InfluxData.lvconf) registering
+this table provider. You should edit the .lvconf to ensure the target InfluxDB instance URL is correct (the default
+is set to localhost:8086).
+
+Once running and connected, use lv-client, LiveView Web or LiveView Desktop to query the "cpu" table, or any
+ other table discovered in your target influxdb instance.
+ 
+ 
+ 
+## Third Party Information
+
+No third-party components are included in the original distribution. Dependencies to influxdb and its dependencies
+are managed by Maven.
+
+
+## Changelog
+
+* 1.0    initial release
+* 1.1    migrated to StreamBase 10 project

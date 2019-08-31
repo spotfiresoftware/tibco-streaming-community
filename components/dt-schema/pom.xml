@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.community</groupId>
+    <artifactId>dt-schema</artifactId>
+    <packaging>ep-java-fragment</packaging>
+    <version>2.0.0</version>
+    <name>Decision Table Schema</name>
+    <description>Demonstrates generating Java wrappers from a decision table model</description>
+
+    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
+    
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOguillonapa/streaming-community/master/docs/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+  
+    <properties>
+        <jaxb2_commons.version>0.11.0</jaxb2_commons.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-java-fragment-samples</artifactId>
+        <version>10.5.0-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-value-constructor</artifactId>
+            <version>3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-annotate</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-tools</artifactId>
+            <version>${jaxb2_commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+            <version>${jaxb2_commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- <sourceDirectory>src</sourceDirectory> -->
+        <plugins>
+            <!-- configure a Main to be executed on startup -->
+            <plugin>
+                <groupId>com.tibco.ep</groupId>
+                <artifactId>ep-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <mainClass>com.tibco.ep.community.dtschema.CreateDecisionTable</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+                </configuration>
+            </plugin>
+            
+            <!--  Plugin that runs xjc to generate the StreamBase decision table Java wrappers -->
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.13.1</version>
+                <executions>
+                    <execution>
+                        <id>response-xjc</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <extension>true</extension>
+                            <args>
+                                <arg>-XtoString</arg>
+                                <arg>-Xvalue-constructor</arg>
+                                <arg>-Xinheritance</arg>
+                                <arg>-Xannotate</arg>
+                                <arg>-Xcopyable</arg>
+                            </args>
+                            <schemas>
+                                <schema>
+                                    <fileset>
+                                        <directory>resources</directory>
+                                    </fileset>
+                                </schema>
+                            </schemas>
+                            <generateDirectory>src-generated</generateDirectory>
+                            <generatePackage>com.tibco.ep.ams.model.response</generatePackage>
+                            <plugins>
+                              
+                                <!-- Used to generate value constructors (-Xvalue-constructor) -->
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-value-constructor</artifactId>
+                                    <version>3.0</version>
+                                </plugin>
+                            
+                                <!-- Used to subclass the Record class (-Xinheritance) and to generate toString methods (-XtoString) -->
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-basics</artifactId>
+                                    <version>${jaxb2_commons.version}</version>
+                                </plugin>
+                        
+                                <!-- Used to add annotations in the generated code (-Xannotate) -->
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-basics-annotate</artifactId>
+                                    <version>1.0.2</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.codehaus.jackson</groupId>
+                                    <artifactId>jackson-core-asl</artifactId>
+                                    <version>1.9.13</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!--  Plugin that cleans the generated Java wrappers -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src-generated</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+              </plugin>
+
+        </plugins>
+    </build>
+
+</project>

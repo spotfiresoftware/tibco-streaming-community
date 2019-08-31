@@ -1,33 +1,32 @@
 # Delay Operator
 
-Delays the transmission of data along a stream by a specified amount of time
+The Delay operator postpones sending data along a stream for a specified amount 
+of time.
 
-* [Delay Operator](src/site/markdown/index.md)
+Example uses might include:
 
----
-Copyright (c) 2018-2019, TIBCO Software Inc.
+* An application that needs to load a set of trading parameters prior to receiving market data. 
+* Traders may want to build up a trading metric (like the beta of a portfolio) by analyzing market data over a specified interval before initiating their trading strategies.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+The sample application includes a DelayFiveSeconds operator, to demonstrate 
+delaying the stream by a constant amount of time, and a DelayVariable 
+operator, to demonstrate delaying by a variable amount of time. 
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
+Both are instances of the DelayOperator component found in the Project 
+Operators drawer of the Palette view. In the Operator Properties tab of the 
+Properties view, specify the delay period as a StreamBase expression that 
+resolves to an interval timestamp. In the case of DelayVariable, the 
+expression is a field name in the incoming stream. In the case of 
+DelayFiveSeconds, the delay expression is seconds(5).
 
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
+Usage Notes:
 
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
+1. Data passed to the operator leaves in the same order it came out, as it 
+   operates much like a First-In-First-Out queue. 
+2. The data passed to the operator is not altered except for the fact that 
+   the output tuple is delayed by the specified amount of time.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Version History
+
+**1.2:** Fixed application pauses that may occur under rare circumstances when using this operator.
+**1.1:** Fixed a deadlock bug.

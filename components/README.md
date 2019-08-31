@@ -4,40 +4,13 @@ Projects contributed by the community
 
 Samples :
 
-* [AMS Client: AMS client operator demonstrates the use of the TIBCO Artifact Management Server REST API](ams-client/src/site/markdown/index.md)
-* [Bollinger Bands Signaling: Automated trading simulation using Bollinger Bands trading indicator](bollinger-bands-signaling/src/site/markdown/index.md)
-* [Delay Operator: Delays the transmission of data along a stream by a specified amount of time](delay-operator)
+* [AMS client operator demonstrates the use of the TIBCO Artifact Management Server REST API](ams-client)
+* [Automated trading simulation using Bollinger Bands trading indicator](bollinger-bands-signaling)
+* [Delays the transmission of data along a stream by a specified amount of time](delay-operator)
+* [Demonstrates generating Java wrappers from a decision table model](dt-schema)
 * [NYC Yellow Cabs: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](nyc-yellow-cabs-demo)
-* [Plane Tracker: Decode airplane radio and publish plane data to LiveViewTM Server](plane-tracker)
-* [Redis Adapter: Adapters to send and receive messages from a Redis database, including streaming](redis-adapter)
-* [SB LDM InfluxDB Table Provider: Live Datamart Table Provider example for querying an InfluxDB database](sb-ldm-influx-tableprovider)
-* [SMILE Operators: SMILE Stat and ML library integration operators](smile-operators)
+* [Decode airplane radio and publish plane data to LiveViewTM Server](plane-tracker)
+* [Adapters to send and receive messages from a Redis database, including streaming](redis-adapter)
+* [Live Datamart Table Provider example for querying an InfluxDB database](sb-ldm-influxdb-tableprovider)
+* [SMILE Stat and ML library integration operators](smile-operators)
 * [Wikipedia: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](wikimedia)
-
----
-Copyright (c) 2018-2019, TIBCO Software Inc.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

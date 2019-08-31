@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="Table">
+        <xs:sequence>
+      
+            <!--  Metadata -->
+            <xs:element name="md">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="prop" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="xs:string"/>
+                                <xs:attribute name="type" type="xs:string"/>
+                                <xs:attribute name="value" type="xs:string"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+      
+            <!-- The decision table body -->
+            <xs:element name="decisionTable">
+                <xs:complexType>
+                    <xs:sequence>
+                    
+                        <!-- Decision table rows -->
+                        <xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="cond" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:attribute name="id" type="xs:string"/>
+                                            <xs:attribute name="colId" type="xs:string"/>
+                                            <xs:attribute name="expr" type="xs:string"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="act" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:attribute name="id" type="xs:string"/>
+                                            <xs:attribute name="colId" type="xs:string"/>
+                                            <xs:attribute name="expr" type="xs:string"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="id" type="xs:string"/>
+                            </xs:complexType>
+                        </xs:element>
+                        
+                        <!-- Decision table columns -->
+                        <xs:element name="columns" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="column" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:attribute name="id" type="xs:string"/>
+                                            <xs:attribute name="name" type="xs:string"/>
+                                            <xs:attribute name="propertyPath" type="xs:string"/>
+                                            <xs:attribute name="propertyType" type="xs:string"/>
+                                            <xs:attribute name="columnType" type="xs:string"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="version" type="xs:string"/>
+    </xs:complexType>
+</xs:schema>
+

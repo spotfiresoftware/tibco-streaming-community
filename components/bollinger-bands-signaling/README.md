@@ -1,33 +1,48 @@
 # Bollinger Bands Signaling
 
-Automated trading simulation using Bollinger Bands trading indicator
+Bollinger Bands are a technical analysis tool that can be used to measure the 
+height or depth of a price relative to previous trades. Bollinger Bands 
+consist of a middle band being an N-period simple moving average (SMA), an 
+upper band at +K times the standard deviation of the simple moving average 
+(SMA+K*sigma), and a lower band at -K times the standard deviation of the 
+simple moving average (SMA-K*sigma).
 
-* [Bollinger Bands Signaling](src/site/markdown/index.md)
+The parameters for this component can be set as constants in the Definitions 
+tab of the EventFlow Editor for BollingerBandSignaling.sbapp.
 
----
-Copyright (c) 2018-2019, TIBCO Software Inc.
+The parameters are:
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+* **WindowSize:** The period or number of observations of the simple moving average.
+* **K:** The number of standard deviations to use for the high and low Bollinger bands.
+* **OrderSize:** The number of shares to trade with.
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
+The input stream for the application accepts a security symbol, price, and 
+timestamp. For each symbol provided, the application calculates the simple 
+moving average and the high and low Bollinger bands. If the current price of 
+the stock ever jumps above the high Bollinger band, then according to theory, 
+this indicator predicts that the stock price should drop. Thus, the signaling 
+algorithm takes a short position until the price of the stock passes the 
+middle band from above (at which point the position is unwound). 
 
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
+Alternatively, if the current price of the stock ever dips below the low 
+Bollinger band, then according to theory, this indicator predicts that the 
+stock price should increase. Thus, the signaling algorithm takes a long 
+position until the price of the stock passes the middle band from below (at 
+which point the position is unwound). 
 
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
+Trades are assumed to be immediately executed with no lag or partial fills 
+and the number of shares to trade are given by the OrderSize variable.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Two short feed simulations are provided. The first demonstrates how the 
+component works while monitoring one stock symbol, and the second demonstrates 
+how the component works while monitoring two stock symbols. The model can be 
+extended to monitor as many symbols as desired, though they must all trade 
+have the same parameters (K, WindowSize, OrderSize).
+
+Values for WindowSize,  K and OrderSize can vary (and can be set manually).
+
+The default values are:
+
+* WindowSize = 10
+* K = 1.96
+* OrderSize = 1000
