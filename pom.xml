@@ -34,21 +34,24 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tibco.ep</groupId>
-    <artifactId>community</artifactId>
+    <groupId>com.tibco.ep.community</groupId>
+    <artifactId>components</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
-    <name>TIBCO Streaming Community Samples</name>
-    <description>This github repository contains a number of TIBCO Streaming samples contributed by the community that can be cloned to your local workspace</description>
-
-    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
-
-    <properties>
-        <github.global.server>github</github.global.server>
-    </properties>
+    <name>Components</name>
+    <description>Projects contributed by the community</description>
 
     <modules>
-        <module>components</module>
+        <module>ams-client</module>
+        <module>bollinger-bands-signaling</module>
+        <module>delay-operator</module>
+        <module>dt-schema</module>
+        <module>nyc-yellow-cabs-demo</module>
+        <module>plane-tracker</module>
+        <module>redis-adapter</module>
+        <module>sb-ldm-influxdb-tableprovider</module>
+        <module>smile-operators</module>
+        <module>wikimedia</module>
     </modules>
 
     <!-- skip site docs in this aggregator -->
@@ -68,8 +71,6 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.12</version>
                 <configuration>
-                    <repositoryOwner>TIBCOguillonapa</repositoryOwner>
-                    <repositoryName>streaming-community</repositoryName>
                     <message>Updated site documentation from jenkins</message>
                     <skip>true</skip>
                 </configuration>
