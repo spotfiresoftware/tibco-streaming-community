@@ -13,4 +13,5 @@ Samples :
 * [Adapters to send and receive messages from a Redis database, including streaming](redis-adapter)
 * [Live Datamart Table Provider example for querying an InfluxDB database](sb-ldm-influxdb-tableprovider)
 * [SMILE Stat and ML library integration operators](smile-operators)
+* [A simple wrapper around epadmin to provide a nicer ux for common development workflows](uxadmin)
 * [Wikipedia: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](wikimedia)
