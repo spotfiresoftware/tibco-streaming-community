@@ -41,7 +41,7 @@
     <name>TIBCO Streaming Community Samples</name>
     <description>This github repository contains a number of TIBCO Streaming samples contributed by the community that can be cloned to your local workspace</description>
 
-    <url>https://github.com/TIBCOguillonapa/streaming-community</url>
+    <url>https://github.com/TIBCOSoftware/tibco-streaming-community</url>
 
     <properties>
         <github.global.server>github</github.global.server>
