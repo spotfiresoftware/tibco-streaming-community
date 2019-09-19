@@ -68,8 +68,6 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.12</version>
                 <configuration>
-                    <repositoryOwner>TIBCOguillonapa</repositoryOwner>
-                    <repositoryName>streaming-community</repositoryName>
                     <message>Updated site documentation from jenkins</message>
                     <skip>true</skip>
                 </configuration>
