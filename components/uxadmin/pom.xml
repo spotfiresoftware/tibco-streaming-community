@@ -98,7 +98,7 @@
 	<licenses>
 		<license>
 			<name>BSD 3-Clause License</name>
-			<url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/LICENSE</url>
+			<url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
