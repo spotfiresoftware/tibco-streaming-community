@@ -5,7 +5,6 @@ This github repository contains a number of TIBCO&reg; Streaming samples contrib
 Overview:
 
 * [Using in TIBCO StreamBase Studio&trade;](docs/studio.md)
-* [Contributing](docs/contributing.md)
 * [License](docs/LICENSE)
 
 Sample categories:
