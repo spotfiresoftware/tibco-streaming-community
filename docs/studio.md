@@ -8,7 +8,7 @@ The samples can also be imported into TIBCO StreamBase Studio&trade; :
 
 ## Import using TIBCO StreamBase Studio&trade;
 
-* Use **File -> Load StreamBase Sample...** menu option.
+* Use **File -> Import Samples and Community Content...** menu option.
 * Agree to TIBCO&reg; Streaming Community terms and conditions.
 * Choose what sample(s) to import:
 
@@ -18,7 +18,7 @@ This will create a copy the projects to the workspace and any changes to the imp
 
 ## Using the Maven Importer
 
-* Copy the path of the git checkout. You can find its location from **File -> Load StreamBase Sample...** menu option, and clicking on the **Open repository clones in system explorer** link. The location can also be opened from the StreamBase Studio preferences page.
+* Copy the path of the git checkout. You can find its location from **File -> Import Samples and Community Content...** menu option, and clicking on the **Open repository clones in system explorer** link. The location can also be opened from the StreamBase Studio preferences page.
 * Use **Import -> Maven -> Existing Maven Projects** menu option.
 * Paste the path to the cloned repositories.
 * Choose what sample(s) to import:
