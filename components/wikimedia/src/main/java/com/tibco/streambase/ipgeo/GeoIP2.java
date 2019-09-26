@@ -1,5 +1,10 @@
-package com.tibco.streambase.ipgeo;
+/*
+* Copyright © 2019. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 
+package com.tibco.streambase.ipgeo;
 
 import java.io.IOException;
 import java.io.InputStream;

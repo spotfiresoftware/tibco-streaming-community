@@ -1,5 +1,10 @@
-package com.tibco.streambase.ircdemo;
+/*
+* Copyright © 2019. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 
+package com.tibco.streambase.ircdemo;
 
 import java.net.URL;
 import java.util.ArrayList;
