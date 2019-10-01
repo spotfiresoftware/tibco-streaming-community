@@ -16,6 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import smile.stat.hypothesis.CorTest;
@@ -425,11 +426,10 @@ public class Correlation extends Operator implements Parameterizable {
 	 * @return the created list
 	 * @throws StreamBaseException
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Double> listFromTuple(Tuple tuple) throws StreamBaseException {
 		List<Double> inList;
 		if (format.equals("List")) {
-			inList = (ArrayList<Double>) new ArrayList<>(tuple.getList(variablesField));
+			inList = tuple.getList(variablesField).stream().mapToDouble(x -> (Double) x).boxed().collect(Collectors.toList());
 			for (int i = 0; i < correlationsLength; i++) { // Replace nulls with default value.
 				if (inList.get(i) == null) inList.set(i, nullValue);
 			}

@@ -7,7 +7,9 @@
 package com.tibco.ep.sp.contrib.smileoperators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -817,11 +819,9 @@ public class Classification extends Operator implements Parameterizable {
 	 * @return The transformed array.
 	 * @throws StreamBaseException 
 	 */
-	@SuppressWarnings("unchecked")
 	private double[] listConverter(Tuple tuple, String field) throws StreamBaseException {
 		try {
-			return ((ArrayList<Double>) new ArrayList<>(tuple.getList(field)))
-					.stream().mapToDouble(Double::doubleValue).toArray();
+			return tuple.getList(field).stream().mapToDouble(x -> (Double) x).toArray();
 		} catch (TupleException e) {
 			throw new StreamBaseException("Tuple conversion error");
 		}
