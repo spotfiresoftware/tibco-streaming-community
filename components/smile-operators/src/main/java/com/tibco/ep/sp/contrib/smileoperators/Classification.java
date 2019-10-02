@@ -7,24 +7,46 @@
 package com.tibco.ep.sp.contrib.smileoperators;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
-import com.streambase.sb.*;
+import com.streambase.sb.CompleteDataType;
+import com.streambase.sb.DataType;
+import com.streambase.sb.NullValueException;
+import com.streambase.sb.Schema;
 import com.streambase.sb.Schema.Field;
-import com.streambase.sb.operator.*;
+import com.streambase.sb.StreamBaseException;
+import com.streambase.sb.Tuple;
+import com.streambase.sb.TupleException;
+import com.streambase.sb.operator.Operator;
+import com.streambase.sb.operator.Parameterizable;
+import com.streambase.sb.operator.TypecheckException;
 
-import smile.classification.*;
-import smile.math.distance.*;
+import smile.classification.AdaBoost;
+import smile.classification.Classifier;
+import smile.classification.DecisionTree;
+import smile.classification.GradientTreeBoost;
+import smile.classification.KNN;
+import smile.classification.LDA;
+import smile.classification.LogisticRegression;
+import smile.classification.NaiveBayes;
+import smile.classification.NeuralNetwork;
+import smile.classification.OnlineClassifier;
+import smile.classification.QDA;
+import smile.classification.RDA;
+import smile.classification.RandomForest;
+import smile.classification.SVM;
 import smile.math.Math;
-import smile.math.kernel.MercerKernel;
+import smile.math.distance.CorrelationDistance;
+import smile.math.distance.Distance;
+import smile.math.distance.EuclideanDistance;
+import smile.math.distance.ManhattanDistance;
 import smile.math.kernel.GaussianKernel;
 import smile.math.kernel.HellingerKernel;
 import smile.math.kernel.LaplacianKernel;
 import smile.math.kernel.LinearKernel;
+import smile.math.kernel.MercerKernel;
 
 /**
  * The SMILE Classification integration operator.
@@ -44,7 +66,45 @@ import smile.math.kernel.LinearKernel;
 public class Classification extends Operator implements Parameterizable {
 
 	public static final long serialVersionUID = 1561379988543L;
-	@SuppressWarnings("unused")
+	
+	private static final String VAL_BERNOULLI = "Bernoulli";
+	private static final String VAL_MULTINOMIAL = "Multinomial";
+	private static final String VAL_ONE_VS_ONE = "One vs one";
+	private static final String VAL_MANHATTAN = "Manhattan";
+	private static final String VAL_CORRELATION = "Correlation";
+	private static final String VAL_QUADRATIC_DISCRIMINANT_ANALYSIS = "Quadratic Discriminant Analysis";
+	private static final String VAL_LINEAR_DISCRIMINANT_ANALYSIS = "Linear Discriminant Analysis";
+	private static final String VAL_ENTROPY = "Entropy";
+	private static final String VAL_GINI_IMPURITY = "Gini Impurity";
+	private static final String VAL_REGULARIZED_DISCRIMINANT_ANALYSIS = "Regularized Discriminant Analysis";
+	private static final String VAL_LOGISTIC_REGRESSION = "Logistic Regression";
+	private static final String VAL_K_NEAREST_NEIGHBOR = "K-Nearest Neighbor";
+	private static final String VAL_DECISION_TREE = "Decision Tree";
+	private static final String VAL_ADA_BOOST = "AdaBoost";
+	private static final String VAL_RANDOM_FOREST = "Random Forest";
+	private static final String VAL_GRADIENT_BOOSTED_TREES = "Gradient Boosted Trees";
+	private static final String VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK = "Multilayer Perceptron Neural Network";
+	private static final String VAL_SUPPORT_VECTOR_MACHINES = "Support Vector Machines";
+	private static final String VAL_LAPLACIAN = "Laplacian";
+	private static final String VAL_GAUSSIAN = "Gaussian";
+	private static final String VAL_NAIVE_BAYES = "Naive Bayes";
+	private static final String PROP_BAYES_SMOOTHER = "bayesSmoother";
+	private static final String PROP_KERNEL_PARAM = "kernelParam";
+	private static final String PROP_SOFT_MARGIN = "softMargin";
+	private static final String PROP_DECAY = "decay";
+	private static final String PROP_MOMENTUM = "momentum";
+	private static final String PROP_LEARNING_RATE = "learningRate";
+	private static final String PROP_LAYER_UNITS = "layerUnits";
+	private static final String PROP_SHRINKAGE = "shrinkage";
+	private static final String PROP_SAMPLING_RATE = "samplingRate";
+	private static final String PROP_NUM_TREES = "numTrees";
+	private static final String PROP_MAX_LEAVES = "maxLeaves";
+	private static final String PROP_MIN_LEAVES = "minLeaves";
+	private static final String PROP_REG_FACTOR = "regFactor";
+	private static final String PROP_NEIGHBORS = "neighbors";
+	private static final String PROP_CLASSES = "classes";
+	private static final String PROP_PARAM_FIELD = "paramField";
+	private static final String PROP_LABEL_FIELD = "labelField";
 	private Logger logger;
 	private String displayName = "Classifier (SMILE)";
 	private int inputPorts = 2;
@@ -246,8 +306,8 @@ public class Classification extends Operator implements Parameterizable {
 		setDisplayName(displayName);
 		setShortDisplayName(this.getClass().getSimpleName());
 		setOnline(false);
-		setBatchType("K-Nearest Neighbor");
-		setOnlineType("Multilayer Perceptron Neural Network");
+		setBatchType(VAL_K_NEAREST_NEIGHBOR);
+		setOnlineType(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 		setParamField("");
 		setLabelField("");
 		setClassOut("prediction");
@@ -258,7 +318,7 @@ public class Classification extends Operator implements Parameterizable {
 		setRegFactor(0.0);
 		setMinLeaves(1);
 		setMaxLeaves(6);
-		setRuleType("Gini Impurity");
+		setRuleType(VAL_GINI_IMPURITY);
 		setNumTrees(50);
 		setSamplingRate(0.7);
 		setShrinkage(0.01);
@@ -267,11 +327,11 @@ public class Classification extends Operator implements Parameterizable {
 		setLearningRate(0.1);
 		setMomentum(0.0);
 		setDecay(0.0);
-		setMultiStrat("One vs one");
+		setMultiStrat(VAL_ONE_VS_ONE);
 		setSoftMargin(1);
-		setKernel("Gaussian");
+		setKernel(VAL_GAUSSIAN);
 		setKernelParam(0.5);
-		setBayesModel("Multinomial");
+		setBayesModel(VAL_MULTINOMIAL);
 		setBayesSmoother(1.0);
 		onClassifier = null;
 		classifier = null;
@@ -289,27 +349,27 @@ public class Classification extends Operator implements Parameterizable {
 		// label field and param field
 		try {
 			if (getInputSchema(1).getField(getLabelField()).getDataType() != DataType.INT) {
-				throw new PropertyTypecheckException("labelField", 
+				throw new PropertyTypecheckException(PROP_LABEL_FIELD, 
 						  getLabelField() + " needs to be of type int");
 			}
 		} catch (TupleException e1) {
-			throw new PropertyTypecheckException("labelField",
+			throw new PropertyTypecheckException(PROP_LABEL_FIELD,
 					  "A learning int field needs to be specified");
 		}
 		
 		try {
 			if (!getInputSchema(0).getField(getParamField()).getCompleteDataType()
 					.equals(CompleteDataType.forDoubleList())) {
-				throw new PropertyTypecheckException("paramField",
+				throw new PropertyTypecheckException(PROP_PARAM_FIELD,
 						  getParamField() + " needs to be of type list of doubles");
 			}
 			if (!getInputSchema(1).getField(getParamField()).getCompleteDataType()
 					.equals(CompleteDataType.forDoubleList())) {
-				throw new PropertyTypecheckException("paramField",
+				throw new PropertyTypecheckException(PROP_PARAM_FIELD,
 						  getParamField() + " needs to match in both schemas");
 			}
 		} catch (TupleException e1) {
-			throw new PropertyTypecheckException("paramField",
+			throw new PropertyTypecheckException(PROP_PARAM_FIELD,
 					  "A parameters list field needs to be specified");
 		}
 		
@@ -322,38 +382,38 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// classes
 		if (getClasses() <= 1) {
-			throw new PropertyTypecheckException("classes", "The number of classes must be at least 2");
+			throw new PropertyTypecheckException(PROP_CLASSES, "The number of classes must be at least 2");
 		}
 									
 		// Only typecheck the properties necessary for the selected class type. 
 		switch (classType) {
-			case "K-Nearest Neighbor": 						knnTypecheck();
+			case VAL_K_NEAREST_NEIGHBOR: 						knnTypecheck();
 															break;
-			case "Linear Discriminant Analysis":			break;
+			case VAL_LINEAR_DISCRIMINANT_ANALYSIS:			break;
 //			case "Fisher's Linear Discriminant":			fldTypecheck();
-			case "Quadratic Discriminant Analysis":			break;
-			case "Regularized Discriminant Analysis":
-			case "Logistic Regression":  					regTypecheck();
+			case VAL_QUADRATIC_DISCRIMINANT_ANALYSIS:			break;
+			case VAL_REGULARIZED_DISCRIMINANT_ANALYSIS:
+			case VAL_LOGISTIC_REGRESSION:  					regTypecheck();
 															break;
-			case "Decision Tree":							dTreeTypecheck();
+			case VAL_DECISION_TREE:							dTreeTypecheck();
 															break;
-			case "Random Forest": 							ranForTypecheck();
+			case VAL_RANDOM_FOREST: 							ranForTypecheck();
 															break;
-			case "Gradient Boosted Trees":					gBTreesTypecheck();
+			case VAL_GRADIENT_BOOSTED_TREES:					gBTreesTypecheck();
 															break;
-			case "AdaBoost":								adaBoostTypecheck();
+			case VAL_ADA_BOOST:								adaBoostTypecheck();
 															break;
-			case "Multilayer Perceptron Neural Network":	netTypecheck();
+			case VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK:	netTypecheck();
 															break;
-			case "Support Vector Machines":					svmTypecheck();
+			case VAL_SUPPORT_VECTOR_MACHINES:					svmTypecheck();
 															break;
-			case "Naive Bayes": 							bayesTypecheck();
+			case VAL_NAIVE_BAYES: 							bayesTypecheck();
 			default:										break;
 		}
 		
 		// creating output schema
 		ArrayList<Field> fields = new ArrayList<Field>(getInputSchema(0).fields());	
-		fields.add(new Schema.Field(getClassOut(), CompleteDataType.forInt()));
+		fields.add(Schema.createField(DataType.INT, getClassOut()));
 		setOutputSchema(0, new Schema(null, fields));
 	}
 	
@@ -364,7 +424,7 @@ public class Classification extends Operator implements Parameterizable {
 	private void knnTypecheck() throws TypecheckException {
 		// neighbors
 		if (getNeighbors() <= 0) {
-			throw new PropertyTypecheckException("neighbors", "The number of neighbors must be at least 1");
+			throw new PropertyTypecheckException(PROP_NEIGHBORS, "The number of neighbors must be at least 1");
 		}
 				      					   
 	}
@@ -384,7 +444,7 @@ public class Classification extends Operator implements Parameterizable {
 	 */
 	private void regTypecheck() throws TypecheckException {
 		if (getRegFactor() < 0.0) {
-			throw new PropertyTypecheckException("regFactor", "The regularization factor must be at least 0");
+			throw new PropertyTypecheckException(PROP_REG_FACTOR, "The regularization factor must be at least 0");
 		}
 				 						 
 	}
@@ -397,18 +457,18 @@ public class Classification extends Operator implements Parameterizable {
 	private void dTreeTypecheck() throws TypecheckException {
 		// minLeaves
 		if (getMinLeaves() < 1) {
-			throw new PropertyTypecheckException("minLeaves", "The minimum number of leaves must be at least 1");
+			throw new PropertyTypecheckException(PROP_MIN_LEAVES, "The minimum number of leaves must be at least 1");
 		}
 		
 		// maxLeaves
 		if (getMaxLeaves() < 2) {
-			throw new PropertyTypecheckException("maxLeaves", "The maximum number of leaves must be at least 2");
+			throw new PropertyTypecheckException(PROP_MAX_LEAVES, "The maximum number of leaves must be at least 2");
 		}
 		
 		// ruleType and splitRule 
-		if (getRuleType().equals("Gini Impurity")) {
+		if (getRuleType().equals(VAL_GINI_IMPURITY)) {
 			this.splitRule = DecisionTree.SplitRule.GINI;
-		} else if (getRuleType().equals("Entropy")) {
+		} else if (getRuleType().equals(VAL_ENTROPY)) {
 			this.splitRule = DecisionTree.SplitRule.ENTROPY;
 		} else {
 			this.splitRule = DecisionTree.SplitRule.CLASSIFICATION_ERROR;
@@ -425,15 +485,15 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// numTrees
 		if (getNumTrees() < 1) {
-			throw new PropertyTypecheckException("numTrees", "The number of trees must be at least 1");
+			throw new PropertyTypecheckException(PROP_NUM_TREES, "The number of trees must be at least 1");
 		}
 		
 		// samplingRate
 		if (getSamplingRate() > 1) {
-			throw new PropertyTypecheckException("samplingRate", "The maximum sampling rate is 1");
+			throw new PropertyTypecheckException(PROP_SAMPLING_RATE, "The maximum sampling rate is 1");
 		}
 		if (getSamplingRate() <= 0) {
-			throw new PropertyTypecheckException("samplingRate", "the sampling rate must be positive");
+			throw new PropertyTypecheckException(PROP_SAMPLING_RATE, "the sampling rate must be positive");
 		}
 	}
 
@@ -447,10 +507,10 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// shrinkage
 		if (getShrinkage() > 1) {
-			throw new PropertyTypecheckException("shrinkage", "The maximum learning rate is 1");
+			throw new PropertyTypecheckException(PROP_SHRINKAGE, "The maximum learning rate is 1");
 		}
 		if (getShrinkage() <= 0) {
-			throw new PropertyTypecheckException("shrinkage", "the learning rate must be positive");
+			throw new PropertyTypecheckException(PROP_SHRINKAGE, "the learning rate must be positive");
 		}
 	}
 	
@@ -462,11 +522,11 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// numTrees
 		if (getNumTrees() < 1) {
-			throw new PropertyTypecheckException("numTrees", "The number of trees must be at least 1");
+			throw new PropertyTypecheckException(PROP_NUM_TREES, "The number of trees must be at least 1");
 		}
 		// maxLeaves
 		if (getMaxLeaves() < 2) {
-			throw new PropertyTypecheckException("maxLeaves", "The maximum number of leaves must be at least 2");
+			throw new PropertyTypecheckException(PROP_MAX_LEAVES, "The maximum number of leaves must be at least 2");
 		}
 	}
 	
@@ -477,20 +537,20 @@ public class Classification extends Operator implements Parameterizable {
 	private void netTypecheck() throws TypecheckException {
 		
 		// layerUnits
-		String[] parse = getLayerUnits().split(", ");
+		String[] parse = getLayerUnits().split(",");
 		for (String token : parse) {
 			try {
-				Integer.parseInt(token);
+				Integer.parseInt(token.trim());
 			} catch (NumberFormatException e) {
-				throw new PropertyTypecheckException("layerUnits", 
+				throw new PropertyTypecheckException(PROP_LAYER_UNITS, 
 						  "The units per network layer must be seperated by \", \"");
 			}
 		}
 		if (parse.length < 2) 
-			throw new PropertyTypecheckException("layerUnits", "There must be at least two layers");
+			throw new PropertyTypecheckException(PROP_LAYER_UNITS, "There must be at least two layers");
 		if (Integer.parseInt(parse[parse.length - 1]) != getClasses()) {
 			if (!(Integer.parseInt(parse[parse.length - 1]) == 1 && getClasses() == 2)) {
-				throw new PropertyTypecheckException("layerUnits", 
+				throw new PropertyTypecheckException(PROP_LAYER_UNITS, 
 						  "The last network layer's units must be the same as the number of classes");
 			}
 		}
@@ -498,23 +558,23 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// learningRate
 		if (getLearningRate() < 0.0) {
-			throw new PropertyTypecheckException("learningRate", "The learning rate must be at least 0.0");
+			throw new PropertyTypecheckException(PROP_LEARNING_RATE, "The learning rate must be at least 0.0");
 		}
 		
 		// momentum 
 		if (getMomentum() < 0.0) {
-			throw new PropertyTypecheckException("momentum", "Momentum must be at least 0.0");
+			throw new PropertyTypecheckException(PROP_MOMENTUM, "Momentum must be at least 0.0");
 		}
 		if (getMomentum() >= 1.0) {
-			throw new PropertyTypecheckException("momentum", "Momentum must be lower than 1.0");
+			throw new PropertyTypecheckException(PROP_MOMENTUM, "Momentum must be lower than 1.0");
 		}
 		
 		// decay
 		if (getDecay() < 0.0) {
-			throw new PropertyTypecheckException("decay", "Decay must be at least 0.0");
+			throw new PropertyTypecheckException(PROP_DECAY, "Decay must be at least 0.0");
 		}
 		if (getDecay() > 0.1) {
-			throw new PropertyTypecheckException("decay", "Maximum decay is 0.1");
+			throw new PropertyTypecheckException(PROP_DECAY, "Maximum decay is 0.1");
 		}
 	}
 	
@@ -527,12 +587,12 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// softMargin
 		if (getSoftMargin() < 0.0) {
-			throw new PropertyTypecheckException("softMargin", "The soft margin penalty parameter must be at least 0.0");
+			throw new PropertyTypecheckException(PROP_SOFT_MARGIN, "The soft margin penalty parameter must be at least 0.0");
 		}
 		
 		// Some kernels require a parameter. Check kernelParam here if needed
-		if ((kernel.equals("Gaussian") || kernel.equals("Laplacian")) && getKernelParam() < 0.0) {
-			throw new PropertyTypecheckException("kernelParam",	"The kernel sigma parameter must be at least 0.0");
+		if ((kernel.equals(VAL_GAUSSIAN) || kernel.equals(VAL_LAPLACIAN)) && getKernelParam() < 0.0) {
+			throw new PropertyTypecheckException(PROP_KERNEL_PARAM,	"The kernel sigma parameter must be at least 0.0");
 		}
 	}
 			
@@ -544,7 +604,7 @@ public class Classification extends Operator implements Parameterizable {
 		
 		// bayesSmoother
 		if (getBayesSmoother() <= 0.0) {
-			throw new PropertyTypecheckException("bayesSmoother", "The Bayes smoothing pseudocount must be greater than 0");
+			throw new PropertyTypecheckException(PROP_BAYES_SMOOTHER, "The Bayes smoothing pseudocount must be greater than 0");
 		}
 
 	}
@@ -641,7 +701,7 @@ public class Classification extends Operator implements Parameterizable {
 			trainingLabels.add(label);	
 		} else {
 			// Bayes needs # of params for initialization. The other online algos don't.
-			if (onClassifier == null && onlineType.equals("Naive Bayes")) {
+			if (onClassifier == null && onlineType.equals(VAL_NAIVE_BAYES)) {
 				initBayes();
 			}
 			onClassifier.learn(params, label);
@@ -662,28 +722,28 @@ public class Classification extends Operator implements Parameterizable {
 			throw new StreamBaseException("All classes should be represented in the training set");
 		}
 
-		if (batchType.equals("Linear Discriminant Analysis")) {
+		if (batchType.equals(VAL_LINEAR_DISCRIMINANT_ANALYSIS)) {
 			classifier = new LDA(data, labels);
-		} else if (batchType.equals("Quadratic Discriminant Analysis")) {
+		} else if (batchType.equals(VAL_QUADRATIC_DISCRIMINANT_ANALYSIS)) {
 			classifier = new QDA(data, labels);
-		} else if (batchType.equals("Regularized Discriminant Analysis")) {
+		} else if (batchType.equals(VAL_REGULARIZED_DISCRIMINANT_ANALYSIS)) {
 			classifier = new RDA(data, labels, regFactor);
-		} else if (batchType.equals("K-Nearest Neighbor")) {
+		} else if (batchType.equals(VAL_K_NEAREST_NEIGHBOR)) {
 			Distance<double[]> dist = new EuclideanDistance();
-			if (distType.equals("Correlation")) dist = new CorrelationDistance();
-			else if (distType.equals("Manhattan")) dist = new ManhattanDistance();
+			if (distType.equals(VAL_CORRELATION)) dist = new CorrelationDistance();
+			else if (distType.equals(VAL_MANHATTAN)) dist = new ManhattanDistance();
 			classifier = new KNN<double[]>(data, labels, dist, neighbors);
-		} else if (batchType.equals("Logistic Regression")) {
+		} else if (batchType.equals(VAL_LOGISTIC_REGRESSION)) {
 			classifier = new LogisticRegression(data, labels, regFactor);
-		} else if (batchType.equals("Decision Tree")) {
+		} else if (batchType.equals(VAL_DECISION_TREE)) {
 			classifier = new DecisionTree(data, labels, maxLeaves, minLeaves, splitRule);
-		} else if (batchType.equals("Random Forest")) {
+		} else if (batchType.equals(VAL_RANDOM_FOREST)) {
 			int mtry = (int) Math.ceil(Math.sqrt(numParams));
 			classifier = new RandomForest(null, data, labels, numTrees, maxLeaves, 
 										  minLeaves, mtry, samplingRate, splitRule);
-		} else if (batchType.equals("Gradient Boosted Trees")) {
+		} else if (batchType.equals(VAL_GRADIENT_BOOSTED_TREES)) {
 			classifier = new GradientTreeBoost(null, data, labels, numTrees, maxLeaves, shrinkage, samplingRate);
-		} else if (batchType.equals("AdaBoost")) {
+		} else if (batchType.equals(VAL_ADA_BOOST)) {
 			classifier = new AdaBoost(null, data, labels, numTrees, maxLeaves);
 		}
 		
@@ -720,10 +780,12 @@ public class Classification extends Operator implements Parameterizable {
 		super.init();
 		outputSchema = getRuntimeOutputSchema(0);
 		if (online) {
-			if (onlineType.equals("Multilayer Perceptron Neural Network")) {
+			if (onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK)) {
 				initNetwork();
-			} else if (onlineType.equals("Support Vector Machines")) {
+				logger.info("Multilayer Perceptron Neural Network initialized");
+			} else if (onlineType.equals(VAL_SUPPORT_VECTOR_MACHINES)) {
 				initSVM();
+				logger.info("Support Vector Machines initialized");
 			}
 		} else {
 			trainingData = new ArrayList<double[]>();
@@ -737,10 +799,10 @@ public class Classification extends Operator implements Parameterizable {
 	private void initNetwork() {
 		
 		// Parse the layerUnits string.
-		String[] tokens = getLayerUnits().split(", ");
+		String[] tokens = getLayerUnits().split(",");
 		int[] unitsPerLayer = new int[tokens.length];
 		for (int i = 0; i < tokens.length; i++) {
-			unitsPerLayer[i] = Integer.parseInt(tokens[i]);
+			unitsPerLayer[i] = Integer.parseInt(tokens[i].trim());
 		}
 		numParams = unitsPerLayer[0];
 		if (unitsPerLayer[unitsPerLayer.length - 1] == 2 && classes == 1) unitsPerLayer[unitsPerLayer.length] = 1;
@@ -775,7 +837,7 @@ public class Classification extends Operator implements Parameterizable {
 	 */
 	private void initSVM() {
 		SVM.Multiclass strategy;
-		if (multiStrat.equals("One vs one")) {
+		if (multiStrat.equals(VAL_ONE_VS_ONE)) {
 			strategy = SVM.Multiclass.ONE_VS_ONE;
 		} else {
 			strategy = SVM.Multiclass.ONE_VS_ALL;
@@ -784,11 +846,11 @@ public class Classification extends Operator implements Parameterizable {
 		// First create the Mercer Kernel for the SVM to use.
 		MercerKernel<double[]> mercerKernel = null;
 		switch (kernel) {
-			case "Gaussian":	mercerKernel = new GaussianKernel(kernelParam);
+			case VAL_GAUSSIAN:	mercerKernel = new GaussianKernel(kernelParam);
 								break;
 			case "Hellinger":	mercerKernel = new HellingerKernel();
 								break;
-			case "Laplacian":	mercerKernel = new LaplacianKernel(kernelParam);
+			case VAL_LAPLACIAN:	mercerKernel = new LaplacianKernel(kernelParam);
 								break;
 			case "Linear":		mercerKernel = new LinearKernel();
 								break;
@@ -802,9 +864,9 @@ public class Classification extends Operator implements Parameterizable {
 	 */
 	private void initBayes() {
 		NaiveBayes.Model model;
-		if (bayesModel.equals("Multinomial")) {
+		if (bayesModel.equals(VAL_MULTINOMIAL)) {
 			model = NaiveBayes.Model.MULTINOMIAL;
-		} else if (bayesModel.equals("Bernoulli")) {
+		} else if (bayesModel.equals(VAL_BERNOULLI)) {
 			model = NaiveBayes.Model.BERNOULLI;
 		} else {
 			model = NaiveBayes.Model.POLYAURN;
@@ -823,7 +885,7 @@ public class Classification extends Operator implements Parameterizable {
 		try {
 			return tuple.getList(field).stream().mapToDouble(x -> (Double) x).toArray();
 		} catch (TupleException e) {
-			throw new StreamBaseException("Tuple conversion error");
+			throw new StreamBaseException("Tuple conversion error", e);
 		}
 	}	
 
@@ -1089,87 +1151,87 @@ public class Classification extends Operator implements Parameterizable {
 	}
 	
 	public boolean shouldEnableNeighbors() {
-		return !this.online && this.batchType.equals("K-Nearest Neighbor");
+		return !this.online && this.batchType.equals(VAL_K_NEAREST_NEIGHBOR);
 	}
 	
 	public boolean shouldEnableDistType() {
-		return !this.online && this.batchType.equals("K-Nearest Neighbor");	
+		return !this.online && this.batchType.equals(VAL_K_NEAREST_NEIGHBOR);	
 	}
 
 	public boolean shouldEnableRegFactor() {
-		return !this.online && (this.batchType.equals("Logistic Regression") || 
-								this.batchType.equals("Regularized Discriminant Analysis"));
+		return !this.online && (this.batchType.equals(VAL_LOGISTIC_REGRESSION) || 
+								this.batchType.equals(VAL_REGULARIZED_DISCRIMINANT_ANALYSIS));
 	}
 	
 	public boolean shouldEnableMinLeaves() {
-		return !this.online && !this.batchType.equals("Gradient Boosted Trees") &&
-				(this.batchType.equals("Decision Tree") || this.batchType.equals("Random Forest"));
+		return !this.online && !this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES) &&
+				(this.batchType.equals(VAL_DECISION_TREE) || this.batchType.equals(VAL_RANDOM_FOREST));
 	}
 	
 	public boolean shouldEnableMaxLeaves() {
-		return !this.online && (this.batchType.equals("Decision Tree") || this.batchType.equals("Random Forest") 
-				|| this.batchType.equals("Gradient Boosted Trees") || this.batchType.equals("AdaBoost"));
+		return !this.online && (this.batchType.equals(VAL_DECISION_TREE) || this.batchType.equals(VAL_RANDOM_FOREST) 
+				|| this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES) || this.batchType.equals(VAL_ADA_BOOST));
 	}
 	
 	public boolean shouldEnableRuleType() {
-		return !this.online && !this.batchType.equals("Gradient Boosted Trees") &&
-				(this.batchType.equals("Decision Tree") || this.batchType.equals("Random Forest"));
+		return !this.online && !this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES) &&
+				(this.batchType.equals(VAL_DECISION_TREE) || this.batchType.equals(VAL_RANDOM_FOREST));
 	}
 	
 	public boolean shouldEnableNumTrees() {
-		return !this.online && (this.batchType.equals("Random Forest") || 
-				this.batchType.equals("Gradient Boosted Trees") || this.batchType.equals("AdaBoost"));
+		return !this.online && (this.batchType.equals(VAL_RANDOM_FOREST) || 
+				this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES) || this.batchType.equals(VAL_ADA_BOOST));
 	}
 	
 	public boolean shouldEnableSamplingRate() {
-		return !this.online && (this.batchType.equals("Random Forest") || this.batchType.equals("Gradient Boosted Trees"));	
+		return !this.online && (this.batchType.equals(VAL_RANDOM_FOREST) || this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES));	
 	}
 	
 	public boolean shouldEnableShrinkage() {
-		return !this.online && this.batchType.equals("Gradient Boosted Trees");
+		return !this.online && this.batchType.equals(VAL_GRADIENT_BOOSTED_TREES);
 	}
 	
 	public boolean shouldEnableErrorType() {
-		return this.online && this.onlineType.equals("Multilayer Perceptron Neural Network");
+		return this.online && this.onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 	}
 	
 	public boolean shouldEnableLayerUnits() {
-		return this.online && this.onlineType.equals("Multilayer Perceptron Neural Network");
+		return this.online && this.onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 	}
 	
 	public boolean shouldEnableLearningRate() {
-		return this.online && this.onlineType.equals("Multilayer Perceptron Neural Network");
+		return this.online && this.onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 	}
 	
 	public boolean shouldEnableMomentum() {
-		return this.online && this.onlineType.equals("Multilayer Perceptron Neural Network");
+		return this.online && this.onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 	}
 	
 	public boolean shouldEnableDecay() {
-		return this.online && this.onlineType.equals("Multilayer Perceptron Neural Network");
+		return this.online && this.onlineType.equals(VAL_MULTILAYER_PERCEPTRON_NEURAL_NETWORK);
 	}
 	
 	public boolean shouldEnableMultiStrat() {
-		return this.online && this.classes >= 3 && this.onlineType.equals("Support Vector Machines");
+		return this.online && this.classes >= 3 && this.onlineType.equals(VAL_SUPPORT_VECTOR_MACHINES);
 	}
 
 	public boolean shouldEnableSoftMargin() {
-		return this.online && this.onlineType.equals("Support Vector Machines");
+		return this.online && this.onlineType.equals(VAL_SUPPORT_VECTOR_MACHINES);
 	}
 	
 	public boolean shouldEnablekernel() {
-		return this.online && this.onlineType.equals("Support Vector Machines");
+		return this.online && this.onlineType.equals(VAL_SUPPORT_VECTOR_MACHINES);
 	}
 	
 	public boolean shouldEnableKernelParam() {
-		return shouldEnablekernel() && (kernel.equals("Gaussian") || kernel.equals("Laplacian"));
+		return shouldEnablekernel() && (kernel.equals(VAL_GAUSSIAN) || kernel.equals(VAL_LAPLACIAN));
 	}
 	
 	public boolean shouldEnableBayesModel() {
-		return this.online && this.onlineType.equals("Naive Bayes");
+		return this.online && this.onlineType.equals(VAL_NAIVE_BAYES);
 	}
 	
 	public boolean shouldEnableBayesSmoother() {
-		return this.online && this.onlineType.equals("Naive Bayes");
+		return this.online && this.onlineType.equals(VAL_NAIVE_BAYES);
 	}
 }
