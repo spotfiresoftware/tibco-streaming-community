@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.sp.contrib</groupId>
+    <artifactId>CramerView</artifactId>
+    <packaging>ep-liveview-fragment</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>CramerView</name>
+    <description>Illustrates using SMILE operators for correlating sensor readings with failures and presenting a LiveView table of the results for visualizing in TIBCO LiveView Web or TIBCO Spotfire</description>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-liveview-fragment</artifactId>
+        <version>10.5.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tibco.ep.community.components</groupId>
+            <artifactId>smile-operators</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tibco.ep.lvweb</groupId>
+            <artifactId>lvweb</artifactId>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>feedsim</artifactId>
+        	<version>10.5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>ldm</artifactId>
+        	<version>10.5.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
+  <SimStreams Name="RowSchema">
+    <ProcessingOptions DataRatePerSecond="2.0" DataGenerationMethod="DataFile">
+      <DataSource Name="DataSource" DataSourceURI="AllDataCombined(NoRelationsRows1-200, RelationsFromRows200-394).csv" QuoteChar="34" SkipLineCount="1"/>
+    </ProcessingOptions>
+    <Schema Description="Generated from /Volumes/GoogleDrive/My Drive/Reinforcement Learning/DataForStoryboard/401-600(noRelations).csv" ColumnMappingMethod="NAME">
+      <Fields Name="FailureCode" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="FailureCode"/>
+      </Fields>
+      <Fields Name="SNSR1_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C1"/>
+      </Fields>
+      <Fields Name="SNSR1_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C2"/>
+      </Fields>
+      <Fields Name="SNSR1_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C3"/>
+      </Fields>
+      <Fields Name="SNSR1_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C4"/>
+      </Fields>
+      <Fields Name="SNSR1_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C5"/>
+      </Fields>
+      <Fields Name="SNSR1_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C6"/>
+      </Fields>
+      <Fields Name="SNSR1_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C7"/>
+      </Fields>
+      <Fields Name="SNSR1_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C8"/>
+      </Fields>
+      <Fields Name="SNSR1_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C9"/>
+      </Fields>
+      <Fields Name="SNSR1_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C10"/>
+      </Fields>
+      <Fields Name="SNSR1_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C11"/>
+      </Fields>
+      <Fields Name="SNSR1_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C12"/>
+      </Fields>
+      <Fields Name="SNSR1_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C13"/>
+      </Fields>
+      <Fields Name="SNSR1_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C14"/>
+      </Fields>
+      <Fields Name="SNSR1_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR1_C15"/>
+      </Fields>
+      <Fields Name="SNSR2_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C1"/>
+      </Fields>
+      <Fields Name="SNSR2_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C2"/>
+      </Fields>
+      <Fields Name="SNSR2_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C3"/>
+      </Fields>
+      <Fields Name="SNSR2_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C4"/>
+      </Fields>
+      <Fields Name="SNSR2_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C5"/>
+      </Fields>
+      <Fields Name="SNSR2_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C6"/>
+      </Fields>
+      <Fields Name="SNSR2_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C7"/>
+      </Fields>
+      <Fields Name="SNSR2_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C8"/>
+      </Fields>
+      <Fields Name="SNSR2_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C9"/>
+      </Fields>
+      <Fields Name="SNSR2_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C10"/>
+      </Fields>
+      <Fields Name="SNSR2_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C11"/>
+      </Fields>
+      <Fields Name="SNSR2_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C12"/>
+      </Fields>
+      <Fields Name="SNSR2_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C13"/>
+      </Fields>
+      <Fields Name="SNSR2_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C14"/>
+      </Fields>
+      <Fields Name="SNSR2_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR2_C15"/>
+      </Fields>
+      <Fields Name="SNSR3_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C1"/>
+      </Fields>
+      <Fields Name="SNSR3_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C2"/>
+      </Fields>
+      <Fields Name="SNSR3_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C3"/>
+      </Fields>
+      <Fields Name="SNSR3_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C4"/>
+      </Fields>
+      <Fields Name="SNSR3_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C5"/>
+      </Fields>
+      <Fields Name="SNSR3_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C6"/>
+      </Fields>
+      <Fields Name="SNSR3_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C7"/>
+      </Fields>
+      <Fields Name="SNSR3_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C8"/>
+      </Fields>
+      <Fields Name="SNSR3_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C9"/>
+      </Fields>
+      <Fields Name="SNSR3_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C10"/>
+      </Fields>
+      <Fields Name="SNSR3_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C11"/>
+      </Fields>
+      <Fields Name="SNSR3_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C12"/>
+      </Fields>
+      <Fields Name="SNSR3_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C13"/>
+      </Fields>
+      <Fields Name="SNSR3_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C14"/>
+      </Fields>
+      <Fields Name="SNSR3_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR3_C15"/>
+      </Fields>
+      <Fields Name="SNSR4_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C1"/>
+      </Fields>
+      <Fields Name="SNSR4_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C2"/>
+      </Fields>
+      <Fields Name="SNSR4_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C3"/>
+      </Fields>
+      <Fields Name="SNSR4_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C4"/>
+      </Fields>
+      <Fields Name="SNSR4_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C5"/>
+      </Fields>
+      <Fields Name="SNSR4_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C6"/>
+      </Fields>
+      <Fields Name="SNSR4_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C7"/>
+      </Fields>
+      <Fields Name="SNSR4_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C8"/>
+      </Fields>
+      <Fields Name="SNSR4_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C9"/>
+      </Fields>
+      <Fields Name="SNSR4_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C10"/>
+      </Fields>
+      <Fields Name="SNSR4_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C11"/>
+      </Fields>
+      <Fields Name="SNSR4_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C12"/>
+      </Fields>
+      <Fields Name="SNSR4_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C13"/>
+      </Fields>
+      <Fields Name="SNSR4_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C14"/>
+      </Fields>
+      <Fields Name="SNSR4_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR4_C15"/>
+      </Fields>
+      <Fields Name="SNSR5_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C1"/>
+      </Fields>
+      <Fields Name="SNSR5_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C2"/>
+      </Fields>
+      <Fields Name="SNSR5_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C3"/>
+      </Fields>
+      <Fields Name="SNSR5_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C4"/>
+      </Fields>
+      <Fields Name="SNSR5_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C5"/>
+      </Fields>
+      <Fields Name="SNSR5_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C6"/>
+      </Fields>
+      <Fields Name="SNSR5_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C7"/>
+      </Fields>
+      <Fields Name="SNSR5_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C8"/>
+      </Fields>
+      <Fields Name="SNSR5_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C9"/>
+      </Fields>
+      <Fields Name="SNSR5_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C10"/>
+      </Fields>
+      <Fields Name="SNSR5_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C11"/>
+      </Fields>
+      <Fields Name="SNSR5_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C12"/>
+      </Fields>
+      <Fields Name="SNSR5_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C13"/>
+      </Fields>
+      <Fields Name="SNSR5_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C14"/>
+      </Fields>
+      <Fields Name="SNSR5_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR5_C15"/>
+      </Fields>
+      <Fields Name="SNSR6_C1" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C1"/>
+      </Fields>
+      <Fields Name="SNSR6_C2" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C2"/>
+      </Fields>
+      <Fields Name="SNSR6_C3" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C3"/>
+      </Fields>
+      <Fields Name="SNSR6_C4" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C4"/>
+      </Fields>
+      <Fields Name="SNSR6_C5" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C5"/>
+      </Fields>
+      <Fields Name="SNSR6_C6" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C6"/>
+      </Fields>
+      <Fields Name="SNSR6_C7" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C7"/>
+      </Fields>
+      <Fields Name="SNSR6_C8" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C8"/>
+      </Fields>
+      <Fields Name="SNSR6_C9" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C9"/>
+      </Fields>
+      <Fields Name="SNSR6_C10" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C10"/>
+      </Fields>
+      <Fields Name="SNSR6_C11" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C11"/>
+      </Fields>
+      <Fields Name="SNSR6_C12" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C12"/>
+      </Fields>
+      <Fields Name="SNSR6_C13" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C13"/>
+      </Fields>
+      <Fields Name="SNSR6_C14" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C14"/>
+      </Fields>
+      <Fields Name="SNSR6_C15" DataTypeName="double" Description="">
+        <DataSourceMapping DestFieldName="SNSR6_C15"/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>
