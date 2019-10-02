@@ -1,4 +1,4 @@
-# CramerView
+# Cramer View
 
 Loops over a feed simulation of sensor data that streams through a correlation operator; the data set initially has no correlation to failure; in the latter half of the file a few sensors begin to show a correlation, indicating failing sensors.
 
