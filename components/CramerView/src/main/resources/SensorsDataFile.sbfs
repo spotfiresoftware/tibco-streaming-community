@@ -2,7 +2,7 @@
 <sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS">
   <SimStreams Name="RowSchema">
     <ProcessingOptions DataRatePerSecond="2.0" DataGenerationMethod="DataFile">
-      <DataSource Name="DataSource" DataSourceURI="AllDataCombined(NoRelationsRows1-200, RelationsFromRows200-394).csv" QuoteChar="34" SkipLineCount="1"/>
+      <DataSource Name="DataSource" DataSourceURI="Data(NoRelationsRows1-200RelationsFromRows200-394).csv" QuoteChar="34" SkipLineCount="1"/>
     </ProcessingOptions>
     <Schema Description="Generated from /Volumes/GoogleDrive/My Drive/Reinforcement Learning/DataForStoryboard/401-600(noRelations).csv" ColumnMappingMethod="NAME">
       <Fields Name="FailureCode" DataTypeName="double" Description="">
