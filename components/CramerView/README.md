@@ -11,3 +11,6 @@ This project is intended to run as a LiveView Project and includes a LiveView Pu
 the while streaming the included sensor data through a Correlation operator, discovering in real-time which sensor readings are
 correlated to the _failure_ (FailureCode) flag.
  
+Once running, either use your browser and open TIBCO LiveView Web at http://localhost:10080 or open CramerView.dxp using TIBCO Spotfire
+10.5 or higher.
+ 
