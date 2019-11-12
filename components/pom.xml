@@ -53,6 +53,7 @@
         <module>smile-operators</module>
         <module>uxadmin</module>
         <module>wikimedia</module>
+        <module>cramer-view</module>
     </modules>
 
     <!-- skip site docs in this aggregator -->
