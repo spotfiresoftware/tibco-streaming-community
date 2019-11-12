@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.tibco.ep.sp.contrib</groupId>
-    <artifactId>CramerView</artifactId>
+    <artifactId>cramer-view</artifactId>
     <packaging>ep-liveview-fragment</packaging>
     <version>1.0.0</version>
     <name>CramerView</name>
