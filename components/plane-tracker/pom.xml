@@ -30,7 +30,7 @@
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-liveview-fragment</artifactId>
-        <version>10.5.0-SNAPSHOT</version>
+        <version>10.5.0</version>
         <relativePath/>
     </parent>
 
@@ -46,7 +46,7 @@
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>ldm</artifactId>
-        	<version>10.5.0-SNAPSHOT</version>
+        	<version>10.5.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
