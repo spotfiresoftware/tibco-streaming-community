@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.5.0-SNAPSHOT_c6fb93b83965e5e090f03a65dffb4538844fa348">
+    <add>
+        <gui.metadata>
+            <property name="app-version" value="1.0.0"/>
+            <property name="description" value="Loops over a feed simulation of sensor data that streams through a correlation operator; the data set initially has no correlation to failure; in the latter half of the file a few sensors begin to show a correlation, indicating failing sensors.&#10;&#10;USAGE&#10;&#10;Run this project as a LiveView project, and either open your browser to http://localhost:10080 and there will be a simple Pareto chart and table visualization, or open the included Analysis File in TIBCO Spotfire.&#10;"/>
+        </gui.metadata>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.sp.contrib.cramerview.CramerTable"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="lvinterfaces.CorrelationsPublisher"/>
+        <import from="lvinterfaces.CorrelationsPublisher"/>
+        <import from="lvinterfaces.CorrelationsSchemas"/>
+        <dynamic-variables/>
+        <stream name="out:FSReload_1">
+            <schema>
+                <field name="command" type="string"/>
+                <field name="value" type="double"/>
+            </schema>
+        </stream>
+        <stream name="out:FSRestart_1">
+            <schema>
+                <field name="command" type="string"/>
+                <field name="value" type="double"/>
+            </schema>
+        </stream>
+        <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
+        <stream name="ServerStateIn" schema="ServerStateSchema"/>
+        <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
+        <stream name="Start">
+            <schema/>
+        </stream>
+        <stream name="TheLastGoodRecordIn" schema="TheLastGoodRecordSchema"/>
+        <output-stream name="QueryTheLastGoodRecordOut" schema="QueryTheLastGoodRecordSchema"/>
+        <box name="LVReadyListener" type="inputadapter">
+            <output port="1" stream="out:LVReadyListener_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.liveview.LiveViewReady"/>
+            <param name="encapsulatingLV" value="true"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="shareConnection" value="true"/>
+            <param name="uri" value="lv://localhost"/>
+        </box>
+        <box name="isReady" type="filter">
+            <input port="1" stream="out:LVReadyListener_1"/>
+            <output port="1" stream="out:isReady_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Action==&quot;CONNECTED&quot;"/>
+        </box>
+        <box name="MakeGood" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="ServerStateIn"/>
+            <output port="1" stream="PublisherStateOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="CurrentState">RECOVERY_COMPLETE</replace>
+                    <replace field="Name">"CramerTable"</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="PublisherStateOut" schema="ServerStateSchema"/>
+        <box name="uStarts" type="union">
+            <input port="1" stream="Start"/>
+            <input port="2" stream="out:isReady_1"/>
+            <output port="1" stream="out:uStarts_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="StartCommand" type="map">
+            <input port="1" stream="out:uStarts_1"/>
+            <output port="1" stream="out:StartCommand_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"start"</include>
+                    <include field="value">0.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:StartCommand_1"/>
+            <input port="2" stream="out:FSReload_1"/>
+            <input port="3" stream="out:FSRestart_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="StartSim" type="inputadapter">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:StartSim_1"/>
+            <output port="2" stream="out:StartSim_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.sbfeedsim.SBFeedsim"/>
+            <param name="enableControlPort" value="true"/>
+            <param name="filenameFieldName" value=""/>
+            <param name="logLevel" value="INFO"/>
+            <param name="reportRateS" value="0"/>
+            <param name="sbfsFileName" value="SensorsDataFile.sbfs"/>
+            <param name="waitForStartCommand" value="true"/>
+        </box>
+        <box name="FSAdapterStatus" type="outputadapter">
+            <input port="1" stream="out:StartSim_1"/>
+            <output port="1" stream="out:FSAdapterStatus_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="Logger"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="IntoTuple" type="map">
+            <input port="1" stream="out:StartSim_2"/>
+            <output port="1" stream="out:IntoTuple_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="FailureCode"/>
+                </item>
+                <expressions>
+                    <include field="Data">input1</include>
+                    <remove field="Data.FailureCode"/>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="WhenComplete" type="filter">
+            <input port="1" stream="out:StartSim_1"/>
+            <output port="1" stream="out:WhenComplete_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Action == &quot;COMPLETE&quot;"/>
+        </box>
+        <box name="Cramer" type="java">
+            <input port="1" stream="out:IntoTuple_1"/>
+            <output port="1" stream="out:Cramer_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.sp.contrib.smileoperators.Correlation"/>
+            <param name="corrType" value="Cramer's V"/>
+            <param name="correlationField" value="FailureCode"/>
+            <param name="decimalDigits" value="3"/>
+            <param name="emission" value="Time"/>
+            <param name="format" value="Tuple"/>
+            <param name="frequency" value="1"/>
+            <param name="nullValue" value="0.0"/>
+            <param name="outputType" value="List of Tuples"/>
+            <param name="periodSeconds" value="0.5"/>
+            <param name="tableSize" value="10"/>
+            <param name="variablesField" value="Data"/>
+            <param name="windowSize" value="100"/>
+        </box>
+        <box name="Wait5s" type="map">
+            <input port="1" stream="out:WhenComplete_1"/>
+            <output port="1" stream="out:Wait5s_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="noop">sleep(seconds(5))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="PrepClearTable" type="map">
+            <input port="1" stream="out:Wait5s_1"/>
+            <output port="1" stream="out:PrepClearTable_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="TableName">"Correlations"</include>
+                    <include field="Predicate">"true"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Split" type="iterate">
+            <input port="1" stream="out:Cramer_1"/>
+            <output port="1" stream="out:Split_1"/>
+            <param name="iterate-expr" value="correlations"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Name">each.element.name</include>
+                    <include field="Value">each.element.value</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="AddControlFields" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="PublishToCorrelationsOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">CorrelationsInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="ClearTable" type="outputadapter">
+            <input port="1" stream="out:PrepClearTable_1"/>
+            <output port="1" stream="out:ClearTable_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.liveview.LiveViewDelete"/>
+            <param name="encapsulatingLV" value="true"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="shareConnection" value="true"/>
+            <param name="uri" value="lv://localhost"/>
+        </box>
+        <output-stream name="PublishToCorrelationsOut" schema="CorrelationsDataInSchema"/>
+        <box name="onDelDone" type="filter">
+            <input port="1" stream="out:ClearTable_1"/>
+            <output port="1" stream="out:onDelDone_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Action == &quot;DELETE_END&quot;"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="out:onDelDone_1"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="FSReload" type="map">
+            <input port="1" stream="out:Split2_1"/>
+            <output port="1" stream="out:FSReload_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"load"</include>
+                    <include field="value">0.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FSRestart" type="map">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="out:FSRestart_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"start"</include>
+                    <include field="value">0.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <gui.note name="Note">
+            <property name="description" value="This publisher will automatically begin streaming from its feed simulation file when the liveview server is ready. It has logic to loop continuously."/>
+        </gui.note>
+    </add>
+</modify>
