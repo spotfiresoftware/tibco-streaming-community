@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="PublishSchemasIn">
+        <param name="gui:x" value="243"/>
+        <param name="gui:y" value="216"/>
+    </component>
+    <component name="ServerStateIn">
+        <param name="gui:x" value="243"/>
+        <param name="gui:y" value="-164"/>
+    </component>
+    <component name="ServerStatusIn">
+        <param name="gui:x" value="243"/>
+        <param name="gui:y" value="-69"/>
+    </component>
+    <component name="Start">
+        <param name="gui:x" value="-42"/>
+        <param name="gui:y" value="-315"/>
+    </component>
+    <component name="TheLastGoodRecordIn">
+        <param name="gui:x" value="243"/>
+        <param name="gui:y" value="26"/>
+    </component>
+    <component name="AddControlFields">
+        <param name="gui:x" value="793"/>
+        <param name="gui:y" value="-280"/>
+    </component>
+    <component name="ClearTable">
+        <param name="gui:x" value="796"/>
+        <param name="gui:y" value="-438"/>
+    </component>
+    <component name="Cramer">
+        <param name="gui:x" value="590"/>
+        <param name="gui:y" value="-280"/>
+    </component>
+    <component name="FSAdapterStatus">
+        <param name="gui:x" value="491"/>
+        <param name="gui:y" value="-104"/>
+        <param name="gui:bends:1" value="419,-285;463,-74"/>
+    </component>
+    <component name="FSReload">
+        <param name="gui:x" value="1101"/>
+        <param name="gui:y" value="-482"/>
+        <param name="gui:bends:1" value="1043,-416;1051,-448"/>
+    </component>
+    <component name="FSRestart">
+        <param name="gui:x" value="1101"/>
+        <param name="gui:y" value="-397"/>
+        <param name="gui:bends:1" value="1057,-397;1063,-368"/>
+    </component>
+    <component name="IntoTuple">
+        <param name="gui:x" value="486"/>
+        <param name="gui:y" value="-280"/>
+        <param name="gui:bends:1" value="462,-265;464,-250"/>
+    </component>
+    <component name="LVReadyListener">
+        <param name="gui:x" value="-34"/>
+        <param name="gui:y" value="-186"/>
+    </component>
+    <component name="MakeGood">
+        <param name="gui:x" value="331"/>
+        <param name="gui:y" value="-164"/>
+    </component>
+    <component name="PrepClearTable">
+        <param name="gui:x" value="683"/>
+        <param name="gui:y" value="-438"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="696"/>
+        <param name="gui:y" value="-280"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="996"/>
+        <param name="gui:y" value="-438"/>
+    </component>
+    <component name="StartCommand">
+        <param name="gui:x" value="156"/>
+        <param name="gui:y" value="-315"/>
+    </component>
+    <component name="StartSim">
+        <param name="gui:x" value="349"/>
+        <param name="gui:y" value="-305"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="252"/>
+        <param name="gui:y" value="-305"/>
+        <param name="gui:bends:2" value="1140,-448;1140,-483;246,-483;246,-275"/>
+        <param name="gui:bends:3" value="1153,-368;1153,-496;226,-496;226,-265"/>
+    </component>
+    <component name="Wait5s">
+        <param name="gui:x" value="597"/>
+        <param name="gui:y" value="-438"/>
+    </component>
+    <component name="WhenComplete">
+        <param name="gui:x" value="500"/>
+        <param name="gui:y" value="-438"/>
+        <param name="gui:bends:1" value="435,-285;465,-406"/>
+    </component>
+    <component name="isReady">
+        <param name="gui:x" value="53"/>
+        <param name="gui:y" value="-186"/>
+    </component>
+    <component name="onDelDone">
+        <param name="gui:x" value="913"/>
+        <param name="gui:y" value="-438"/>
+    </component>
+    <component name="uStarts">
+        <param name="gui:x" value="57"/>
+        <param name="gui:y" value="-315"/>
+    </component>
+    <component name="PublishToCorrelationsOut">
+        <param name="gui:x" value="933"/>
+        <param name="gui:y" value="-280"/>
+    </component>
+    <component name="PublisherStateOut">
+        <param name="gui:x" value="430"/>
+        <param name="gui:y" value="-164"/>
+    </component>
+    <component name="QueryTheLastGoodRecordOut">
+        <param name="gui:x" value="243"/>
+        <param name="gui:y" value="121"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-24"/>
+        <param name="gui:y" value="-452"/>
+        <param name="gui:width" value="178"/>
+        <param name="gui:height" value="115"/>
+    </component>
+    <component name="Restart">
+        <param name="gui:x" value="482"/>
+        <param name="gui:y" value="-504"/>
+        <param name="gui:width" value="681"/>
+        <param name="gui:height" value="188"/>
+    </component>
+    <component name="UnusedPublisherFeatures">
+        <param name="gui:x" value="180"/>
+        <param name="gui:y" value="-186"/>
+        <param name="gui:width" value="237"/>
+        <param name="gui:height" value="223"/>
+    </component>
+    <gui.group name="Restart" visual-state="open">
+        <member name="WhenComplete"/>
+        <member name="Wait5s"/>
+        <member name="ClearTable"/>
+        <member name="PrepClearTable"/>
+        <member name="FSRestart"/>
+        <member name="Split2"/>
+        <member name="FSReload"/>
+        <member name="onDelDone"/>
+        <param name="gui:x" value="482"/>
+        <param name="gui:y" value="-504"/>
+        <param name="gui:width" value="681"/>
+        <param name="gui:height" value="188"/>
+    </gui.group>
+    <gui.group name="UnusedPublisherFeatures" visual-state="open">
+        <member name="MakeGood"/>
+        <member name="PublisherStateOut"/>
+        <member name="PublishSchemasIn"/>
+        <member name="ServerStateIn"/>
+        <member name="QueryTheLastGoodRecordOut"/>
+        <member name="TheLastGoodRecordIn"/>
+        <member name="ServerStatusIn"/>
+        <param name="gui:x" value="180"/>
+        <param name="gui:y" value="-186"/>
+        <param name="gui:width" value="237"/>
+        <param name="gui:height" value="223"/>
+    </gui.group>
+</application-layout>
