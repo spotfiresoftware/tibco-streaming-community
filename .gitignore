@@ -5,6 +5,7 @@
 .classpath
 .metadata
 .vscode
+.java-version
 
 # directories
 target/
