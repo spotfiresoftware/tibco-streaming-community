@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DeliveryBidEvent">
+        <param name="gui:x" value="-446"/>
+        <param name="gui:y" value="-902"/>
+    </component>
+    <component name="DeliveryConfirmationEvent">
+        <param name="gui:x" value="-446"/>
+        <param name="gui:y" value="-654"/>
+    </component>
+    <component name="DeliveryRequestEvent">
+        <param name="gui:x" value="-446"/>
+        <param name="gui:y" value="-988"/>
+    </component>
+    <component name="GPSLocationEvent">
+        <param name="gui:x" value="140"/>
+        <param name="gui:y" value="-417"/>
+    </component>
+    <component name="InsertDriver">
+        <param name="gui:x" value="-134"/>
+        <param name="gui:y" value="-436"/>
+    </component>
+    <component name="InsertStore">
+        <param name="gui:x" value="-397"/>
+        <param name="gui:y" value="-436"/>
+    </component>
+    <component name="PickUpConfirmationEvent">
+        <param name="gui:x" value="-446"/>
+        <param name="gui:y" value="-734"/>
+    </component>
+    <component name="StoreDriverSelection">
+        <param name="gui:x" value="-446"/>
+        <param name="gui:y" value="-818"/>
+    </component>
+    <component name="PhaseFive">
+        <param name="gui:x" value="41"/>
+        <param name="gui:y" value="-772"/>
+    </component>
+    <component name="PhaseFour">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-655"/>
+    </component>
+    <component name="PhaseOne">
+        <param name="gui:x" value="-250"/>
+        <param name="gui:y" value="-1001"/>
+    </component>
+    <component name="PhaseThree">
+        <param name="gui:x" value="-244"/>
+        <param name="gui:y" value="-698"/>
+    </component>
+    <component name="PhaseTwo">
+        <param name="gui:x" value="-250"/>
+        <param name="gui:y" value="-856"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="RawGPS2CityRegion1">
+        <param name="gui:x" value="290"/>
+        <param name="gui:y" value="-417"/>
+    </component>
+    <component name="ActiveDeliveries">
+        <param name="gui:x" value="-387"/>
+        <param name="gui:y" value="-562"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="DeliveryRequestBidTimes">
+        <param name="gui:x" value="-46"/>
+        <param name="gui:y" value="-562"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="DriverLocations">
+        <param name="gui:x" value="-278"/>
+        <param name="gui:y" value="-562"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="DriverRankings">
+        <param name="gui:x" value="86"/>
+        <param name="gui:y" value="-562"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Stores">
+        <param name="gui:x" value="-157"/>
+        <param name="gui:y" value="-562"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="DoInsertDriver">
+        <param name="gui:x" value="-44"/>
+        <param name="gui:y" value="-436"/>
+    </component>
+    <component name="DoInsertStore">
+        <param name="gui:x" value="-310"/>
+        <param name="gui:y" value="-436"/>
+    </component>
+    <component name="TrackDriver">
+        <param name="gui:x" value="470"/>
+        <param name="gui:y" value="-417"/>
+    </component>
+    <component name="_">
+        <param name="gui:x" value="-95"/>
+        <param name="gui:y" value="-772"/>
+    </component>
+    <component name="AutoAssignOut">
+        <param name="gui:x" value="52"/>
+        <param name="gui:y" value="-901"/>
+    </component>
+    <component name="BidRequestOut">
+        <param name="gui:x" value="53"/>
+        <param name="gui:y" value="-1055"/>
+    </component>
+    <component name="DeliveryAlert">
+        <param name="gui:x" value="299"/>
+        <param name="gui:y" value="-942"/>
+    </component>
+    <component name="ImprovementNote">
+        <param name="gui:x" value="257"/>
+        <param name="gui:y" value="-592"/>
+    </component>
+    <component name="ManualAssignOut">
+        <param name="gui:x" value="52"/>
+        <param name="gui:y" value="-982"/>
+    </component>
+    <component name="MonthlySummary">
+        <param name="gui:x" value="269"/>
+        <param name="gui:y" value="-694"/>
+    </component>
+    <component name="NoBidRequestsAlert">
+        <param name="gui:x" value="396"/>
+        <param name="gui:y" value="-1001"/>
+    </component>
+    <component name="NoBiddersAlert">
+        <param name="gui:x" value="300"/>
+        <param name="gui:y" value="-1047"/>
+    </component>
+    <component name="NoDriversAssignedByStoreAlert">
+        <param name="gui:x" value="299"/>
+        <param name="gui:y" value="-843"/>
+    </component>
+    <component name="PickupAlert">
+        <param name="gui:x" value="396"/>
+        <param name="gui:y" value="-891"/>
+    </component>
+    <component name="RankingDecrease">
+        <param name="gui:x" value="412"/>
+        <param name="gui:y" value="-694"/>
+    </component>
+    <component name="RankingIncrease">
+        <param name="gui:x" value="400"/>
+        <param name="gui:y" value="-593"/>
+    </component>
+    <component name="Alerts">
+        <param name="gui:x" value="215"/>
+        <param name="gui:y" value="-1089"/>
+        <param name="gui:width" value="288"/>
+        <param name="gui:height" value="341"/>
+    </component>
+    <component name="DriverTracking">
+        <param name="gui:x" value="112"/>
+        <param name="gui:y" value="-458"/>
+        <param name="gui:width" value="389"/>
+        <param name="gui:height" value="123"/>
+    </component>
+    <component name="LoadDriversGroup">
+        <param name="gui:x" value="-142"/>
+        <param name="gui:y" value="-457"/>
+        <param name="gui:width" value="201"/>
+        <param name="gui:height" value="121"/>
+    </component>
+    <component name="LoadStoresGroup">
+        <param name="gui:x" value="-402"/>
+        <param name="gui:y" value="-458"/>
+        <param name="gui:width" value="192"/>
+        <param name="gui:height" value="123"/>
+    </component>
+    <component name="Output">
+        <param name="gui:x" value="7"/>
+        <param name="gui:y" value="-1089"/>
+        <param name="gui:width" value="151"/>
+        <param name="gui:height" value="286"/>
+    </component>
+    <component name="UserMonitor">
+        <param name="gui:x" value="215"/>
+        <param name="gui:y" value="-722"/>
+        <param name="gui:width" value="288"/>
+        <param name="gui:height" value="216"/>
+    </component>
+    <gui.group color="255,128,128" name="Alerts" visual-state="open">
+        <member name="DeliveryAlert"/>
+        <member name="NoBidRequestsAlert"/>
+        <member name="NoBiddersAlert"/>
+        <member name="NoDriversAssignedByStoreAlert"/>
+        <member name="PickupAlert"/>
+        <param name="gui:x" value="215"/>
+        <param name="gui:y" value="-1089"/>
+        <param name="gui:width" value="288"/>
+        <param name="gui:height" value="341"/>
+    </gui.group>
+    <gui.group color="128,128,255" name="DriverTracking" visual-state="open">
+        <member name="GPSLocationEvent"/>
+        <member name="RawGPS2CityRegion1"/>
+        <member name="TrackDriver"/>
+        <param name="gui:x" value="112"/>
+        <param name="gui:y" value="-458"/>
+        <param name="gui:width" value="389"/>
+        <param name="gui:height" value="123"/>
+    </gui.group>
+    <gui.group color="255,128,255" name="LoadDriversGroup" visual-state="open">
+        <member name="InsertDriver"/>
+        <member name="DoInsertDriver"/>
+        <param name="gui:x" value="-142"/>
+        <param name="gui:y" value="-457"/>
+        <param name="gui:width" value="201"/>
+        <param name="gui:height" value="121"/>
+    </gui.group>
+    <gui.group color="255,128,192" name="LoadStoresGroup" visual-state="open">
+        <member name="InsertStore"/>
+        <member name="DoInsertStore"/>
+        <param name="gui:x" value="-402"/>
+        <param name="gui:y" value="-458"/>
+        <param name="gui:width" value="192"/>
+        <param name="gui:height" value="123"/>
+    </gui.group>
+    <gui.group name="Output" visual-state="open">
+        <member name="BidRequestOut"/>
+        <member name="AutoAssignOut"/>
+        <member name="ManualAssignOut"/>
+        <param name="gui:x" value="7"/>
+        <param name="gui:y" value="-1089"/>
+        <param name="gui:width" value="151"/>
+        <param name="gui:height" value="286"/>
+    </gui.group>
+    <gui.group color="128,255,255" name="UserMonitor" visual-state="open">
+        <member name="ImprovementNote"/>
+        <member name="RankingDecrease"/>
+        <member name="MonthlySummary"/>
+        <member name="RankingIncrease"/>
+        <param name="gui:x" value="215"/>
+        <param name="gui:y" value="-722"/>
+        <param name="gui:width" value="288"/>
+        <param name="gui:height" value="216"/>
+    </gui.group>
+</application-layout>

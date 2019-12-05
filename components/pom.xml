@@ -54,6 +54,7 @@
         <module>uxadmin</module>
         <module>wikimedia</module>
         <module>cramer-view</module>
+        <module>flowershop</module>
     </modules>
 
     <!-- skip site docs in this aggregator -->

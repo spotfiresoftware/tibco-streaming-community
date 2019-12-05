@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+    <add>
+        <gui.metadata>
+            <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/AssignModule.png"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.AssignmentPhase"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="seconds(20)" name="ASSIGN_DELAY"/>
+            <parameter default="30" name="DEFAULT_DELIVERY_TIME"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="ActiveDeliveries" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ActiveDeliveriesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="618"/>
+            <param name="gui:y" value="-51"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DeliveryBids" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="bid_id" type="long"/>
+                    <field name="delivery_request_id" type="long"/>
+                    <field name="delivery_bid" type="tuple" value="DeliveryBid"/>
+                    <field name="time_of_bid" type="timestamp"/>
+                </schema>
+                <primary-index type="hash">
+                    <field name="bid_id"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="delivery_request_id"/>
+                </index>
+                <index type="btree">
+                    <field name="time_of_bid"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="910"/>
+            <param name="gui:y" value="368"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DeliveryRequestBidTimes" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DeliveryRequestBidTimesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="578"/>
+            <param name="gui:y" value="240"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DriverRankings" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverRankingsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="1409"/>
+            <param name="gui:y" value="17"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="OutstandingManualAssignments" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="delivery_request_id" type="long"/>
+                    <field name="store_id" type="int"/>
+                    <field name="when" type="timestamp"/>
+                </schema>
+                <primary-index type="hash">
+                    <field name="delivery_request_id"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="when"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="1739"/>
+            <param name="gui:y" value="17"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="Stores" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="StoresTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="755"/>
+            <param name="gui:y" value="241"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <stream name="BidIdAssignInput" schema="DeliveryBid">
+            <param name="gui:x" value="413"/>
+            <param name="gui:y" value="368"/>
+        </stream>
+        <stream name="RecordPickup4ManualAssignInput">
+            <schema>
+                <field name="store_id" type="int"/>
+                <field name="delivery_request_id" type="long"/>
+                <field name="driver_id" type="int"/>
+                <field name="committed_time" type="timestamp"/>
+            </schema>
+            <param name="gui:x" value="418"/>
+            <param name="gui:y" value="-156"/>
+        </stream>
+        <box name="TickOutstandingBids" type="metronome">
+            <output port="1" stream="out:TickOutstandingBids_1"/>
+            <param name="interval" value="1"/>
+            <param name="timestamp-field" value="now"/>
+            <param name="gui:x" value="413"/>
+            <param name="gui:y" value="110"/>
+        </box>
+        <box name="TickOutstandingManualAssignments" type="metronome">
+            <output port="1" stream="out:TickOutstandingManualAssignments_1"/>
+            <param name="interval" value="1"/>
+            <param name="timestamp-field" value="now"/>
+            <param name="gui:x" value="1267"/>
+            <param name="gui:y" value="-205"/>
+        </box>
+        <box name="BidIdAssign" type="seqnum">
+            <input port="1" stream="BidIdAssignInput"/>
+            <output port="1" stream="out:BidIdAssign_1"/>
+            <param name="output-field" value="bid_id"/>
+            <param name="sequence-id" value="bid_id"/>
+            <param name="update-expression" value="bid_id + 1"/>
+            <param name="gui:x" value="589"/>
+            <param name="gui:y" value="368"/>
+        </box>
+        <box name="FindOutstandingAssignments" type="query">
+            <input port="1" stream="out:TickOutstandingManualAssignments_1"/>
+            <output port="1" stream="out:FindOutstandingAssignments_1"/>
+            <dataref id="querytable" name="OutstandingManualAssignments"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="when"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-value.0" value="now - minutes(1)"/>
+            <param name="key-upperbound-operation.0" value="le"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="all"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="1477"/>
+            <param name="gui:y" value="-205"/>
+        </box>
+        <box name="GetAssignableDeliveryRequests" type="query">
+            <property name="description" value="find all delivery ids that are ready for assignment. output sends earliest deliveries first."/>
+            <input port="1" stream="out:TickOutstandingBids_1"/>
+            <output port="1" stream="out:GetAssignableDeliveryRequests_1"/>
+            <dataref id="querytable" name="DeliveryRequestBidTimes"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="delivery_request_time"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-value.0" value="now - ${ASSIGN_DELAY}"/>
+            <param name="key-upperbound-operation.0" value="le"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="all"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="589"/>
+            <param name="gui:y" value="110"/>
+        </box>
+        <box name="RecordPickup4ManualAssign" type="query">
+            <input port="1" stream="RecordPickup4ManualAssignInput"/>
+            <output port="1" stream="out:RecordPickup4ManualAssign_1"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="driver_id">input1.driver_id</set>
+                    <set field="pickup_time_committed">input1.committed_time</set>
+                    <set field="delivery_time">now() + minutes(${DEFAULT_DELIVERY_TIME})</set>
+                    <set field="pickup_event_received">false</set>
+                    <set field="delivery_event_received">false</set>
+                    <set field="late_delivery_alert_sent">false</set>
+                    <set field="late_pickup_alert_sent">false</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="627"/>
+            <param name="gui:y" value="-156"/>
+        </box>
+        <box name="AssignmentComplete" type="query">
+            <property name="description" value="By deleting the delivery_request_id row in the OutstandingManualAssignments table, prevents the 1-minute alert from taking place. Note that this operator has no output if there was no pending outstanding manual assignment: either by a duplicate StoreDriverSelection event, or if this happens after the one minute alert."/>
+            <input port="1" stream="out:RecordPickup4ManualAssign_1"/>
+            <dataref id="querytable" name="OutstandingManualAssignments"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="786"/>
+            <param name="gui:y" value="-155"/>
+        </box>
+        <box name="GetStoreAssignProcess" type="query">
+            <input port="1" stream="out:GetAssignableDeliveryRequests_1"/>
+            <output port="1" stream="out:GetStoreAssignProcess_1"/>
+            <dataref id="querytable" name="Stores"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="store_id"/>
+            <param name="key-value.0" value="input1.store_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="manual_process"/>
+                </item>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="764"/>
+            <param name="gui:y" value="110"/>
+        </box>
+        <box name="MakeNoManualAssignmentsAlert" type="map">
+            <input port="1" stream="out:FindOutstandingAssignments_1"/>
+            <output port="1" stream="NoManualAssignmentsAlertOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="delivery_request_id"/>
+                    <include field="store_id"/>
+                </item>
+            </target-list>
+            <param name="gui:x" value="1676"/>
+            <param name="gui:y" value="-205"/>
+        </box>
+        <box name="RecordBid" type="query">
+            <input port="1" stream="out:BidIdAssign_1"/>
+            <dataref id="querytable" name="DeliveryBids"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="bid_id"/>
+            <param name="key-value.0" value="input1.bid_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="delivery_request_id">input.delivery_request_id</set>
+                    <set field="delivery_bid">DeliveryBid(driver_id, delivery_request_id, pickup_time_committed)</set>
+                    <set field="time_of_bid">now()</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="764"/>
+            <param name="gui:y" value="366"/>
+        </box>
+        <output-stream name="NoManualAssignmentsAlertOutput">
+            <param name="gui:x" value="1891"/>
+            <param name="gui:y" value="-205"/>
+        </output-stream>
+        <box name="GetAllBidders" type="query">
+            <property name="description" value="Removes all delivery bids for the given delivery_request_id, and outputs a list of all driver_ids for later manipulation"/>
+            <input port="1" stream="out:GetStoreAssignProcess_1"/>
+            <output port="1" stream="out:GetAllBidders_1"/>
+            <dataref id="querytable" name="DeliveryBids"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="input1.delivery_request_id = current.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="store_id"/>
+                    <include field="delivery_request_id"/>
+                    <include field="manual_process"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="driver_ids_w_committime">filternull(aggregatelist(tuple(delivery_bid.driver_id, delivery_bid.pickup_time_committed)))</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="bid_id">null</set>
+                    <set field="delivery_request_id">null</set>
+                    <set field="delivery_bid">null</set>
+                    <set field="time_of_bid">null</set>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="920"/>
+            <param name="gui:y" value="110"/>
+        </box>
+        <box name="EnsureBids" type="filter">
+            <input port="1" stream="out:GetAllBidders_1"/>
+            <output port="1" stream="out:EnsureBids_1"/>
+            <output port="2" stream="out:EnsureBids_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="length(driver_ids_w_committime) &gt; 0"/>
+            <param name="expression.1" value="true"/>
+            <param name="gui:x" value="1023"/>
+            <param name="gui:y" value="110"/>
+        </box>
+        <box name="FormatNoBidsAlert" type="map">
+            <input port="1" stream="out:EnsureBids_2"/>
+            <output port="1" stream="NoBidsAlertOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="store_id"/>
+                    <include field="delivery_request_id"/>
+                </item>
+            </target-list>
+            <param name="gui:x" value="1152"/>
+            <param name="gui:y" value="259"/>
+            <param name="gui:bends:1" value="1113,150;1142,289"/>
+        </box>
+        <box name="ManualOrAutoAssign" type="filter">
+            <input port="1" stream="out:EnsureBids_1"/>
+            <output port="1" stream="out:ManualOrAutoAssign_1"/>
+            <output port="2" stream="out:ManualOrAutoAssign_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="manual_process"/>
+            <param name="expression.1" value="!manual_process"/>
+            <param name="gui:x" value="1152"/>
+            <param name="gui:y" value="13"/>
+            <param name="gui:bends:1" value="1102,130;1122,43"/>
+        </box>
+        <output-stream name="NoBidsAlertOutput">
+            <param name="gui:x" value="1304"/>
+            <param name="gui:y" value="258"/>
+        </output-stream>
+        <box name="ForEachDriver" type="iterate">
+            <property name="description" value="Begins a &quot;foreach&quot; loop, iterating over each driver. Doing this in conjunction with the aggregate downstream allows us to collect each driver's ranking, collect it in a (sorted-by-rank) list in the aggregate window"/>
+            <input port="1" stream="out:ManualOrAutoAssign_1"/>
+            <output port="1" stream="out:ForEachDriver_1"/>
+            <param name="iterate-expr" value="driver_ids_w_committime"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="current_driver_bid">each.element</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1304"/>
+            <param name="gui:y" value="-85"/>
+            <param name="gui:bends:1" value="1229,33;1251,-55"/>
+        </box>
+        <box name="SelectFirstBidder" type="map">
+            <input port="1" stream="out:ManualOrAutoAssign_2"/>
+            <output port="1" stream="AutoAssignOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="delivery_request_id"/>
+                    <include field="store_id"/>
+                </item>
+                <expressions>
+                    <include field="driver_id">driver_ids_w_committime[0].driver_id -- first driver is earliest bid</include>
+                    <include field="committed_time">driver_ids_w_committime[0].pickup_time_committed -- first driver's pickup time</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1275"/>
+            <param name="gui:y" value="103"/>
+            <param name="gui:bends:1" value="1248,53;1265,133"/>
+        </box>
+        <output-stream name="AutoAssignOutput">
+            <param name="gui:x" value="1434"/>
+            <param name="gui:y" value="188"/>
+            <param name="gui:bends:1" value="1362,133;1382,218"/>
+        </output-stream>
+        <box name="AttachRankings" type="query">
+            <input port="1" stream="out:ForEachDriver_1"/>
+            <output port="1" stream="out:AttachRankings_1"/>
+            <dataref id="querytable" name="DriverRankings"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-lowerbound-value.0" value="input1.current_driver_bid.driver_id"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="current_driver_ranking">ranking</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="1419"/>
+            <param name="gui:y" value="-85"/>
+        </box>
+        <box name="RecordPickup4AutoAssign" type="query">
+            <input port="1" stream="AutoAssignOutput"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="driver_id">input1.driver_id</set>
+                    <set field="pickup_time_committed">input1.committed_time</set>
+                    <set field="delivery_time">now() + minutes(${DEFAULT_DELIVERY_TIME})</set>
+                    <set field="pickup_event_received">false</set>
+                    <set field="delivery_event_received">false</set>
+                    <set field="late_pickup_alert_sent">false</set>
+                    <set field="late_delivery_alert_sent">false</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="1434"/>
+            <param name="gui:y" value="103"/>
+        </box>
+        <box name="Top5RankedDrivers" type="aggregate">
+            <property name="description" value="The aggregate window is sized by the length of the driver_ids list (see the Close Predicate). The output creates a sorted list of all ranking/driver pairs. The &quot;firstval&quot; calls pass on the input values (which are all the same for the duration of the for loop started by the Iterate operator).&#13;&#10;&#13;&#10;Note that the &quot;reverse(sort())&quot; call is used so that the highest value rank is first (sort by default sorts ascending)"/>
+            <input port="1" stream="out:AttachRankings_1"/>
+            <output port="1" stream="out:Top5RankedDrivers_1"/>
+            <param name="dimension-name.0" value="FiveTupleWindow"/>
+            <param name="dimension-type.0" value="predicate"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-close-predicate.0" value="count() == length(input1.driver_ids_w_committime)"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="delivery_request_id">firstval(delivery_request_id) -- pass on input delivery request id</include>
+                    <include field="store_id">firstval(store_id) -- pass on input store id</include>
+                    <include field="ranked_drivers">reverse(sort(aggregatelist(tuple(current_driver_ranking,current_driver_bid)))) -- sort desc</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1536"/>
+            <param name="gui:y" value="-85"/>
+        </box>
+        <box name="Top5" type="map">
+            <input port="1" stream="out:Top5RankedDrivers_1"/>
+            <output port="1" stream="out:Top5_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="ranked_drivers"/>
+                </item>
+                <expressions>
+                    <include field="top5_drivers">sublist(ranked_drivers, 0, min(4, length(ranked_drivers)))</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1645"/>
+            <param name="gui:y" value="-85"/>
+        </box>
+        <box name="RecordManualAssign" type="query">
+            <input port="1" stream="out:Top5_1"/>
+            <output port="1" stream="ManualAssignOutput"/>
+            <dataref id="querytable" name="OutstandingManualAssignments"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="store_id">input.store_id</set>
+                    <set field="when">now()</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="1749"/>
+            <param name="gui:y" value="-85"/>
+        </box>
+        <output-stream name="ManualAssignOutput">
+            <param name="gui:x" value="1887"/>
+            <param name="gui:y" value="-85"/>
+        </output-stream>
+        <gui.note name="ForTesting20Seconds">
+            <property name="description" value="The spec calls for this to be two minutes, but for testing a shorter interval is chosen"/>
+            <note-target name="GetAssignableDeliveryRequests"/>
+            <param name="gui:x" value="550"/>
+            <param name="gui:y" value="37"/>
+            <param name="gui:width" value="155"/>
+            <param name="gui:height" value="74"/>
+        </gui.note>
+    </add>
+</modify>

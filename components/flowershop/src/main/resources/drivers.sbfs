@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS" Description="Simulate a bunch of drivers moving around on the city grid">
+  <SimStreams Name="GPSLocationEvent">
+    <ProcessingOptions DataRatePerSecond="7.0" DataGenerationMethod="Custom"/>
+    <Schema>
+      <Fields Name="driver_id" DataTypeName="int" Description="">
+        <Distribution GenerationMethod="Enumerated" NumRandomEnumValues="1" EnumeratedDistMethod="SpecifiedValues">
+          <EnumeratedDist weight="1.0" value="1"/>
+          <EnumeratedDist weight="1.0" value="2"/>
+          <EnumeratedDist weight="1.0" value="3"/>
+          <EnumeratedDist weight="1.0" value="4"/>
+          <EnumeratedDist weight="1.0" value="5"/>
+          <EnumeratedDist weight="1.0" value="6"/>
+          <EnumeratedDist weight="1.0" value="7"/>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="raw_location" DataTypeName="tuple" Description="">
+        <Distribution GenerationMethod="Random"/>
+        <DataSourceMapping/>
+        <Schema>
+          <Fields Name="latitude" DataTypeName="double" Description="in degrees (-90 to +90)">
+            <Distribution GenerationMethod="Random" MinValue="-90.0" MaxValue="90.0" StartValue="-85.0"/>
+            <DataSourceMapping/>
+          </Fields>
+          <Fields Name="longitude" DataTypeName="double" Description="in degrees (-90 to +90)">
+            <Distribution GenerationMethod="Random" MinValue="-90.0" MaxValue="90.0" StartValue="-85.0"/>
+            <DataSourceMapping/>
+          </Fields>
+        </Schema>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>

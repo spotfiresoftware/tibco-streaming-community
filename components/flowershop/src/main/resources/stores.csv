@@ -1,0 +1,6 @@
+#store_id,min_driver_ranking,location(x,y),manual_process
+1,1,"10,10",true
+2,2,"20,20",true
+3,3,"30,30",false
+4,4,"40,40",false
+5,10,"0,0",false

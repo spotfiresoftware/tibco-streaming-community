@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_5a3d853e254e1c51e849f910970514d129ebafdd">
+    <add>
+        <gui.metadata>
+            <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/RankingModule.png"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.RankingEvalPhase"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <dynamic-variables/>
+        <data name="DriverAlertCounts" shared="false" source="concrete" type="querytable">
+            <property name="description" value="Note: the count is not a running total, but rather a counter reset every 20 deliveries"/>
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="driver_id" type="int"/>
+                    <field name="num_alerts" type="int"/>
+                </schema>
+                <primary-index type="hash">
+                    <field name="driver_id"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="157"/>
+            <param name="gui:y" value="338"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DriverRankings" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverRankingsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="534"/>
+            <param name="gui:y" value="340"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <stream name="Every20DeliveriesInput" schema="DeliveryConfirmation">
+            <param name="gui:x" value="31"/>
+            <param name="gui:y" value="98"/>
+        </stream>
+        <stream name="RecordAlertInput">
+            <schema>
+                <field name="delivery_request_id" type="long"/>
+                <field name="driver_id" type="int"/>
+                <field name="pickup_time_committed" type="timestamp"/>
+                <field name="delivery_time" type="timestamp"/>
+                <field name="late_delivery_alert_sent" type="bool"/>
+            </schema>
+            <param name="gui:x" value="31"/>
+            <param name="gui:y" value="193"/>
+        </stream>
+        <box name="Every20Deliveries" type="aggregate">
+            <input port="1" stream="Every20DeliveriesInput"/>
+            <output port="1" stream="out:Every20Deliveries_1"/>
+            <param name="dimension-name.0" value="Every20"/>
+            <param name="dimension-type.0" value="Tuple"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="20"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <param name="group-by-name.0" value="driver_id"/>
+            <param name="group-by.0" value="driver_id"/>
+            <param name="gui:x" value="167"/>
+            <param name="gui:y" value="98"/>
+        </box>
+        <box name="RecordAlert" type="query">
+            <input port="1" stream="RecordAlertInput"/>
+            <dataref id="querytable" name="DriverAlertCounts"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="num_alerts">1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="num_alerts">old.num_alerts + 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="167"/>
+            <param name="gui:y" value="193"/>
+        </box>
+        <box name="ResetAndCountAlerts" type="query">
+            <input port="1" stream="out:Every20Deliveries_1"/>
+            <output port="1" stream="out:ResetAndCountAlerts_1"/>
+            <dataref id="querytable" name="DriverAlertCounts"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="num_alerts">if isnull(old.num_alerts) then 0 else old.num_alerts</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="num_alerts">0</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="297"/>
+            <param name="gui:y" value="98"/>
+        </box>
+        <box name="EvalFilter" type="filter">
+            <input port="1" stream="out:ResetAndCountAlerts_1"/>
+            <output port="1" stream="out:EvalFilter_1"/>
+            <output port="2" stream="out:EvalFilter_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="num_alerts == 0"/>
+            <param name="expression.1" value="num_alerts &gt; 5"/>
+            <param name="gui:x" value="412"/>
+            <param name="gui:y" value="98"/>
+        </box>
+        <box name="DoRankingDecrease" type="query">
+            <input port="1" stream="out:EvalFilter_2"/>
+            <output port="1" stream="RankingDecreaseOutput"/>
+            <dataref id="querytable" name="DriverRankings"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="driver_id"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="ranking">old.ranking - 1</set>
+                    <set field="last_ranking_change">"decrease"</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="544"/>
+            <param name="gui:y" value="195"/>
+            <param name="gui:bends:1" value="496,138;516,225"/>
+        </box>
+        <box name="DoRankingIncrease" type="query">
+            <input port="1" stream="out:EvalFilter_1"/>
+            <output port="1" stream="out:DoRankingIncrease_1"/>
+            <dataref id="querytable" name="DriverRankings"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="driver_id"/>
+                </item>
+                <item name="old" selection="none">
+                    <include field="last_ranking_change"/>
+                </item>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="ranking">old.ranking + 1</set>
+                    <set field="last_ranking_change">"increase"</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="544"/>
+            <param name="gui:y" value="85"/>
+            <param name="gui:bends:1" value="519,118;519,115"/>
+        </box>
+        <output-stream name="RankingDecreaseOutput">
+            <param name="gui:x" value="699"/>
+            <param name="gui:y" value="195"/>
+        </output-stream>
+        <box name="IsImprovement" type="filter">
+            <input port="1" stream="out:DoRankingIncrease_1"/>
+            <output port="1" stream="out:IsImprovement_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="last_ranking_change == &quot;decrease&quot;"/>
+            <param name="gui:x" value="699"/>
+            <param name="gui:y" value="-10"/>
+            <param name="gui:bends:1" value="644,115;666,20"/>
+        </box>
+        <box name="PrepRankingIncreaseEvent" type="map">
+            <input port="1" stream="out:DoRankingIncrease_1"/>
+            <output port="1" stream="RankingIncreaseEventOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="driver_id"/>
+                </item>
+            </target-list>
+            <param name="gui:x" value="699"/>
+            <param name="gui:y" value="85"/>
+        </box>
+        <output-stream name="RankingIncreaseEventOutput">
+            <param name="gui:x" value="878"/>
+            <param name="gui:y" value="85"/>
+        </output-stream>
+        <box name="PrepImprovementEvent" type="map">
+            <input port="1" stream="out:IsImprovement_1"/>
+            <output port="1" stream="ImprovementEventOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="driver_id"/>
+                </item>
+            </target-list>
+            <param name="gui:x" value="878"/>
+            <param name="gui:y" value="-10"/>
+        </box>
+        <output-stream name="ImprovementEventOutput">
+            <param name="gui:x" value="1037"/>
+            <param name="gui:y" value="-10"/>
+        </output-stream>
+    </add>
+</modify>

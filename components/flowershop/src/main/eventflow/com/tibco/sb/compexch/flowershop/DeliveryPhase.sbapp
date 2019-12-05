@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+    <add>
+        <gui.metadata>
+            <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/DeliveryModule.png"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.DeliveryPhase"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <dynamic-variables/>
+        <data name="ActiveDeliveries" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ActiveDeliveriesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="434"/>
+            <param name="gui:y" value="166"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <stream name="TagDeliveryDoneInput" schema="DeliveryConfirmation">
+            <param name="gui:x" value="133"/>
+            <param name="gui:y" value="190"/>
+        </stream>
+        <stream name="TagPickupDoneInput" schema="PickUpConfirmation">
+            <param name="gui:x" value="133"/>
+            <param name="gui:y" value="100"/>
+        </stream>
+        <box name="TickDeliveryTimeAlerts" type="metronome">
+            <output port="1" stream="out:TickDeliveryTimeAlerts_1"/>
+            <param name="interval" value="10"/>
+            <param name="timestamp-field" value="now"/>
+            <param name="gui:x" value="-31"/>
+            <param name="gui:y" value="279"/>
+        </box>
+        <box name="TickPickupTimeAlerts" type="metronome">
+            <output port="1" stream="out:TickPickupTimeAlerts_1"/>
+            <param name="interval" value="10"/>
+            <param name="timestamp-field" value="now"/>
+            <param name="gui:x" value="-31"/>
+            <param name="gui:y" value="5"/>
+        </box>
+        <box name="FindLateForDelivery" type="query">
+            <input port="1" stream="out:TickDeliveryTimeAlerts_1"/>
+            <output port="1" stream="out:FindLateForDelivery_1"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="pickup_event_received &amp;&amp; !delivery_event_received &amp;&amp; !late_delivery_alert_sent &amp;&amp; delivery_time &lt; now - minutes(10)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="133"/>
+            <param name="gui:y" value="279"/>
+        </box>
+        <box name="FindLateForPickup" type="query">
+            <input port="1" stream="out:TickPickupTimeAlerts_1"/>
+            <output port="1" stream="out:FindLateForPickup_1"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="!pickup_event_received &amp;&amp; !late_pickup_alert_sent &amp;&amp; pickup_time_committed &lt; now - minutes(5)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="132"/>
+            <param name="gui:y" value="6"/>
+        </box>
+        <box name="TagDeliveryDone" type="query">
+            <input port="1" stream="TagDeliveryDoneInput"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="delivery_event_received">true</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="189"/>
+        </box>
+        <box name="TagPickupDone" type="query">
+            <input port="1" stream="TagPickupDoneInput"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="pickup_event_received">true</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="99"/>
+        </box>
+        <box name="TagDeliveryAlertSent" type="query">
+            <input port="1" stream="out:FindLateForDelivery_1"/>
+            <output port="1" stream="TagDeliveryAlertSentOutput"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="delivery_event_received"/>
+                    <remove field="late_pickup_alert_sent"/>
+                    <remove field="pickup_event_received"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="late_delivery_alert_sent">true</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="279"/>
+        </box>
+        <box name="TagPickupAlertSent" type="query">
+            <input port="1" stream="out:FindLateForPickup_1"/>
+            <output port="1" stream="TagPickupAlertSentOutput"/>
+            <dataref id="querytable" name="ActiveDeliveries"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="delivery_event_received"/>
+                    <remove field="late_pickup_alert_sent"/>
+                    <remove field="pickup_event_received"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="late_pickup_alert_sent">true</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="5"/>
+        </box>
+        <output-stream name="TagDeliveryAlertSentOutput">
+            <param name="gui:x" value="444"/>
+            <param name="gui:y" value="279"/>
+        </output-stream>
+        <output-stream name="TagPickupAlertSentOutput">
+            <param name="gui:x" value="444"/>
+            <param name="gui:y" value="5"/>
+        </output-stream>
+    </add>
+</modify>

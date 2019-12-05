@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.RawGPS2CityRegion"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <dynamic-variables/>
+        <stream name="RawGPSIn">
+            <schema>
+                <field name="raw_location" type="tuple">
+                    <schema>
+                        <field description="in degrees (-90 to +90)" name="latitude" type="double"/>
+                        <field description="in degrees (-90 to +90)" name="longitude" type="double"/>
+                    </schema>
+                </field>
+            </schema>
+            <param name="gui:x" value="29"/>
+            <param name="gui:y" value="5"/>
+        </stream>
+        <box name="TranslateLatLon2CityRegion" type="map">
+            <property name="description" value="This does a totally silly transform from lat/lon (assumed degrees from -90 to +90) to a grid system, by just adding 90 to each (so the x,y becomes from 0 to 180)"/>
+            <input port="1" stream="RawGPSIn"/>
+            <output port="1" stream="CityRegionOut"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="raw_location"/>
+                </item>
+                <expressions>
+                    <include field="location">CityRegion(int(raw_location.latitude) + 90, int(raw_location.longitude + 90))</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="156"/>
+            <param name="gui:y" value="5"/>
+        </box>
+        <output-stream name="CityRegionOut">
+            <param name="gui:x" value="295"/>
+            <param name="gui:y" value="5"/>
+        </output-stream>
+    </add>
+</modify>
