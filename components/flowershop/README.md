@@ -1,3 +1,4 @@
+# Flower Shop
 This component represents an implementation of the Fast Flower Delivery
 use case, conceived by members of the Event Processing Technical Society,
 and described in details in the Event Processing in Action book by
@@ -5,7 +6,7 @@ by Opher Etzion and Peter Niblett (ISBN 9781935182214). The specification
 is available in Appendix B. For more information on the book or the use
 case, visit the book publisher's website at http://www.manning.com/etzion/
 
-The main application, com.tibco.sb.compexch.flowershop.FlowerShop, has the following
+The main application, `com.tibco.sb.compexch.flowershop.FlowerShop`, has the following
 assumptions and simplifications:
  - Driver GPS events are expected to send locations in degrees (-90 to +90).
  - A mapping takes place that maps these coordinates to "a grid".
@@ -17,9 +18,9 @@ assumptions and simplifications:
     every day.
 
  Modules:
-  - com.tibco.sb.compexch.flowershop.SharedSchemas contains definition of global
+  - `com.tibco.sb.compexch.flowershop.SharedSchemas` contains definition of global
     events that are reused by the main application.
-  - com.tibco.sb.compexch.flowershop.RawGPS2CityRegion defines the simple
+  - `com.tibco.sb.compexch.flowershop.RawGPS2CityRegion` defines the simple
     GPS-to-City grid mapping. Other mappings could be authored here.
 
  Additional files:
