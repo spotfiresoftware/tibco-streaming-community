@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.5.0_ccb32e4ca924f05a0d59933f58d9d573d97e7fa1">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <named-schemas>
+        <schema description="A driver bidding for a delivery" name="BidRequest">
+            <field description="target of bid request" name="driver_id" type="int"/>
+            <field description="store requesting bid" name="store_id" type="int"/>
+            <field description="id of original delivery request" name="delivery_request_id" type="long"/>
+        </schema>
+        <schema description="a simplified way of encoding a &quot;region of a city&quot;, as if the world is just a grid" name="CityRegion">
+            <field name="x" type="int"/>
+            <field name="y" type="int"/>
+        </schema>
+        <schema description="A driver bidding on a delivery request" name="DeliveryBid">
+            <field name="driver_id" type="int"/>
+            <field name="delivery_request_id" type="long"/>
+            <field name="pickup_time_committed" type="timestamp"/>
+        </schema>
+        <schema description="A driver has delivered flowers to a customer" name="DeliveryConfirmation">
+            <field name="driver_id" type="int"/>
+            <field name="delivery_request_id" type="long"/>
+        </schema>
+        <schema description="A store indicating a flower delivery request by a customer is now ready for drivers to bid on" name="DeliveryRequest">
+            <field name="store_id" type="int"/>
+        </schema>
+        <schema description="Event sent by a store indicating a driver collected flowers to deliver" name="PickUpConfirmation">
+            <field name="store_id" type="int"/>
+            <field name="delivery_request_id" type="long"/>
+        </schema>
+        <schema description="Sent by GPS units in every driver's vehicle" name="RawGPSLocation">
+            <field description="in degrees (-90 to +90)" name="latitude" type="double"/>
+            <field description="in degrees (-90 to +90)" name="longitude" type="double"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+    <table-schemas>
+        <table-schema name="ActiveDeliveriesTableSchema">
+            <schema>
+                <field name="delivery_request_id" type="long"/>
+                <field name="driver_id" type="int"/>
+                <field name="pickup_time_committed" type="timestamp"/>
+                <field name="delivery_time" type="timestamp"/>
+                <field name="pickup_event_received" type="bool"/>
+                <field name="delivery_event_received" type="bool"/>
+                <field name="late_pickup_alert_sent" type="bool"/>
+                <field name="late_delivery_alert_sent" type="bool"/>
+            </schema>
+            <primary-index type="hash">
+                <field name="delivery_request_id"/>
+            </primary-index>
+            <index type="btree">
+                <field name="delivery_time"/>
+            </index>
+            <index type="btree">
+                <field name="pickup_time_committed"/>
+            </index>
+        </table-schema>
+        <table-schema name="DeliveryRequestBidTimesTableSchema">
+            <schema>
+                <field name="delivery_request_id" type="long"/>
+                <field name="delivery_request_time" type="timestamp"/>
+                <field name="store_id" type="int"/>
+            </schema>
+            <primary-index type="hash">
+                <field name="delivery_request_id"/>
+            </primary-index>
+            <index type="btree">
+                <field name="delivery_request_time"/>
+            </index>
+        </table-schema>
+        <table-schema name="DriverLocationsTableSchema">
+            <schema>
+                <field name="driver_id" type="int"/>
+                <field name="last_location" type="tuple" value="CityRegion"/>
+            </schema>
+            <primary-index type="hash">
+                <field name="driver_id"/>
+            </primary-index>
+        </table-schema>
+        <table-schema name="DriverRankingsTableSchema">
+            <schema>
+                <field name="driver_id" type="int"/>
+                <field name="ranking" type="int"/>
+                <field description="when not null, &quot;increase&quot; or &quot;decrease&quot;. used for phase 4." name="last_ranking_change" type="string"/>
+            </schema>
+            <primary-index type="hash">
+                <field name="driver_id"/>
+            </primary-index>
+            <index type="btree">
+                <field name="ranking"/>
+            </index>
+        </table-schema>
+        <table-schema name="StoresTableSchema">
+            <schema>
+                <field name="store_id" type="int"/>
+                <field description="higher rankings are more desireable" name="min_driver_ranking" type="int"/>
+                <field name="location" type="tuple" value="CityRegion"/>
+                <field description="when true, the store wants to manually intervene in the bidding allocation" name="manual_process" type="bool"/>
+            </schema>
+            <primary-index type="hash">
+                <field name="store_id"/>
+            </primary-index>
+        </table-schema>
+    </table-schemas>
+</application>

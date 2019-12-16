@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0_f89ad9c1e682178524f5f24a92b37025de5f8851">
+    <add>
+        <gui.metadata>
+            <property name="description" value="This component represents an implementation of the Fast Flower Delivery&#13;&#10;use case, from the Event Processing in Action book by Opher Etzion and &#13;&#10;Peter Niblett (ISBN 9781935182214). The specification is available in &#13;&#10;Appendix B, and a copy of the specification is included in this &#13;&#10;component (specification.pdf).&#13;&#10;&#13;&#10;&#13;&#10;The main application (FlowerShop.sbapp) has the following assumptions &#13;&#10;and simplifications:&#13;&#10; - Driver GPS events are expected to be sending locations in degrees (-90 to +90)&#13;&#10; - A mapping takes place that maps these coordinates to &quot;a grid&quot;&#13;&#10; - The city grid is assumed to start at 0,0&#13;&#10; - The assignment process timeout (described in Phase 2) is set to 20 seconds,&#13;&#10;    instead of 2 minutes to help testing. It is defined as a module parameter for&#13;&#10;    easy modification. &#13;&#10;&#13;&#10; Modules:&#13;&#10;  - SharedSchemas.sbapp contains definition of global events that are reused by&#13;&#10;     the main application&#13;&#10;  - RawGPS2CityRegion.sbapp defines the simple GPS to City grid mapping. Other&#13;&#10;     mappings could be authored here&#13;&#10; - *Phase.sbapp files implement the phase modules&#13;&#10;  &#13;&#10; Additional files:&#13;&#10;  - drivers.csv is loaded by the application on startup and loads a&#13;&#10;     (driver_id, driver_rank) in-memory table&#13;&#10;  - stores.csv does a similar task for stores, loading their location (in grid&#13;&#10;     coordinates) and minimum-ranking&#13;&#10;  - drivers.sbfs is a feed simulation that may be used to generate driver GPS events&#13;&#10;&#13;&#10;Usage notes:&#13;&#10;1. To define stores and drivers manually, use the InsertStore and InsertDriver&#13;&#10;   streams.&#13;&#10;2. drivers.sbfs is a convenience feed simulation provided that matches the drivers&#13;&#10;   defined in drivers.csv. If you change one, update the other file to match. You&#13;&#10;   can also send driver events manually or programmatically by sending tuples to&#13;&#10;   the GPSLocationEvent input stream.&#13;&#10;&#13;&#10;For more information on the book or the use case, visit the book publisher's web&#13;&#10;site at http://www.manning.com/etzion/ and the StreamBase Event Processing&#13;&#10;Technical Society landing site at http://www.streambase.com/ep-ts.&#13;&#10;"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.FlowerShop"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="30" name="DEFAULT_DELIVERY_TIME"/>
+            <parameter default="seconds(20)" name="ASSIGN_DELAY"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="ActiveDeliveries" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ActiveDeliveriesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="DeliveryRequestBidTimes" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DeliveryRequestBidTimesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="DriverLocations" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverLocationsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="DriverRankings" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverRankingsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload file="drivers.csv" format="csv" header="ignore" mode="file"/>
+        </data>
+        <data name="Stores" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="StoresTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload file="stores.csv" format="csv" header="ignore" mode="file"/>
+        </data>
+        <stream name="DeliveryBidEvent" schema="DeliveryBid">
+            <property name="description" value="A driver bid on a delivery_request, with a time committment.&#13;&#10;Note: specification said that a bid event designates the location; this is not represented here since the system has locations as an async process."/>
+        </stream>
+        <stream name="DeliveryConfirmationEvent" schema="DeliveryConfirmation">
+            <property name="description" value="A driver should send this event when a flower has been delivered."/>
+        </stream>
+        <stream name="DeliveryRequestEvent" schema="DeliveryRequest">
+            <property name="description" value="The event that kicks off the main process: a store sends a request event on this stream to indicate a customer has ordered flowers for delivery. Events on BidRequestOut will be emitted to all nearby drivers that qualify. They may then bid on the delivery by sending back an event on the DeliveryBidEvent stream. Drivers have a specific time window within which to send their bids."/>
+        </stream>
+        <stream name="GPSLocationEvent">
+            <schema>
+                <field name="driver_id" type="int"/>
+                <field name="raw_location" type="tuple" value="RawGPSLocation"/>
+            </schema>
+        </stream>
+        <stream name="InsertDriver">
+            <schema>
+                <field name="driver_id" type="int"/>
+                <field name="ranking" type="int"/>
+            </schema>
+        </stream>
+        <stream name="InsertStore">
+            <schema>
+                <field description="store unique identifier" name="store_id" type="int"/>
+                <field description="higher rankings are more desireable" name="min_driver_ranking" type="int"/>
+                <field description="where in the city the store is" name="location" type="tuple" value="CityRegion"/>
+                <field description="store assignment style" name="manual_process" type="bool"/>
+            </schema>
+        </stream>
+        <stream name="PickUpConfirmationEvent" schema="PickUpConfirmation">
+            <property name="description" value="A driver should send this when the flowers are picked up from the store."/>
+        </stream>
+        <stream name="StoreDriverSelection">
+            <property name="description" value="A store, in response to a ManualAssignOut event, has selected a driver"/>
+            <schema description="A store, in response to a ManualAssignOut event, has selected a driver">
+                <field name="store_id" type="int"/>
+                <field name="delivery_request_id" type="long"/>
+                <field name="driver_id" type="int"/>
+                <field name="committed_time" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="DoInsertDriver" type="query">
+            <input port="1" stream="InsertDriver"/>
+            <dataref id="querytable" name="DriverRankings"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" prefix="input_" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="ranking">input1.ranking</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="DoInsertStore" type="query">
+            <input port="1" stream="InsertStore"/>
+            <dataref id="querytable" name="Stores"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="store_id"/>
+            <param name="key-value.0" value="input1.store_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="min_driver_ranking">input1.min_driver_ranking</set>
+                    <set field="location">input1.location</set>
+                    <set field="manual_process">input1.manual_process</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <module-reference name="PhaseOne">
+            <input name="AddRequestIDInput" port="1" stream="DeliveryRequestEvent"/>
+            <output name="BidRequestOutput" port="1" stream="BidRequestOut"/>
+            <output name="NoBidRequestsAlertOutput" port="2" stream="NoBidRequestsAlert"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.BidPhase"/>
+            <input-dataref name="Stores" table="Stores"/>
+            <input-dataref name="DeliveryRequestBidTimes" table="DeliveryRequestBidTimes"/>
+            <input-dataref name="DriverLocations" table="DriverLocations"/>
+            <input-dataref name="DriverRankings" table="DriverRankings"/>
+        </module-reference>
+        <module-reference name="PhaseThree">
+            <input name="TagPickupDoneInput" port="1" stream="PickUpConfirmationEvent"/>
+            <input name="TagDeliveryDoneInput" port="2" stream="DeliveryConfirmationEvent"/>
+            <output name="TagDeliveryAlertSentOutput" port="1" stream="DeliveryAlert"/>
+            <output name="TagPickupAlertSentOutput" port="2" stream="PickupAlert"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.DeliveryPhase"/>
+            <input-dataref name="ActiveDeliveries" table="ActiveDeliveries"/>
+        </module-reference>
+        <module-reference name="PhaseTwo">
+            <input name="BidIdAssignInput" port="1" stream="DeliveryBidEvent"/>
+            <input name="RecordPickup4ManualAssignInput" port="2" stream="StoreDriverSelection"/>
+            <output name="NoBidsAlertOutput" port="1" stream="NoBiddersAlert"/>
+            <output name="NoManualAssignmentsAlertOutput" port="2" stream="NoDriversAssignedByStoreAlert"/>
+            <output name="ManualAssignOutput" port="3" stream="ManualAssignOut"/>
+            <output name="AutoAssignOutput" port="4" stream="AutoAssignOut"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.AssignmentPhase"/>
+            <input-dataref name="Stores" table="Stores"/>
+            <input-dataref name="DeliveryRequestBidTimes" table="DeliveryRequestBidTimes"/>
+            <input-dataref name="ActiveDeliveries" table="ActiveDeliveries"/>
+            <input-dataref name="DriverRankings" table="DriverRankings"/>
+        </module-reference>
+        <module-reference name="RawGPS2CityRegion1">
+            <input name="RawGPSIn" port="1" stream="GPSLocationEvent"/>
+            <output name="CityRegionOut" port="1" stream="out:RawGPS2CityRegion1_1"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.RawGPS2CityRegion"/>
+        </module-reference>
+        <output-stream name="AutoAssignOut">
+            <property name="description" value="The driver driver_id has been assigned to the indicated delivery request"/>
+        </output-stream>
+        <output-stream name="BidRequestOut">
+            <property name="description" value="An event sent by the system to drivers that are near a store, and qualify for a delivery request. Drivers interested in the delivery should respond with an event on the DeliveryBidEvent stream."/>
+        </output-stream>
+        <output-stream name="DeliveryAlert">
+            <property name="description" value="A delivery is late"/>
+        </output-stream>
+        <output-stream name="ManualAssignOut">
+            <property name="description" value="A store is using manual assignment, and this stream emits the top-five drivers to choose from. A store should then select one and send an event on the StoreDriverSelection stream."/>
+        </output-stream>
+        <output-stream name="NoBiddersAlert">
+            <property name="description" value="An event warning that no drivers bid on a delivery request."/>
+        </output-stream>
+        <output-stream name="NoBidRequestsAlert">
+            <property name="description" value="A variant of &quot;no bidders, then send alert&quot;. There are no drivers that qualified and were nearby, so we can send out an alert immediately upon a delivery request. &#13;&#10;&#13;&#10;This alert was not in the specification."/>
+        </output-stream>
+        <output-stream name="NoDriversAssignedByStoreAlert">
+            <property name="description" value="An alert indicating that a store did not complete its manual assignment of a driver."/>
+        </output-stream>
+        <output-stream name="PickupAlert">
+            <property name="description" value="A pickup is late"/>
+        </output-stream>
+        <box name="_" type="union">
+            <input port="1" stream="AutoAssignOut"/>
+            <input port="2" stream="StoreDriverSelection"/>
+            <output port="1" stream="out:__1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <module-reference name="PhaseFour">
+            <input name="RecordAlertInput" port="1" stream="DeliveryAlert"/>
+            <input name="Every20DeliveriesInput" port="2" stream="DeliveryConfirmationEvent"/>
+            <output name="RankingDecreaseOutput" port="1" stream="RankingDecrease"/>
+            <output name="ImprovementEventOutput" port="2" stream="ImprovementNote"/>
+            <output name="RankingIncreaseEventOutput" port="3" stream="RankingIncrease"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.RankingEvalPhase"/>
+            <input-dataref name="DriverRankings" table="DriverRankings"/>
+        </module-reference>
+        <box name="TrackDriver" type="query">
+            <input port="1" stream="out:RawGPS2CityRegion1_1"/>
+            <dataref id="querytable" name="DriverLocations"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="last_location">input1.location</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <output-stream name="ImprovementNote">
+            <property name="description" value="A driver has recently improved (see specification for what this means)."/>
+        </output-stream>
+        <output-stream name="RankingDecrease">
+            <property name="description" value="A driver's rank has just decreased."/>
+        </output-stream>
+        <output-stream name="RankingIncrease">
+            <property name="description" value="The ranking for the given driver has been increased, as a result of 20 deliveries with no alert."/>
+        </output-stream>
+        <module-reference name="PhaseFive">
+            <input name="RecordAssignmentInput" port="1" stream="out:__1"/>
+            <output name="CalculateAvgsPerDayPerDriverOutput" port="1" stream="MonthlySummary"/>
+            <param name="file" value="com.tibco.sb.compexch.flowershop.ActivityMonitoringPhase"/>
+        </module-reference>
+        <output-stream name="MonthlySummary">
+            <property name="description" value="Driver statistics"/>
+        </output-stream>
+    </add>
+</modify>
