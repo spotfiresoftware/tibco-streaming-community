@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <external-server-connection id="TechSupport" type="custom-table-provider" table-provider-class="com.tibco.techsupport.tableprovider.TechSupportTableProvider">
+    <parameters>
+      <parameter key="Table">TSTable</parameter>
+      <parameter key="Table">OSExec</parameter>
+      <parameter key="Table">FileSystemRead</parameter>
+      <parameter key="Table">ProxyQuery</parameter>
+      <parameter key="Table">ProxyPublish</parameter>
+      <parameter key="Table">LVServerLog</parameter>
+      <parameter key="Table">ProxyLVClient</parameter>
+      <parameter key="Table">ProxySBClient</parameter>
+    </parameters>
+    <retry-parameters/>
+  </external-server-connection>
+</liveview-configuration>

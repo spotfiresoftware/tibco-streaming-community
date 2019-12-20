@@ -1,0 +1,29 @@
+#!/bin/bash
+# Copyright 2012-2018 TIBCO Software Inc.
+# ts-client: shell wrapper for Component Exchange TSClient class
+set -x
+
+die()
+{
+    echo "$2" 1>&2
+    exit $1
+}
+
+TOOLS_JAR="sb-java-tools.jar"
+TSCLIENT_JAR="tsclient_1.1.jar"
+
+if [ -z "$TOOLS_JAR" ] ; then
+    die 2 "Cannot find ${TOOLS_JAR}. It's expected to be in ${PWD}"
+fi
+
+if [ -z "$TSCLIENT_JAR" ] ; then
+    die 2 "Cannot find ${TSCLIENT_JAR}. It's expected to be in ${PWD}"
+fi
+
+`java -version > /dev/null`
+if [ $? -ne 0 ] ; then
+     die 2 "java is not on the PATH"
+fi
+
+# Invoke the TSClient command
+java -Xmx512m -XX:+UseCompressedOops -cp ${TOOLS_JAR}:${TSCLIENT_JAR} ${LIVEVIEW_CLIENT_JVM_ARGS} com.tibco.techsupport.tools.TSClient "$@"
