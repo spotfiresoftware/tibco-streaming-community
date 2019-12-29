@@ -11,7 +11,7 @@ In addition, there are several tables that support
 "proxying" operations to other LiveView servers. These
 tables are intended for use in clusters where the end user can only
 connect to the services layer (SL), but the SL can connect
-to other nodes in the cluster.
+to other data layer (DL) nodes in the cluster.
 
 A LiveView project is included that has all the TS tables configured.
 Authentication is enabled and configured to demonstrate some ways
@@ -61,9 +61,14 @@ Furthermore, any operation that touches a table will also require the user to ha
 and read permissions to ProxyQuery and queries MyTable - they will also require list and query permissions to MyTable. All proxied operations are executed as the
 user specified in remote LV URI.
 
-The lv-client command included with LiveView can exercise most of the TableProvider capabilities. Included in this project is a tailored command line tool called TSClient that can
+The lv-client command included with LiveView can exercise most of the TableProvider capabilities.
+Included in this project is a tailored command line tool called TSClient that
 makes accessing the TS tables a little easier. A good example of where the TSClient is helpful is the TSTable getsnapshot operation. This operation returns
 a few rows with Text status messages, and potentially many rows of binary data in the Blob field. These blob fields need to be reassembled into a file on the client
-that is a copy of the snapshot ZIP file that was created on the LiveView server. Breaking the snapshot zip into multiple small tuples avoids issues with trying to transfer very
+that is a copy of the snapshot ZIP file that was created on the LiveView server. Breaking the snapshot zip into multiple small tuples avoids issues with trying to transfer
 large binary files, but does require reassembly.
 
+There's a windows and linux script in src/main/resources that can be used as a java launcher for a ts-client command line.
+You do have to export the TSClient class as a jar file and place it in the same directory as the script.
+
+There are also a few bash scripts in src/test/resources that can be used to demonstrate how to access the TS tables in the LiveViewSimple project.

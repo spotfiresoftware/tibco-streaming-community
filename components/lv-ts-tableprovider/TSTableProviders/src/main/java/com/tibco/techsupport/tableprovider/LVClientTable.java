@@ -542,6 +542,7 @@ public class LVClientTable implements Table  {
 				String[] args=cmd.split(" ");
 				argsList.addAll(Arrays.asList(args));
 
+				logger.debug(String.format("Built command: %s", argsList.toString()));
 				String [] ars=new String[argsList.size()];
 				argsList.toArray(ars);
 				ProcessBuilder pb = new ProcessBuilder(ars);

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -476,20 +477,44 @@ public class TSTable implements Table  {
 					tsOp=queue.poll(500, TimeUnit.MILLISECONDS);
 					
 					if (tsOp !=null) {
-						new BeginSnapshotEvent(this).dispatch(tsOp.listener);
-						doTSOp(tsOp.listener, tsOp.queryModel);
-					}
-				} catch (LiveViewException le) {
-					if (tsOp != null) {
-						new QueryExceptionEvent(this, le).dispatch(tsOp.listener);
+						TSClientWorkerThread tswt = new TSClientWorkerThread(tsOp.listener, tsOp.queryModel);
+						tswt.setDaemon(true);
+						tswt.start();
 					}
 				} catch (Exception e) {
 					logger.warn(Msg.format("Unexpected exception: {0}", e.getMessage()));
-				} finally {
-					// if anything blows up we still need to send an EndSnapshotEvent
-					if (tsOp != null) {
-						new EndSnapshotEvent(this).dispatch(tsOp.listener);
-					}
+				} 
+			}
+		}
+		
+		/*
+		 * The TSClientWorkerThread thread is where the ts table command is run.
+		 */
+		private class TSClientWorkerThread extends Thread {
+			
+			final QueryEventListener listener;
+			final QueryModel queryModel;
+			
+			public TSClientWorkerThread (QueryEventListener listener, QueryModel queryModel) {
+				this.listener=listener;
+				this.queryModel=queryModel;
+			}
+			
+			public void run() {	
+				List<String> argsList = new ArrayList<String>();
+				long idKey=1;
+				
+				try {
+					new BeginSnapshotEvent(this).dispatch(listener);
+					doTSOp(listener, queryModel);
+					new EndSnapshotEvent(this).dispatch(listener);
+					
+				} catch (LiveViewException e) {
+					new QueryExceptionEvent(this, e).dispatch(listener);
+					return;
+				} catch (Exception e) {
+					new QueryExceptionEvent(this, LiveViewExceptionType.UNDERLYING_SB_EXCEPTION.error(e)).dispatch(listener);
+					return;
 				}
 			}
 		}

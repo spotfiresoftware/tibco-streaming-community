@@ -502,7 +502,7 @@ public class TSClient {
 		qb.setQueryType(LiveViewQueryType.SNAPSHOT);
 		
 		String zipName=null;
-		qb.setQueryString(String.format("select %s from TSTable%s", COMMAND_GETSNAPSHOT, (Util.isEmpty(ident)) ? "" : "where " + ident));
+		qb.setQueryString(String.format("select %s from TSTable%s", COMMAND_GETSNAPSHOT, (Util.isEmpty(ident)) ? "" : " where " + ident));
 		
 		int chunks=0;
 		final SnapshotQueryListener iter = new SnapshotQueryListener();

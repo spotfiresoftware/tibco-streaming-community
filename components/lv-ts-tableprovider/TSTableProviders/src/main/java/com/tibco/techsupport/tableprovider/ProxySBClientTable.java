@@ -59,7 +59,7 @@ import com.streambase.sb.util.Util;
  * from the context of the process that the LiveView server is running as. There is no way to send character to the
  * sbc/sbadmin command, so commands that need STDIN will just hang. 
  * 
- * select [ sbc | sbadmin ] from ProxySBClient where [ sburi= <RemoteSBURI> | service=<My.Service.cluster[;username:password] ] sbcmd=<sbc/sdadmin command line to execute>
+ * select [ sbc | sbadmin ] from ProxySBClient where [ lvuri= <RemoteLVURI> | service=<My.Service.cluster[;username:password] ] sbcmd=<sbc/sdadmin command line to execute>
  * return is snapshot only with schema OutputFromCommand(string)
  * 
  * The RemoteSBURI can point to any reachable StreamBase server anywhere. The service name can only be a node in the same cluster.
