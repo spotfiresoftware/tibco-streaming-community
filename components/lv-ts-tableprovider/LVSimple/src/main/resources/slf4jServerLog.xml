@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ 
+ <!-- Default logging config -->
+ 
+  <appender name="RootConsoleAppender" 
+            class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>LiveViewTSTableProvider %-5level %logger{0} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="SyslogAppender" 
+            class="ch.qos.logback.classic.net.SyslogAppender">
+    <facility>SYSLOG</facility>
+    <suffixPattern>LiveViewTSTableProvider %-5level %logger{0} - %msg%n</suffixPattern>
+  </appender>
+  
+    <appender name="LocalLiveViewAppender" class="com.streambase.liveview.client.appenders.LiveViewAppender">
+
+    <!-- If you want to publish to a different table name, change set this property. -->
+    <TableName>LVServerLog</TableName>
+    
+<!--
+    This URI has to point to the LiveViewServer that you wish to publish the logger output. -->
+
+        <LVURI>lv://lvadmin:lvadmin@localhost:10080</LVURI>
+	
+     <AppenderName>LiveViewTSTableProvider</AppenderName>
+     <LVPublisherName>LiveViewTSTableProvider</LVPublisherName>
+       
+  </appender>
+      
+  <root>
+    <level value="info"/>
+
+    <appender-ref ref="RootConsoleAppender"/>    
+    <appender-ref ref="LocalLiveViewAppender" />
+     
+     <!--
+     <appender-ref ref="SyslogAppender" />
+      -->
+     
+  </root>
+
+</configuration>
