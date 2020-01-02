@@ -55,6 +55,7 @@
         <module>wikimedia</module>
         <module>cramer-view</module>
         <module>flowershop</module>
+        <module>lv-ts-tableprovider</module>
     </modules>
 
     <!-- skip site docs in this aggregator -->

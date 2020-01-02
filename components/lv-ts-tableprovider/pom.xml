@@ -8,6 +8,9 @@
   <artifactId>ts-table-demo</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
+
+  <name>LiveView technical support tables</name>
+  <description>TableProvider classes to add TS tables to a LiveView project</description>
  
   <modules>
     <module>LVSimple</module>

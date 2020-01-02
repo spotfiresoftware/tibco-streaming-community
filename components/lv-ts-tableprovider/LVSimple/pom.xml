@@ -9,15 +9,13 @@
     <artifactId>LiveViewSimple</artifactId>
     <packaging>ep-liveview-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    
-    <name>LiveView sample that uses TS TableProviders</name>
-    <description>LiveView TableProvider that allows LiveViewClients to get system logs, snapshots, system table contents, etc.</description>
 
     <!-- common definitions for this version of StreamBase -->
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-liveview-fragment</artifactId>
         <version>10.5.1-SNAPSHOT</version>
+        <relativePath/>
     </parent>
 
 	<licenses>

@@ -1,3 +1,4 @@
+# Copyright 2020 TIBCO Software Inc.
 # Simple tests for OSExec Table
 
 set -x

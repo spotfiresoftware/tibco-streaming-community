@@ -3,7 +3,7 @@
 LiveView has a public TableProvider API that allows user to add
 *foreign* backend data sources. Such data sources are queried using
 whatever native language the backend implements. In the Technical
-Support TableProvider we have define a very simple "query language"
+Support TableProvider we have defined a very simple "query language"
 that allows users to express things like "get all the system logs", or
 "get a system snapshot".
 

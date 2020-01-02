@@ -1,5 +1,5 @@
 @echo off
-rem Copyright 2012-2018 TIBCO Software Inc.
+rem Copyright 2020 TIBCO Software Inc.
 setlocal
 
 rem - sb-java-tools.jar and tsclient_1.1.jar are assumed to be in the same directory with this command shell

@@ -1,3 +1,4 @@
+# Copyright 2020 TIBCO Software Inc.
 # Simple tests for ProxyLVClient table
 
 # The ProxyLVClient table is intended for use with quick returning

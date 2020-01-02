@@ -1,3 +1,4 @@
+# Copyright 2020 TIBCO Software Inc.
 # Simple tests for FileSystemRead Table
 
 set -x

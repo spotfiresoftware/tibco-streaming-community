@@ -1,3 +1,4 @@
+# Copyright 2020 TIBCO Software Inc.
 # Simple tests for ProxyPublish Table
 
 set -x
