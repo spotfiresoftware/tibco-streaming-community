@@ -25,10 +25,6 @@
 	        <distribution>repo</distribution>
 	    </license>
 	</licenses>
- 
-	<properties>
-	    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
-	</properties>
 
     <dependencies>
 
