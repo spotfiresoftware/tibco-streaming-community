@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ 
+ <!-- Default logging config -->
+ 
+  <appender name="RootConsoleAppender" 
+            class="ch.qos.logback.core.ConsoleAppender">
+	<encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+      
+  <root>
+    <level value="info"/>
+    <appender-ref ref="RootConsoleAppender"/>         
+  </root>
+
+</configuration>

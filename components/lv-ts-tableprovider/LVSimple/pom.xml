@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>LiveViewSimple</artifactId>
+    <packaging>ep-liveview-fragment</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-liveview-fragment</artifactId>
+        <version>10.5.1-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+	<licenses>
+	    <license>
+	        <name>BSD 3-Clause License</name>
+	        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+	        <distribution>repo</distribution>
+	    </license>
+	</licenses>
+ 
+	<properties>
+	    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+	</properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.tibco.ep.lvweb</groupId>
+            <artifactId>lvweb</artifactId>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.ldm</groupId>
+        	<artifactId>logback-appender</artifactId>
+        	<version>10.5.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>com.tibco.ep.ldm.tstables</groupId>
+        	<artifactId>ts-tableprovider</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

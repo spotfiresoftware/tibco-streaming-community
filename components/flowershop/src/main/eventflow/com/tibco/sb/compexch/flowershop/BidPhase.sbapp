@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+    <add>
+        <gui.metadata>
+            <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/BidModule.png"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.BidPhase"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.sb.compexch.flowershop.SharedSchemas"/>
+        <dynamic-variables/>
+        <data name="DeliveryRequestBidTimes" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DeliveryRequestBidTimesTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="627"/>
+            <param name="gui:y" value="249"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DriverLocations" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverLocationsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="970"/>
+            <param name="gui:y" value="60"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="DriverRankings" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="DriverRankingsTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="626"/>
+            <param name="gui:y" value="85"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <data name="Stores" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="StoresTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="290"/>
+            <param name="gui:y" value="133"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <stream name="AddRequestIDInput" schema="DeliveryRequest">
+            <param name="gui:x" value="74"/>
+            <param name="gui:y" value="43"/>
+        </stream>
+        <box name="AddRequestID" type="seqnum">
+            <input port="1" stream="AddRequestIDInput"/>
+            <output port="1" stream="out:AddRequestID_1"/>
+            <param name="output-field" value="delivery_request_id"/>
+            <param name="sequence-id" value="deliveryrequestid"/>
+            <param name="update-expression" value="deliveryrequestid + 1"/>
+            <param name="gui:x" value="186"/>
+            <param name="gui:y" value="43"/>
+        </box>
+        <box name="GetLocAndMinRank" type="query">
+            <input port="1" stream="out:AddRequestID_1"/>
+            <output port="1" stream="out:GetLocAndMinRank_1"/>
+            <dataref id="querytable" name="Stores"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="store_id"/>
+            <param name="key-lowerbound-value.0" value="input1.store_id"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-explicit"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="min_driver_ranking"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="store_location">current.location</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="store_id">input.store_id</set>
+                    <set field="min_driver_ranking">null</set>
+                    <set field="location">null</set>
+                    <set field="manual_process">null</set>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="300"/>
+            <param name="gui:y" value="43"/>
+        </box>
+        <box name="ProcessDriversThenCheck" type="split">
+            <property name="description" value="This split ensures we first process all drivers for this request, and after that look to see if any bid requests were sent. If none were sent, for any reason, an alert is emitted."/>
+            <input port="1" stream="out:GetLocAndMinRank_1"/>
+            <output port="1" stream="out:ProcessDriversThenCheck_1"/>
+            <output port="2" stream="out:ProcessDriversThenCheck_2"/>
+            <param name="output-count" value="2"/>
+            <param name="gui:x" value="460"/>
+            <param name="gui:y" value="43"/>
+        </box>
+        <box name="FindBidRequestTag4DeliveryRequest" type="query">
+            <property name="description" value="By matching against a null-row tuple if no row is found in the delivery request table, and doing a notnull check, it can tell if the branch that collected qualified, nearby drivers ever resulted in a BidRequest"/>
+            <input port="1" stream="out:ProcessDriversThenCheck_2"/>
+            <output port="1" stream="out:FindBidRequestTag4DeliveryRequest_1"/>
+            <dataref id="querytable" name="DeliveryRequestBidTimes"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="delivery_request_id"/>
+                    <include field="store_id"/>
+                </item>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="hasAtLeastOneDriverBidRequest">notnull(current.delivery_request_id)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="delivery_request_id">null</set>
+                    <set field="delivery_request_time">null</set>
+                    <set field="store_id">null</set>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="636"/>
+            <param name="gui:y" value="157"/>
+            <param name="gui:bends:1" value="565,83;591,187"/>
+        </box>
+        <box name="GetQualifiedDrivers" type="query">
+            <property name="description" value="If no drivers qualify, a single output tuple with driver_id null will be output"/>
+            <input port="1" stream="out:ProcessDriversThenCheck_1"/>
+            <output port="1" stream="out:GetQualifiedDrivers_1"/>
+            <dataref id="querytable" name="DriverRankings"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="ranking"/>
+            <param name="key-lowerbound-value.0" value="min_driver_ranking"/>
+            <param name="key-lowerbound-operation.0" value="ge"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-explicit"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="last_ranking_change"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="driver_id">null</set>
+                    <set field="ranking">null</set>
+                    <set field="last_ranking_change">null</set>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="636"/>
+            <param name="gui:y" value="0"/>
+            <param name="gui:bends:1" value="561,63;569,30"/>
+        </box>
+        <box name="DoesItHaveNoBidRequests" type="filter">
+            <input port="1" stream="out:FindBidRequestTag4DeliveryRequest_1"/>
+            <output port="1" stream="out:DoesItHaveNoBidRequests_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="not(hasAtLeastOneDriverBidRequest)"/>
+            <param name="gui:x" value="837"/>
+            <param name="gui:y" value="158"/>
+        </box>
+        <box name="EnsureQualifedDrivers" type="filter">
+            <input port="1" stream="out:GetQualifiedDrivers_1"/>
+            <output port="1" stream="out:EnsureQualifedDrivers_1"/>
+            <output port="2" stream="out:EnsureQualifedDrivers_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="notnull(driver_id)"/>
+            <param name="expression.1" value="true"/>
+            <param name="gui:x" value="800"/>
+            <param name="gui:y" value="1"/>
+        </box>
+        <box name="GetDriverStoreDistance" type="query">
+            <property name="description" value="Outputs the distance between the current driver and the store location"/>
+            <input port="1" stream="out:EnsureQualifedDrivers_1"/>
+            <output port="1" stream="out:GetDriverStoreDistance_1"/>
+            <dataref id="querytable" name="DriverLocations"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="distance">sqrt(pow(store_location.x - last_location.x, 2) + pow(store_location.y - last_location.y, 2))</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="980"/>
+            <param name="gui:y" value="-36"/>
+            <param name="gui:bends:1" value="941,21;947,-6"/>
+        </box>
+        <box name="NoBidRequestsUnion" type="union">
+            <input port="1" stream="out:EnsureQualifedDrivers_2"/>
+            <input port="2" stream="out:DoesItHaveNoBidRequests_1"/>
+            <output port="1" stream="out:NoBidRequestsUnion_1"/>
+            <param name="strict" value="false"/>
+            <param name="gui:x" value="1004"/>
+            <param name="gui:y" value="157"/>
+            <param name="gui:bends:1" value="914,41;948,177"/>
+            <param name="gui:bends:2" value="955,188;957,197"/>
+        </box>
+        <box name="FormatNoBidRequestsAlert" type="map">
+            <input port="1" stream="out:NoBidRequestsUnion_1"/>
+            <output port="1" stream="NoBidRequestsAlertOutput"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="store_id"/>
+                    <include field="delivery_request_id"/>
+                </item>
+            </target-list>
+            <param name="gui:x" value="1166"/>
+            <param name="gui:y" value="157"/>
+        </box>
+        <box name="NearbyDriverFilter" type="filter">
+            <property name="description" value="Checks for the driver to be nearby (see predicate settings for how this is defined)"/>
+            <input port="1" stream="out:GetDriverStoreDistance_1"/>
+            <output port="1" stream="out:NearbyDriverFilter_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="distance &lt; 10"/>
+            <param name="gui:x" value="1115"/>
+            <param name="gui:y" value="-36"/>
+        </box>
+        <output-stream name="NoBidRequestsAlertOutput">
+            <param name="gui:x" value="1341"/>
+            <param name="gui:y" value="157"/>
+        </output-stream>
+        <box name="RecordDeliveryRequestBidStart" type="query">
+            <input port="1" stream="out:NearbyDriverFilter_1"/>
+            <output port="1" stream="out:RecordDeliveryRequestBidStart_1"/>
+            <dataref id="querytable" name="DeliveryRequestBidTimes"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="delivery_request_id"/>
+            <param name="key-value.0" value="input1.delivery_request_id"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="output-no-match"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="delivery_request_time">now()</set>
+                    <set field="store_id">input1.store_id</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="delivery_request_time">timestamp(null)</set>
+                    <set field="store_id">int(null)</set>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1276"/>
+            <param name="gui:y" value="-36"/>
+        </box>
+        <box name="MakeBidRequest" type="map">
+            <input port="1" stream="out:RecordDeliveryRequestBidStart_1"/>
+            <output port="1" stream="BidRequestOutput"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="bid_request">BidRequest(driver_id, store_id, delivery_request_id)</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="1433"/>
+            <param name="gui:y" value="-36"/>
+        </box>
+        <output-stream name="BidRequestOutput">
+            <param name="gui:x" value="1550"/>
+            <param name="gui:y" value="-36"/>
+        </output-stream>
+    </add>
+</modify>

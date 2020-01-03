@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.3.0-SNAPSHOT_5a3d853e254e1c51e849f910970514d129ebafdd">
+    <add>
+        <gui.metadata>
+            <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/ActivityMonitoringModule.png"/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.flowershop.ActivityMonitoringPhase"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <data name="AssignmentStats" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="driver_id" type="int"/>
+                    <field description="A daily running total of the number of assignments a driver has" name="assignments" type="int"/>
+                    <field description="The total number of assignments on the previous day" name="previousDay" type="int"/>
+                    <field description="The number of days the driver has less than five assignments" name="weak_driver" type="int"/>
+                    <field description="The number of idle days the driver has" name="idle_driver" type="int"/>
+                    <field description="If number of daily assignments are at least two standard deviations lower than the average" name="consistent_weak_driver" type="bool"/>
+                    <field description="If number of daily assignments are at least two standard deviations higher than the average" name="consistent_strong_driver" type="bool"/>
+                    <field description="The number of assignments of a driver increases from day to day" name="improving_driver" type="bool"/>
+                    <field description="A moving average of the number of daily assignments" name="moving_average" type="double"/>
+                    <field description="The number of days a driver has been active" name="active" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="driver_id"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+            <param name="gui:x" value="268"/>
+            <param name="gui:y" value="354"/>
+            <param name="gui:width" value="80"/>
+            <param name="gui:height" value="56"/>
+        </data>
+        <stream name="RecordAssignmentInput">
+            <schema>
+                <field name="store_id" type="int"/>
+                <field name="delivery_request_id" type="long"/>
+                <field name="driver_id" type="int"/>
+                <field name="committed_time" type="timestamp"/>
+            </schema>
+            <param name="gui:x" value="-67"/>
+            <param name="gui:y" value="244"/>
+        </stream>
+        <box name="DailyAssignmentReport" type="metronome">
+            <property name="description" value="A daily report timer"/>
+            <output port="1" stream="out:DailyAssignmentReport_1"/>
+            <param name="interval" value="86400"/>
+            <param name="timestamp-field" value="time"/>
+            <param name="gui:x" value="-67"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <box name="HourlyAssignmentCheck" type="metronome">
+            <property name="description" value="An hourly report timer"/>
+            <output port="1" stream="out:HourlyAssignmentCheck_1"/>
+            <param name="interval" value="3600"/>
+            <param name="timestamp-field" value="time"/>
+            <param name="gui:x" value="-67"/>
+            <param name="gui:y" value="121"/>
+        </box>
+        <box name="GetAssignStatsForAvg" type="query">
+            <input port="1" stream="out:DailyAssignmentReport_1"/>
+            <output port="1" stream="out:GetAssignStatsForAvg_1"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="metrics">aggregatelist(moving_average)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="104"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <box name="UpdateDailyAssignmentTable" type="query">
+            <input port="1" stream="RecordAssignmentInput"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="assignments">1</set>
+                    <set field="previousDay">0</set>
+                    <set field="weak_driver">0</set>
+                    <set field="idle_driver">0</set>
+                    <set field="consistent_weak_driver">false</set>
+                    <set field="consistent_strong_driver">false</set>
+                    <set field="improving_driver">true</set>
+                    <set field="moving_average">0.0</set>
+                    <set field="active">0</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="assignments">old.assignments + 1</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="104"/>
+            <param name="gui:y" value="244"/>
+        </box>
+        <box name="UpdateHourlyAssignments" type="query">
+            <input port="1" stream="out:HourlyAssignmentCheck_1"/>
+            <output port="1" stream="out:UpdateHourlyAssignments_1"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="104"/>
+            <param name="gui:y" value="121"/>
+        </box>
+        <box name="AssignAvgNVariance" type="map">
+            <input port="1" stream="out:GetAssignStatsForAvg_1"/>
+            <output port="1" stream="out:AssignAvgNVariance_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="average">avg(input1.metrics)</include>
+                    <include field="stderror">sqrt(variancep(input1.metrics))</include>
+                    <remove field="metrics"/>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="278"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <box name="UpdateHourlyStatistics" type="map">
+            <input port="1" stream="out:UpdateHourlyAssignments_1"/>
+            <output port="1" stream="out:UpdateHourlyStatistics_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="previousDay">input1.assignments</replace>
+                    <replace field="weak_driver">if input1.assignments&lt;5 then weak_driver+1 else weak_driver</replace>
+                    <replace field="idle_driver">if input1.assignments==0 then idle_driver+1 else idle_driver</replace>
+                    <replace field="improving_driver">if input1.assignments &lt; input1.previousDay &amp;&amp; input1.improving_driver then input1.improving_driver = false else input1.improving_driver = true</replace>
+                    <replace field="moving_average">(input1.moving_average + input1.assignments)/(input1.active +1)</replace>
+                    <replace field="active">input1.active + 1</replace>
+                    <remove field="consistent_weak_driver"/>
+                    <remove field="consistent_strong_driver"/>
+                    <remove field="assignments"/>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="278"/>
+            <param name="gui:y" value="121"/>
+        </box>
+        <box name="GetAssignStats" type="query">
+            <input port="1" stream="out:AssignAvgNVariance_1"/>
+            <output port="1" stream="out:GetAssignStats_1"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="435"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <box name="WriteHourlyStatistics" type="query">
+            <input port="1" stream="out:UpdateHourlyStatistics_1"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="driver_id"/>
+            <param name="key-value.0" value="input1.driver_id"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="assignments">0</set>
+                    <set field="previousDay">input1.previousDay</set>
+                    <set field="weak_driver">input1.weak_driver</set>
+                    <set field="idle_driver">input1.idle_driver</set>
+                    <set field="improving_driver">input1.improving_driver</set>
+                    <set field="moving_average">input1.moving_average</set>
+                    <set field="active">input1.active</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="435"/>
+            <param name="gui:y" value="121"/>
+        </box>
+        <box name="ConfidenceIntervals" type="map">
+            <input port="1" stream="out:GetAssignStats_1"/>
+            <output port="1" stream="out:ConfidenceIntervals_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="upperCI">average + 2*stderror</include>
+                    <include field="lowerCI">average - 2*stderror</include>
+                    <remove field="average"/>
+                    <remove field="stderror"/>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="553"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <box name="CalculateAvgsPerMonthPerDriver" type="map">
+            <input port="1" stream="out:ConfidenceIntervals_1"/>
+            <output port="1" stream="CalculateAvgsPerDayPerDriverOutput"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="DriverID">input1.driver_id</include>
+                    <include field="IsWeak">if weak_driver ==  active then true else false</include>
+                    <include field="IsIdle">if idle_driver &gt; 0 then true else false</include>
+                    <include field="IsConsistentWeak">if moving_average &lt; lowerCI then true else false</include>
+                    <include field="IsConsistentStrong">if  moving_average &gt; upperCI then true else false</include>
+                    <include field="IsImproving">improving_driver</include>
+                </expressions>
+            </target-list>
+            <param name="gui:x" value="716"/>
+            <param name="gui:y" value="11"/>
+        </box>
+        <output-stream name="CalculateAvgsPerDayPerDriverOutput">
+            <param name="gui:x" value="969"/>
+            <param name="gui:y" value="-84"/>
+            <param name="gui:bends:1" value="822,41;844,-54"/>
+        </output-stream>
+        <box name="DeleteDailyStats" type="query">
+            <input port="1" stream="CalculateAvgsPerDayPerDriverOutput"/>
+            <dataref id="querytable" name="AssignmentStats"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="gui:x" value="969"/>
+            <param name="gui:y" value="11"/>
+        </box>
+    </add>
+</modify>
