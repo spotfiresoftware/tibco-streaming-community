@@ -10,7 +10,7 @@
     <packaging>ep-eventflow-fragment</packaging>
     <version>2.1.0</version>
     <name>Fast Flower Delivery Sample Application</name>
-    <description>Implements the Fast Flower Delivery use case from the Event Processing in Action book.</description>
+    <description>Implements the Fast Flower Delivery use case from the Event Processing in Action book</description>
 
     <!-- common definitions for this version of StreamBase -->
     <parent>
