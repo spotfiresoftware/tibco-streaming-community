@@ -72,7 +72,3 @@ There's a windows and linux script in src/main/resources that can be used as a j
 You do have to export the TSClient class as a jar file and place it in the same directory as the script.
 
 There are also a few bash scripts in src/test/resources that can be used to demonstrate how to access the TS tables in the LiveViewSimple project.
-This is a maven aggregator project consisting of the following maven modules :
-
-* [ts-tableprovider](src/site/markdown/index.md)
-* [${project.description}](LVSimple)
