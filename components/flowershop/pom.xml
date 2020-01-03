@@ -10,6 +10,7 @@
     <packaging>ep-eventflow-fragment</packaging>
     <version>2.1.0</version>
     <name>Fast Flower Delivery Sample Application</name>
+    <description>Implements the Fast Flower Delivery use case from the Event Processing in Action book.</description>
 
     <!-- common definitions for this version of StreamBase -->
     <parent>
@@ -18,6 +19,18 @@
         <version>10.5.0</version>
         <relativePath/>
     </parent>
+
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
 
     <dependencies>
         <dependency>
