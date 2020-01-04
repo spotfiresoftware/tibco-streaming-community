@@ -76,3 +76,8 @@ This is a maven aggregator project consisting of the following maven modules :
 
 * [ts-tableprovider](src/site/markdown/index.md)
 * [${project.description}](LVSimple)
+
+This is a maven aggregator project consisting of the following maven modules :
+
+* [ts-tableprovider](src/site/markdown/index.md)
+* [${project.description}](LVSimple)
