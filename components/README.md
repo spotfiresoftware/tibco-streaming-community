@@ -16,5 +16,5 @@ Samples :
 * [A simple wrapper around epadmin to provide a nicer ux for common development workflows.](uxadmin)
 * [Wikipedia: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](wikimedia)
 * [Illustrates using SMILE operators for correlating sensor readings with failures and presenting a LiveView table of the results for visualizing in TIBCO LiveView Web or TIBCO Spotfire](cramer-view)
-* [${project.description}](flowershop)
+* [Implements the Fast Flower Delivery use case from the Event Processing in Action book](flowershop)
 * [TableProvider classes to add TS tables to a LiveView project](lv-ts-tableprovider)
