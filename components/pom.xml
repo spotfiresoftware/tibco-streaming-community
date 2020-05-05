@@ -56,6 +56,7 @@
         <module>cramer-view</module>
         <module>flowershop</module>
         <module>lv-ts-tableprovider</module>
+        <module>escaped-identifier-mapper</module>
     </modules>
 
     <!-- skip site docs in this aggregator -->
