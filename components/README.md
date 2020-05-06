@@ -18,3 +18,4 @@ Samples :
 * [Illustrates using SMILE operators for correlating sensor readings with failures and presenting a LiveView table of the results for visualizing in TIBCO LiveView Web or TIBCO Spotfire](cramer-view)
 * [Implements the Fast Flower Delivery use case from the Event Processing in Action book](flowershop)
 * [TableProvider classes to add TS tables to a LiveView project](lv-ts-tableprovider)
+* [Maps escaped field names](escaped-identifier-mapper)
