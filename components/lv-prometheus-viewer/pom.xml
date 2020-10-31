@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>com.tibco.community</groupId>
+  <artifactId>lv-frontend-prometheus</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+
+  <name>LiveView Prometheus frontend</name>
+  <description>LiveView project that can discover Prometheus metrics and poll them regularly</description>
+ 
+  <modules>
+    <module>SB_LiveViewPrometheus</module>
+    <module>SB_LiveViewPrometheusDeploy</module>
+  </modules>
+
+  <licenses>
+    <license>
+      <name>BSD 3-Clause License</name>
+      <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+ 
+  <properties>
+    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+  </properties>
+
+</project>

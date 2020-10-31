@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="MetaDataControl">
+        <param name="gui:x" value="90"/>
+        <param name="gui:y" value="-185"/>
+    </component>
+    <component name="MetaDataIn">
+        <param name="gui:x" value="656"/>
+        <param name="gui:y" value="-396"/>
+    </component>
+    <component name="PublishSchemasIn">
+        <param name="gui:x" value="866"/>
+        <param name="gui:y" value="-35"/>
+    </component>
+    <component name="ServerStateIn">
+        <param name="gui:x" value="230"/>
+        <param name="gui:y" value="-305"/>
+    </component>
+    <component name="ServerStatusIn">
+        <param name="gui:x" value="707"/>
+        <param name="gui:y" value="-40"/>
+    </component>
+    <component name="SetMetaDataPollingS">
+        <param name="gui:x" value="103"/>
+        <param name="gui:y" value="-305"/>
+    </component>
+    <component name="TheLastGoodRecordIn">
+        <param name="gui:x" value="1015"/>
+        <param name="gui:y" value="-36"/>
+    </component>
+    <component name="GetSelectMetrics">
+        <param name="gui:x" value="1020"/>
+        <param name="gui:y" value="-172"/>
+    </component>
+    <component name="AddControlFields">
+        <param name="gui:x" value="1000"/>
+        <param name="gui:y" value="-344"/>
+    </component>
+    <component name="CustomJSON">
+        <param name="gui:x" value="656"/>
+        <param name="gui:y" value="-285"/>
+    </component>
+    <component name="EOD">
+        <param name="gui:x" value="537"/>
+        <param name="gui:y" value="-182"/>
+    </component>
+    <component name="EODMetaDataLog">
+        <param name="gui:x" value="682"/>
+        <param name="gui:y" value="-172"/>
+    </component>
+    <component name="GetMetaData">
+        <param name="gui:x" value="432"/>
+        <param name="gui:y" value="-50"/>
+    </component>
+    <component name="GetMetaDataLog">
+        <param name="gui:x" value="551"/>
+        <param name="gui:y" value="-41"/>
+    </component>
+    <component name="MakeGood">
+        <param name="gui:x" value="350"/>
+        <param name="gui:y" value="-305"/>
+    </component>
+    <component name="Metronome">
+        <param name="gui:x" value="97"/>
+        <param name="gui:y" value="-49"/>
+    </component>
+    <component name="NoFields">
+        <param name="gui:x" value="920"/>
+        <param name="gui:y" value="-129"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="871"/>
+        <param name="gui:y" value="-333"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="320"/>
+        <param name="gui:y" value="-59"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="766"/>
+        <param name="gui:y" value="-334"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="201"/>
+        <param name="gui:y" value="-59"/>
+    </component>
+    <component name="PublishToMetricsMetadataOut">
+        <param name="gui:x" value="1136"/>
+        <param name="gui:y" value="-344"/>
+    </component>
+    <component name="PublishToMetricsOut">
+        <param name="gui:x" value="1136"/>
+        <param name="gui:y" value="-172"/>
+    </component>
+    <component name="PublisherStateOut">
+        <param name="gui:x" value="455"/>
+        <param name="gui:y" value="-305"/>
+    </component>
+    <component name="QueryTheLastGoodRecordOut">
+        <param name="gui:x" value="1177"/>
+        <param name="gui:y" value="-36"/>
+    </component>
+</application-layout>

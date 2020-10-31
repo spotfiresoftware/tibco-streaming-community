@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="HTTPControl">
+        <param name="gui:x" value="145"/>
+        <param name="gui:y" value="176"/>
+    </component>
+    <component name="InputStream">
+        <param name="gui:x" value="86"/>
+        <param name="gui:y" value="372"/>
+    </component>
+    <component name="InputStream1">
+        <param name="gui:x" value="252"/>
+        <param name="gui:y" value="-94"/>
+    </component>
+    <component name="MetaDataIn">
+        <param name="gui:x" value="801"/>
+        <param name="gui:y" value="260"/>
+    </component>
+    <component name="PublishSchemasIn">
+        <param name="gui:x" value="10"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="ServerStateIn">
+        <param name="gui:x" value="300"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="ServerStatusIn">
+        <param name="gui:x" value="10"/>
+        <param name="gui:y" value="110"/>
+    </component>
+    <component name="TheLastGoodRecordIn">
+        <param name="gui:x" value="10"/>
+        <param name="gui:y" value="310"/>
+    </component>
+    <component name="AddControlFields1">
+        <param name="gui:x" value="372"/>
+        <param name="gui:y" value="-83"/>
+    </component>
+    <component name="AddControlFields2">
+        <param name="gui:x" value="1083"/>
+        <param name="gui:y" value="260"/>
+    </component>
+    <component name="BogusDat">
+        <param name="gui:x" value="722"/>
+        <param name="gui:y" value="372"/>
+    </component>
+    <component name="CustomJSON">
+        <param name="gui:x" value="527"/>
+        <param name="gui:y" value="663"/>
+    </component>
+    <component name="FromJSON">
+        <param name="gui:x" value="541"/>
+        <param name="gui:y" value="155"/>
+    </component>
+    <component name="FromJSONCopy">
+        <param name="gui:x" value="575"/>
+        <param name="gui:y" value="369"/>
+    </component>
+    <component name="HTTPClientStatus">
+        <param name="gui:x" value="397"/>
+        <param name="gui:y" value="248"/>
+    </component>
+    <component name="InputAdapter">
+        <param name="gui:x" value="277"/>
+        <param name="gui:y" value="176"/>
+    </component>
+    <component name="InputJSON">
+        <param name="gui:x" value="212"/>
+        <param name="gui:y" value="490"/>
+    </component>
+    <component name="Java">
+        <param name="gui:x" value="359"/>
+        <param name="gui:y" value="637"/>
+    </component>
+    <component name="MakeGood">
+        <param name="gui:x" value="600"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="MyJSONConvert">
+        <param name="gui:x" value="380"/>
+        <param name="gui:y" value="492"/>
+    </component>
+    <component name="OperData">
+        <param name="gui:x" value="541"/>
+        <param name="gui:y" value="483"/>
+    </component>
+    <component name="OperStatus">
+        <param name="gui:x" value="558"/>
+        <param name="gui:y" value="587"/>
+    </component>
+    <component name="PromFromClient">
+        <param name="gui:x" value="440"/>
+        <param name="gui:y" value="156"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="961"/>
+        <param name="gui:y" value="260"/>
+    </component>
+    <component name="PublishToMetricsMetadataOut">
+        <param name="gui:x" value="1236"/>
+        <param name="gui:y" value="266"/>
+    </component>
+    <component name="PublishToMetricsOut">
+        <param name="gui:x" value="487"/>
+        <param name="gui:y" value="-83"/>
+    </component>
+    <component name="PublisherStateOut">
+        <param name="gui:x" value="750"/>
+        <param name="gui:y" value="-200"/>
+    </component>
+    <component name="QueryTheLastGoodRecordOut">
+        <param name="gui:x" value="750"/>
+        <param name="gui:y" value="10"/>
+    </component>
+</application-layout>

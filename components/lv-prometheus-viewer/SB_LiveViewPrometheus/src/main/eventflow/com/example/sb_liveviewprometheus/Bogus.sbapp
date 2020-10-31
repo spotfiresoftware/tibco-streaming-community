@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_fcca6148c7c997effa219428e290190203ee0c70">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.example.sb_liveviewprometheus.Bogus"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="lvinterfaces.MetricsMetricsMetadataPublisher"/>
+        <import from="lvinterfaces.MetricsMetadataSchemas"/>
+        <import from="lvinterfaces.MetricsMetricsMetadataPublisher"/>
+        <import from="lvinterfaces.MetricsSchemas"/>
+        <named-schemas>
+            <schema name="HTTPClientAdvancedSchema">
+                <field name="connectTimeout" type="int"/>
+                <field name="readTimeout" type="int"/>
+                <field name="reconnectTimeout" type="int"/>
+                <field name="pollFrequency" type="int"/>
+                <field name="ignoreCertificateErrors" type="bool"/>
+            </schema>
+            <schema name="HTTPClientAuthSchema">
+                <field name="authType" type="string"/>
+                <field name="user" type="string"/>
+                <field name="pass" type="string"/>
+            </schema>
+            <schema name="HTTPClientCookieSchema">
+                <field name="name" type="string"/>
+                <field name="value" type="string"/>
+            </schema>
+            <schema name="HTTPClientDataSchema">
+                <field name="text" type="string"/>
+                <field name="binary" type="blob"/>
+                <field name="filePath" type="string"/>
+                <field name="mediaType" type="string"/>
+                <field name="name" type="string"/>
+                <field name="urlEncode" type="bool"/>
+                <field name="urlEncodeType" type="string"/>
+            </schema>
+            <schema name="HTTPClientHeadersSchema">
+                <field name="name" type="string"/>
+                <field name="values" type="list">
+                    <element-type type="string"/>
+                </field>
+            </schema>
+            <schema name="HTTPClientProxySchema">
+                <field name="useProxy" type="bool"/>
+                <field name="host" type="string"/>
+                <field name="port" type="int"/>
+                <field name="user" type="string"/>
+                <field name="pass" type="string"/>
+            </schema>
+            <schema name="HTTPClientQueryParametersSchema">
+                <field name="name" type="string"/>
+                <field name="value" type="string"/>
+                <field name="urlEncode" type="bool"/>
+                <field name="urlEncodeType" type="string"/>
+            </schema>
+            <schema name="HTTPClientSettingsOutputSchema">
+                <field name="outputTuplePerLine" type="bool"/>
+                <field name="outputBlankLines" type="bool"/>
+                <field name="outputNullTupleOnCompletion" type="bool"/>
+                <field name="outputConnectingStatus" type="bool"/>
+                <field name="useDefaultCharset" type="bool"/>
+                <field name="charset" type="string"/>
+                <field name="urlDecode" type="bool"/>
+                <field name="urlDecodeType" type="string"/>
+            </schema>
+            <schema name="MetadataJSONSchema">
+                <field name="type" type="string"/>
+                <field name="help" type="string"/>
+                <field name="unit" type="string"/>
+            </schema>
+            <schema name="NameStringValueSchema">
+                <field name="name" type="string"/>
+                <field name="value" type="string"/>
+            </schema>
+            <schema name="BogusSchema">
+                <field name="metadata" type="list">
+                    <element-type type="tuple" value="MetadataJSONSchema"/>
+                </field>
+            </schema>
+            <schema name="HTTPClientSettingsSchema">
+                <field name="requestMethod" type="string"/>
+                <field name="requestType" type="string"/>
+                <field name="downloadPath" type="string"/>
+                <field name="asynchronous" type="bool"/>
+                <field name="proxy" type="tuple" value="HTTPClientProxySchema"/>
+                <field name="advanced" type="tuple" value="HTTPClientAdvancedSchema"/>
+                <field name="auth" type="tuple" value="HTTPClientAuthSchema"/>
+                <field name="output" type="tuple" value="HTTPClientSettingsOutputSchema"/>
+            </schema>
+            <schema name="MetricsNameJSONSchema">
+                <field name="name" type="string"/>
+                <field name="Metadata" type="tuple" value="MetadataJSONSchema"/>
+            </schema>
+            <schema name="HTTPClientControlSchema">
+                <field name="command" type="string"/>
+                <field name="url" type="string"/>
+                <field name="data" type="list">
+                    <element-type type="tuple" value="HTTPClientDataSchema"/>
+                </field>
+                <field name="headers" type="list">
+                    <element-type type="tuple" value="HTTPClientHeadersSchema"/>
+                </field>
+                <field name="queryParameters" type="list">
+                    <element-type type="tuple" value="HTTPClientQueryParametersSchema"/>
+                </field>
+                <field name="cookies" type="list">
+                    <element-type type="tuple" value="HTTPClientCookieSchema"/>
+                </field>
+                <field name="settings" type="tuple" value="HTTPClientSettingsSchema"/>
+            </schema>
+            <schema name="MetaDataPayloadJSONSchema">
+                <field name="status" type="string"/>
+                <field name="data" type="list">
+                    <element-type type="tuple" value="BogusSchema"/>
+                </field>
+            </schema>
+        </named-schemas>
+        <parameter-definitions>
+            <parameter default="http://localhost:9090" name="PROMETHEUS_URL"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="HTTPControl" schema="HTTPClientControlSchema" scope="public"/>
+        <stream name="InputStream">
+            <schema>
+                <field name="data" type="string"/>
+            </schema>
+        </stream>
+        <stream name="InputStream1" schema="MetricsTableSchema"/>
+        <stream name="MetaDataIn" schema="MetricsMetadataTableSchema" scope="public"/>
+        <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
+        <stream name="ServerStateIn" schema="ServerStateSchema"/>
+        <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
+        <stream name="TheLastGoodRecordIn" schema="TheLastGoodRecordSchema"/>
+        <output-stream name="QueryTheLastGoodRecordOut" schema="QueryTheLastGoodRecordSchema"/>
+        <box name="AddControlFields1" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="InputStream1"/>
+            <output port="1" stream="PublishToMetricsOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">MetricsInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box disabled="true" name="FromJSONCopy" type="map">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:FromJSONCopy_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="*">parsejson(MetaDataPayloadJSONSchema(), data).*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box disabled="true" name="InputAdapter" type="inputadapter">
+            <input port="1" stream="HTTPControl"/>
+            <output port="1" stream="out:InputAdapter_1"/>
+            <output port="2" stream="out:InputAdapter_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.httpclient.HTTPClient"/>
+            <param name="Charset" value=""/>
+            <param name="LogLevel" value="INFO"/>
+            <param name="ProxyHost" value=""/>
+            <param name="ProxyPass" value=""/>
+            <param name="ProxyPort" value="8080"/>
+            <param name="ProxyUser" value=""/>
+            <param name="UseDefaultCharset" value="true"/>
+            <param name="UseProxy" value="false"/>
+            <param name="asynchronous" value="true"/>
+            <param name="authPassword" value=""/>
+            <param name="authType" value="None"/>
+            <param name="authUsername" value=""/>
+            <param name="connectTimeout" value="30000"/>
+            <param name="downloadPath" value=""/>
+            <param name="excutorThreads" value="3"/>
+            <param name="ignoreCertificateErrors" value="false"/>
+            <param name="outputBlankLines" value="true"/>
+            <param name="outputConnectingStatus" value="true"/>
+            <param name="outputCookies" value="true"/>
+            <param name="outputHeaders" value="true"/>
+            <param name="outputInputTuple" value="true"/>
+            <param name="outputNullTupleOnCompletion" value="true"/>
+            <param name="outputTuplePerLine" value="false"/>
+            <param name="pollFrequency" value="0"/>
+            <param name="readTimeout" value="30000"/>
+            <param name="reconnectTimeout" value="3000"/>
+            <param name="requestMethod" value="GET"/>
+            <param name="requestType" value="Basic"/>
+            <param name="url" value="${PROMETHEUS_URL}/api/v1/metadata"/>
+            <param name="urlDecodeData" value="false"/>
+            <param name="urlDecodeDataType" value="QUERY_PARAM_SPACE_ENCODED"/>
+        </box>
+        <box name="InputJSON" type="outputadapter">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:InputJSON_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="MakeGood" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="ServerStateIn"/>
+            <output port="1" stream="PublisherStateOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="CurrentState">RECOVERY_COMPLETE</replace>
+                    <replace field="Name">"PrometheusPub"</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="MetaDataIn"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="PublisherStateOut" schema="ServerStateSchema"/>
+        <output-stream name="PublishToMetricsOut" schema="MetricsDataInSchema"/>
+        <box name="AddControlFields2" type="map">
+            <property name="description" value="Adds default values for all LiveView control fields.&#10;The app can use these fields to support udpate/delete rules,&#10;or table persistence."/>
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="PublishToMetricsMetadataOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="*">MetricsMetadataInputControlFields().*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box disabled="true" name="BogusDat" type="outputadapter">
+            <input port="1" stream="out:FromJSONCopy_1"/>
+            <output port="1" stream="out:BogusDat_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box disabled="true" name="HTTPClientStatus" type="outputadapter">
+            <input port="1" stream="out:InputAdapter_2"/>
+            <output port="1" stream="out:HTTPClientStatus_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="out:InputJSON_1"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.example.sb_liveviewprometheus.GetMetaData"/>
+        </box>
+        <box disabled="true" name="MyJSONConvert" type="java">
+            <input port="1" stream="out:InputJSON_1"/>
+            <output port="1" stream="out:MyJSONConvert_1"/>
+            <output port="2" stream="out:MyJSONConvert_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.jsontuple.JSON2Tuple"/>
+            <param name="enableLooseParsing" value="false"/>
+            <param name="enablePassThroughFields" value="false"/>
+            <param name="enableStatusPort" value="true"/>
+            <param name="jsonFieldName" value="data"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="outputSchema" value="MetaDataPayloadJSONSchema"/>
+            <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+        </box>
+        <box disabled="true" name="PromFromClient" type="outputadapter">
+            <input port="1" stream="out:InputAdapter_1"/>
+            <output port="1" stream="out:PromFromClient_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <output-stream name="PublishToMetricsMetadataOut" schema="MetricsMetadataDataInSchema"/>
+        <box name="CustomJSON" type="outputadapter">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="out:CustomJSON_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box disabled="true" name="FromJSON" type="map">
+            <input port="1" stream="out:PromFromClient_1"/>
+            <output port="1" stream="out:FromJSON_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="*">parsejson(MetaDataPayloadJSONSchema(), data).*</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box disabled="true" name="OperData" type="outputadapter">
+            <input port="1" stream="out:MyJSONConvert_1"/>
+            <output port="1" stream="out:OperData_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box disabled="true" name="OperStatus" type="outputadapter">
+            <input port="1" stream="out:MyJSONConvert_2"/>
+            <output port="1" stream="out:OperStatus_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+    </add>
+</modify>
