@@ -10,6 +10,9 @@
     <packaging>ep-liveview-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
+    <name>LiveView sample that uses TS TableProviders</name>
+    <description>LiveView TableProvider that allows LiveViewClients to get system logs, snapshots, system table contents, etc.</description>
+
     <!-- common definitions for this version of StreamBase -->
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
@@ -25,10 +28,6 @@
 	        <distribution>repo</distribution>
 	    </license>
 	</licenses>
- 
-	<properties>
-	    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
-	</properties>
 
     <dependencies>
 
