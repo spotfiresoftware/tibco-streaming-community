@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
-  <publisher id="PrometheusPub" filename="com.example.sb_liveviewprometheus.PrometheusPub">
-    <tables>
-      <table table-ref="Metrics"/>
-      <table table-ref="MetricsMetadata"/>
-    </tables>
-  </publisher>
-</liveview-configuration>
