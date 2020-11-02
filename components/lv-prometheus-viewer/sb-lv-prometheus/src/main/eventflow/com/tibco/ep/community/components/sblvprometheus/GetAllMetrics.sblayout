@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataControl">
+        <param name="gui:x" value="-313"/>
+        <param name="gui:y" value="58"/>
+    </component>
+    <component name="MetricIn">
+        <param name="gui:x" value="284"/>
+        <param name="gui:y" value="48"/>
+    </component>
+    <component name="AddControlFields1">
+        <param name="gui:x" value="485"/>
+        <param name="gui:y" value="1"/>
+    </component>
+    <component name="GetValue">
+        <param name="gui:x" value="284"/>
+        <param name="gui:y" value="-47"/>
+    </component>
+    <component name="Iterate">
+        <param name="gui:x" value="115"/>
+        <param name="gui:y" value="-47"/>
+    </component>
+    <component name="MakeDataReq">
+        <param name="gui:x" value="-313"/>
+        <param name="gui:y" value="-37"/>
+    </component>
+    <component name="MetricData">
+        <param name="gui:x" value="-98"/>
+        <param name="gui:y" value="12"/>
+    </component>
+    <component name="MetricDataStatus">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="67"/>
+        <param name="gui:bends:1" value="-20,52;-10,97"/>
+    </component>
+    <component name="Metronome">
+        <param name="gui:x" value="-401"/>
+        <param name="gui:y" value="-37"/>
+    </component>
+    <component name="RmComment">
+        <param name="gui:x" value="195"/>
+        <param name="gui:y" value="-47"/>
+    </component>
+    <component name="SplitNL">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-47"/>
+        <param name="gui:bends:1" value="-8,32;4,-17"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="389"/>
+        <param name="gui:y" value="1"/>
+        <param name="gui:bends:1" value="366,-17;374,21"/>
+        <param name="gui:bends:2" value="379,78;383,41"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="-196"/>
+        <param name="gui:y" value="12"/>
+        <param name="gui:bends:1" value="-224,-7;-216,32"/>
+        <param name="gui:bends:2" value="-237,88;-229,52"/>
+    </component>
+    <component name="PublishToMetricsOut">
+        <param name="gui:x" value="615"/>
+        <param name="gui:y" value="1"/>
+    </component>
+</application-layout>

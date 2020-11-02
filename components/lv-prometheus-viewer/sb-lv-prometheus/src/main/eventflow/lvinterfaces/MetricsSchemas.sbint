@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.6.2-SNAPSHOT">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the Metrics LiveView table."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.MetricsSchemas"/>
+    </type-metadata>
+    <named-schemas>
+        <schema name="MetricsDataInSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+            <field name="EventTime" type="timestamp"/>
+            <field name="Name" type="string"/>
+            <field name="Filter" type="string"/>
+            <field name="Value" type="double"/>
+        </schema>
+        <schema name="MetricsDataOutSchema">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field name="EventTime" type="timestamp"/>
+            <field name="Name" type="string"/>
+            <field name="Filter" type="string"/>
+            <field name="Value" type="double"/>
+        </schema>
+        <schema name="MetricsTableSchema">
+            <field name="EventTime" type="timestamp"/>
+            <field name="Name" type="string"/>
+            <field name="Filter" type="string"/>
+            <field name="Value" type="double"/>
+        </schema>
+        <schema name="MetricsInputControlFields">
+            <field description="A unique identifier for each publisher" name="PublisherID" type="string"/>
+            <field description="A monotonically increasing sequence number wrt each PublisherID" name="PublisherSN" type="long"/>
+            <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
+            <field description="RFU. Should be null." name="CQSDataUpdatePredicate" type="string"/>
+            <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
+        </schema>
+        <schema name="MetricsPrimaryKeySchema">
+            <field name="EventTime" type="timestamp"/>
+            <field name="Name" type="string"/>
+            <field name="Filter" type="string"/>
+        </schema>
+    </named-schemas>
+</application>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ASCII"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="Metrics" snapshot-parallelism="2">
+    <fields>
+      <field name="EventTime" type="timestamp"/>
+      <field name="Name" type="string"/>
+      <field name="Filter" type="string"/>
+      <field name="Value" type="double"/>
+    </fields>
+    <primary-key>
+      <field ref="EventTime"/>
+      <field ref="Name"/>
+      <field ref="Filter"/>
+    </primary-key>
+    <indices>
+      <index>
+        <field ref="EventTime"/>
+      </index>
+    </indices>
+  </data-table>
+</liveview-configuration>
