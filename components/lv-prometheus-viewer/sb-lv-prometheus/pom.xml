@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.community.components</groupId>
+    <artifactId>sb-lv-prometheus</artifactId>
+    <packaging>ep-liveview-fragment</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- common definitions for this version of Streaming -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-liveview-fragment</artifactId>
+        <version>10.6.1</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tibco.ep.lvweb</groupId>
+            <artifactId>lvweb</artifactId>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>httpclient</artifactId>
+        	<version>10.6.1</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>fileio</artifactId>
+        	<version>10.6.1</version>
+        </dependency>
+    </dependencies>
+
+</project>
