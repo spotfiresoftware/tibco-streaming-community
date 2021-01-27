@@ -96,7 +96,6 @@ public class GetMetricData extends Operator implements Parameterizable {
 			JSONObject metricJO=(JSONObject)metricJS.get("metric");
 			StringBuilder mFilter= new StringBuilder();
 			String mName=null;
-			String mValue=null;
 			boolean first=true;
 			for (String k: metricJO.keySet()) {
 					if ("__name__".equals(k)) {

@@ -5,14 +5,14 @@
 */
 package com.tibco.ep.community.components.sblvprometheus;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
-import com.streambase.com.jayway.jsonpath.Configuration;
-import com.streambase.com.jayway.jsonpath.JsonPath;
-import com.streambase.com.jayway.jsonpath.Option;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.streambase.sb.CompleteDataType;
 import com.streambase.sb.Schema;
 import com.streambase.sb.StreamBaseException;
@@ -80,51 +80,37 @@ public class GetMetaData extends Operator implements Parameterizable {
 	*/
 	public void processTuple(int inputPort, Tuple tuple) throws StreamBaseException {
 
-		String jsonS=tuple.getString(dataName);		
-		List<HashMap<String, String>> jsonHash=jsonPathHash(jsonS, "data");
-
 		try {
-			for (HashMap<String, String> metricsHash : jsonHash) {
+			String jsonS=tuple.getString(dataName);
+			JSONObject jsonO = (JSONObject)JSONPath.read(jsonS, "data");
+			String dataS = "[" + jsonO.toJSONString() + "]";
+			JSONArray jsonArray = JSON.parseArray(dataS);
 
-				String [] nameArray=metricsHash.keySet().toArray(new String[0]);
-				for (int j=0; j<nameArray.length; j++) {
-					 String	metricName=nameArray[j];
+			for (int i=0; i<jsonArray.size(); i++) {
+				JSONObject jsonObj = (JSONObject)jsonArray.get(i);
 
-					Object MetricData=(Object)metricsHash.get(metricName);
-					com.streambase.net.minidev.json.JSONArray fa = (com.streambase.net.minidev.json.JSONArray)MetricData;
+				Set<String> keys= jsonObj.keySet();
+				for (String metricName : keys) {
+					JSONArray metaArray=(JSONArray)jsonObj.get(metricName);
 
-					for (int i=0 ; i<fa.size() ; i++) {
-						try {
-							Object metaData=fa.get(i);
-							HashMap<String, String> parts=(HashMap<String, String>)metaData;
-							
-							Tuple output=outputSchema.createTuple();
-							
-							output.setField(nameName, metricName);
-							output.setString(nameType, parts.get("type"));
-							output.setString(nameHelp, parts.get("help"));
-							output.setString(nameUnits, parts.get("unit"));
-							
-							sendOutput(0,output);
-						} catch (Exception ex) {
-							logger.warn(ex.getMessage());
-						}
+					for (int j=0; j<metaArray.size(); j++) {
+						JSONObject metaObj= (JSONObject) metaArray.get(j);
+
+						Tuple output=outputSchema.createTuple();
+						output.setField(nameName, metricName);
+						output.setString(nameType, metaObj.get("type").toString());
+						output.setString(nameHelp, metaObj.get("help").toString());
+						output.setString(nameUnits, metaObj.get("unit").toString());
+
+						sendOutput(0,output);
 					}
 				}
 			}
-		
 		} catch (Exception e) {
-			logger.warn(e.getMessage());
+			logger.warn(String.format("Exception parsing metadata: %s", e.getMessage()));
 		}
 	}
 	
-	private List<HashMap<String, String>> jsonPathHash(String json, String jsonPath) {  // TODO: TEMPORARILY CHANGED FROM LIST<STRING> TO STRING FOR DEBUGGING     
-	    Configuration conf = Configuration.defaultConfiguration().addOptions(Option.ALWAYS_RETURN_LIST);
-	    JsonPath jsonObj = JsonPath.compile(jsonPath);
-	    List<HashMap<String, String>> ret = jsonObj.read(json, conf);
-	    return ret;
-	}
-
 	/**
 	 */
 	public void init() throws StreamBaseException {
