@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+<modify version="10.6.2-SNAPSHOT_06c6e0cfbdff659bfd1712330429035e8ee1303d">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -111,6 +111,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
