@@ -39,6 +39,14 @@ public class GetMetricData extends Operator implements Parameterizable {
 	private final String nameFilter="Filter";
 	private final String nameValue="Value";
 	
+
+	//
+	// While non-conforming for JSON, Prometheus uses string representation positive and negative infinity and NaN
+	//
+    private static final String PROMETHEUS_POS_INF = "+Inf";
+    private static final String PROMETHEUS_NEG_INF = "-Inf";
+    private static final String PROMETHEUS_NAN = "NaN";
+
 	private Schema.Field fieldName=new Schema.Field(nameName, CompleteDataType.forString());
 	private Schema.Field fieldFilter=new Schema.Field(nameFilter, CompleteDataType.forString());
 	private Schema.Field fieldValue=new Schema.Field(nameValue, CompleteDataType.forDouble());
@@ -96,7 +104,6 @@ public class GetMetricData extends Operator implements Parameterizable {
 			JSONObject metricJO=(JSONObject)metricJS.get("metric");
 			StringBuilder mFilter= new StringBuilder();
 			String mName=null;
-			String mValue=null;
 			boolean first=true;
 			for (String k: metricJO.keySet()) {
 					if ("__name__".equals(k)) {
@@ -114,13 +121,42 @@ public class GetMetricData extends Operator implements Parameterizable {
 			}
 	
 			Tuple output=outputSchema.createTuple();
-			output.setString(nameName, mName);
-			output.setString(nameFilter, mFilter.toString());
-			output.setDouble(nameValue, Double.valueOf(value));
-			sendOutput(0,output);
+			try {
+				output.setString(nameName, mName);
+				output.setString(nameFilter, mFilter.toString());
+				output.setDouble(nameValue, getDouble(value));
+				sendOutput(0,output);
+			} catch (Exception e) {
+				logger.warn(String.format("Failed to set output tuple: %s", e.getMessage()));
+			}
 		}
 	}
 	
+	/*
+	 * While non-conforming to JSON (rfc4627), Prometheus uses +/-Inf and Nan
+	 */
+	private Double getDouble(String value) {
+
+	    if (value.equals(PROMETHEUS_POS_INF)) {
+	        return Double.POSITIVE_INFINITY;
+	    }
+ 
+	    if (value.equals(PROMETHEUS_NEG_INF)) {
+	        return Double.NEGATIVE_INFINITY;
+	    }
+ 
+	    if (value.equals(PROMETHEUS_NAN)) {
+	        return Double.NaN;
+	    }
+ 
+	    try {
+	        return Double.valueOf(value);
+	    } catch (NumberFormatException e) {
+	        logger.warn(String.format("Exception converting value", e.getMessage()));
+	        return null;
+	    }
+	}
+
 	/**
 	 */
 	public void init() throws StreamBaseException {
