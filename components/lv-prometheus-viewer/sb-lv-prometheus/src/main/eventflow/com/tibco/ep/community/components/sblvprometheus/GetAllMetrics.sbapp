@@ -94,7 +94,7 @@
             </schema>
         </named-schemas>
         <parameter-definitions>
-            <parameter default="http://localhost:9090" name="PROMETHEUS_URL"/>
+            <parameter default="systemproperty(&quot;liveview.prometheus.server.url&quot;, &quot;http://localhost:9090&quot;)" name="PROMETHEUS_URL"/>
         </parameter-definitions>
         <dynamic-variables/>
         <stream name="DataControl" schema="HTTPClientControlSchema" scope="public"/>

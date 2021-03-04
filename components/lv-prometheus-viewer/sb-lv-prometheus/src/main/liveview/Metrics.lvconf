@@ -16,6 +16,12 @@
       <index>
         <field ref="EventTime"/>
       </index>
+      <index>
+        <field ref="Value"/>
+      </index>
+      <index>
+        <field ref="Name"/>
+      </index>
     </indices>
   </data-table>
 </liveview-configuration>
