@@ -115,7 +115,7 @@
             </schema>
         </named-schemas>
         <parameter-definitions>
-            <parameter default="systemproperty(&quot;liveview.prometheus.server.url&quot;, &quot;http://localhost:9090&quot;)" name="PROMETHEUS_URL"/>
+            <parameter default="=systemproperty(&quot;liveview.prometheus.server.url&quot;, &quot;http://localhost:9090&quot;)" name="PROMETHEUS_URL"/>
             <parameter default="300" name="DEFAULT_METADATA_POLLING_S"/>
         </parameter-definitions>
         <dynamic-variables>
