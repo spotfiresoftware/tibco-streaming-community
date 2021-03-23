@@ -126,7 +126,7 @@
         <stream name="PublishSchemasIn" schema="PublishSchemasSchema"/>
         <stream name="ServerStateIn" schema="ServerStateSchema"/>
         <stream name="ServerStatusIn" schema="ServerStatusSchema"/>
-        <stream name="SetMetaDataPollingS">
+        <stream name="SetMetaDataPollingS" scope="public">
             <schema>
                 <field name="seconds" type="int"/>
             </schema>

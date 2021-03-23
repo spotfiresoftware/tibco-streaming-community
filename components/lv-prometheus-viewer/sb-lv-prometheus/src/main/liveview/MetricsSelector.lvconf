@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+  <data-table id="MetricsSelector">
+    <fields>
+      <field name="RegEx" type="string" description="The RegEx expression for metric names to collect data on"/>
+    </fields>
+    <primary-key>
+      <field ref="RegEx"/>
+    </primary-key>
+  </data-table>
+</liveview-configuration>

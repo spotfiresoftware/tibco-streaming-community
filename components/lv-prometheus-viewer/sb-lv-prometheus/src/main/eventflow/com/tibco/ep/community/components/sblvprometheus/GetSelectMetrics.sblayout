@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="AddUpdateWhite">
+        <param name="gui:x" value="462"/>
+        <param name="gui:y" value="-295"/>
+    </component>
     <component name="DeleteMeta">
         <param name="gui:x" value="-158"/>
         <param name="gui:y" value="-197"/>
@@ -10,6 +14,10 @@
     <component name="MetricIn">
         <param name="gui:x" value="117"/>
         <param name="gui:y" value="-332"/>
+    </component>
+    <component name="RemoveWhite">
+        <param name="gui:x" value="498"/>
+        <param name="gui:y" value="-35"/>
     </component>
     <component name="SetMetricPollingS">
         <param name="gui:x" value="-493"/>
@@ -31,13 +39,37 @@
         <param name="gui:x" value="332"/>
         <param name="gui:y" value="-372"/>
     </component>
+    <component name="AddRemove">
+        <param name="gui:x" value="326"/>
+        <param name="gui:y" value="-162"/>
+    </component>
+    <component name="AddUpdate2">
+        <param name="gui:x" value="498"/>
+        <param name="gui:y" value="-207"/>
+    </component>
+    <component name="AddUpdateWrite">
+        <param name="gui:x" value="665"/>
+        <param name="gui:y" value="-217"/>
+    </component>
     <component name="DeleteAll">
         <param name="gui:x" value="-32"/>
         <param name="gui:y" value="-197"/>
     </component>
+    <component name="DeleteStatusLog">
+        <param name="gui:x" value="1139"/>
+        <param name="gui:y" value="-102"/>
+    </component>
+    <component name="DeleteUnwanted">
+        <param name="gui:x" value="1046"/>
+        <param name="gui:y" value="-103"/>
+    </component>
     <component name="GetAllRegExs">
         <param name="gui:x" value="-367"/>
         <param name="gui:y" value="-341"/>
+    </component>
+    <component name="GetAllRegExsCopy">
+        <param name="gui:x" value="557"/>
+        <param name="gui:y" value="-473"/>
     </component>
     <component name="GetMetricData">
         <param name="gui:x" value="117"/>
@@ -45,20 +77,32 @@
         <param name="gui:bends:1" value="64,-491;86,-397"/>
     </component>
     <component name="GetMetricsList">
-        <param name="gui:x" value="-524"/>
-        <param name="gui:y" value="-189"/>
+        <param name="gui:x" value="-606"/>
+        <param name="gui:y" value="-193"/>
     </component>
     <component name="GetMetricsLog">
-        <param name="gui:x" value="-398"/>
-        <param name="gui:y" value="-229"/>
+        <param name="gui:x" value="-480"/>
+        <param name="gui:y" value="-233"/>
     </component>
     <component name="GetNames">
         <param name="gui:x" value="-367"/>
         <param name="gui:y" value="-531"/>
     </component>
+    <component name="GetSelectors">
+        <param name="gui:x" value="102"/>
+        <param name="gui:y" value="-162"/>
+    </component>
     <component name="IncludeName">
         <param name="gui:x" value="-251"/>
         <param name="gui:y" value="-341"/>
+    </component>
+    <component name="IsConnected">
+        <param name="gui:x" value="466"/>
+        <param name="gui:y" value="-473"/>
+    </component>
+    <component name="MakeDelete">
+        <param name="gui:x" value="949"/>
+        <param name="gui:y" value="-103"/>
     </component>
     <component name="MakeQuery">
         <param name="gui:x" value="-251"/>
@@ -77,10 +121,50 @@
         <param name="gui:x" value="-493"/>
         <param name="gui:y" value="-531"/>
     </component>
+    <component name="PrePopSelector">
+        <param name="gui:x" value="672"/>
+        <param name="gui:y" value="-473"/>
+    </component>
+    <component name="PrePopStatusLog">
+        <param name="gui:x" value="767"/>
+        <param name="gui:y" value="-473"/>
+    </component>
+    <component name="Remove2">
+        <param name="gui:x" value="498"/>
+        <param name="gui:y" value="-119"/>
+    </component>
+    <component name="RemoveCurList">
+        <param name="gui:x" value="963"/>
+        <param name="gui:y" value="-233"/>
+    </component>
+    <component name="RemoveRegEx">
+        <param name="gui:x" value="738"/>
+        <param name="gui:y" value="-109"/>
+    </component>
+    <component name="SelectQDataLog">
+        <param name="gui:x" value="236"/>
+        <param name="gui:y" value="-162"/>
+    </component>
+    <component name="SelectorStatusLog">
+        <param name="gui:x" value="279"/>
+        <param name="gui:y" value="-258"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="834"/>
+        <param name="gui:y" value="-109"/>
+    </component>
     <component name="Split2">
         <param name="gui:x" value="-8"/>
         <param name="gui:y" value="-531"/>
         <param name="gui:bends:1" value="-54,-511;-52,-501"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="581"/>
+        <param name="gui:y" value="-217"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="621"/>
+        <param name="gui:y" value="-109"/>
     </component>
     <component name="Union3">
         <param name="gui:x" value="236"/>
@@ -93,8 +177,8 @@
         <param name="gui:y" value="-341"/>
     </component>
     <component name="WriteMetricList">
-        <param name="gui:x" value="-398"/>
-        <param name="gui:y" value="-134"/>
+        <param name="gui:x" value="-480"/>
+        <param name="gui:y" value="-126"/>
     </component>
     <component name="MetricDataOut">
         <param name="gui:x" value="117"/>
