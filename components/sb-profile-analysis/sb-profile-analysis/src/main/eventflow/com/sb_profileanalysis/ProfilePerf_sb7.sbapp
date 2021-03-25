@@ -469,13 +469,6 @@
             <output port="4" stream="out:Split1_4"/>
             <param name="output-count" value="4"/>
         </box>
-        <module-reference name="AdvisoryRef1">
-            <input name="Done" port="1" stream="out:Split1_3"/>
-            <param name="file" value="com.sb_profileanalysis.Advisory"/>
-            <parameter-bindings>
-                <binding name="RegionThreshold" value="${REGION_THRESHOLD}"/>
-            </parameter-bindings>
-        </module-reference>
         <box name="setDone" type="map">
             <input port="1" stream="out:Split1_4"/>
             <output port="1" stream="out:setDone_1"/>
@@ -491,9 +484,17 @@
             <param name="file" value="com.sb_profileanalysis.SummaryFiles"/>
             <input-dataref name="OperatorRollupTable" table="OperatorProfRef1.OperatorRollupTable"/>
             <input-dataref name="QueueRollupTable" table="QueueProfRef1.QueueRollupTable"/>
-            <input-dataref name="StreamsInfoTable"/>
+            <input-dataref name="StreamsInfoTable" table="StreamsProfRef1.StreamsInfoTable"/>
             <table-export name="RegionContentionTable"/>
             <table-export name="RegionTable"/>
+        </module-reference>
+        <module-reference name="AdvisoryRef1">
+            <input name="Done" port="1" stream="out:Split1_3"/>
+            <param name="file" value="com.sb_profileanalysis.Advisory"/>
+            <input-dataref name="RegionContentionTable" table="SummaryFilesRef1.RegionContentionTable"/>
+            <parameter-bindings>
+                <binding name="RegionThreshold" value="int(systemproperty(&quot;sb.profile.analsys.region.threshold&quot;, &quot;4&quot;))"/>
+            </parameter-bindings>
         </module-reference>
         <box name="isStudio" type="filter">
             <input port="1" stream="out:setDone_1"/>
@@ -520,7 +521,7 @@
             <input-dataref name="operatorSPITTable" table="OperatorProfRef1.operatorSPITTable"/>
             <input-dataref name="operatorSPOTTable" table="OperatorProfRef1.operatorSPOTTable"/>
             <input-dataref name="RegionTable" table="SummaryFilesRef1.RegionTable"/>
-            <input-dataref name="StreamsInfoTable"/>
+            <input-dataref name="StreamsInfoTable" table="StreamsProfRef1.StreamsInfoTable"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
             </parameter-bindings>
