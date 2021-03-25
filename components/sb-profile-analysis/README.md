@@ -1,41 +1,77 @@
-# LiveView Prometheus Metrics Integration
+# StreamBase profile data summary/analysis tool
 
-This LiveView sample can connect with a Prometheus server and will periodically download current select metric values.
+This eventflow sample provides an application that reads StreamBase profile
+data files and summarizes the data into top consumers by category.
 
-There is a table called `MetricMetadata` which has a list of all current metric names on the
-Prometheus server along with any available information about the metric such a description and/or unit definition.
+The categories available for all StreamBase versions are:
 
-A second table called `Metrics` has metric values, keyed by metric name and labels. By default the metric names included in this table
-are configured by setting a regex expression, one per line, in a file called `MetricsWhiteListRegex.txt`.
-Each regex line in the file is evaluated in turn to see if a particular metric is of interest.
-The default regex is `".*"`, so all metrics are included.
+Top Operator CPU usage
+    For individual cycles - help find spikes in operator CPU usage.
+Aggregate Operator CPU usage (milliseconds)
+    By adding each cycle's operator CPU use, lists the operators that are
+    most consistently busy.
+Top Operator Input rate (TPS)
+    For individual cycles - help find spikes in input rates.
+Top Operator Output rates (TPS)
+    For individual cycles - help find spikes in output rates.
+Top Operator Size (operator dependent - see StreamBase Operators documentation)
+    For individual cycles - help find spikes in operator sizes.
+Top Queues size
+    For individual cycles - find queues that have size spikes.
+Aggregate Queue size
+    By adding each cycle's queue size, lists the queues that are most
+    consistently busy.
+Top Microseconds Per [Input | Output] Tuple Operators
+    Find operators that take the most time per individual tuple.
+Top Thread CPU usage (microseconds)
+    For individual cycles - help find spikes in thread CPU usage.
+Aggregate Thread usage (milliseconds)
+    By adding each cycle's thread CPU usage, lists the threads that are most
+    consistently busy.
+Memory usage
+    For individual cycles - find periods when JVM memory usage is at maximum.
+Garbage Collectors
+    Summarize the total, average, and maximum GC times for all running collectors.
+Top Streams
+    The highest average rate output/input streams
 
-A third LiveView table called `MetricsSelector` will be initialized to have all the rows
-present in `MetricsWhiteListRegex.txt`. By publishing to the `MetricsSelector` table you can dynamically add a new metric to be included in the `Metrics` table.
-Similarly, you can delete an existing row(s) from the `MetricsSelector` table and the associated metrics will be removed from the `Metrics` table
-and not appear again. You can use one of the 4 available APIs, or the lv-client command line, to publish or delete from a LiveView table. 
-See LiveView documentation for more information. Note that metrics dynamically added/removed will not survive a node restart. On restart, the original
-`MetricsWhiteListRegex.txt` RegExs will be present.
+To collect profile data, you can connect sbprofile to a running server.
+For example:
 
-There is an alternative event flow application called GetAllMetrics.sbapp that does not query Prometheus for individual
-metrics but just GETs all metrics from the /metrics endpoint. If you wish to use that method of retrieving metrics, you need to replace the
-GetSelectMetrics module reference in PrometheusPub.sbapp with GetAllMetrics.sbapp.
+    sbprofile -u sb://hostname:portnumber -c profile-dd-mm-yy.log
 
-You must provide a Prometheus server URL by setting the system property liveview.prometheus.server.url. By default the Prometheus URL defaults to http://localhost:9090.
-If authentication is needed you must also configure two different
-HTTP client adapters - one in the `PrometheusPub.sbapp` and one in `GetSelectMetrics.sbapp` (or GetAllMetrics.sbapp).
+The number of lines summarized in each category can be configured by
+setting the environment variable MAX_COUNT=X, where X is the number
+of lines you wish.
 
-By default the Metrics table is trimmed to keep 60 minutes of metric history. You can change this to any length history that your
-heap allocation will support by updating the "Trim Metrics" alert.
+In addition to the summary data sent to the console, there are 6 files
+written to the same directory the profile data source is in. These
+files contain the following lists of data and their base names are the
+original profile name postpend with descriptive tag. These files are:
 
-If you don't have ready access to a Promethus server, you can quickly download and setup one as described here:
-[https://prometheus.io/docs/prometheus/latest/getting_started](https://prometheus.io/docs/prometheus/latest/getting_started). 
-Running that server on the same host that is running this sample will populate the `MetricsMetadata` and `Metrics` table with the internal
-Prometheus server metrics. This sample has been tested with Prometheus version 2.21.0.
+{profile-filename}-Operator-NonZero.csv - A list of input, output
+    and CPU for all operators that have non-zero values.
+{profile-filename}-Operator-Zero.csv - A list of all operators
+    that have a zero input, output, and CPU.
+{profile-filename}-ModuleFullPath-CPU.csv - A list of operators
+    input, output, and CPU in the given full module path.
+{profile-filename}-ModuleFullPath-Zero.csv - A list of full module
+    paths that have zero input/output/CPU in any operators
+{profile-filename}-ModuleName-CPU.csv - A list of operators
+    input, output, and CPU for a module across all of its
+    path references.
+{profile-filename}-ModuleName-Zero.csv - A list of modules
+    that have zero input/output/CPU operators across all of
+    its path references.
+{profile-filename}-Regions.csv - A list of application concurrent
+    regions with aggregated input queue sizes.
+{profile-filename}-Queues.csv - A list of application 
+    queues with aggregated queue sizes.
 
-Note that the Promethus data model is polling based, while the LiveView model is real time event driven. There are a number
-of polling intervals you can control in both the Prometheus server and in this sample to improve real time resolution available in the `Metrics` table.
-The default Prometheus `scrape_interval` is once per minute. You can decrease this value in the `--config.file` to improve the responsiveness of the `Metrics`. By default this sample will
-poll the Prometheus server for its metadata once every 60 seconds. By default this sample will poll the metric data once every 2 seconds.
-
-The polling and URL defaults can changed in the `engine.conf` or by using substitution variables when deploying the sample.
+You can get operator and module test coverage information if you
+specify the "-z" option on sbprofile. This will include operators that
+have zero input/output data in the profile data which is omitted by default.
+The {profile-filename}-Operator-Zero.csv file will list the operators
+that were never touched during a profile run, while
+{profile-filename}-ModuleName-Zero.csv will list the modules that
+contained no operators that had data flow.
