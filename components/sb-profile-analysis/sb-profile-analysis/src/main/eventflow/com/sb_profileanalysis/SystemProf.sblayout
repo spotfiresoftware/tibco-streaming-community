@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="SystemIn">
+        <param name="gui:x" value="-278"/>
+        <param name="gui:y" value="388"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="SystemInfoTable">
+        <param name="gui:x" value="413"/>
+        <param name="gui:y" value="519"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="CountRows">
+        <param name="gui:x" value="308"/>
+        <param name="gui:y" value="381"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="DeleteLesser">
+        <param name="gui:x" value="570"/>
+        <param name="gui:y" value="382"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="FilterTimeRange2">
+        <param name="gui:x" value="33"/>
+        <param name="gui:y" value="383"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="LimitSize">
+        <param name="gui:x" value="429"/>
+        <param name="gui:y" value="382"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="-136"/>
+        <param name="gui:y" value="384"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="writeSystem">
+        <param name="gui:x" value="199"/>
+        <param name="gui:y" value="380"/>
+        <param name="gui:width" value="70"/>
+    </component>
+</application-layout>

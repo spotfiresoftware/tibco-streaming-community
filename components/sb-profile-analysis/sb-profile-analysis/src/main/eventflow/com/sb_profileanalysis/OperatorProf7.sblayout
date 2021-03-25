@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DoneIn">
+        <param name="gui:x" value="514"/>
+        <param name="gui:y" value="616"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="OperatorIn">
+        <param name="gui:x" value="-290"/>
+        <param name="gui:y" value="394"/>
+    </component>
+    <component name="Operator7StatsRef1">
+        <param name="gui:x" value="663"/>
+        <param name="gui:y" value="601"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="OperatorRollupTable">
+        <param name="gui:x" value="321"/>
+        <param name="gui:y" value="362"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="startSizeTable">
+        <param name="gui:x" value="784"/>
+        <param name="gui:y" value="470"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="GapWarnLog">
+        <param name="gui:x" value="62"/>
+        <param name="gui:y" value="244"/>
+    </component>
+    <component name="ShortWarnLog">
+        <param name="gui:x" value="74"/>
+        <param name="gui:y" value="124"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="143"/>
+        <param name="gui:y" value="383"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="Split3">
+        <param name="gui:x" value="391"/>
+        <param name="gui:y" value="432"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="StripFeilds">
+        <param name="gui:x" value="525"/>
+        <param name="gui:y" value="527"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="UpdateTickCount">
+        <param name="gui:x" value="672"/>
+        <param name="gui:y" value="389"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="convertRest">
+        <param name="gui:x" value="20"/>
+        <param name="gui:y" value="379"/>
+    </component>
+    <component name="getGap">
+        <param name="gui:x" value="-54"/>
+        <param name="gui:y" value="244"/>
+    </component>
+    <component name="getShort">
+        <param name="gui:x" value="-41"/>
+        <param name="gui:y" value="124"/>
+    </component>
+    <component name="isGap">
+        <param name="gui:x" value="-168"/>
+        <param name="gui:y" value="244"/>
+    </component>
+    <component name="isNewTick">
+        <param name="gui:x" value="527"/>
+        <param name="gui:y" value="389"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="isOorD">
+        <param name="gui:x" value="-94"/>
+        <param name="gui:y" value="392"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="isTooShort">
+        <param name="gui:x" value="-155"/>
+        <param name="gui:y" value="124"/>
+    </component>
+    <component name="rollupUpdate">
+        <param name="gui:x" value="277"/>
+        <param name="gui:y" value="272"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="setOpType">
+        <param name="gui:x" value="76"/>
+        <param name="gui:y" value="506"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="DoneOut">
+        <param name="gui:x" value="778"/>
+        <param name="gui:y" value="606"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="GapWarn">
+        <param name="gui:x" value="181"/>
+        <param name="gui:y" value="248"/>
+    </component>
+    <component name="TooShortWarn">
+        <param name="gui:x" value="197"/>
+        <param name="gui:y" value="124"/>
+    </component>
+</application-layout>

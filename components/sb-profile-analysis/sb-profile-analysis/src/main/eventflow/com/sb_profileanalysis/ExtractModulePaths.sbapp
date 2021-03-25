@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="7.0.13roxry_152815">
+    <add generator="gui">
+        <schema name="schema:InputStream">
+            <field description="" name="name" type="string"/>
+            <field description="" name="Size" type="int"/>
+            <field description="" name="CPU" type="long"/>
+            <field description="" name="TotalIn" type="long"/>
+            <field description="" name="TotalOut" type="long"/>
+            <field description="" name="FullModulePath" type="string"/>
+            <field description="" name="ModuleName" type="string"/>
+        </schema>
+        <schema name="schema:fwd_168807241">
+            <field description="" name="name" type="string"/>
+            <field description="" name="Size" type="int"/>
+            <field description="" name="CPU" type="long"/>
+            <field description="" name="TotalIn" type="long"/>
+            <field description="" name="TotalOut" type="long"/>
+            <field description="" name="FullModulePath" type="string"/>
+            <field description="" name="ModuleName" type="string"/>
+        </schema>
+        <stream name="out:DropOneModule_1" schema="schema:fwd_168807241"/>
+        <stream name="InputStream" schema="schema:InputStream">
+            <param name="gui:x" value="7.0"/>
+            <param name="gui:y" value="6.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </stream>
+        <box name="Split" type="split">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+            <param name="gui:bends:1" value=""/>
+            <param name="gui:x" value="123.0"/>
+            <param name="gui:y" value="6.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:Split_1"/>
+            <input port="2" stream="out:DropOneModule_1"/>
+            <output port="1" stream="OutputStream"/>
+            <param name="strict" value="false"/>
+            <param name="gui:bends:1" value="401.0,25.0;401.0,31.0"/>
+            <param name="gui:bends:2" value="608.0,66.0;608.0,55.0"/>
+            <param name="gui:x" value="646.0"/>
+            <param name="gui:y" value="12.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="out:Split_2"/>
+            <input port="2" stream="out:DropOneModule_1"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+            <param name="gui:bends:1" value="219.0,49.0;219.0,54.0"/>
+            <param name="gui:bends:2" value="588.0,66.0;588.0,126.0;175.0,126.0;175.0,78.0"/>
+            <param name="gui:x" value="257.0"/>
+            <param name="gui:y" value="35.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </box>
+        <box name="IsDone" type="filter">
+            <input port="1" stream="out:Union2_1"/>
+            <output port="1" stream="out:IsDone_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="lastindexof(FullModulePath, &quot;.&quot;) != -1"/>
+            <param name="gui:bends:1" value=""/>
+            <param name="gui:x" value="371.0"/>
+            <param name="gui:y" value="35.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+            <param name="gui:columnwidths" value="141,701"/>
+        </box>
+        <output-stream name="OutputStream">
+            <param name="gui:bends" value=""/>
+            <param name="gui:x" value="766.0"/>
+            <param name="gui:y" value="12.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </output-stream>
+        <box name="DropOneModule" type="map">
+            <input port="1" stream="out:IsDone_1"/>
+            <output port="1" stream="out:DropOneModule_1"/>
+            <target-list>
+                <item name="input" prefix="" selection="all" suffix="">
+                    <replace field="FullModulePath">substr(FullModulePath, 0, lastindexof(FullModulePath, "."))</replace>
+                </item>
+            </target-list>
+            <param name="gui:bends:1" value=""/>
+            <param name="gui:x" value="498.0"/>
+            <param name="gui:y" value="35.0"/>
+            <param name="gui:width" value="62.0"/>
+            <param name="gui:height" value="62.0"/>
+        </box>
+    </add>
+</modify>

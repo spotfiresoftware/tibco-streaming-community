@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Done">
+        <param name="gui:x" value="350"/>
+        <param name="gui:y" value="411"/>
+    </component>
+    <component name="GCInfoTable">
+        <param name="gui:x" value="625"/>
+        <param name="gui:y" value="1244"/>
+        <param name="gui:width" value="138"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="OperatorRollupTable">
+        <param name="gui:x" value="1524"/>
+        <param name="gui:y" value="385"/>
+        <param name="gui:width" value="194"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="QueueRollupTable">
+        <param name="gui:x" value="379"/>
+        <param name="gui:y" value="583"/>
+        <param name="gui:width" value="184"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="RegionTable">
+        <param name="gui:x" value="1492"/>
+        <param name="gui:y" value="-132"/>
+        <param name="gui:width" value="138"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="StreamsInfoTable">
+        <param name="gui:x" value="540"/>
+        <param name="gui:y" value="1094"/>
+        <param name="gui:width" value="172"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="SystemInfoTable">
+        <param name="gui:x" value="272"/>
+        <param name="gui:y" value="246"/>
+        <param name="gui:width" value="172"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="ThreadRollupTable">
+        <param name="gui:x" value="1598"/>
+        <param name="gui:y" value="744"/>
+        <param name="gui:width" value="188"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="TopThreadTable">
+        <param name="gui:x" value="426"/>
+        <param name="gui:y" value="694"/>
+        <param name="gui:width" value="170"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="operatorCPUTable">
+        <param name="gui:x" value="515"/>
+        <param name="gui:y" value="951"/>
+        <param name="gui:width" value="182"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="operatorInputTable">
+        <param name="gui:x" value="386"/>
+        <param name="gui:y" value="-82"/>
+        <param name="gui:width" value="192"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="operatorOutputTable">
+        <param name="gui:x" value="390"/>
+        <param name="gui:y" value="45"/>
+        <param name="gui:width" value="198"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="operatorSPITTable">
+        <param name="gui:x" value="1598"/>
+        <param name="gui:y" value="864"/>
+        <param name="gui:width" value="182"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="operatorSPOTTable">
+        <param name="gui:x" value="1594"/>
+        <param name="gui:y" value="966"/>
+        <param name="gui:width" value="190"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="operatorSizeTable">
+        <param name="gui:x" value="464"/>
+        <param name="gui:y" value="149"/>
+        <param name="gui:width" value="176"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="queuesTable">
+        <param name="gui:x" value="418"/>
+        <param name="gui:y" value="343"/>
+        <param name="gui:width" value="140"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="AggCPULog">
+        <param name="gui:x" value="1355"/>
+        <param name="gui:y" value="1046"/>
+    </component>
+    <component name="AggCPUQuery">
+        <param name="gui:x" value="994"/>
+        <param name="gui:y" value="1051"/>
+    </component>
+    <component name="AggQuSizeLog">
+        <param name="gui:x" value="1134"/>
+        <param name="gui:y" value="407"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="AggQuSizeTitle">
+        <param name="gui:x" value="832"/>
+        <param name="gui:y" value="403"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="AggThreadQuery">
+        <param name="gui:x" value="1025"/>
+        <param name="gui:y" value="613"/>
+    </component>
+    <component name="AggThreadTitle">
+        <param name="gui:x" value="847"/>
+        <param name="gui:y" value="615"/>
+    </component>
+    <component name="AggThreadsLog">
+        <param name="gui:x" value="1271"/>
+        <param name="gui:y" value="614"/>
+    </component>
+    <component name="CalcOper">
+        <param name="gui:x" value="1125"/>
+        <param name="gui:y" value="-245"/>
+    </component>
+    <component name="Calcs">
+        <param name="gui:x" value="1123"/>
+        <param name="gui:y" value="1186"/>
+    </component>
+    <component name="CountAllOps">
+        <param name="gui:x" value="840"/>
+        <param name="gui:y" value="-244"/>
+    </component>
+    <component name="CountAllThreadsQuery">
+        <param name="gui:x" value="825"/>
+        <param name="gui:y" value="496"/>
+    </component>
+    <component name="CountQueQuery">
+        <param name="gui:x" value="842"/>
+        <param name="gui:y" value="293"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="CountZeroOps">
+        <param name="gui:x" value="983"/>
+        <param name="gui:y" value="-245"/>
+    </component>
+    <component name="GCLog">
+        <param name="gui:x" value="1278"/>
+        <param name="gui:y" value="1303"/>
+    </component>
+    <component name="GCTitle">
+        <param name="gui:x" value="892"/>
+        <param name="gui:y" value="1299"/>
+    </component>
+    <component name="GetAllGCs">
+        <param name="gui:x" value="1008"/>
+        <param name="gui:y" value="1300"/>
+    </component>
+    <component name="GetOpType1">
+        <param name="gui:x" value="1109"/>
+        <param name="gui:y" value="-136"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="GetOpType2">
+        <param name="gui:x" value="1134"/>
+        <param name="gui:y" value="-31"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="GetOpType3">
+        <param name="gui:x" value="1140"/>
+        <param name="gui:y" value="86"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="GetOpType4">
+        <param name="gui:x" value="1204"/>
+        <param name="gui:y" value="958"/>
+    </component>
+    <component name="GetOpType5">
+        <param name="gui:x" value="1237"/>
+        <param name="gui:y" value="1050"/>
+    </component>
+    <component name="GetOpType6">
+        <param name="gui:x" value="1157"/>
+        <param name="gui:y" value="826"/>
+    </component>
+    <component name="GetOpType7">
+        <param name="gui:x" value="1154"/>
+        <param name="gui:y" value="722"/>
+    </component>
+    <component name="GetRegionCount">
+        <param name="gui:x" value="1383"/>
+        <param name="gui:y" value="-245"/>
+    </component>
+    <component name="GetTopStreams">
+        <param name="gui:x" value="1008"/>
+        <param name="gui:y" value="1181"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="MemoryUsed">
+        <param name="gui:x" value="974"/>
+        <param name="gui:y" value="199"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="565"/>
+        <param name="gui:y" value="355"/>
+        <param name="gui:height" value="165"/>
+    </component>
+    <component name="StreamsLog">
+        <param name="gui:x" value="1238"/>
+        <param name="gui:y" value="1180"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="StreamsTitle">
+        <param name="gui:x" value="892"/>
+        <param name="gui:y" value="1180"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="SystemLog">
+        <param name="gui:x" value="1206"/>
+        <param name="gui:y" value="197"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="ToMB">
+        <param name="gui:x" value="1099"/>
+        <param name="gui:y" value="199"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopCPULog">
+        <param name="gui:x" value="1324"/>
+        <param name="gui:y" value="961"/>
+    </component>
+    <component name="TopCPUQuery">
+        <param name="gui:x" value="1043"/>
+        <param name="gui:y" value="959"/>
+    </component>
+    <component name="TopCPUTitle">
+        <param name="gui:x" value="865"/>
+        <param name="gui:y" value="948"/>
+    </component>
+    <component name="TopInputLog">
+        <param name="gui:x" value="1252"/>
+        <param name="gui:y" value="-136"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopInputTitle">
+        <param name="gui:x" value="835"/>
+        <param name="gui:y" value="-135"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopOpSizeLog">
+        <param name="gui:x" value="1289"/>
+        <param name="gui:y" value="86"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopOutputLog">
+        <param name="gui:x" value="1272"/>
+        <param name="gui:y" value="-30"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopOutputTitle">
+        <param name="gui:x" value="834"/>
+        <param name="gui:y" value="-32"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopQuSizeLog">
+        <param name="gui:x" value="1288"/>
+        <param name="gui:y" value="303"/>
+    </component>
+    <component name="TopQuSizeTitle">
+        <param name="gui:x" value="998"/>
+        <param name="gui:y" value="303"/>
+    </component>
+    <component name="TopSPITLog">
+        <param name="gui:x" value="1308"/>
+        <param name="gui:y" value="717"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSPITQuery">
+        <param name="gui:x" value="998"/>
+        <param name="gui:y" value="718"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSPOTLog">
+        <param name="gui:x" value="1319"/>
+        <param name="gui:y" value="824"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSPOTQuery">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="824"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSPOTTitle">
+        <param name="gui:x" value="864"/>
+        <param name="gui:y" value="824"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSPTTitle">
+        <param name="gui:x" value="854"/>
+        <param name="gui:y" value="717"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="TopSizeTitle">
+        <param name="gui:x" value="842"/>
+        <param name="gui:y" value="84"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopThreadTitle">
+        <param name="gui:x" value="966"/>
+        <param name="gui:y" value="501"/>
+    </component>
+    <component name="TopThreadsLog">
+        <param name="gui:x" value="1229"/>
+        <param name="gui:y" value="502"/>
+    </component>
+    <component name="TopThreadsQuery">
+        <param name="gui:x" value="1101"/>
+        <param name="gui:y" value="501"/>
+    </component>
+    <component name="aggCPUTitle">
+        <param name="gui:x" value="892"/>
+        <param name="gui:y" value="1053"/>
+    </component>
+    <component name="aggQueueQuery">
+        <param name="gui:x" value="1004"/>
+        <param name="gui:y" value="406"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="calcDuration">
+        <param name="gui:x" value="1262"/>
+        <param name="gui:y" value="-246"/>
+    </component>
+    <component name="calcGCPercent">
+        <param name="gui:x" value="1122"/>
+        <param name="gui:y" value="1299"/>
+    </component>
+    <component name="calcPercent">
+        <param name="gui:x" value="1124"/>
+        <param name="gui:y" value="1052"/>
+    </component>
+    <component name="calcPercent2">
+        <param name="gui:x" value="1154"/>
+        <param name="gui:y" value="615"/>
+    </component>
+    <component name="summaryLog">
+        <param name="gui:x" value="1511"/>
+        <param name="gui:y" value="-246"/>
+    </component>
+    <component name="systemTitle">
+        <param name="gui:x" value="837"/>
+        <param name="gui:y" value="197"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="topInputQuery">
+        <param name="gui:x" value="976"/>
+        <param name="gui:y" value="-135"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="topOpSizeQuery">
+        <param name="gui:x" value="984"/>
+        <param name="gui:y" value="89"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="topOutputQuery">
+        <param name="gui:x" value="982"/>
+        <param name="gui:y" value="-32"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="topQuSizeQuery">
+        <param name="gui:x" value="1149"/>
+        <param name="gui:y" value="304"/>
+    </component>
+    <component name="AllGC">
+        <param name="gui:x" value="1402"/>
+        <param name="gui:y" value="1301"/>
+    </component>
+    <component name="MaxMemoryUsed">
+        <param name="gui:x" value="1337"/>
+        <param name="gui:y" value="202"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="ProfileSummary">
+        <param name="gui:x" value="1644"/>
+        <param name="gui:y" value="-241"/>
+    </component>
+    <component name="TopCPU">
+        <param name="gui:x" value="1451"/>
+        <param name="gui:y" value="959"/>
+    </component>
+    <component name="TopInput">
+        <param name="gui:x" value="1379"/>
+        <param name="gui:y" value="-131"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopOpSize">
+        <param name="gui:x" value="1421"/>
+        <param name="gui:y" value="92"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopOutput">
+        <param name="gui:x" value="1405"/>
+        <param name="gui:y" value="-24"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TopQueueSize">
+        <param name="gui:x" value="1420"/>
+        <param name="gui:y" value="312"/>
+    </component>
+    <component name="TopSPIT">
+        <param name="gui:x" value="1435"/>
+        <param name="gui:y" value="726"/>
+    </component>
+    <component name="TopSPOT">
+        <param name="gui:x" value="1446"/>
+        <param name="gui:y" value="833"/>
+    </component>
+    <component name="TopStreams">
+        <param name="gui:x" value="1366"/>
+        <param name="gui:y" value="1186"/>
+    </component>
+    <component name="TopThread">
+        <param name="gui:x" value="1363"/>
+        <param name="gui:y" value="506"/>
+    </component>
+    <component name="aggCPU">
+        <param name="gui:x" value="1485"/>
+        <param name="gui:y" value="1054"/>
+    </component>
+    <component name="aggQueueSize">
+        <param name="gui:x" value="1261"/>
+        <param name="gui:y" value="411"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="aggThreadCPU">
+        <param name="gui:x" value="1402"/>
+        <param name="gui:y" value="615"/>
+    </component>
+</application-layout>
