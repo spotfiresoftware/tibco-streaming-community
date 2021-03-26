@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.SummaryFiles"/>
+            <param name="fully-qualified-name" value="com.profile_impl.SummaryFiles"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="10" name="MaxCount"/>
             <parameter default="8" name="OperatorsPerRegion"/>
@@ -1056,7 +1056,7 @@ UpRegionName</replace>
         <module-reference name="ExtractModulePathsRef1">
             <input name="InputStream" port="1" stream="out:GetBaseContainer_1"/>
             <output name="OutputStream" port="1" stream="out:ExtractModulePathsRef1_1"/>
-            <param name="file" value="com.sb_profileanalysis.ExtractModulePaths"/>
+            <param name="file" value="com.profile_impl.ExtractModulePaths"/>
         </module-reference>
         <box name="WriteDownstream" type="query">
             <input port="1" stream="out:TrimAgain_1"/>

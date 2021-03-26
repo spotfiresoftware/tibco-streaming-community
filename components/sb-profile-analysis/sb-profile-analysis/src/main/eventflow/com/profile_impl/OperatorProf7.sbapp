@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.OperatorProf7"/>
+            <param name="fully-qualified-name" value="com.profile_impl.OperatorProf7"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="10" name="MaxCount"/>
             <parameter default="8" name="OperatorsPerRegion"/>
@@ -255,7 +255,7 @@
             <input name="DoneIn" port="2" stream="DoneIn"/>
             <output name="DoneOut" port="1" stream="DoneOut"/>
             <param name="parallel" value="true"/>
-            <param name="file" value="com.sb_profileanalysis.Operator7Stats"/>
+            <param name="file" value="com.profile_impl.Operator7Stats"/>
             <table-export name="operatorCPUTable"/>
             <table-export name="operatorInputTable"/>
             <table-export name="operatorOutputTable"/>

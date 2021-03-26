@@ -3,7 +3,7 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.PerfLogger"/>
+            <param name="fully-qualified-name" value="com.profile_impl.PerfLogger"/>
         </type-metadata>
         <memory-model-settings/>
         <parameter-definitions>
@@ -15,8 +15,6 @@
             <schema>
                 <field name="placeholder" type="string"/>
             </schema>
-            <param name="gui:x" value="503"/>
-            <param name="gui:y" value="344"/>
         </stream>
         <box name="ShouldLog" type="filter">
             <input port="1" stream="in"/>
@@ -25,8 +23,6 @@
             <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="${ShouldLog}"/>
             <param name="expression.1" value="true"/>
-            <param name="gui:x" value="641"/>
-            <param name="gui:y" value="344"/>
         </box>
         <box name="InputLogger" type="outputadapter">
             <input port="1" stream="out:ShouldLog_1"/>
@@ -38,29 +34,20 @@
             <param name="messageIdentifier" value="${LoggerName}"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="true"/>
-            <param name="gui:x" value="790"/>
-            <param name="gui:y" value="332"/>
         </box>
         <box name="Union1" type="union">
             <input port="1" stream="out:InputLogger_1"/>
             <input port="2" stream="out:ShouldLog_2"/>
             <output port="1" stream="out:Union1_1"/>
             <param name="strict" value="false"/>
-            <param name="gui:x" value="921"/>
-            <param name="gui:y" value="352"/>
         </box>
         <box name="Split1" type="split">
             <input port="1" stream="out:Union1_1"/>
             <output port="1" stream="out:Split1_1"/>
             <output port="2" stream="out"/>
             <param name="output-count" value="2"/>
-            <param name="gui:x" value="1041"/>
-            <param name="gui:y" value="352"/>
         </box>
-        <output-stream name="out">
-            <param name="gui:x" value="1173"/>
-            <param name="gui:y" value="394"/>
-        </output-stream>
+        <output-stream name="out"/>
         <box name="WriteData" type="outputadapter">
             <input port="1" stream="out:Split1_1"/>
             <param name="start:state" value="true"/>
@@ -86,8 +73,6 @@
             <param name="ThrottleErrorMessages" value="false"/>
             <param name="TsFormat" value="false"/>
             <param name="logLevel" value="INFO"/>
-            <param name="gui:x" value="1157"/>
-            <param name="gui:y" value="302"/>
         </box>
     </add>
 </modify>

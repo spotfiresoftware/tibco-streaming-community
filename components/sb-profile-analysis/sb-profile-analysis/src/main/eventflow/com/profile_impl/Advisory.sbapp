@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.Advisory"/>
+            <param name="fully-qualified-name" value="com.profile_impl.Advisory"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="8" name="RegionThreshold"/>
         </parameter-definitions>
@@ -83,6 +83,7 @@
                     <remove field="UpStreamList"/>
                 </item>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="UpStreamList">unique(UpStreamList)</include>
                 </expressions>

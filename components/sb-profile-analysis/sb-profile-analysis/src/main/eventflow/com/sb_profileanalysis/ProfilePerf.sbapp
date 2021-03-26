@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.ProfilePerf_sb7"/>
+            <param name="fully-qualified-name" value="com.sb_profileanalysis.ProfilePerf"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="int(systemproperty(&quot;sb.profile.analsys.maxcount&quot;, &quot;10&quot;))" name="MaxCount"/>
             <parameter default="1.3  -- Numer of seconds between ticks before emitting warning" name="TSGapWarnSec"/>
@@ -304,7 +304,7 @@
         </box>
         <module-reference name="GCProfRef1">
             <input name="SystemIn" port="1" stream="out:WhatType_4"/>
-            <param name="file" value="com.sb_profileanalysis.GCProf"/>
+            <param name="file" value="com.profile_impl.GCProf"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
             </parameter-bindings>
@@ -323,7 +323,7 @@
         </box>
         <module-reference name="StreamsProfRef1">
             <input name="StreamsIn" port="1" stream="out:WhatType_5"/>
-            <param name="file" value="com.sb_profileanalysis.StreamsProf"/>
+            <param name="file" value="com.profile_impl.StreamsProf"/>
             <table-export name="StreamsInfoTable"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
@@ -331,14 +331,14 @@
         </module-reference>
         <module-reference name="SystemProfRef1">
             <input name="SystemIn" port="1" stream="out:WhatType_3"/>
-            <param name="file" value="com.sb_profileanalysis.SystemProf"/>
+            <param name="file" value="com.profile_impl.SystemProf"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
             </parameter-bindings>
         </module-reference>
         <module-reference name="ThreadProfRef1">
             <input name="ThreadIn" port="1" stream="out:WhatType_2"/>
-            <param name="file" value="com.sb_profileanalysis.ThreadProf"/>
+            <param name="file" value="com.profile_impl.ThreadProf"/>
             <table-export name="ThreadRollupTable"/>
             <table-export name="TopThreadTable"/>
             <parameter-bindings>
@@ -353,7 +353,7 @@
         </box>
         <module-reference name="QueueProfRef1">
             <input name="QueueIn" port="1" stream="out:NameFilter2_1"/>
-            <param name="file" value="com.sb_profileanalysis.QueueProf7"/>
+            <param name="file" value="com.profile_impl.QueueProf7"/>
             <table-export name="queuesTable"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
@@ -408,8 +408,10 @@
             <input name="OperatorIn" port="1" stream="out:updateLastTS_1"/>
             <input name="DoneIn" port="2" stream="out:Split_2"/>
             <output name="DoneOut" port="1" stream="out:OperatorProfRef1_1"/>
+            <output name="GapWarn" port="2" stream="out:OperatorProfRef1_2"/>
+            <output name="TooShortWarn" port="3" stream="out:OperatorProfRef1_3"/>
             <param name="parallel" value="true"/>
-            <param name="file" value="com.sb_profileanalysis.OperatorProf7"/>
+            <param name="file" value="com.profile_impl.OperatorProf7"/>
             <input-dataref name="startSizeTable" table="startSizeTable"/>
             <table-export name="OperatorRollupTable"/>
             <table-export name="operatorCPUTable"/>
@@ -481,7 +483,7 @@
         </box>
         <module-reference name="SummaryFilesRef1">
             <input name="Split2InputStream1" port="1" stream="out:Split1_1"/>
-            <param name="file" value="com.sb_profileanalysis.SummaryFiles"/>
+            <param name="file" value="com.profile_impl.SummaryFiles"/>
             <input-dataref name="OperatorRollupTable" table="OperatorProfRef1.OperatorRollupTable"/>
             <input-dataref name="QueueRollupTable" table="QueueProfRef1.QueueRollupTable"/>
             <input-dataref name="StreamsInfoTable" table="StreamsProfRef1.StreamsInfoTable"/>
@@ -490,7 +492,7 @@
         </module-reference>
         <module-reference name="AdvisoryRef1">
             <input name="Done" port="1" stream="out:Split1_3"/>
-            <param name="file" value="com.sb_profileanalysis.Advisory"/>
+            <param name="file" value="com.profile_impl.Advisory"/>
             <input-dataref name="RegionContentionTable" table="SummaryFilesRef1.RegionContentionTable"/>
             <parameter-bindings>
                 <binding name="RegionThreshold" value="int(systemproperty(&quot;sb.profile.analsys.region.threshold&quot;, &quot;4&quot;))"/>
@@ -506,7 +508,7 @@
         </box>
         <module-reference name="SummaryLogOutRef1">
             <input name="Done" port="1" stream="out:Split1_2"/>
-            <param name="file" value="com.sb_profileanalysis.SummaryLogOut"/>
+            <param name="file" value="com.profile_impl.SummaryLogOut"/>
             <input-dataref name="OperatorRollupTable" table="OperatorProfRef1.OperatorRollupTable"/>
             <input-dataref name="QueueRollupTable" table="QueueProfRef1.QueueRollupTable"/>
             <input-dataref name="SystemInfoTable" table="SystemProfRef1.SystemInfoTable"/>

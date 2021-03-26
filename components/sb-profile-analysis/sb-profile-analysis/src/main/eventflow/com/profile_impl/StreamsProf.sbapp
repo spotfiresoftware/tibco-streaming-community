@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.StreamsProf"/>
+            <param name="fully-qualified-name" value="com.profile_impl.StreamsProf"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="10" name="MaxCount"/>
             <parameter default="8" name="OperatorsPerRegion"/>

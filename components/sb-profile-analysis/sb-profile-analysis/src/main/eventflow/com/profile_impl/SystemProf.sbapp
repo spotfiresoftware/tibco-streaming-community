@@ -3,10 +3,10 @@
     <add>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.sb_profileanalysis.SystemProf"/>
+            <param name="fully-qualified-name" value="com.profile_impl.SystemProf"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.sb_profileanalysis.SharedSchemas"/>
+        <import from="com.interfaces.SharedSchemas"/>
         <parameter-definitions>
             <parameter default="10" name="MaxCount"/>
             <parameter default="8" name="OperatorsPerRegion"/>
@@ -106,6 +106,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="count">count()</include>
                 </expressions>
@@ -152,6 +153,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
         </box>
     </add>
