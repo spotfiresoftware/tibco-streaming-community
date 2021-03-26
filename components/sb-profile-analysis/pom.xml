@@ -5,16 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
  
   <groupId>com.tibco.ep.community.components</groupId>
-  <artifactId>lv-prometheus-viewer</artifactId>
+  <artifactId>sb-profile-analysis</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
 
-  <name>LiveView frontend for Prometheus</name>
-  <description>LiveView project that can discover Prometheus metrics and poll them regularly</description>
+  <name>Summarize StreamBase Profile data</name>
+  <description>Event flow application that reads sbprofile data and summarizes for analysis</description>
  
   <modules>
-    <module>sb-lv-prometheus</module>
-    <module>sb-lv-prometheus-deploy</module>
+    <module>sb-profile-analysis</module>
   </modules>
 
   <licenses>
