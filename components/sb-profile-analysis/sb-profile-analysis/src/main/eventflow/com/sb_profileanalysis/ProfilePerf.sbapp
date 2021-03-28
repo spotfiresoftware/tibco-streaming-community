@@ -354,6 +354,7 @@
         <module-reference name="QueueProfRef1">
             <input name="QueueIn" port="1" stream="out:NameFilter2_1"/>
             <param name="file" value="com.profile_impl.QueueProf7"/>
+            <table-export name="QueueRollupTable"/>
             <table-export name="queuesTable"/>
             <parameter-bindings>
                 <binding name="MaxCount" value="${MaxCount}"/>
@@ -503,7 +504,7 @@
             <output port="1" stream="done"/>
             <output port="2" stream="out:isStudio_2"/>
             <param name="autogen-nomatch-port" value="true"/>
-            <param name="expression.0" value="indexof(systemproperty(&quot;sun.java.command&quot;, &quot;&quot;), &quot;--studio&quot;) != -1"/>
+            <param name="expression.0" value="indexof(systemproperty(&quot;com.tibco.ep.dtm.deploy.tool.used&quot;, &quot;&quot;), &quot;true&quot;) != -1"/>
             <param name="expression.1" value="true"/>
         </box>
         <module-reference name="SummaryLogOutRef1">

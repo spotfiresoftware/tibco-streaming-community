@@ -177,7 +177,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Aggregate CPU ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="aggCPULogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -186,10 +187,28 @@
             <output port="1" stream="out:AggQuSizeTitle_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
             <param name="customFormat" value="*** Queues with largest Aggregated Sizes ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="AggQuSizeLogger"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
         </box>
         <box name="AggThreadTitle" type="outputadapter">
@@ -199,7 +218,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Aggregated Threads CPU usage ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="AggThreadLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -300,7 +320,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Garbarage Collectors ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="GCLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -311,7 +332,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top Streams ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="StreamsLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -322,7 +344,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Highest Memory Usage ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="aggCPULogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -333,7 +356,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top CPU Operators ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopCPULogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -342,10 +366,28 @@
             <output port="1" stream="out:TopInputTitle_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
             <param name="customFormat" value="*** Top Input TPS ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopInputLogger"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
         </box>
         <box name="TopOutputTitle" type="outputadapter">
@@ -353,10 +395,28 @@
             <output port="1" stream="out:TopOutputTitle_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
             <param name="customFormat" value="*** Top Output TPS ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopInputLogger"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
         </box>
         <box name="TopSizeTitle" type="outputadapter">
@@ -366,7 +426,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top Size Operators ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopSizeLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -377,7 +438,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top Microseconds Per Output Tuple Operators ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopSPOTLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -388,7 +450,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top Microseconds Per Input Tuple Operators ***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopSPITLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -763,7 +826,8 @@
             <param name="asyncEnabled" value="true"/>
             <param name="customFormat" value="*** Largest Queue Sizes ({0} queues in total)***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopQuSizeLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -846,7 +910,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="*** Top Threads CPU usage ({0} unique managed threads seen)***"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopThreadLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -857,7 +922,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, Size={1, number,#}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="AggQuSizeLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1227,7 +1293,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, CPU={1, number,#} ms, CPU={2, number, percent}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopThreadsLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1252,7 +1319,8 @@
             <param name="asyncEnabled" value="true"/>
             <param name="customFormat" value="{1}, Number of Collections={2, number,#}, Total Time={3, number,#} ms, Max Time={0, number,#} ms, Ave Time={5, number,#} ms, Percent of GC time to total time={4, number, percent}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="GCLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1296,7 +1364,8 @@
             <param name="asyncEnabled" value="true"/>
             <param name="customFormat" value="{2}, {8}, Total Count={4, number,#}, Ave Rate={9, number,#} TPS, Max Rate={6, number,#} TPS"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="StreamsLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1307,7 +1376,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="Max={1, number,#} MB,  Used={2, number,#} MB, Free={3, number,#} MB - total Threads={4, number,#}, Dequeue Clients={5, number,#}, Time Running={6, number,#}, {7}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="SystemLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1318,7 +1388,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={6}, {5}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopCPULogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1327,10 +1398,28 @@
             <output port="1" stream="TopInput"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6},  {5}"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopInptLogger"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
         </box>
         <box name="TopOpSizeLog" type="outputadapter">
@@ -1340,7 +1429,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6}, {5}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopOoSizeLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1349,10 +1439,28 @@
             <output port="1" stream="TopOutput"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6}, {5}"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopOutputLogger"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
         </box>
         <box name="TopQuSizeLog" type="outputadapter">
@@ -1362,7 +1470,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, Size={1, number,#},  {2}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopQuSizeLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1373,7 +1482,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={7}, Time per Tuple={6,number,#.#} uS {5}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopSPITLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1384,7 +1494,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={7}, Time per Tuple={6,number,#.#} uS {5}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopSPOTLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1395,7 +1506,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, User={1, number,#} ms, System={2, number,#} ms,  Total={3, number,#} ms, {4}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="TopThreadsLogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1418,7 +1530,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="{0}, total={1, number,#} ms, Type={3}, CPU={2, number, percent}"/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="aggCPULogger"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
@@ -1459,7 +1572,8 @@
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="customFormat" value="Total Number of Operators={1}, Zero Operators={2}, Non-Zero Operators={3}, Region Count={5}, Start time={0}, profile duration {4} minutes."/>
             <param name="logLevel" value="Info"/>
-            <param name="messageIdentifier" value="OperatorCount"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
             <param name="messagePrefix" value=""/>
             <param name="verbose" value="false"/>
         </box>
