@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>ProfileAnalysisDeploy</artifactId>
+    <packaging>ep-application</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ProfileAnalysisDeploy</name>
+    <description>My Application</description>
+
+    <!-- common definitions for this version of Streaming -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-application</artifactId>
+        <version>10.6.2-SNAPSHOT</version>
+    </parent>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.tibco.ep</groupId>
+                <artifactId>ep-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <skipTests>${skipLocalTests}</skipTests>
+                    <nodes>
+                        <node>A</node>
+                     </nodes>
+                 </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+    	<dependency>
+    		<groupId>com.example</groupId>
+    		<artifactId>SB_ProfileAnalysis</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    		<type>ep-eventflow-fragment</type>
+    	</dependency>
+    </dependencies>
+</project>
