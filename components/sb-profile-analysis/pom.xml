@@ -14,6 +14,7 @@
  
   <modules>
     <module>sb-profile-analysis</module>
+    <module>ProfileAnalysisDeploy</module>
   </modules>
 
   <licenses>

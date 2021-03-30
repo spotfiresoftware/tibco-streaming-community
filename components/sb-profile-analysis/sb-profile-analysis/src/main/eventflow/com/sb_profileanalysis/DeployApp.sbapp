@@ -59,6 +59,12 @@
             <output port="2" stream="out:Split_2"/>
             <param name="output-count" value="2"/>
         </box>
+        <box name="IsFilterNull" type="filter">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:IsFilterNull_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="notnull(systemenv(&quot;PROFILE_DATA_FILTER&quot;))"/>
+        </box>
         <box name="MakeCmd" type="map">
             <input port="1" stream="out:Split_2"/>
             <output port="1" stream="out:MakeCmd_1"/>
@@ -66,18 +72,18 @@
                 <item name="input" selection="none"/>
                 <expressions>
                     <include field="filename">systemenv("PROFILE_DATA_PATH")</include>
-                    <include field="start">timestamp()</include>
-                    <include field="end">timestamp()</include>
+                    <include field="start">timestamp(systemenv("PROFILE_START_TIME"))</include>
+                    <include field="end">timestamp(systemenv("PROFILE_END_TIME"))</include>
                 </expressions>
             </target-list>
         </box>
         <box name="MakeFilter" type="map">
-            <input port="1" stream="out:Split_1"/>
+            <input port="1" stream="out:IsFilterNull_1"/>
             <output port="1" stream="out:MakeFilter_1"/>
             <target-list>
                 <item name="input" selection="none"/>
                 <expressions>
-                    <include field="moduleName">string()</include>
+                    <include field="moduleName">systemenv("PROFILE_DATA_FILTER")</include>
                 </expressions>
             </target-list>
         </box>
