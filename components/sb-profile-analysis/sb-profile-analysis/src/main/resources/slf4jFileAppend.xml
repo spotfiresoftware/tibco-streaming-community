@@ -23,7 +23,7 @@
      -->
      
         <appender name="ProfileLog" class="ch.qos.logback.core.FileAppender">
-      <file>ProfileSummary.txt</file>
+      <file>${sb.profile.analysis.out.path}ProfileSummary.txt</file>
       <append>false</append>
       <encoder>
       <!--  
