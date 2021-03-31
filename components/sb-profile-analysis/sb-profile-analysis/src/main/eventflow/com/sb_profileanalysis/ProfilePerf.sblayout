@@ -69,8 +69,8 @@
         <param name="gui:y" value="14"/>
     </component>
     <component name="EndAndBig">
-        <param name="gui:x" value="36"/>
-        <param name="gui:y" value="-23"/>
+        <param name="gui:x" value="25"/>
+        <param name="gui:y" value="-86"/>
     </component>
     <component name="FilterTimeRange">
         <param name="gui:x" value="399"/>
@@ -83,9 +83,13 @@
         <param name="gui:width" value="63"/>
         <param name="gui:height" value="72"/>
     </component>
+    <component name="IsStarting">
+        <param name="gui:x" value="29"/>
+        <param name="gui:y" value="10"/>
+    </component>
     <component name="IsTime">
-        <param name="gui:x" value="-59"/>
-        <param name="gui:y" value="-120"/>
+        <param name="gui:x" value="-67"/>
+        <param name="gui:y" value="-192"/>
     </component>
     <component name="Log">
         <param name="gui:x" value="-276"/>
@@ -96,13 +100,13 @@
         <param name="gui:y" value="209"/>
     </component>
     <component name="LogRows">
-        <param name="gui:x" value="240"/>
-        <param name="gui:y" value="-31"/>
+        <param name="gui:x" value="229"/>
+        <param name="gui:y" value="-94"/>
         <param name="gui:height" value="76"/>
     </component>
     <component name="LogStartEnd">
-        <param name="gui:x" value="46"/>
-        <param name="gui:y" value="-120"/>
+        <param name="gui:x" value="38"/>
+        <param name="gui:y" value="-192"/>
     </component>
     <component name="NameFilter">
         <param name="gui:x" value="498"/>
@@ -117,8 +121,8 @@
         <param name="gui:y" value="210"/>
     </component>
     <component name="ScaleTotal">
-        <param name="gui:x" value="135"/>
-        <param name="gui:y" value="-24"/>
+        <param name="gui:x" value="124"/>
+        <param name="gui:y" value="-87"/>
     </component>
     <component name="SendOne">
         <param name="gui:x" value="559"/>
@@ -139,6 +143,10 @@
         <param name="gui:x" value="-308"/>
         <param name="gui:y" value="89"/>
         <param name="gui:height" value="63"/>
+    </component>
+    <component name="StartingLog">
+        <param name="gui:x" value="133"/>
+        <param name="gui:y" value="10"/>
     </component>
     <component name="Union">
         <param name="gui:x" value="1240"/>
@@ -190,8 +198,8 @@
         <param name="gui:width" value="63"/>
     </component>
     <component name="setStartEndTime">
-        <param name="gui:x" value="-164"/>
-        <param name="gui:y" value="-120"/>
+        <param name="gui:x" value="-172"/>
+        <param name="gui:y" value="-192"/>
     </component>
     <component name="shutdownRequest">
         <param name="gui:x" value="1340"/>

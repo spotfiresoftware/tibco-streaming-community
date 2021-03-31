@@ -430,7 +430,7 @@
             <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="update">
                 <item name="input" selection="all"/>
             </target-list>
-            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="no-match">
+            <target-list name="no-match">
                 <item name="input" selection="all"/>
             </target-list>
         </box>
@@ -780,7 +780,9 @@
             <input port="2" stream="out:getStreamsName_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="AddTimestamp" value="None"/>
             <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="Charset" value=""/>
             <param name="CheckForRollAtStartup" value="false"/>
             <param name="CompressData" value="false"/>
             <param name="FieldDelimiter" value=","/>
@@ -793,14 +795,19 @@
             <param name="MaxRollSecs" value="0"/>
             <param name="NullValueRepresentation" value="null"/>
             <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="PassThroughDataToEventPort" value="false"/>
+            <param name="RollHour" value="0"/>
+            <param name="RollMinute" value="0"/>
             <param name="RollPeriod" value="None"/>
+            <param name="RollSecond" value="0"/>
             <param name="StartControlPort" value="true"/>
             <param name="StartEventPort" value="false"/>
             <param name="StringQuoteCharacter" value="&quot;"/>
             <param name="StringQuoteOption" value="Quote if necessary"/>
             <param name="SyncOnFlush" value="false"/>
             <param name="ThrottleErrorMessages" value="false"/>
-            <param name="TsFormat" value="false"/>
+            <param name="TimestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="UseDefaultCharset" value="true"/>
             <param name="logLevel" value="INFO"/>
         </box>
         <box name="SaveZeroOperators" type="outputadapter">
