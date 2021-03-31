@@ -87,12 +87,13 @@ The analysis tool can be run in Studio in a number of ways, or as a deployed app
 You may wish to configure the summary report file location, no mater how you run the application.
 The default output is /tmp/ProfileSummary.txt.
 
-To run in studio, create a launch configuration for the com.sb_profileanalysis.ProfilePerf.sbapp.
-You will want to deselect the EventFlowDeploy.conf file in the main tab. Once the application is started
+To run in studio, navigate to com.sb_profileanalysis.ProfilePerf.sbapp and right click on that application,
+then Run as -> Eventflow Fragment. Once the application is started
 go to the SB Test/Debug perspective and select the Manual input tab. Select the 'filename' input
 and type the fully qualified path name to the profile data file.
  
-The included deploy project can be used to build a application zip. See StreamBase documentation for the
+The included deploy project can be used to build a application zip. You will need to rename the src/main/configurations/EventFlowDeploy.conf-hide
+to EventFlowDeploy.conf to identify what application to run. See StreamBase documentation for the
 ways in which you can deploy the application zip. Before installing the node you will run the
 application on, you should set the environment variable PROFILE_DATA_PATH to the absolute path
 name of the profile data file.
