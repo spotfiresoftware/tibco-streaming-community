@@ -90,7 +90,8 @@ The default output is /tmp/ProfileSummary.txt.
 To run in studio, navigate to com.sb_profileanalysis.ProfilePerf.sbapp and right click on that application,
 then Run as -> Eventflow Fragment. Once the application is started
 go to the SB Test/Debug perspective and select the Manual input tab. Select the 'filename' input
-and type the fully qualified path name to the profile data file.
+and type the fully qualified path name to the profile data file. There is a sample profile data file
+at src/main/resources/helloliveview.prof.gz.
  
 The included deploy project can be used to build a application zip. You will need to rename the src/main/configurations/EventFlowDeploy.conf-hide
 to EventFlowDeploy.conf to identify what application to run. See StreamBase documentation for the
