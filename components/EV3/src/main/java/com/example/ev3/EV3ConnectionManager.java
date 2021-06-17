@@ -1,5 +1,6 @@
 package com.example.ev3;
 
+import com.j4ev3.core.Sensor;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 
@@ -91,7 +92,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 			connectTo.manager = this;
 		}
 		
-		if(MACaddress.length() != 12) {
+		if(MACaddress.length() != 12) {//TODO:check that it's a hex number
 			throw new TypecheckException(String.format("The adapter requires a 12-character Bluetooth MAC address."));
 		}
 
@@ -130,6 +131,9 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		}
 		
 		//TODO: connect to robot; store it in shared object
+		connectTo.run(MACaddress);
+		getLogger().debug("HELLO HI DON'T MISS ME HELLO HI DON'T MISS MEHELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME");
+		getLogger().debug(connectTo.robot.getSensor().getDeviceModeName(Sensor.PORT_1, 0, 10));
 	}
 
 	/**

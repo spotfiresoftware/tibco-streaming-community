@@ -3,6 +3,8 @@
 //
 package com.example.ev3;
 
+import com.j4ev3.core.*;
+import com.j4ev3.desktop.*;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 
@@ -17,6 +19,7 @@ import com.streambase.sb.adapter.InputAdapter;
 import com.streambase.sb.adapter.OutputAdapter;
 import com.streambase.sb.operator.Operator;
 
+
 public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, Parameterizable
 {
 	private static EV3SharedObject instance = new EV3SharedObject();
@@ -24,14 +27,8 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	//stored shared data
 	public EV3ConnectionManager manager;
 	public List<Operator> operators = new ArrayList<Operator>();
+	public Brick robot;
 	
-	//robot connection: //TODO
-	
-
-	private EV3SharedObject(EV3ConnectionManager m){
-		//TODO
-		manager = m;
-	}
 	
 	private EV3SharedObject() {
 		manager = null;
@@ -50,6 +47,10 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+	}
+	
+	public void run(String address) {
+		robot = new Brick(new BluetoothComm(address));
 	}
 
 }

@@ -2,7 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
-
+    
+   
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
@@ -24,6 +25,14 @@
     		<groupId>com.tibco.ep.sb.adapter</groupId>
     		<artifactId>python</artifactId>
     		<version>10.6.1</version>
+    	</dependency>
+    	
+    	<!--  to install j4ev3 from the jar, once downloaded from https://github.com/LLeddy/J4EV3 -->
+    	<!--  mvn install:install-file -Dfile="<PATH TO JAR FILE>J4EV3WithDependencies.jar" -DgroupId="github.LLeddy" -DartifactId="J4EV3" -Dversion="17.7.26" -Dpackaging="jar" -->
+    	<dependency>
+    		<groupId>github.LLeddy</groupId>
+    		<artifactId>J4EV3</artifactId>
+    		<version>17.7.26</version>
     	</dependency>
     </dependencies>
 </project>
