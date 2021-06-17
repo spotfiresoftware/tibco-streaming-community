@@ -16,33 +16,26 @@ import com.streambase.sb.operator.*;
  * For in-depth information on implementing a custom Java Operator, please see
  * "Developing StreamBase Java Operators" in the StreamBase documentation.
  */
-public class EV3ConnectionManager extends Operator implements Parameterizable {
+public class EV3CommandAdapter extends Operator implements Parameterizable {
 
-	public static final long serialVersionUID = 1623849395795L;
-	private String displayName = "EV3 Connection Manager";
-	
-	//Properties
-	private String MACaddress;
-	
-	private SensorTypeEnum Port1Device;
-	private SensorTypeEnum Port2Device;
-	private SensorTypeEnum Port3Device;
-	private SensorTypeEnum Port4Device;
-	
-	private boolean PortAMotor;
-	private boolean PortBMotor;
-	private boolean PortCMotor;
-	private boolean PortDMotor;
-	
-	//shared object
-	private EV3SharedObject connectTo;
-	
-	
+	public static final long serialVersionUID = 1623944657934L;
 	// Local variables
-	private int inputPorts = 0;
+	private int inputPorts = 2;
 	private int outputPorts = 0;
+	private int nextOutputPort = 0;
 	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
 	
+	//Expected motor command schema
+	private static Schema.Field FIELD_COMMAND = Schema.createField(DataType.STRING, "Command");
+	private static Schema.Field FIELD_COMMAND_TARGET = Schema.createField(DataType.STRING, "TargetPort");
+	private static Schema.Field FIELD_COMMAND_VALUE = Schema.createField(DataType.INT, "Rate");
+	
+	//Expected LED command schema
+	private static Schema.Field FIELD_LED_ON = Schema.createField(DataType.STRING, "LED");
+	private static Schema.Field FIELD_LED_COLOR = Schema.createField(DataType.STRING, "Color");
+	private static Schema.Field FIELD_LED_BLINK = Schema.createField(DataType.BOOL, "Blink");
+	
+	private EV3SharedObject connectTo;
 
 	/**
 	* The constructor is called when the Operator instance is created, but before the Operator 
@@ -53,25 +46,12 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 	* of this operator is  dragged to the canvas, and serve as the default values for omitted
 	* optional parameters.
 	 */
-	public EV3ConnectionManager() {
+	public EV3CommandAdapter() {
 		super();
 		setPortHints(inputPorts, outputPorts);
-		setDisplayName(displayName);
+		setDisplayName(this.getClass().getSimpleName());
 		setShortDisplayName(this.getClass().getSimpleName());
-		
-		connectTo = EV3SharedObject.getEV3SharedObject();
-		
-		setMACaddress("");
-		
-		setPort1Device(SensorTypeEnum.NONE);
-		setPort2Device(SensorTypeEnum.NONE);
-		setPort3Device(SensorTypeEnum.NONE);
-		setPort4Device(SensorTypeEnum.NONE);
-		
-		setPortAMotor(false);
-		setPortBMotor(false);
-		setPortCMotor(false);
-		setPortDMotor(false);
+
 	}
 
 	/**
@@ -85,15 +65,28 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 	public void typecheck() throws TypecheckException {
 		// typecheck: require a specific number of input ports
 		requireInputPortCount(inputPorts);
+
+		connectTo = EV3SharedObject.getEV3SharedObject();
 		
-		//check that shared object is properly paired
-		if (connectTo.manager == null || !connectTo.manager.equals(this)) {
-			connectTo.manager = this;
-		}
+		if (connectTo.manager == null) {
+            throw new TypecheckException(String.format("The EV3 Command Adapter requires a EV3 Connection Manager to operate."));
+        }else {
+    		//Check that the connection has already been configured
+    		if(!connectTo.operators.contains(this)) {
+    			connectTo.operators.add(this);
+    		}
+        }
 		
-		if(MACaddress.length() != 12) {
-			throw new TypecheckException(String.format("The adapter requires a 12-character Bluetooth MAC address."));
-		}
+		
+		//check motor commands
+		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_COMMAND.getName()) || !getInputSchema(0).hasField(FIELD_COMMAND_TARGET.getName())) {
+            throw new TypecheckException(String.format("The control port schema must at least have fields named %s and %s of type String", FIELD_COMMAND.getName(), FIELD_COMMAND_TARGET.getName()));
+        }
+		
+		//check LED
+		if (getInputSchema(1) == null || !getInputSchema(1).hasField(FIELD_LED_ON.getName()) ) {
+            throw new TypecheckException(String.format("The control port schema must at least have a field named %s of type Boolean", FIELD_LED_ON.getName()));
+        }
 
 	}
 
@@ -109,7 +102,24 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info("operator processing a tuple at input port" + inputPort);
 		}
-		//This operator does not have an input port and does not process tuples.
+		// TODO only the first input port is processed; see the template code for typecheck()
+		if (inputPort > 0) {
+			getLogger().info("operator skipping tuple at input port" + inputPort);
+			return;
+		}
+
+		// create a new output tuple from the Schema at the port we are about to send to
+		Tuple out = outputSchemas[inputPort].createTuple();
+
+		// TODO this template just copies each field value from input port 0 (the first input port)
+		for (int i = 0; i < out.getSchema().getFieldCount(); ++i) {
+			// note: best performance is achieved retrieving values through Tuple#getField(Schema.Field)
+			out.setField(i, tuple.getField(i));
+		}
+
+		// nextOutputPort is used to send tuples by round-robin on every output port by this template.
+		sendOutput(nextOutputPort, out);
+		nextOutputPort = (nextOutputPort + 1) % outputPorts;
 	}
 
 	/**
@@ -128,108 +138,13 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		for (int i = 0; i < outputPorts; ++i) {
 			outputSchemas[i] = getRuntimeOutputSchema(i);
 		}
-		
-		//TODO: connect to robot; store it in shared object
 	}
 
 	/**
 	*  The shutdown method is called when the StreamBase server is in the process of shutting down.
 	*/
 	public void shutdown() {
-		connectTo.manager = null;
 
 	}
-	
-	//Visibility rules
-	public boolean shouldEnableStreamPort1() {
-		return Port1Device!=SensorTypeEnum.NONE;
-	}
-
-	public boolean shouldEnableStreamPort2() {
-		return Port2Device!=SensorTypeEnum.NONE;
-	}
-
-	public boolean shouldEnableStreamPort3() {
-		return Port3Device!=SensorTypeEnum.NONE;
-	}
-
-	public boolean shouldEnableStreamPort4() {
-		return Port4Device!=SensorTypeEnum.NONE;
-	}
-
-	//Getters & setters
-	public String getMACaddress() {
-		return MACaddress;
-	}
-
-	public void setMACaddress(String settingForSharedObject) {
-		this.MACaddress = settingForSharedObject;
-	}
-
-	public SensorTypeEnum getPort1Device() {
-		return Port1Device;
-	}
-
-	public void setPort1Device(SensorTypeEnum port1Device) {
-		Port1Device = port1Device;
-	}
-
-	public SensorTypeEnum getPort2Device() {
-		return Port2Device;
-	}
-
-	public void setPort2Device(SensorTypeEnum port2Device) {
-		Port2Device = port2Device;
-	}
-
-	public SensorTypeEnum getPort3Device() {
-		return Port3Device;
-	}
-
-	public void setPort3Device(SensorTypeEnum port3Device) {
-		Port3Device = port3Device;
-	}
-
-	public SensorTypeEnum getPort4Device() {
-		return Port4Device;
-	}
-
-	public void setPort4Device(SensorTypeEnum port4Device) {
-		Port4Device = port4Device;
-	}
-
-	public boolean isPortAMotor() {
-		return PortAMotor;
-	}
-
-	public void setPortAMotor(boolean portAMotor) {
-		PortAMotor = portAMotor;
-	}
-
-	public boolean isPortBMotor() {
-		return PortBMotor;
-	}
-
-	public void setPortBMotor(boolean portBMotor) {
-		PortBMotor = portBMotor;
-	}
-
-	public boolean isPortCMotor() {
-		return PortCMotor;
-	}
-
-	public void setPortCMotor(boolean portCMotor) {
-		PortCMotor = portCMotor;
-	}
-
-	public boolean isPortDMotor() {
-		return PortDMotor;
-	}
-
-	public void setPortDMotor(boolean portDMotor) {
-		PortDMotor = portDMotor;
-	}
-	
-	
 
 }

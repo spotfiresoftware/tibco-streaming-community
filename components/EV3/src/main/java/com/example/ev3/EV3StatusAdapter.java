@@ -17,7 +17,7 @@ import com.streambase.sb.util.Util;
  * For in-depth information on implementing a custom Java Operator, please see
  * "Developing StreamBase Java Operators" in the StreamBase documentation.
  */
-public class EV3InputAdapter extends Operator implements Parameterizable {
+public class EV3StatusAdapter extends Operator implements Parameterizable {
 
 	public static final long serialVersionUID = 1623698966801L;
 	// Properties
@@ -47,7 +47,7 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	private boolean StreamPort3;
 	private boolean StreamPort4;
 	
-	private EV3ConnectionManager connectTo;
+	private EV3SharedObject connectTo;
 	
 	
 	private String displayName = "MINDSTORMS EV3 Input Adapter";
@@ -67,9 +67,18 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	private static String FIELD_ROTATION = "Rotation";
 	private static String FIELD_SPEED = "Speed";
 
+	private static String FIELD_LEFT = "LeftButton";
+	private static String FIELD_CENTER = "CenterButton";
+	private static String FIELD_RIGHT = "RightButton";
+	private static String FIELD_UP = "UpButton";
+	private static String FIELD_DOWN = "DownButton";
+	
 	private static String FIELD_LISTEN = "Listen";
 	private static String FIELD_TOUCH = "Touch";
 	private static String FIELD_BUMPED = "Bumped";
+	private static String FIELD_COLOR = "Color";
+	private static String FIELD_REFLECT = "LightReflected";
+	private static String FIELD_AMBIENT = "LightAmbient";
 	private static String FIELD_DIST_CM = "Distance(cm)";
 	private static String FIELD_DIST_IN = "Distance(in)";
 	private static String FIELD_ANGLE = "Angle";
@@ -85,7 +94,7 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	* of this operator is  dragged to the canvas, and serve as the default values for omitted
 	* optional parameters.
 	 */
-	public EV3InputAdapter() {
+	public EV3StatusAdapter() {
 		super();
 		setPortHints(inputPorts, outputPorts);
 		setDisplayName(displayName);
@@ -98,9 +107,6 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 		setStreamPort2(false);
 		setStreamPort3(false);
 		setStreamPort4(false);
-		
-		setBoolLinkedToAdapter(false);
-		setLinkedAdapter("");
 	}
 
 	/**
@@ -120,6 +126,17 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_TARGET_PORT.getName())) {
             throw new TypecheckException(String.format("The control port schema must at least have a field named %s of type String", FIELD_TARGET_PORT.getName()));
         }
+		
+		connectTo = EV3SharedObject.getEV3SharedObject();
+		
+		if (connectTo.manager == null) {
+            throw new TypecheckException(String.format("The EV3 Status Adapter requires a EV3 Connection Manager to operate."));
+        }else {
+    		//Check that the connection has already been configured
+    		if(!connectTo.operators.contains(this)) {
+    			connectTo.operators.add(this);
+    		}
+        }
 
 		// you must specify a setOutputSchema for each port, so that StreamBase Studio
 		// knows how many output ports to draw for the output ports. If you do not
@@ -129,31 +146,57 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 		
 		int portNumber = 0;
 		
-		//one port for all motor readings for now
-		setOutputSchema(portNumber, createMotorOutputSchema(""));
+		//button port
+		setOutputSchema(portNumber, createButtonOutputSchema(""));
+		
+		//one for each motor connected
+		if (connectTo.manager.isPortAMotor()) {
+			portNumber++;
+			setOutputSchema(portNumber, createMotorOutputSchema(""));
+			//getLogger().debug("Port A: true");
+		}
+		if (connectTo.manager.isPortBMotor()) {
+			portNumber++;
+			setOutputSchema(portNumber, createMotorOutputSchema(""));
+			//getLogger().debug("Port B: true");
+		}
+		if (connectTo.manager.isPortCMotor()) {
+			portNumber++;
+			setOutputSchema(portNumber, createMotorOutputSchema(""));
+			//getLogger().debug("Port C: true");
+		}
+		if (connectTo.manager.isPortDMotor()) {
+			portNumber++;
+			setOutputSchema(portNumber, createMotorOutputSchema(""));
+			//getLogger().debug("Port D: true");
+		}
+		
 		
 		//one for each applicable sensor
-		//TODO:relink this to connection manager
-		/*
-		if (Port1Device != SensorTypeEnum.NONE) {
+		if (connectTo.manager.getPort1Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(Port1Device));
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort1Device()));
+			//getLogger().debug("Port 1: " + connectTo.manager.getPort1Device());
 		}
-		if (Port2Device != SensorTypeEnum.NONE) {
+		if (connectTo.manager.getPort2Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(Port2Device));
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort2Device()));
+			//getLogger().debug("Port 2: " + connectTo.manager.getPort2Device());
 		}
-		if (Port3Device != SensorTypeEnum.NONE) {
+		if (connectTo.manager.getPort3Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(Port3Device));
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort3Device()));
+			//getLogger().debug("Port 3: " + connectTo.manager.getPort3Device());
 		}
-		if (Port4Device != SensorTypeEnum.NONE) {
+		if (connectTo.manager.getPort4Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(Port4Device));
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort4Device()));
+			//getLogger().debug("Port 4: " + connectTo.manager.getPort4Device());
 		}
-		*/
 		
-		//TODO button port too
+		//getLogger().debug("Port number recalculated to "+ portNumber);
+		//getLogger().debug("Is Port A a motor (according to status adapter's paired manager)?" + connectTo.manager.isPortAMotor());
+
 	}
 
 	/**
@@ -220,20 +263,29 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 * Control
 	 * 
 	 * Output:
+	 * -ButtonOutput
 	 * -MotorOutput
 	 * -TouchOutput
-	 * ColorOutput
+	 * -ColorOutput
 	 * -UltraOutput
 	 * -GyroOutput
 	 * -IROutput
 	 */
 	
+	public Schema createButtonOutputSchema(String mainName) {
+		Schema buttonSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "buttonSchema"),
+				new Schema.Field(FIELD_LEFT,CompleteDataType.forString()),
+				new Schema.Field(FIELD_CENTER,CompleteDataType.forString()),
+				new Schema.Field(FIELD_RIGHT,CompleteDataType.forString()),
+				new Schema.Field(FIELD_UP,CompleteDataType.forString()),
+				new Schema.Field(FIELD_DOWN,CompleteDataType.forString())
+				);
+		return buttonSchema;
+	}
+	
 	 public Schema createMotorOutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema motorSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "motorSchema"),
 	                    new Schema.Field(FIELD_DEGREES,returnType),
 	                    new Schema.Field(FIELD_ROTATION,returnType),
@@ -260,11 +312,8 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 }
 	 
 	 public Schema createTouchOutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema touchSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "touchSchema"),
 	                    new Schema.Field(FIELD_TOUCH,returnType),
 	                    new Schema.Field(FIELD_BUMPED,CompleteDataType.forBoolean())
@@ -273,14 +322,12 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 }
 	 
 	 public Schema createColorOutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema colorSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "colorSchema"),
-	        		new Schema.Field(FIELD_DIST_CM,returnType)
-	        		//TODO fill with enum
+	        		new Schema.Field(FIELD_COLOR,CompleteDataType.forString()),
+	        		new Schema.Field(FIELD_REFLECT, returnType),
+	        		new Schema.Field(FIELD_AMBIENT, returnType)
 	                    );
 	        return colorSchema;
 	 }
@@ -300,11 +347,8 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 		}
 	 
 	 public Schema createUltraOutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema ultraSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "ultraSchema"),
 	                    new Schema.Field(FIELD_DIST_CM,returnType),
 	                    new Schema.Field(FIELD_DIST_IN,returnType),
@@ -314,11 +358,8 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 }
 	 
 	 public Schema createGyroOutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema gyroSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "gyroSchema"),
 	                    new Schema.Field(FIELD_ANGLE,returnType),
 	                    new Schema.Field(FIELD_RATE,returnType)
@@ -327,11 +368,8 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 }
 	 
 	 public Schema createIROutputSchema(String mainName) {
-		 CompleteDataType returnType = CompleteDataType.forDouble();
-		 //if a percentage is requested, it will be returned as integer values
-		 if (OutputType == OutputTypeEnum.PERCENT) {
-			 returnType = CompleteDataType.forInt();
-		 }
+		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
+		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema IRSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "irSchema"),
 	                    new Schema.Field(FIELD_DISTANCE,returnType)
 	                    );
@@ -428,55 +466,21 @@ public class EV3InputAdapter extends Operator implements Parameterizable {
 	 *  @see Parameterizable 
 	 */
 
-	public boolean shouldEnableOutputType() {
-		// TODO implement custom enablement logic here
-		return true;
-	}
-
 	public boolean shouldEnableStreamPortA() {
-		// TODO implement custom enablement logic here
-		return true;
+		return connectTo.manager == null? false : connectTo.manager.isPortAMotor();
 	}
 
 	public boolean shouldEnableStreamPortB() {
-		// TODO implement custom enablement logic here
-		return true;
+		return connectTo.manager == null? false : connectTo.manager.isPortBMotor();
 	}
 
 	public boolean shouldEnableStreamPortC() {
-		// TODO implement custom enablement logic here
-		return true;
+		return connectTo.manager == null? false : connectTo.manager.isPortCMotor();
 	}
 
 	public boolean shouldEnableStreamPortD() {
-		// TODO implement custom enablement logic here
-		return true;
+		return connectTo.manager == null? false : connectTo.manager.isPortDMotor();
 	}
-	
-	
-	/*
-	 * Code for setting up the robot configuration
-	 */
-	
-	private boolean BoolLinkedToAdapter;
-	private String linkedAdapter;
-	
-	public boolean isBoolLinkedToAdapter() {
-		return BoolLinkedToAdapter;
-	}
-
-	public void setBoolLinkedToAdapter(boolean isLinkedToAdapter) {
-		this.BoolLinkedToAdapter = isLinkedToAdapter;
-	}
-
-	public String getLinkedAdapter() {
-		return linkedAdapter;
-	}
-
-	public void setLinkedAdapter(String linkedAdapter) {
-		this.linkedAdapter = linkedAdapter;
-	}
-	
 
 
 }

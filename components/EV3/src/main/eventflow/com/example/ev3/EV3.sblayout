@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><application-layout>
-    <component name="InputStream">
-        <param name="gui:x" value="-371"/>
-        <param name="gui:y" value="82"/>
+    <component name="CommandInputStream1">
+        <param name="gui:x" value="-369"/>
+        <param name="gui:y" value="32"/>
+    </component>
+    <component name="CommandInputStream2">
+        <param name="gui:x" value="-356"/>
+        <param name="gui:y" value="128"/>
+    </component>
+    <component name="StatusInputStream">
+        <param name="gui:x" value="-381"/>
+        <param name="gui:y" value="-90"/>
     </component>
     <component name="Java">
-        <param name="gui:x" value="-232"/>
-        <param name="gui:y" value="75"/>
-    </component>
-    <component name="Java2">
-        <param name="gui:x" value="18"/>
-        <param name="gui:y" value="-53"/>
-    </component>
-    <component name="Java3">
-        <param name="gui:x" value="137"/>
+        <param name="gui:x" value="-203"/>
         <param name="gui:y" value="60"/>
     </component>
     <component name="Java4">
-        <param name="gui:x" value="-755"/>
-        <param name="gui:y" value="7"/>
+        <param name="gui:x" value="-542"/>
+        <param name="gui:y" value="-65"/>
     </component>
 </application-layout>
