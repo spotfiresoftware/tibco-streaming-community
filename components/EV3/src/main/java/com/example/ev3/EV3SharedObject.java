@@ -25,7 +25,7 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	private static EV3SharedObject instance = new EV3SharedObject();
 	
 	//stored shared data
-	public EV3ConnectionManager manager;
+	protected EV3ConnectionManager manager;
 	public List<Operator> operators = new ArrayList<Operator>();
 	public Brick robot;
 	
@@ -51,6 +51,15 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	
 	public void run(String address) {
 		robot = new Brick(new BluetoothComm(address));
+	}
+	
+	//getters & setters (checked)
+	public void setManager(EV3ConnectionManager m) {
+		this.manager = m;
+	}
+	
+	public EV3ConnectionManager getManager() {
+		return this.manager;
 	}
 
 }

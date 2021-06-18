@@ -1,5 +1,7 @@
 package com.example.ev3;
 
+import java.util.HashMap;
+
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 import com.streambase.sb.util.Util;
@@ -47,7 +49,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	private boolean StreamPort3;
 	private boolean StreamPort4;
 	
-	private EV3SharedObject connectTo;
+	private EV3SharedObject connectTo = EV3SharedObject.getEV3SharedObject();
 	
 	
 	private String displayName = "MINDSTORMS EV3 Input Adapter";
@@ -56,6 +58,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	private int outputPorts = 8;
 	private int nextOutputPort = 0;
 	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
+	private HashMap<String, Integer> outputPortNames;
 	
 	//Input schema definition
 	private static Schema.Field FIELD_TARGET_PORT = Schema.createField(DataType.STRING, "TargetPort");
@@ -128,11 +131,13 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
         }
 		
 		connectTo = EV3SharedObject.getEV3SharedObject();
+
 		
-		if (connectTo.manager == null) {
+		if (connectTo.getManager() == null) {
             throw new TypecheckException(String.format("The EV3 Status Adapter requires a EV3 Connection Manager to operate."));
         }else {
     		//Check that the connection has already been configured
+        	
     		if(!connectTo.operators.contains(this)) {
     			connectTo.operators.add(this);
     		}
@@ -150,52 +155,51 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 		setOutputSchema(portNumber, createButtonOutputSchema(""));
 		
 		//one for each motor connected
-		if (connectTo.manager.isPortAMotor()) {
+		if (connectTo.getManager().isPortAMotor()) {
 			portNumber++;
 			setOutputSchema(portNumber, createMotorOutputSchema(""));
 			//getLogger().debug("Port A: true");
 		}
-		if (connectTo.manager.isPortBMotor()) {
+		if (connectTo.getManager().isPortBMotor()) {
 			portNumber++;
 			setOutputSchema(portNumber, createMotorOutputSchema(""));
 			//getLogger().debug("Port B: true");
 		}
-		if (connectTo.manager.isPortCMotor()) {
+		if (connectTo.getManager().isPortCMotor()) {
 			portNumber++;
 			setOutputSchema(portNumber, createMotorOutputSchema(""));
 			//getLogger().debug("Port C: true");
 		}
-		if (connectTo.manager.isPortDMotor()) {
+		if (connectTo.getManager().isPortDMotor()) {
 			portNumber++;
 			setOutputSchema(portNumber, createMotorOutputSchema(""));
 			//getLogger().debug("Port D: true");
 		}
 		
-		
 		//one for each applicable sensor
-		if (connectTo.manager.getPort1Device() != SensorTypeEnum.NONE) {
+		if (connectTo.getManager().getPort1Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort1Device()));
-			//getLogger().debug("Port 1: " + connectTo.manager.getPort1Device());
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.getManager().getPort1Device()));
+			//getLogger().debug("Port 1: " + connectTo.getManager().getPort1Device());
 		}
-		if (connectTo.manager.getPort2Device() != SensorTypeEnum.NONE) {
+		if (connectTo.getManager().getPort2Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort2Device()));
-			//getLogger().debug("Port 2: " + connectTo.manager.getPort2Device());
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.getManager().getPort2Device()));
+			//getLogger().debug("Port 2: " + connectTo.getManager().getPort2Device());
 		}
-		if (connectTo.manager.getPort3Device() != SensorTypeEnum.NONE) {
+		if (connectTo.getManager().getPort3Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort3Device()));
-			//getLogger().debug("Port 3: " + connectTo.manager.getPort3Device());
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.getManager().getPort3Device()));
+			//getLogger().debug("Port 3: " + connectTo.getManager().getPort3Device());
 		}
-		if (connectTo.manager.getPort4Device() != SensorTypeEnum.NONE) {
+		if (connectTo.getManager().getPort4Device() != SensorTypeEnum.NONE) {
 			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.manager.getPort4Device()));
-			//getLogger().debug("Port 4: " + connectTo.manager.getPort4Device());
+			setOutputSchema(portNumber, getSchemaForSensorType(connectTo.getManager().getPort4Device()));
+			//getLogger().debug("Port 4: " + connectTo.getManager().getPort4Device());
 		}
 		
 		//getLogger().debug("Port number recalculated to "+ portNumber);
-		//getLogger().debug("Is Port A a motor (according to status adapter's paired manager)?" + connectTo.manager.isPortAMotor());
+		//getLogger().debug("Is Port A a motor (according to status adapter's paired manager)?" + connectTo.getManager().isPortAMotor());
 
 	}
 
@@ -211,24 +215,20 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info("operator processing a tuple at input port" + inputPort);
 		}
-		// TODO only the first input port is processed; see the template code for typecheck()
-		if (inputPort > 0) {
-			getLogger().info("operator skipping tuple at input port" + inputPort);
-			return;
+		// TODO only the first input port is processed
+		if (inputPort == 0) {
+			String target = tuple.getString(FIELD_TARGET_PORT);
+			if (outputPortNames.containsKey(target)) {
+				int outputPort = outputPortNames.get(target);
+				Tuple out = outputSchemas[outputPort].createTuple();
+				//TODO fill tuple accordingly
+				sendOutput(outputPort, out);
+				//TODO change any values required
+			}else {
+				getLogger().warn(String.format("No output port available for target %s", target));
+			}
 		}
-
-		// create a new output tuple from the Schema at the port we are about to send to
-		Tuple out = outputSchemas[inputPort].createTuple();
-
-		// TODO this template just copies each field value from input port 0 (the first input port)
-		for (int i = 0; i < out.getSchema().getFieldCount(); ++i) {
-			// note: best performance is achieved retrieving values through Tuple#getField(Schema.Field)
-			out.setField(i, tuple.getField(i));
-		}
-
-		// nextOutputPort is used to send tuples by round-robin on every output port by this template.
-		sendOutput(nextOutputPort, out);
-		nextOutputPort = (nextOutputPort + 1) % outputPorts;
+		//TODO process button values
 	}
 
 	/**
@@ -246,6 +246,48 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 
 		for (int i = 0; i < outputPorts; ++i) {
 			outputSchemas[i] = getRuntimeOutputSchema(i);
+		}
+		
+		//map each port name to the port number it connects to TODO
+		outputPortNames = new HashMap<String, Integer>();
+		int portNumber = 0;
+		
+		//TODO button output port command?
+		
+		//for the four motors:
+		if (connectTo.getManager().isPortAMotor()) {
+			portNumber++;
+			outputPortNames.put("A", portNumber);
+		}
+		if (connectTo.getManager().isPortBMotor()) {
+			portNumber++;
+			outputPortNames.put("B", portNumber);
+		}
+		if (connectTo.getManager().isPortCMotor()) {
+			portNumber++;
+			outputPortNames.put("C", portNumber);
+		}
+		if (connectTo.getManager().isPortDMotor()) {
+			portNumber++;
+			outputPortNames.put("D", portNumber);
+		}
+		
+		//for the four sensors:
+		if (connectTo.getManager().getPort1Device() != SensorTypeEnum.NONE) {
+			portNumber++;
+			outputPortNames.put("1", portNumber);
+		}
+		if (connectTo.getManager().getPort2Device() != SensorTypeEnum.NONE) {
+			portNumber++;
+			outputPortNames.put("2", portNumber);
+		}
+		if (connectTo.getManager().getPort3Device() != SensorTypeEnum.NONE) {
+			portNumber++;
+			outputPortNames.put("3", portNumber);
+		}
+		if (connectTo.getManager().getPort4Device() != SensorTypeEnum.NONE) {
+			portNumber++;
+			outputPortNames.put("4", portNumber);
 		}
 	}
 
@@ -272,6 +314,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	 * -IROutput
 	 */
 	
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	public Schema createButtonOutputSchema(String mainName) {
 		Schema buttonSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "buttonSchema"),
 				new Schema.Field(FIELD_LEFT,CompleteDataType.forString()),
@@ -283,6 +329,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 		return buttonSchema;
 	}
 	
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	 public Schema createMotorOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
@@ -294,6 +344,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	        return motorSchema;
 	 }
 	 
+	 /**
+	 * @param type
+	 * @return Schema
+	 */	 
 	 public Schema getSchemaForSensorType (SensorTypeEnum type) {
 		 switch(type) {
 		 case TOUCH:
@@ -311,6 +365,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 		 }
 	 }
 	 
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	 public Schema createTouchOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
@@ -321,6 +379,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	        return touchSchema;
 	 }
 	 
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	 public Schema createColorOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
@@ -332,7 +394,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	        return colorSchema;
 	 }
 	 
-	 public static enum ColorEnum {
+
+	public static enum ColorEnum {
 			NONE("None"), BLACK("Black"),BLUE("Blue"),GREEN("Green"),YELLOW("Yellow"),RED("Red"),WHITE("White"),BROWN("Brown");
 
 			private final String rep;
@@ -346,7 +409,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 			}
 		}
 	 
-	 public Schema createUltraOutputSchema(String mainName) {
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */
+	public Schema createUltraOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema ultraSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "ultraSchema"),
@@ -357,6 +424,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	        return ultraSchema;
 	 }
 	 
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	 public Schema createGyroOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
@@ -367,6 +438,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	        return gyroSchema;
 	 }
 	 
+	 
+	 /**
+	 * @param mainName
+	 * @return Schema
+	 */	 
 	 public Schema createIROutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
@@ -467,19 +543,35 @@ public class EV3StatusAdapter extends Operator implements Parameterizable {
 	 */
 
 	public boolean shouldEnableStreamPortA() {
-		return connectTo.manager == null? false : connectTo.manager.isPortAMotor();
+		return connectTo.getManager() == null? false : connectTo.getManager().isPortAMotor();
 	}
 
 	public boolean shouldEnableStreamPortB() {
-		return connectTo.manager == null? false : connectTo.manager.isPortBMotor();
+		return connectTo.getManager() == null? false : connectTo.getManager().isPortBMotor();
 	}
 
 	public boolean shouldEnableStreamPortC() {
-		return connectTo.manager == null? false : connectTo.manager.isPortCMotor();
+		return connectTo.getManager() == null? false : connectTo.getManager().isPortCMotor();
 	}
 
 	public boolean shouldEnableStreamPortD() {
-		return connectTo.manager == null? false : connectTo.manager.isPortDMotor();
+		return connectTo.getManager() == null? false : connectTo.getManager().isPortDMotor();
+	}
+	
+	public boolean shouldEnableStreamPort1() {
+		return connectTo.getManager() == null? false : connectTo.getManager().getPort1Device() !=SensorTypeEnum.NONE;
+	}
+
+	public boolean shouldEnableStreamPort2() {
+		return connectTo.getManager() == null? false : connectTo.getManager().getPort2Device() !=SensorTypeEnum.NONE;
+	}
+
+	public boolean shouldEnableStreamPort3() {
+		return connectTo.getManager() == null? false : connectTo.getManager().getPort3Device() !=SensorTypeEnum.NONE;
+	}
+
+	public boolean shouldEnableStreamPort4() {
+		return connectTo.getManager() == null? false : connectTo.getManager().getPort4Device() !=SensorTypeEnum.NONE;
 	}
 
 

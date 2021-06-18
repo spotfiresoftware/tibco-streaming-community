@@ -1,5 +1,6 @@
 package com.example.ev3;
 
+import com.j4ev3.core.LED;
 import com.j4ev3.core.Sensor;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
@@ -61,6 +62,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		setShortDisplayName(this.getClass().getSimpleName());
 		
 		connectTo = EV3SharedObject.getEV3SharedObject();
+		connectTo.setManager(this);
 		
 		setMACaddress("");
 		
@@ -88,14 +90,27 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		requireInputPortCount(inputPorts);
 		
 		//check that shared object is properly paired
-		if (connectTo.manager == null || !connectTo.manager.equals(this)) {
-			connectTo.manager = this;
+		if (connectTo.getManager() == null || !connectTo.getManager().equals(this)) {
+			connectTo.setManager(this);
 		}
 		
-		if(MACaddress.length() != 12) {//TODO:check that it's a hex number
+		if(!isValid(MACaddress)) {
 			throw new TypecheckException(String.format("The adapter requires a 12-character Bluetooth MAC address."));
 		}
+		getLogger().info("Typechecking now.");
 
+	}
+	
+	private boolean isValid(String MAC) {
+		int length = MAC.length();
+		if(length != 12) return false; //must be 12 characters
+		for (int i = 0; i<length; i++) {
+			char ch = MAC.charAt(i);
+			if ((ch < '0' || ch > '9') && (ch < 'A' || ch > 'F')) { //must be a hex number
+				return false;
+	        }
+		}
+		return true;
 	}
 
 	/**
@@ -130,36 +145,23 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 			outputSchemas[i] = getRuntimeOutputSchema(i);
 		}
 		
-		//TODO: connect to robot; store it in shared object
 		connectTo.run(MACaddress);
-		getLogger().debug("HELLO HI DON'T MISS ME HELLO HI DON'T MISS MEHELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME HELLO HI DON'T MISS ME");
-		getLogger().debug(connectTo.robot.getSensor().getDeviceModeName(Sensor.PORT_1, 0, 10));
+		connectTo.robot.getLED().setPattern(LED.LED_ORANGE_PULSE);
+		getLogger().info("Connection to %s successful.", MACaddress);
 	}
 
 	/**
 	*  The shutdown method is called when the StreamBase server is in the process of shutting down.
 	*/
 	public void shutdown() {
-		connectTo.manager = null;
-
+		connectTo.setManager(null);
+		getLogger().info("Shutting down");
 	}
 	
-	//Visibility rules
-	public boolean shouldEnableStreamPort1() {
-		return Port1Device!=SensorTypeEnum.NONE;
+	public void postShutdown() {
+		getLogger().info("Post-shutting down");
 	}
-
-	public boolean shouldEnableStreamPort2() {
-		return Port2Device!=SensorTypeEnum.NONE;
-	}
-
-	public boolean shouldEnableStreamPort3() {
-		return Port3Device!=SensorTypeEnum.NONE;
-	}
-
-	public boolean shouldEnableStreamPort4() {
-		return Port4Device!=SensorTypeEnum.NONE;
-	}
+	
 
 	//Getters & setters
 	public String getMACaddress() {
