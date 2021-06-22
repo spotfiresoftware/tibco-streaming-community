@@ -8,15 +8,20 @@
         <param name="gui:y" value="128"/>
     </component>
     <component name="StatusInputStream">
-        <param name="gui:x" value="-381"/>
-        <param name="gui:y" value="-90"/>
+        <param name="gui:x" value="-369"/>
+        <param name="gui:y" value="-163"/>
+    </component>
+    <component name="Command">
+        <param name="gui:x" value="33"/>
+        <param name="gui:y" value="-175"/>
     </component>
     <component name="Java">
-        <param name="gui:x" value="-203"/>
-        <param name="gui:y" value="60"/>
+        <param name="gui:x" value="-122"/>
+        <param name="gui:y" value="56"/>
     </component>
-    <component name="Java4">
-        <param name="gui:x" value="-542"/>
-        <param name="gui:y" value="-65"/>
+    <component name="Java2">
+        <param name="gui:x" value="-245"/>
+        <param name="gui:y" value="-170"/>
+        <param name="gui:height" value="117"/>
     </component>
 </application-layout>

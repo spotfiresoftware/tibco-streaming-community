@@ -1,5 +1,7 @@
 package com.example.ev3;
 
+import java.beans.IntrospectionException;
+
 import com.streambase.sb.operator.parameter.*;
 
 /**
@@ -15,8 +17,12 @@ public class EV3CommandAdapterBeanInfo extends SBSimpleBeanInfo {
 	* The order of properties below determines the order they are displayed within
 	* the StreamBase Studio property view. 
 	*/
-	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() {
-		return new SBPropertyDescriptor[] {};
+	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() throws IntrospectionException {
+		return new SBPropertyDescriptor[] {
+				new SBPropertyDescriptor("ConnectionManagerName", EV3CommandAdapter.class)
+                .displayName("Linked Connection Manager name")
+                .description("Set this to the name of the Connection Manager adapter you wish to share a connection with.")
+		};
 	}
 
 }

@@ -18,7 +18,7 @@ import com.streambase.sb.operator.*;
  * For in-depth information on implementing a custom Java Operator, please see
  * "Developing StreamBase Java Operators" in the StreamBase documentation.
  */
-public class EV3ConnectionManager extends Operator implements Parameterizable {
+public class EV3ConnectionManager extends Operator implements Parameterizable,ISharableAdapter {
 
 	public static final long serialVersionUID = 1623849395795L;
 	private String displayName = "EV3 Connection Manager";
@@ -26,17 +26,6 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 	//Properties
 	private String MACaddress;
 	
-	private SensorTypeEnum Port1Device;
-	private SensorTypeEnum Port2Device;
-	private SensorTypeEnum Port3Device;
-	private SensorTypeEnum Port4Device;
-	
-	private boolean PortAMotor;
-	private boolean PortBMotor;
-	private boolean PortCMotor;
-	private boolean PortDMotor;
-	
-	//shared object
 	private EV3SharedObject connectTo;
 	
 	
@@ -61,20 +50,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		setDisplayName(displayName);
 		setShortDisplayName(this.getClass().getSimpleName());
 		
-		connectTo = EV3SharedObject.getEV3SharedObject();
-		connectTo.setManager(this);
-		
 		setMACaddress("");
-		
-		setPort1Device(SensorTypeEnum.NONE);
-		setPort2Device(SensorTypeEnum.NONE);
-		setPort3Device(SensorTypeEnum.NONE);
-		setPort4Device(SensorTypeEnum.NONE);
-		
-		setPortAMotor(false);
-		setPortBMotor(false);
-		setPortCMotor(false);
-		setPortDMotor(false);
 	}
 
 	/**
@@ -89,11 +65,6 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		// typecheck: require a specific number of input ports
 		requireInputPortCount(inputPorts);
 		
-		//check that shared object is properly paired
-		if (connectTo.getManager() == null || !connectTo.getManager().equals(this)) {
-			connectTo.setManager(this);
-		}
-		
 		if(!isValid(MACaddress)) {
 			throw new TypecheckException(String.format("The adapter requires a 12-character Bluetooth MAC address."));
 		}
@@ -106,7 +77,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		if(length != 12) return false; //must be 12 characters
 		for (int i = 0; i<length; i++) {
 			char ch = MAC.charAt(i);
-			if ((ch < '0' || ch > '9') && (ch < 'A' || ch > 'F')) { //must be a hex number
+			if ((ch < '0' || ch > '9') && (ch < 'A' || ch > 'F') && (ch < 'a' || ch > 'f')) { //must be a hex number
 				return false;
 	        }
 		}
@@ -137,6 +108,9 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 	 */
 	public void init() throws StreamBaseException {
 		super.init();
+		//connect to shared object;
+		connectTo = EV3SharedObject.getSharedObjectInstance(this);
+		
 		// for best performance, consider caching input or output Schema.Field objects for
 		// use later in processTuple()
 		outputSchemas = new Schema[outputPorts];
@@ -146,7 +120,6 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		}
 		
 		connectTo.run(MACaddress);
-		connectTo.robot.getLED().setPattern(LED.LED_ORANGE_PULSE);
 		getLogger().info("Connection to %s successful.", MACaddress);
 	}
 
@@ -154,7 +127,6 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 	*  The shutdown method is called when the StreamBase server is in the process of shutting down.
 	*/
 	public void shutdown() {
-		connectTo.setManager(null);
 		getLogger().info("Shutting down");
 	}
 	
@@ -172,70 +144,10 @@ public class EV3ConnectionManager extends Operator implements Parameterizable {
 		this.MACaddress = settingForSharedObject;
 	}
 
-	public SensorTypeEnum getPort1Device() {
-		return Port1Device;
+	@Override
+	public String getConnectionManagerName() {
+		return this.getName();
 	}
 
-	public void setPort1Device(SensorTypeEnum port1Device) {
-		Port1Device = port1Device;
-	}
-
-	public SensorTypeEnum getPort2Device() {
-		return Port2Device;
-	}
-
-	public void setPort2Device(SensorTypeEnum port2Device) {
-		Port2Device = port2Device;
-	}
-
-	public SensorTypeEnum getPort3Device() {
-		return Port3Device;
-	}
-
-	public void setPort3Device(SensorTypeEnum port3Device) {
-		Port3Device = port3Device;
-	}
-
-	public SensorTypeEnum getPort4Device() {
-		return Port4Device;
-	}
-
-	public void setPort4Device(SensorTypeEnum port4Device) {
-		Port4Device = port4Device;
-	}
-
-	public boolean isPortAMotor() {
-		return PortAMotor;
-	}
-
-	public void setPortAMotor(boolean portAMotor) {
-		PortAMotor = portAMotor;
-	}
-
-	public boolean isPortBMotor() {
-		return PortBMotor;
-	}
-
-	public void setPortBMotor(boolean portBMotor) {
-		PortBMotor = portBMotor;
-	}
-
-	public boolean isPortCMotor() {
-		return PortCMotor;
-	}
-
-	public void setPortCMotor(boolean portCMotor) {
-		PortCMotor = portCMotor;
-	}
-
-	public boolean isPortDMotor() {
-		return PortDMotor;
-	}
-
-	public void setPortDMotor(boolean portDMotor) {
-		PortDMotor = portDMotor;
-	}
-	
-	
 
 }

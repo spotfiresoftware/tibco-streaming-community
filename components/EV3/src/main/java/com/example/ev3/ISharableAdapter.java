@@ -25,7 +25,8 @@ public interface ISharableAdapter
     public String getContainerName();
     
     /**
-     * @return the name of the adapter with which to link, or null otherwise.
+     * @return the name of the connection manager to share
      */
-    public String getAdapterToLinkWith();
+    public String getConnectionManagerName();
+    
 }

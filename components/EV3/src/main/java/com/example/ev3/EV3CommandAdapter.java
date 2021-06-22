@@ -1,5 +1,6 @@
 package com.example.ev3;
 
+import com.j4ev3.core.LED;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 
@@ -16,7 +17,7 @@ import com.streambase.sb.operator.*;
  * For in-depth information on implementing a custom Java Operator, please see
  * "Developing StreamBase Java Operators" in the StreamBase documentation.
  */
-public class EV3CommandAdapter extends Operator implements Parameterizable {
+public class EV3CommandAdapter extends Operator implements Parameterizable,ISharableAdapter {
 
 	public static final long serialVersionUID = 1623944657934L;
 	// Local variables
@@ -36,6 +37,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable {
 	private static Schema.Field FIELD_LED_BLINK = Schema.createField(DataType.BOOL, "Blink");
 	
 	private EV3SharedObject connectTo;
+	public String ConnectionManagerName;
 
 	/**
 	* The constructor is called when the Operator instance is created, but before the Operator 
@@ -65,18 +67,10 @@ public class EV3CommandAdapter extends Operator implements Parameterizable {
 	public void typecheck() throws TypecheckException {
 		// typecheck: require a specific number of input ports
 		requireInputPortCount(inputPorts);
-
-		connectTo = EV3SharedObject.getEV3SharedObject();
 		
-		if (connectTo.manager == null) {
-            throw new TypecheckException(String.format("The EV3 Command Adapter requires a EV3 Connection Manager to operate."));
-        }else {
-    		//Check that the connection has already been configured
-    		if(!connectTo.operators.contains(this)) {
-    			connectTo.operators.add(this);
-    		}
-        }
-		
+		if(ConnectionManagerName.length() < 1) {
+			throw new TypecheckException(String.format("The 'Linked Connection Manager Name' must not be left blank."));
+		}
 		
 		//check motor commands
 		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_COMMAND.getName()) || !getInputSchema(0).hasField(FIELD_COMMAND_TARGET.getName())) {
@@ -131,12 +125,21 @@ public class EV3CommandAdapter extends Operator implements Parameterizable {
 	 */
 	public void init() throws StreamBaseException {
 		super.init();
+		//connect to shared object;
+		connectTo = EV3SharedObject.getSharedObjectInstance(this);
+				
 		// for best performance, consider caching input or output Schema.Field objects for
 		// use later in processTuple()
 		outputSchemas = new Schema[outputPorts];
 
 		for (int i = 0; i < outputPorts; ++i) {
 			outputSchemas[i] = getRuntimeOutputSchema(i);
+		}
+		
+		//TODO remove
+		if (connectTo.robot != null) {
+			getLogger().info("Command adapter initialized after connection manager, sending orange LED");
+			connectTo.robot.getLED().setPattern(LED.LED_ORANGE_PULSE);
 		}
 	}
 
@@ -145,6 +148,14 @@ public class EV3CommandAdapter extends Operator implements Parameterizable {
 	*/
 	public void shutdown() {
 
+	}
+
+	@Override
+	public String getConnectionManagerName() {
+		return ConnectionManagerName;
+	}
+	public void setConnectionManagerName(String s) {
+		ConnectionManagerName = s;
 	}
 
 }

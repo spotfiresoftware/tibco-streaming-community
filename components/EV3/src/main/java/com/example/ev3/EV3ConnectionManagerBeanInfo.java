@@ -23,35 +23,6 @@ public class EV3ConnectionManagerBeanInfo extends SBSimpleBeanInfo {
                 new SBPropertyDescriptor("MACaddress", EV3ConnectionManager.class)
                 .displayName("Bluetooth MAC address")
                 .description("Set this to the 12-character MAC address of your EV3 brick.")
-                .setUIHints(UIHints.create().setTab("Robot Configuration")),
-               
-                
-                //physical port configuration
-                new JavaEnumPropertyDescriptor<SensorTypeEnum>("Port1Device", EV3ConnectionManager.class, SensorTypeEnum.class)
-				.displayName("EV3 Port 1 Device").description("")
-				.setUIHints(UIHints.create().setTab("Robot Configuration")),
-				new JavaEnumPropertyDescriptor<SensorTypeEnum>("Port2Device", EV3ConnectionManager.class, SensorTypeEnum.class)
-				.displayName("EV3 Port 2 Device").description("")
-				.setUIHints(UIHints.create().setTab("Robot Configuration")),
-				new JavaEnumPropertyDescriptor<SensorTypeEnum>("Port3Device", EV3ConnectionManager.class, SensorTypeEnum.class)
-				.displayName("EV3 Port 3 Device").description("")
-				.setUIHints(UIHints.create().setTab("Robot Configuration")),
-				new JavaEnumPropertyDescriptor<SensorTypeEnum>("Port4Device", EV3ConnectionManager.class, SensorTypeEnum.class)
-				.displayName("EV3 Port 4 Device").description("")
-				.setUIHints(UIHints.create().setTab("Robot Configuration")),
-				
-				new SBPropertyDescriptor("PortAMotor", EV3ConnectionManager.class)
-                .displayName("Motor connected to port A?").description("")
-                .setUIHints(UIHints.create().setTab("Robot Configuration")),
-                new SBPropertyDescriptor("PortBMotor", EV3ConnectionManager.class)
-                .displayName("Motor connected to port B?").description("")
-                .setUIHints(UIHints.create().setTab("Robot Configuration")),
-                new SBPropertyDescriptor("PortCMotor", EV3ConnectionManager.class)
-                .displayName("Motor connected to port C?").description("")
-                .setUIHints(UIHints.create().setTab("Robot Configuration")),
-                new SBPropertyDescriptor("PortDMotor", EV3ConnectionManager.class)
-                .displayName("Motor connected to port D?").description("")
-                .setUIHints(UIHints.create().setTab("Robot Configuration"))
 		};
 		return p;
 	}
