@@ -2,7 +2,7 @@ package com.example.ev3;
 
 import java.util.HashMap;
 
-import com.j4ev3.core.LED;
+import com.j4ev3.core.*;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 import com.streambase.sb.util.Util;
@@ -81,7 +81,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	//Output schema fieldnames
 	private static String FIELD_DEGREES = "Degrees";
 	private static String FIELD_ROTATION = "Rotation";
-	private static String FIELD_SPEED = "Speed";
+	private static String FIELD_POWER = "Power";
 
 	private static String FIELD_LEFT = "LeftButton";
 	private static String FIELD_CENTER = "CenterButton";
@@ -99,7 +99,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	private static String FIELD_DIST_IN = "Distance(in)";
 	private static String FIELD_ANGLE = "Angle";
 	private static String FIELD_RATE = "Rate";
-	private static String FIELD_DISTANCE = "Distance";
+	private static String FIELD_PROXIMITY = "Proximity";
 
 	/**
 	* The constructor is called when the Operator instance is created, but before the Operator 
@@ -236,8 +236,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 			String target = tuple.getString(FIELD_TARGET_PORT);
 			if (outputPortNames.containsKey(target)) {
 				int outputPort = outputPortNames.get(target);
-				Tuple out = outputSchemas[outputPort].createTuple();
-				//TODO fill tuple accordingly
+				Tuple out = buildSensorTuple(target);
 				sendOutput(outputPort, out);
 				//TODO change any values required
 			}else {
@@ -245,6 +244,101 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 			}
 		}
 		//TODO process button values
+	}
+	
+	public Tuple buildSensorTuple(String targetPort) throws TupleException {
+		int outputPort = outputPortNames.get(targetPort);
+		byte outputPortByte = getPortByte(targetPort);
+		int sensorType;
+		Tuple out = outputSchemas[outputPort].createTuple();
+		
+		switch (outputSchemas[outputPort].getName()) {
+		case "motorSchema":
+			sensorType = Sensor.TYPE_LARGE_MOTOR;
+			//TODO check that this doesn't cause problems to call both motors "large"
+			out = setFieldByOutputType(out, FIELD_DEGREES, outputPortByte, sensorType, Sensor.LARGE_MOTOR_DEGREE);
+			out = setFieldByOutputType(out, FIELD_ROTATION, outputPortByte, sensorType, Sensor.LARGE_MOTOR_ROTATION);
+			out = setFieldByOutputType(out, FIELD_POWER, outputPortByte, sensorType, Sensor.LARGE_MOTOR_POWER);
+			break;
+		case "touchSchema":
+			sensorType = Sensor.TYPE_TOUCH;
+			out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
+			//TODO this one needs to be set as a boolean regardless
+			//out = setFieldByOutputType(out, FIELD_BUMPED, outputPortByte, sensorType, Sensor.TOUCH_BUMPED);
+			break;
+		case "colorSchema":
+			sensorType = Sensor.TYPE_COLOR;
+			//TODO this one needs to be set as a string regardless
+			//out = setFieldByOutputType(out, FIELD_COLOR, outputPortByte, sensorType, Sensor.COLOR_COLOR);
+			out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
+			out = setFieldByOutputType(out, FIELD_AMBIENT, outputPortByte, sensorType, Sensor.COLOR_AMBIENT);
+			break;
+		case "ultraSchema":
+			sensorType = Sensor.TYPE_ULTRASONIC;
+			out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM );
+			out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
+			//TODO this one needs to be set as a boolean regardless
+			//out = setFieldByOutputType(out, FIELD_LISTEN, outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN);
+			break;
+		case "gyroSchema":
+			sensorType = Sensor.TYPE_GYRO;
+			out = setFieldByOutputType(out, FIELD_ANGLE, outputPortByte, sensorType, Sensor.GYRO_ANGLE );
+			out = setFieldByOutputType(out, FIELD_RATE, outputPortByte, sensorType, Sensor.GYRO_RATE);
+		case "irSchema":
+			sensorType = Sensor.TYPE_IR;
+			out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
+		default:
+				break;
+		}
+		
+		return out;
+	}
+	
+	
+	/**
+	 * Handles the setting of sensor field according to the output type as set in "properties"
+	 * @param tuple
+	 * @param field
+	 * @param port
+	 * @param sensorType
+	 * @param sensorMode
+	 * @return Tuple with the appropriate field set
+	 * @throws TupleException
+	 */
+	public Tuple setFieldByOutputType(Tuple tuple, String field, byte port, int sensorType, int sensorMode) throws TupleException {
+		Sensor sensorRead = connectTo.robot.getSensor();
+		switch (OutputType) {
+		case RAW:
+			tuple.setField(field, sensorRead.getValueRaw(port, sensorType, sensorMode));
+		case SI:
+			tuple.setField(field, sensorRead.getValueSI(port, sensorType, sensorMode));
+		case PERCENT:
+			tuple.setField(field, sensorRead.getValuePercent(port, sensorType, sensorMode));
+		}
+		
+		return tuple;
+	}
+	
+	
+	/**
+	 * Translates String ports to their byte values according to j4ev3 Sensor class
+	 * @param name of port
+	 * @return byte value of port address
+	 */
+	public byte getPortByte(String name) {
+		switch (name) {
+		case "A": return Sensor.PORT_A;
+		case "B": return Sensor.PORT_B;
+		case "C": return Sensor.PORT_C;
+		case "D": return Sensor.PORT_D;
+		case "1": return Sensor.PORT_1;
+		case "2": return Sensor.PORT_2;
+		case "3": return Sensor.PORT_3;
+		case "4": return Sensor.PORT_4;
+		default:
+			getLogger().warn(String.format("No robot port found for name %s", name));
+			return (byte) 0x00;
+		}
 	}
 
 	/**
@@ -309,12 +403,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 			portNumber++;
 			outputPortNames.put("4", portNumber);
 		}
-		
-		//TODO remove
-				if (connectTo.robot != null) {
-					getLogger().info("Status adapter initialized after connection manager, sending orange LED");
-					connectTo.robot.getLED().setPattern(LED.LED_ORANGE_PULSE);
-				}
 	}
 
 	/**
@@ -345,7 +433,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 * @return Schema
 	 */	 
 	public Schema createButtonOutputSchema(String mainName) {
-		Schema buttonSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "buttonSchema"),
+		Schema buttonSchema = new Schema("buttonSchema",
 				new Schema.Field(FIELD_LEFT,CompleteDataType.forString()),
 				new Schema.Field(FIELD_CENTER,CompleteDataType.forString()),
 				new Schema.Field(FIELD_RIGHT,CompleteDataType.forString()),
@@ -362,10 +450,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 public Schema createMotorOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema motorSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "motorSchema"),
+	        Schema motorSchema = new Schema("motorSchema",
 	                    new Schema.Field(FIELD_DEGREES,returnType),
 	                    new Schema.Field(FIELD_ROTATION,returnType),
-	                    new Schema.Field(FIELD_SPEED,returnType)
+	                    new Schema.Field(FIELD_POWER,returnType)
 	                    );
 	        return motorSchema;
 	 }
@@ -398,7 +486,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 public Schema createTouchOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema touchSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "touchSchema"),
+	        Schema touchSchema = new Schema("touchSchema",
 	                    new Schema.Field(FIELD_TOUCH,returnType),
 	                    new Schema.Field(FIELD_BUMPED,CompleteDataType.forBoolean())
 	                    );
@@ -412,7 +500,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 public Schema createColorOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema colorSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "colorSchema"),
+	        Schema colorSchema = new Schema("colorSchema",
 	        		new Schema.Field(FIELD_COLOR,CompleteDataType.forString()),
 	        		new Schema.Field(FIELD_REFLECT, returnType),
 	        		new Schema.Field(FIELD_AMBIENT, returnType)
@@ -442,7 +530,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	public Schema createUltraOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema ultraSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "ultraSchema"),
+	        Schema ultraSchema = new Schema("ultraSchema",
 	                    new Schema.Field(FIELD_DIST_CM,returnType),
 	                    new Schema.Field(FIELD_DIST_IN,returnType),
 	                    new Schema.Field(FIELD_LISTEN,CompleteDataType.forBoolean())
@@ -457,7 +545,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 public Schema createGyroOutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema gyroSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "gyroSchema"),
+	        Schema gyroSchema = new Schema("gyroSchema",
 	                    new Schema.Field(FIELD_ANGLE,returnType),
 	                    new Schema.Field(FIELD_RATE,returnType)
 	                    );
@@ -472,8 +560,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 public Schema createIROutputSchema(String mainName) {
 		 CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT? CompleteDataType.forInt() : CompleteDataType.forDouble();
 		 //if a percentage is requested, it will be an integer; otherwise a double
-	        Schema IRSchema = new Schema(mainName + (Util.isEmpty(mainName) ? "" : "irSchema"),
-	                    new Schema.Field(FIELD_DISTANCE,returnType)
+	        Schema IRSchema = new Schema("irSchema",
+	                    new Schema.Field(FIELD_PROXIMITY,returnType)
 	                    );
 	        return IRSchema;
 	 }
