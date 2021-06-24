@@ -3,6 +3,7 @@
 //
 package com.example.ev3;
 
+import com.example.ev3.EV3StatusAdapter.ColorEnum;
 import com.j4ev3.core.*;
 import com.j4ev3.desktop.*;
 import com.streambase.sb.*;
@@ -16,7 +17,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.streambase.sb.StreamBaseException;
 import com.streambase.sb.adapter.InputAdapter;
 import com.streambase.sb.adapter.OutputAdapter;
 import com.streambase.sb.operator.Operator;
@@ -237,6 +237,27 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 		 if (robot == null)
              throw new StreamBaseException("Could not connect to robot at given MAC address");
 	}
+	
+	//METHODS FOR COMMUNICATING WITH ROBOT
+	/**
+	 * Translates String ports to their byte values according to j4ev3 Sensor class
+	 * @param name of port
+	 * @return byte value of port address
+	 */
+	public byte getPortByte(String name) {
+		switch (name) {
+		case "A": return Sensor.PORT_A;
+		case "B": return Sensor.PORT_B;
+		case "C": return Sensor.PORT_C;
+		case "D": return Sensor.PORT_D;
+		case "1": return Sensor.PORT_1;
+		case "2": return Sensor.PORT_2;
+		case "3": return Sensor.PORT_3;
+		case "4": return Sensor.PORT_4;
+		}
+		return 0x00;//TODO throw an error
+	}
+	
 
 	//GETTERS & SETTERS
 	

@@ -24,4 +24,8 @@
         <param name="gui:y" value="-170"/>
         <param name="gui:height" value="117"/>
     </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="-59"/>
+        <param name="gui:y" value="-85"/>
+    </component>
 </application-layout>
