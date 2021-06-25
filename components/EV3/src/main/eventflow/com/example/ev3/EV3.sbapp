@@ -41,7 +41,7 @@
         <box name="Java2" type="java">
             <input port="1" stream="StatusInputStream"/>
             <output port="1" stream="out:Java2_1"/>
-            <output port="2" stream="OutputStream"/>
+            <output port="2" stream="out:Java2_2"/>
             <output port="3" stream="out:Java2_3"/>
             <output port="4" stream="out:Java2_4"/>
             <param name="start:state" value="true"/>
@@ -50,21 +50,20 @@
             <param name="OutputType" value="Raw"/>
             <param name="Port1Device" value="Color"/>
             <param name="Port2Device" value="Touch"/>
-            <param name="Port3Device" value="Infrared"/>
+            <param name="Port3Device" value="None"/>
             <param name="Port4Device" value="None"/>
-            <param name="PortAMotor" value="false"/>
+            <param name="PortAMotor" value="true"/>
             <param name="PortBMotor" value="false"/>
             <param name="PortCMotor" value="false"/>
             <param name="PortDMotor" value="false"/>
-            <param name="StreamPort1" value="false"/>
-            <param name="StreamPort2" value="false"/>
+            <param name="StreamPort1" value="true"/>
+            <param name="StreamPort2" value="true"/>
             <param name="StreamPort3" value="false"/>
             <param name="StreamPort4" value="false"/>
-            <param name="StreamPortA" value="true"/>
+            <param name="StreamPortA" value="false"/>
             <param name="StreamPortB" value="false"/>
             <param name="StreamPortC" value="false"/>
             <param name="StreamPortD" value="false"/>
         </box>
-        <output-stream name="OutputStream"/>
     </add>
 </modify>

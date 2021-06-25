@@ -50,6 +50,20 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	private boolean StreamPort3;
 	private boolean StreamPort4;
 	
+	boolean[] streamProperties = {StreamPortA, StreamPortB, StreamPortC, StreamPortD, StreamPort1, StreamPort2, StreamPort3, StreamPort4};
+	String[] streamNames = {"A","B","C","D","1","2","3","4"};
+	
+	private boolean runtimeStreamPortA;
+	private boolean runtimeStreamPortB;
+	private boolean runtimeStreamPortC;
+	private boolean runtimeStreamPortD;
+	private boolean runtimeStreamPort1;
+	private boolean runtimeStreamPort2;
+	private boolean runtimeStreamPort3;
+	private boolean runtimeStreamPort4;
+	
+	boolean[] runtimeStreamProperties = {runtimeStreamPortA, runtimeStreamPortB, runtimeStreamPortC, runtimeStreamPortD, runtimeStreamPort1, runtimeStreamPort2, runtimeStreamPort3, runtimeStreamPort4};
+	
 	private SensorTypeEnum Port1Device;
 	private SensorTypeEnum Port2Device;
 	private SensorTypeEnum Port3Device;
@@ -120,10 +134,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		setStreamPortB(false);
 		setStreamPortC(false);
 		setStreamPortD(false);
-		setStreamPort1(false);
-		setStreamPort2(false);
-		setStreamPort3(false);
-		setStreamPort4(false);
 		
 		setPort1Device(SensorTypeEnum.NONE);
 		setPort2Device(SensorTypeEnum.NONE);
@@ -233,10 +243,12 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		if (inputPort == 0) {
 			String target = tuple.getString(FIELD_TARGET_PORT.getName());
 			if (outputPortNames.containsKey(target)) {
+				
 				int outputPort = outputPortNames.get(target);
 				Tuple out = buildSensorTuple(target);
 				sendOutput(outputPort, out);
 				//TODO change any values required
+				
 			}else {
 				getLogger().warn(String.format("No output port available for target %s", target));
 			}
@@ -260,7 +272,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 				out = setFieldByOutputType(out, FIELD_ROTATION, outputPortByte, sensorType, Sensor.LARGE_MOTOR_ROTATION);
 				out = setFieldByOutputType(out, FIELD_POWER, outputPortByte, sensorType, Sensor.LARGE_MOTOR_POWER);
 				break;
-			case "touchSchema":
+			case "Touch":
 				sensorType = Sensor.TYPE_TOUCH;
 				out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
 				//TODO this one needs to be set as a boolean regardless
@@ -269,7 +281,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 				//boolean isBumped = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.TOUCH_BUMPS) > 0.5);
 				//out.setField(FIELD_BUMPED, isBumped);
 				break;
-			case "colorSchema":
+			case "Color":
 				sensorType = Sensor.TYPE_COLOR;
 				//out = setFieldByOutputType(out, FIELD_COLOR, outputPortByte, sensorType, Sensor.COLOR_COLOR);
 				int color = connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.COLOR_COLOR);
@@ -278,7 +290,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 				out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
 				out = setFieldByOutputType(out, FIELD_AMBIENT, outputPortByte, sensorType, Sensor.COLOR_AMBIENT);
 				break;
-			case "ultraSchema":
+			case "Ultrasonic":
 				sensorType = Sensor.TYPE_ULTRASONIC;
 				out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM );
 				out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
@@ -286,11 +298,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 				boolean listen = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN) > 0.5);
 				out.setField(FIELD_LISTEN, listen);
 				break;
-			case "gyroSchema":
+			case "Gyroscope":
 				sensorType = Sensor.TYPE_GYRO;
 				out = setFieldByOutputType(out, FIELD_ANGLE, outputPortByte, sensorType, Sensor.GYRO_ANGLE );
 				out = setFieldByOutputType(out, FIELD_RATE, outputPortByte, sensorType, Sensor.GYRO_RATE);
-			case "irSchema":
+			case "Infrared":
 				sensorType = Sensor.TYPE_IR;
 				out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
 			default:
@@ -342,7 +354,9 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 */
 	public void init() throws StreamBaseException {
 		super.init();
-		
+		// Register the object so it will be run as a thread managed by StreamBase.
+        registerRunnable(this, true);
+        
 		//connect to shared object;
 		connectTo = EV3SharedObject.getSharedObjectInstance(this);
 		
@@ -395,58 +409,29 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 			portNumber++;
 			outputPortNames.put("4", portNumber);
 		}
+		
+		//set up streaming
+		getLogger().info("Stream port A: " + StreamPortA);
+		getLogger().info("Stream port 1: " + StreamPort1);
+		for (int i = 0; i< streamProperties.length; i++) {
+			getLogger().info("Stream property: " + streamProperties[i]);
+			runtimeStreamProperties[i] = streamProperties[i];
+		}
 	}
 	
 	public void run() {
+		getLogger().info("Starting to run.");
+		getLogger().info(""+shouldRun());
 		while (shouldRun()) {
-			try { //TODO make the on/off stream value change
-				if (StreamPortA) {
-					String target = "A";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPortB) {
-					String target = "B";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPortC) {
-					String target = "C";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPortD) {
-					String target = "D";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPort1) {
-					String target = "1";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPort2) {
-					String target = "2";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPort3) {
-					String target = "3";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
-				}
-				if (StreamPort4) {
-					String target = "4";
-					int outputPort = outputPortNames.get(target);
-					Tuple out = buildSensorTuple(target);
-					sendOutput(outputPort, out);
+			try {
+				for (int i = 0; i< streamProperties.length; i++) {
+					if (streamProperties[i]) {
+						getLogger().info("Requesting tuple from port " + streamNames[i]);
+						String target = streamNames[i];
+						int outputPort = outputPortNames.get(target);
+						Tuple out = buildSensorTuple(target);
+						sendOutput(outputPort, out);
+					}
 				}
 			}catch (Exception e) {
 				 getLogger().error("Error", e);
@@ -538,7 +523,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		 //if a percentage is requested, it will be an integer; otherwise a double
 	        Schema touchSchema = new Schema(SensorTypeEnum.TOUCH.toString(),
 	                    new Schema.Field(FIELD_TOUCH,returnType),
-	                    new Schema.Field(FIELD_BUMPED,CompleteDataType.forBoolean())
+	                    new Schema.Field(FIELD_BUMPED,returnType)
 	                    );
 	        return touchSchema;
 	 }
