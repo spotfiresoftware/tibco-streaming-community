@@ -67,7 +67,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	
 	private String displayName = "MINDSTORMS EV3 Input Adapter";
 	// Local variables
-	private int inputPorts = 1;
+	private int inputPorts = 2;
 	private int outputPorts = 8;
 	private int nextOutputPort = 0;
 	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
@@ -203,7 +203,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 				getLogger().warn(String.format("No output port available for target %s", target));
 			}
 		}
-		//TODO process button values
+		//process button values
+		if (inputPort == 1) {
+			Tuple out = buildButtonTuple();
+			sendOutput(outputPorts-1, out);
+		}
 	}
 	
 	public boolean isPort(String s) {
@@ -310,6 +314,20 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 			}
 		}
 	
+		return out;
+	}
+	
+	public Tuple buildButtonTuple() {
+		Tuple out = createButtonOutputSchema("").createTuple();
+		try {
+			out.setField(FIELD_LEFT, connectTo.robot.getButton().buttonPressed(Button.LEFT_BUTTON));
+			out.setField(FIELD_RIGHT, connectTo.robot.getButton().buttonPressed(Button.RIGHT_BUTTON));
+			out.setField(FIELD_CENTER, connectTo.robot.getButton().buttonPressed(Button.ENTER_BUTTON));
+			out.setField(FIELD_UP, connectTo.robot.getButton().buttonPressed(Button.UP_BUTTON));
+			out.setField(FIELD_DOWN, connectTo.robot.getButton().buttonPressed(Button.DOWN_BUTTON));
+		}catch (Exception e) {
+			 getLogger().error("Error", e);
+		}
 		return out;
 	}
 	
@@ -455,11 +473,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 */	 
 	public Schema createButtonOutputSchema(String mainName) {
 		Schema buttonSchema = new Schema("buttonSchema",
-				new Schema.Field(FIELD_LEFT,CompleteDataType.forString()),
-				new Schema.Field(FIELD_CENTER,CompleteDataType.forString()),
-				new Schema.Field(FIELD_RIGHT,CompleteDataType.forString()),
-				new Schema.Field(FIELD_UP,CompleteDataType.forString()),
-				new Schema.Field(FIELD_DOWN,CompleteDataType.forString())
+				new Schema.Field(FIELD_LEFT,CompleteDataType.forInt()),
+				new Schema.Field(FIELD_CENTER,CompleteDataType.forInt()),
+				new Schema.Field(FIELD_RIGHT,CompleteDataType.forInt()),
+				new Schema.Field(FIELD_UP,CompleteDataType.forInt()),
+				new Schema.Field(FIELD_DOWN,CompleteDataType.forInt())
 				);
 		return buttonSchema;
 	}

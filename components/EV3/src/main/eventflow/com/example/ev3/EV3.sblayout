@@ -8,8 +8,12 @@
         <param name="gui:y" value="128"/>
     </component>
     <component name="StatusInputStream">
-        <param name="gui:x" value="-369"/>
-        <param name="gui:y" value="-163"/>
+        <param name="gui:x" value="-422"/>
+        <param name="gui:y" value="-213"/>
+    </component>
+    <component name="StatusInputStreamCopy">
+        <param name="gui:x" value="-450"/>
+        <param name="gui:y" value="-96"/>
     </component>
     <component name="Command">
         <param name="gui:x" value="33"/>
