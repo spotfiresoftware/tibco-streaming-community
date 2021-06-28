@@ -50,20 +50,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	private boolean StreamPort3;
 	private boolean StreamPort4;
 	
-	boolean[] streamProperties = {StreamPortA, StreamPortB, StreamPortC, StreamPortD, StreamPort1, StreamPort2, StreamPort3, StreamPort4};
-	String[] streamNames = {"A","B","C","D","1","2","3","4"};
-	
-	private boolean runtimeStreamPortA;
-	private boolean runtimeStreamPortB;
-	private boolean runtimeStreamPortC;
-	private boolean runtimeStreamPortD;
-	private boolean runtimeStreamPort1;
-	private boolean runtimeStreamPort2;
-	private boolean runtimeStreamPort3;
-	private boolean runtimeStreamPort4;
-	
-	boolean[] runtimeStreamProperties = {runtimeStreamPortA, runtimeStreamPortB, runtimeStreamPortC, runtimeStreamPortD, runtimeStreamPort1, runtimeStreamPort2, runtimeStreamPort3, runtimeStreamPort4};
-	
 	private SensorTypeEnum Port1Device;
 	private SensorTypeEnum Port2Device;
 	private SensorTypeEnum Port3Device;
@@ -85,12 +71,13 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	private int outputPorts = 8;
 	private int nextOutputPort = 0;
 	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
+	private RobotPort[] botPortsInfo; //caches the schemas and port names being used
 	private HashMap<String, Integer> outputPortNames;
 	
 	//Input schema definition
 	private static Schema.Field FIELD_TARGET_PORT = Schema.createField(DataType.STRING, "TargetPort");
 	private static Schema.Field FIELD_STREAM = Schema.createField(DataType.BOOL, "Stream");
-	private static Schema.Field FIELD_SENSOR_MODE  = Schema.createField(DataType.INT, "SensorMode");
+	//private static Schema.Field FIELD_SENSOR_MODE  = Schema.createField(DataType.INT, "SensorMode");
 	
 	//Output schema fieldnames
 	private static String FIELD_DEGREES = "Degrees";
@@ -158,8 +145,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		// typecheck: require a specific number of input ports
 		requireInputPortCount(inputPorts);
 
-		// TODO Ensure that all properties have valid values, and typecheck the input schemas here
-		
 		if(ConnectionManagerName.length() < 1) {
 			throw new TypecheckException(String.format("The 'Linked Connection Manager Name' must not be left blank."));
 		}
@@ -175,56 +160,20 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		
 		
 		int portNumber = 0;
+		String[] portNames = {"A","B","C","D","1","2","3","4"};
+		
+		for (int i = 0; i<portNames.length; i++) { //for each named port:
+			if (isPort(portNames[i])) {//if it is set to be used;
+				setOutputSchema(portNumber, getSchemaForSensorType(getPortDevice(portNames[i])));//set its schema
+				portNumber++;//increment
+			}
+		}
 		
 		//button port
 		setOutputSchema(portNumber, createButtonOutputSchema(""));
 		
-		//one for each motor connected
-		if (isPortAMotor()) {
-			portNumber++;
-			setOutputSchema(portNumber, createMotorOutputSchema(""));
-			//getLogger().debug("Port A: true");
-		}
-		if (isPortBMotor()) {
-			portNumber++;
-			setOutputSchema(portNumber, createMotorOutputSchema(""));
-			//getLogger().debug("Port B: true");
-		}
-		if (isPortCMotor()) {
-			portNumber++;
-			setOutputSchema(portNumber, createMotorOutputSchema(""));
-			//getLogger().debug("Port C: true");
-		}
-		if (isPortDMotor()) {
-			portNumber++;
-			setOutputSchema(portNumber, createMotorOutputSchema(""));
-			//getLogger().debug("Port D: true");
-		}
-		
-		//one for each applicable sensor
-		if (getPort1Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(getPort1Device()));
-			//getLogger().debug("Port 1: " + getPort1Device());
-		}
-		if (getPort2Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(getPort2Device()));
-			//getLogger().debug("Port 2: " + getPort2Device());
-		}
-		if (getPort3Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(getPort3Device()));
-			//getLogger().debug("Port 3: " + getPort3Device());
-		}
-		if (getPort4Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			setOutputSchema(portNumber, getSchemaForSensorType(getPort4Device()));
-			//getLogger().debug("Port 4: " + getPort4Device());
-		}
-		
 		outputPorts = portNumber+1;//since the ports start at index zero the number will be one more
-
+ 
 	}
 
 	/**
@@ -243,12 +192,13 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		if (inputPort == 0) {
 			String target = tuple.getString(FIELD_TARGET_PORT.getName());
 			if (outputPortNames.containsKey(target)) {
-				
 				int outputPort = outputPortNames.get(target);
 				Tuple out = buildSensorTuple(target);
 				sendOutput(outputPort, out);
-				//TODO change any values required
-				
+				//change the streaming value if needed
+				if (tuple.getSchema().hasField(FIELD_STREAM.getName())) {
+					botPortsInfo[outputPort].setStreaming(tuple.getBoolean(FIELD_STREAM.getName()));;
+				}
 			}else {
 				getLogger().warn(String.format("No output port available for target %s", target));
 			}
@@ -256,62 +206,110 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		//TODO process button values
 	}
 	
+	public boolean isPort(String s) {
+		switch (s) {
+		case "A": return isPortAMotor();
+		case "B": return isPortBMotor();
+		case "C": return isPortCMotor();
+		case "D": return isPortDMotor();
+		case "1": return getPort1Device() != SensorTypeEnum.NONE;
+		case "2": return getPort2Device() != SensorTypeEnum.NONE;
+		case "3": return getPort3Device() != SensorTypeEnum.NONE;
+		case "4": return getPort4Device() != SensorTypeEnum.NONE;
+		default:
+			return false;
+		}
+	}
+	
+	public SensorTypeEnum getPortDevice(String s) {
+		switch (s) {
+			case "1": return getPort1Device();
+			case "2": return getPort2Device();
+			case "3": return getPort3Device();
+			case "4": return getPort4Device();
+			default:
+				return SensorTypeEnum.NONE;
+		}
+	}
+	
+	public boolean getPortStreaming(String s) {
+		switch (s) {
+			case "A": return getStreamPortA();
+			case "B": return getStreamPortB();
+			case "C": return getStreamPortC();
+			case "D": return getStreamPortD();
+			case "1": return getStreamPort1();
+			case "2": return getStreamPort2();
+			case "3": return getStreamPort3();
+			case "4": return getStreamPort4();
+			default: return false;
+		}
+	}
+	
 	public Tuple buildSensorTuple(String targetPort){
+		
 		int outputPort = outputPortNames.get(targetPort);
-		byte outputPortByte = connectTo.getPortByte(targetPort);
 		int sensorType;
-		Tuple out = outputSchemas[outputPort].createTuple();
 		
-		try {
+		//this information is helpfully cached
+		byte outputPortByte = botPortsInfo[outputPort].getAddress();
+		Tuple out = botPortsInfo[outputPort].getScheme().createTuple();
 		
-			switch (outputSchemas[outputPort].getName()) {
-			case "motorSchema":
+		if (!(botPortsInfo[outputPort] instanceof RobotSensorPort)) {
+			try {
 				sensorType = Sensor.TYPE_LARGE_MOTOR;
 				//TODO check that this doesn't cause problems to call both motors "large"
 				out = setFieldByOutputType(out, FIELD_DEGREES, outputPortByte, sensorType, Sensor.LARGE_MOTOR_DEGREE);
 				out = setFieldByOutputType(out, FIELD_ROTATION, outputPortByte, sensorType, Sensor.LARGE_MOTOR_ROTATION);
 				out = setFieldByOutputType(out, FIELD_POWER, outputPortByte, sensorType, Sensor.LARGE_MOTOR_POWER);
-				break;
-			case "Touch":
-				sensorType = Sensor.TYPE_TOUCH;
-				out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
-				//TODO this one needs to be set as a boolean regardless
-				//TODO actually what ARE these two values, and how do they differ? 
-				out = setFieldByOutputType(out, FIELD_BUMPED, outputPortByte, sensorType, Sensor.TOUCH_BUMPS);
-				//boolean isBumped = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.TOUCH_BUMPS) > 0.5);
-				//out.setField(FIELD_BUMPED, isBumped);
-				break;
-			case "Color":
-				sensorType = Sensor.TYPE_COLOR;
-				//out = setFieldByOutputType(out, FIELD_COLOR, outputPortByte, sensorType, Sensor.COLOR_COLOR);
-				int color = connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.COLOR_COLOR);
-				String colorName = ColorEnum.values()[color].toString();
-				out.setField(FIELD_COLOR, colorName);
-				out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
-				out = setFieldByOutputType(out, FIELD_AMBIENT, outputPortByte, sensorType, Sensor.COLOR_AMBIENT);
-				break;
-			case "Ultrasonic":
-				sensorType = Sensor.TYPE_ULTRASONIC;
-				out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM );
-				out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
-				//out = setFieldByOutputType(out, FIELD_LISTEN, outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN);
-				boolean listen = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN) > 0.5);
-				out.setField(FIELD_LISTEN, listen);
-				break;
-			case "Gyroscope":
-				sensorType = Sensor.TYPE_GYRO;
-				out = setFieldByOutputType(out, FIELD_ANGLE, outputPortByte, sensorType, Sensor.GYRO_ANGLE );
-				out = setFieldByOutputType(out, FIELD_RATE, outputPortByte, sensorType, Sensor.GYRO_RATE);
-			case "Infrared":
-				sensorType = Sensor.TYPE_IR;
-				out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
-			default:
-					break;
+			}catch (Exception e) {
+				 getLogger().error("Error", e);
 			}
-		}catch (Exception e) {
-			 getLogger().error("Error", e);
+		}else {
+			SensorTypeEnum sensor = ((RobotSensorPort)botPortsInfo[outputPort]).getSensor();
+			try {
+				switch (sensor) {
+				case TOUCH:
+					sensorType = Sensor.TYPE_TOUCH;
+					out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
+					//TODO this one needs to be set as a boolean regardless
+					//TODO actually what ARE these two values, and how do they differ? 
+					out = setFieldByOutputType(out, FIELD_BUMPED, outputPortByte, sensorType, Sensor.TOUCH_BUMPS);
+					//boolean isBumped = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.TOUCH_BUMPS) > 0.5);
+					//out.setField(FIELD_BUMPED, isBumped);
+					break;
+				case COLOR:
+					sensorType = Sensor.TYPE_COLOR;
+					//out = setFieldByOutputType(out, FIELD_COLOR, outputPortByte, sensorType, Sensor.COLOR_COLOR);
+					int color = connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.COLOR_COLOR);
+					String colorName = ColorEnum.values()[color].toString();
+					out.setField(FIELD_COLOR, colorName);
+					out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
+					out = setFieldByOutputType(out, FIELD_AMBIENT, outputPortByte, sensorType, Sensor.COLOR_AMBIENT);
+					break;
+				case ULTRA:
+					sensorType = Sensor.TYPE_ULTRASONIC;
+					out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM );
+					out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
+					//out = setFieldByOutputType(out, FIELD_LISTEN, outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN);
+					boolean listen = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.ULTRASONIC_LISTEN) > 0.5);
+					out.setField(FIELD_LISTEN, listen);
+					break;
+				case GYRO:
+					sensorType = Sensor.TYPE_GYRO;
+					out = setFieldByOutputType(out, FIELD_ANGLE, outputPortByte, sensorType, Sensor.GYRO_ANGLE );
+					out = setFieldByOutputType(out, FIELD_RATE, outputPortByte, sensorType, Sensor.GYRO_RATE);
+				case IR:
+					sensorType = Sensor.TYPE_IR;
+					out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
+				default:
+						break;
+				}
+			}catch (Exception e) {
+				 getLogger().error("Error", e);
+			}
 		}
-		
+	
 		return out;
 	}
 	
@@ -363,71 +361,59 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		// for best performance, consider caching input or output Schema.Field objects for
 		// use later in processTuple()
 		outputSchemas = new Schema[outputPorts];
-
 		for (int i = 0; i < outputPorts; ++i) {
 			outputSchemas[i] = getRuntimeOutputSchema(i);
 		}
+		botPortsInfo = new RobotPort[outputPorts-1];//all but the button port
 		
 		//map each port name to the port number it connects to TODO
 		outputPortNames = new HashMap<String, Integer>();
 		int portNumber = 0;
 		
-		//TODO button output port command?
 		
 		//for the four motors:
-		if (isPortAMotor()) {
-			portNumber++;
-			outputPortNames.put("A", portNumber);
-		}
-		if (isPortBMotor()) {
-			portNumber++;
-			outputPortNames.put("B", portNumber);
-		}
-		if (isPortCMotor()) {
-			portNumber++;
-			outputPortNames.put("C", portNumber);
-		}
-		if (isPortDMotor()) {
-			portNumber++;
-			outputPortNames.put("D", portNumber);
+		String[] motorPortNames = {"A","B","C","D"};
+		for (int i = 0; i<motorPortNames.length; i++) {
+			if (isPort(motorPortNames[i])) {
+				botPortsInfo[portNumber] = initBotPort(motorPortNames[i]);
+				outputPortNames.put(motorPortNames[i], portNumber);
+				portNumber++;
+			}
 		}
 		
 		//for the four sensors:
-		if (getPort1Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			outputPortNames.put("1", portNumber);
-		}
-		if (getPort2Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			outputPortNames.put("2", portNumber);
-		}
-		if (getPort3Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			outputPortNames.put("3", portNumber);
-		}
-		if (getPort4Device() != SensorTypeEnum.NONE) {
-			portNumber++;
-			outputPortNames.put("4", portNumber);
+		String[] sensorPortNames = {"1","2","3","4"};
+		for (int i = 0; i<sensorPortNames.length; i++) {
+			if (isPort(sensorPortNames[i])) {
+				botPortsInfo[portNumber] = initBotSensorPort(sensorPortNames[i]);
+				outputPortNames.put(sensorPortNames[i], portNumber);
+				portNumber++;
+			}
 		}
 		
-		//set up streaming
-		getLogger().info("Stream port A: " + StreamPortA);
-		getLogger().info("Stream port 1: " + StreamPort1);
-		for (int i = 0; i< streamProperties.length; i++) {
-			getLogger().info("Stream property: " + streamProperties[i]);
-			runtimeStreamProperties[i] = streamProperties[i];
-		}
+		//TODO button output port command?
+		
 	}
+	
+	public RobotPort initBotPort(String name) {
+		return new RobotPort(name, getPortStreaming(name), connectTo.getPortByte(name), createMotorOutputSchema(""));
+	}
+	
+	public RobotSensorPort initBotSensorPort(String name) {
+		SensorTypeEnum type = getPortDevice(name);
+		return new RobotSensorPort(name, getPortStreaming(name), connectTo.getPortByte(name), getSchemaForSensorType(type), type);
+	}
+
 	
 	public void run() {
 		getLogger().info("Starting to run.");
 		getLogger().info(""+shouldRun());
 		while (shouldRun()) {
 			try {
-				for (int i = 0; i< streamProperties.length; i++) {
-					if (streamProperties[i]) {
-						getLogger().info("Requesting tuple from port " + streamNames[i]);
-						String target = streamNames[i];
+				for (int i = 0; i< botPortsInfo.length; i++) {
+					if (botPortsInfo[i].isStreaming()) {
+						getLogger().info("Requesting tuple from port " + botPortsInfo[i].getName());
+						String target = botPortsInfo[i].getName();
 						int outputPort = outputPortNames.get(target);
 						Tuple out = buildSensorTuple(target);
 						sendOutput(outputPort, out);

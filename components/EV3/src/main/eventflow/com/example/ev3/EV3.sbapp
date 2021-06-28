@@ -57,7 +57,7 @@
             <param name="PortCMotor" value="false"/>
             <param name="PortDMotor" value="false"/>
             <param name="StreamPort1" value="true"/>
-            <param name="StreamPort2" value="true"/>
+            <param name="StreamPort2" value="false"/>
             <param name="StreamPort3" value="false"/>
             <param name="StreamPort4" value="false"/>
             <param name="StreamPortA" value="false"/>
