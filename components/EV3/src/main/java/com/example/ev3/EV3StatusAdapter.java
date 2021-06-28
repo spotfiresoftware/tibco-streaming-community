@@ -473,11 +473,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	 */	 
 	public Schema createButtonOutputSchema(String mainName) {
 		Schema buttonSchema = new Schema("buttonSchema",
-				new Schema.Field(FIELD_LEFT,CompleteDataType.forInt()),
-				new Schema.Field(FIELD_CENTER,CompleteDataType.forInt()),
-				new Schema.Field(FIELD_RIGHT,CompleteDataType.forInt()),
-				new Schema.Field(FIELD_UP,CompleteDataType.forInt()),
-				new Schema.Field(FIELD_DOWN,CompleteDataType.forInt())
+				new Schema.Field(FIELD_LEFT,CompleteDataType.forBoolean()),
+				new Schema.Field(FIELD_CENTER,CompleteDataType.forBoolean()),
+				new Schema.Field(FIELD_RIGHT,CompleteDataType.forBoolean()),
+				new Schema.Field(FIELD_UP,CompleteDataType.forBoolean()),
+				new Schema.Field(FIELD_DOWN,CompleteDataType.forBoolean())
 				);
 		return buttonSchema;
 	}
