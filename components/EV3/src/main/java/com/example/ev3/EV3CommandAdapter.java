@@ -1,6 +1,7 @@
 package com.example.ev3;
 
 import com.j4ev3.core.LED;
+import com.j4ev3.core.Motor;
 import com.streambase.sb.*;
 import com.streambase.sb.operator.*;
 
@@ -23,13 +24,16 @@ public class EV3CommandAdapter extends Operator implements Parameterizable,IShar
 	// Local variables
 	private int inputPorts = 2;
 	private int outputPorts = 0;
-	private int nextOutputPort = 0;
-	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
 	
 	//Expected motor command schema
 	private static Schema.Field FIELD_COMMAND = Schema.createField(DataType.STRING, "Command");
 	private static Schema.Field FIELD_COMMAND_TARGET = Schema.createField(DataType.STRING, "TargetPort");
 	private static Schema.Field FIELD_COMMAND_VALUE = Schema.createField(DataType.INT, "Rate");
+	
+	private final String COMMAND_STOP = "STOP";
+	private final String COMMAND_BRAKE = "BRAKE";
+	private final String COMMAND_POWER = "POWER";
+	private final String COMMAND_SPEED = "SPEED";
 	
 	//Expected LED command schema
 	private static Schema.Field FIELD_LED_ON = Schema.createField(DataType.STRING, "LED");
@@ -73,12 +77,13 @@ public class EV3CommandAdapter extends Operator implements Parameterizable,IShar
 		}
 		
 		//check motor commands
-		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_COMMAND.getName()) || !getInputSchema(0).hasField(FIELD_COMMAND_TARGET.getName())) {
-            throw new TypecheckException(String.format("The control port schema must at least have fields named %s and %s of type String", FIELD_COMMAND.getName(), FIELD_COMMAND_TARGET.getName()));
+		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_COMMAND.getName()) || getInputSchema(0).getField(getInputSchema(0).getFieldIndex(FIELD_COMMAND.getName())).getElementType() != FIELD_COMMAND.getElementType()
+				|| !getInputSchema(0).hasField(FIELD_COMMAND_TARGET.getName()) || getInputSchema(0).getField(getInputSchema(0).getFieldIndex(FIELD_COMMAND_TARGET.getName())).getElementType() != FIELD_COMMAND_TARGET.getElementType()) {
+            throw new TypecheckException(String.format("The control port schema must at least have fields named %s of type String and %s of type Integer", FIELD_COMMAND.getName(), FIELD_COMMAND_TARGET.getName()));
         }
 		
 		//check LED
-		if (getInputSchema(1) == null || !getInputSchema(1).hasField(FIELD_LED_ON.getName()) ) {
+		if (getInputSchema(1) == null || !getInputSchema(1).hasField(FIELD_LED_ON.getName()) || getInputSchema(1).getField(getInputSchema(1).getFieldIndex(FIELD_LED_ON.getName())).getElementType() != FIELD_LED_ON.getElementType()) {
             throw new TypecheckException(String.format("The control port schema must at least have a field named %s of type Boolean", FIELD_LED_ON.getName()));
         }
 
@@ -93,27 +98,85 @@ public class EV3CommandAdapter extends Operator implements Parameterizable,IShar
 	* @throws StreamBaseException Terminates the application.
 	*/
 	public void processTuple(int inputPort, Tuple tuple) throws StreamBaseException {
+		//ensure that it's actually connected to a robot
+		if (connectTo.getManager() == null || connectTo.robot == null) {
+			throw new StreamBaseException(String.format("Command Adapter not connected to EV3 robot. Check that a Connection Manager named %s exists.", ConnectionManagerName));
+		}
+		
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info("operator processing a tuple at input port" + inputPort);
 		}
-		// TODO only the first input port is processed; see the template code for typecheck()
-		if (inputPort > 0) {
-			getLogger().info("operator skipping tuple at input port" + inputPort);
+		
+		//processing motor commands port
+		if (inputPort == 0) {
+			String command = tuple.getString(FIELD_COMMAND.getName()).toUpperCase();
+			getLogger().info("Command is now: " + command);
+			getLogger().info("Is it a valid command: " + isValidCommand(command));
+			if (isValidCommand(command)) {
+				//apply to single port or apply to all?
+				String target = tuple.getString(FIELD_COMMAND_TARGET.getName()).toUpperCase();
+				getLogger().info("Target port is now: " + target);
+				byte targetPort = connectTo.getMotorPortByte(target);
+				getLogger().info("Target port address is now: " + targetPort);
+				switch(command) {
+				case COMMAND_STOP:
+					connectTo.robot.getMotor().stopMotor(targetPort, false);
+					break;
+				case COMMAND_BRAKE:
+					connectTo.robot.getMotor().stopMotor(targetPort, true);
+					break;
+				case COMMAND_POWER:
+					if (hasValidCommandValue(tuple)) {
+						int val = tuple.getInt(FIELD_COMMAND_VALUE.getName());
+						getLogger().info("Value is now: " + val);
+						if (connectTo == null) {
+							getLogger().info("connectTo is null.");
+						} else {
+							if (connectTo.robot == null) {
+								getLogger().info("connectTo.robot is null.");
+							}else {
+								if (connectTo.robot.getMotor() == null) {
+									getLogger().info("connectTo.robot.getMotor() is null.");
+								}
+							}
+						}
+						
+						connectTo.robot.getMotor().turnAtPower(targetPort, val);
+						getLogger().info("Turning.....");
+					}else {
+						getLogger().warn(String.format("Cannot set POWER without a field named %s of type Integer", FIELD_COMMAND_VALUE.getName()));
+					}
+					break;
+				case COMMAND_SPEED:
+					if (hasValidCommandValue(tuple)) {
+						int val = tuple.getInt(FIELD_COMMAND_VALUE.getName());
+						connectTo.robot.getMotor().turnAtSpeed(targetPort, val);
+					}else {
+						getLogger().warn(String.format("Cannot set SPEED without a field named %s of type Integer", FIELD_COMMAND_VALUE.getName()));
+					}
+					break;
+					default: break;
+				}
+				getLogger().info("finished valid command");
+			}else {
+				getLogger().warn(String.format("Command %s is not a valid command (try STOP, BRAKE, POWER, or SPEED)", command));
+			}
 			return;
 		}
-
-		// create a new output tuple from the Schema at the port we are about to send to
-		Tuple out = outputSchemas[inputPort].createTuple();
-
-		// TODO this template just copies each field value from input port 0 (the first input port)
-		for (int i = 0; i < out.getSchema().getFieldCount(); ++i) {
-			// note: best performance is achieved retrieving values through Tuple#getField(Schema.Field)
-			out.setField(i, tuple.getField(i));
-		}
-
-		// nextOutputPort is used to send tuples by round-robin on every output port by this template.
-		sendOutput(nextOutputPort, out);
-		nextOutputPort = (nextOutputPort + 1) % outputPorts;
+		//TODO handle LEDs
+	}
+	
+	public boolean isValidCommand(String s) {
+		return (s.equals(COMMAND_STOP) || s.equals(COMMAND_BRAKE) || s.equals(COMMAND_POWER) ||
+				s.equals(COMMAND_SPEED));
+	}
+	
+	public boolean isValidMotorPort(String s) {
+		return (s.equals("A") || s.equals("B") || s.equals("C") || s.equals("D"));
+	}
+	
+	public boolean hasValidCommandValue(Tuple t) {
+		return t.getSchema().hasField(FIELD_COMMAND_VALUE.getName()); //values are allowed to be negative
 	}
 
 	/**
@@ -127,19 +190,13 @@ public class EV3CommandAdapter extends Operator implements Parameterizable,IShar
 		super.init();
 		//connect to shared object;
 		connectTo = EV3SharedObject.getSharedObjectInstance(this);
-				
-		// for best performance, consider caching input or output Schema.Field objects for
-		// use later in processTuple()
-		outputSchemas = new Schema[outputPorts];
-
-		for (int i = 0; i < outputPorts; ++i) {
-			outputSchemas[i] = getRuntimeOutputSchema(i);
-		}
-		
-		//TODO remove
-		if (connectTo.robot != null) {
-			getLogger().info("Command adapter initialized after connection manager, sending orange LED");
-			connectTo.robot.getLED().setPattern(LED.LED_ORANGE_PULSE);
+		if (connectTo.getManager() != null) {
+			getLogger().debug(String.format("EV3 Command Adapter has connected to shared object with Connection Manager %s", connectTo.getManager().getName()));
+		}else{
+			getLogger().debug("EV3 Command Adapter has connected to shared object without a Connection Manager, linked with the following:");
+			 for (ISharableAdapter listObj : connectTo.linkedAdapters) {
+				 getLogger().debug("\n  -- " + listObj.getFullyQualifiedName());
+        	 }
 		}
 	}
 

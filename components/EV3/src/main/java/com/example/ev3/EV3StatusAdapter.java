@@ -185,12 +185,17 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	* @throws StreamBaseException Terminates the application.
 	*/
 	public void processTuple(int inputPort, Tuple tuple) throws StreamBaseException {
+		//ensure that it's actually connected to a robot
+		if (connectTo.getManager() == null || connectTo.robot == null) {
+			throw new StreamBaseException(String.format("Command Adapter not connected to EV3 robot. Check that a Connection Manager named %s exists.", ConnectionManagerName));
+		}
+		
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info("operator processing a tuple at input port" + inputPort);
 		}
 		// TODO only the first input port is processed
 		if (inputPort == 0) {
-			String target = tuple.getString(FIELD_TARGET_PORT.getName());
+			String target = tuple.getString(FIELD_TARGET_PORT.getName()).toUpperCase();
 			if (outputPortNames.containsKey(target)) {
 				int outputPort = outputPortNames.get(target);
 				Tuple out = buildSensorTuple(target);
@@ -376,6 +381,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 		//connect to shared object;
 		connectTo = EV3SharedObject.getSharedObjectInstance(this);
 		
+		
 		// for best performance, consider caching input or output Schema.Field objects for
 		// use later in processTuple()
 		outputSchemas = new Schema[outputPorts];
@@ -414,12 +420,12 @@ public class EV3StatusAdapter extends Operator implements Parameterizable,IShara
 	}
 	
 	public RobotPort initBotPort(String name) {
-		return new RobotPort(name, getPortStreaming(name), connectTo.getPortByte(name), createMotorOutputSchema(""));
+		return new RobotPort(name, getPortStreaming(name), connectTo.getSensorPortByte(name), createMotorOutputSchema(""));
 	}
 	
 	public RobotSensorPort initBotSensorPort(String name) {
 		SensorTypeEnum type = getPortDevice(name);
-		return new RobotSensorPort(name, getPortStreaming(name), connectTo.getPortByte(name), getSchemaForSensorType(type), type);
+		return new RobotSensorPort(name, getPortStreaming(name), connectTo.getSensorPortByte(name), getSchemaForSensorType(type), type);
 	}
 
 	

@@ -37,7 +37,7 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	//stored shared data that exists ONLY at runtime
 	private EV3ConnectionManager manager;
 	protected List<ISharableAdapter> linkedAdapters = new ArrayList<ISharableAdapter>();
-	protected Brick robot;
+	public Brick robot;
 	
 	public static EV3SharedObject getSharedObjectInstance(ISharableAdapter adapter) throws StreamBaseException{
 		 if (adapter == null)
@@ -234,6 +234,7 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 				break;
 			}
 		}
+		robot.getLED().setPattern(LED.LED_ORANGE);
 		 if (robot == null)
              throw new StreamBaseException("Could not connect to robot at given MAC address");
 	}
@@ -244,7 +245,7 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	 * @param name of port
 	 * @return byte value of port address
 	 */
-	public byte getPortByte(String name) {
+	public byte getSensorPortByte(String name) {
 		switch (name) {
 		case "A": return Sensor.PORT_A;
 		case "B": return Sensor.PORT_B;
@@ -256,6 +257,16 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 		case "4": return Sensor.PORT_4;
 		}
 		return 0x00;//TODO throw an error
+	}
+	
+	public byte getMotorPortByte(String name) {
+		switch (name) {
+		case "A": return Motor.PORT_A;
+		case "B": return Motor.PORT_B;
+		case "C": return Motor.PORT_C;
+		case "D": return Motor.PORT_D;
+		default: return Motor.PORT_ALL;
+		}
 	}
 	
 
@@ -273,14 +284,14 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 
 	@Override
 	public int compareTo(EV3SharedObject o) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		return 0;
 	}
 
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
 

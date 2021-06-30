@@ -14,6 +14,7 @@
             <schema>
                 <field name="Command" type="string"/>
                 <field name="TargetPort" type="string"/>
+                <field name="Rate" type="int"/>
             </schema>
         </stream>
         <stream name="CommandInputStream2">
@@ -41,7 +42,7 @@
             <input port="2" stream="CommandInputStream2"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3CommandAdapter"/>
-            <param name="ConnectionManagerName" value="Manager"/>
+            <param name="ConnectionManagerName" value="Command"/>
         </box>
         <box name="Java2" type="java">
             <input port="1" stream="StatusInputStream"/>

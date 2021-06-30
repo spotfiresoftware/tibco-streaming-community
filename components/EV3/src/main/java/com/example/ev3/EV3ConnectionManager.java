@@ -120,7 +120,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable,IS
 		}
 		
 		connectTo.run(MACaddress);
-		getLogger().info("Connection to %s successful.", MACaddress);
+		getLogger().info( String.format("Connection to %s successful.", MACaddress));
 	}
 
 	/**
