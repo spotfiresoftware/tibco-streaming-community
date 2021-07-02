@@ -269,6 +269,38 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 		}
 	}
 	
+	public byte getLEDPattern(Boolean on, Boolean blink, String color) {
+		if (!on) {
+			return LED.LED_OFF;
+		}
+		if (!blink) {
+			return getLEDPattern(on, color);
+		} else {
+			switch (color) {
+			case EV3CommandAdapter.LED_RED:
+				return LED.LED_GREEN_FLASH;
+			case EV3CommandAdapter.LED_ORANGE:
+				return LED.LED_ORANGE_FLASH;
+				default: //default case treated as green
+					return LED.LED_GREEN_FLASH;
+			}
+		}
+	}
+	
+	public byte getLEDPattern(Boolean on, String color) {
+		if (!on) {
+			return LED.LED_OFF;
+		}
+		switch (color) {
+		case EV3CommandAdapter.LED_RED:
+			return LED.LED_RED;
+		case EV3CommandAdapter.LED_ORANGE:
+			return LED.LED_ORANGE;
+			default: //default case treated as green
+				return LED.LED_GREEN;
+		}
+	}
+	
 
 	//GETTERS & SETTERS
 	

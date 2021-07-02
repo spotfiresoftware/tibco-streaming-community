@@ -20,6 +20,8 @@
         <stream name="CommandInputStream2">
             <schema>
                 <field name="LED" type="bool"/>
+                <field name="Color" type="string"/>
+                <field name="Blink" type="bool"/>
             </schema>
         </stream>
         <stream name="StatusInputStream">
