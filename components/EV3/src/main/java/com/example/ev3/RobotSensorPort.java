@@ -3,7 +3,7 @@ package com.example.ev3;
 import com.streambase.sb.Schema;
 
 public class RobotSensorPort extends RobotPort {
-	
+
 	private SensorTypeEnum sensor;
 
 	public RobotSensorPort(String name, boolean streaming, byte address, Schema scheme, SensorTypeEnum sensor) {
@@ -16,5 +16,4 @@ public class RobotSensorPort extends RobotPort {
 		return sensor;
 	}
 
-	
 }

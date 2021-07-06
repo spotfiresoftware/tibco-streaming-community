@@ -37,6 +37,7 @@
         <box name="Command" type="java">
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3ConnectionManager"/>
+            <param name="ConnectionTries" value="1000"/>
             <param name="MACaddress" value="0016535299F1"/>
         </box>
         <box name="Java" type="java">
@@ -57,8 +58,8 @@
             <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
             <param name="ConnectionManagerName" value="Command"/>
             <param name="OutputType" value="Raw"/>
-            <param name="Port1Device" value="Color"/>
-            <param name="Port2Device" value="Touch"/>
+            <param name="Port1Device" value="Touch"/>
+            <param name="Port2Device" value="Color"/>
             <param name="Port3Device" value="None"/>
             <param name="Port4Device" value="None"/>
             <param name="PortAMotor" value="true"/>

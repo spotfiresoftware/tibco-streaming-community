@@ -3,17 +3,17 @@ package com.example.ev3;
 import com.streambase.sb.Schema;
 
 public class RobotPort {
-	
+
 	private String name;
 	private boolean streaming;
 	private byte address;
-	private Schema scheme;
-	
-	public RobotPort (String name, boolean streaming, byte address, Schema scheme) {
+	private Schema schema;
+
+	public RobotPort(String name, boolean streaming, byte address, Schema schema) {
 		this.name = name;
 		this.streaming = streaming;
 		this.address = address;
-		this.scheme = scheme;
+		this.schema = schema;
 	}
 
 	public boolean isStreaming() {
@@ -32,9 +32,8 @@ public class RobotPort {
 		return address;
 	}
 
-	public Schema getScheme() {
-		return scheme;
+	public Schema getSchema() {
+		return schema;
 	}
-	
-	
+
 }
