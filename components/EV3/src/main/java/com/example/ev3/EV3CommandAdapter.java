@@ -171,6 +171,9 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
      * The shutdown method is called when the StreamBase server is in the process of shutting down.
      */
     public void shutdown() {
+    	//safely shut off all motors
+    	byte targetPort = connectTo.getMotorPortByte("all");
+    	connectTo.robot.getMotor().stopMotor(targetPort, false);
     }
 
     @Override
