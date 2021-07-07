@@ -288,9 +288,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 					break;
 				case COLOR:
 					sensorType = Sensor.TYPE_COLOR;
-					// out = setFieldByOutputType(out, FIELD_COLOR, outputPortByte, sensorType,
-					// Sensor.COLOR_COLOR);
-					int color = connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType, Sensor.COLOR_COLOR);
+					
+					int color = ((int)connectTo.robot.getSensor().getValueSI(outputPortByte, sensorType, Sensor.COLOR_COLOR));
 					String colorName = ColorEnum.values()[color].toString();
 					out.setField(FIELD_COLOR, colorName);
 					out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
@@ -300,8 +299,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 					sensorType = Sensor.TYPE_ULTRASONIC;
 					out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM);
 					out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
-					// out = setFieldByOutputType(out, FIELD_LISTEN, outputPortByte, sensorType,
-					// Sensor.ULTRASONIC_LISTEN);
+
 					boolean listen = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType,
 							Sensor.ULTRASONIC_LISTEN) > 0.5);
 					out.setField(FIELD_LISTEN, listen);
@@ -529,8 +527,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	}
 
 	public static enum ColorEnum {
-		NONE("None"), BLACK("Black"), BLUE("Blue"), GREEN("Green"), YELLOW("Yellow"), RED("Red"), WHITE("White"),
-		BROWN("Brown");
+		NONE("NONE"), BLACK("BLACK"), BLUE("BLUE"), GREEN("GREEN"), YELLOW("YELLOW"), RED("RED"), WHITE("WHITE"),
+		BROWN("BROWN");
 
 		private final String rep;
 
