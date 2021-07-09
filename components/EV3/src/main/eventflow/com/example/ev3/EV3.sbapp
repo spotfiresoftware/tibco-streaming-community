@@ -10,18 +10,26 @@
         </type-metadata>
         <memory-model-settings/>
         <dynamic-variables/>
-        <stream name="CommandInputStream1">
+        <stream name="BlockingMotorInput">
             <schema>
-                <field name="Command" type="string"/>
                 <field name="TargetPort" type="string"/>
+                <field name="Position" type="int"/>
+                <field name="Time" type="int"/>
                 <field name="Rate" type="int"/>
             </schema>
         </stream>
-        <stream name="CommandInputStream2">
+        <stream name="LEDInput">
             <schema>
                 <field name="LED" type="bool"/>
                 <field name="Color" type="string"/>
                 <field name="Blink" type="bool"/>
+            </schema>
+        </stream>
+        <stream name="MotorInput">
+            <schema>
+                <field name="Command" type="string"/>
+                <field name="TargetPort" type="string"/>
+                <field name="Rate" type="int"/>
             </schema>
         </stream>
         <stream name="StatusInputStream">
@@ -41,27 +49,30 @@
             <param name="MACaddress" value="0016535299F1"/>
         </box>
         <box name="Java" type="java">
-            <input port="1" stream="CommandInputStream1"/>
-            <input port="2" stream="CommandInputStream2"/>
+            <input port="1" stream="MotorInput"/>
+            <input port="2" stream="BlockingMotorInput"/>
+            <input port="3" stream="LEDInput"/>
+            <output port="1" stream="OutputStream"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3CommandAdapter"/>
             <param name="ConnectionManagerName" value="Command"/>
+            <param name="error" value="5"/>
         </box>
-        <box name="Java2" type="java">
+        <box name="Sensors" type="java">
             <input port="1" stream="StatusInputStream"/>
             <input port="2" stream="StatusInputStreamCopy"/>
-            <output port="1" stream="out:Java2_1"/>
-            <output port="2" stream="out:Java2_2"/>
-            <output port="3" stream="out:Java2_3"/>
-            <output port="4" stream="out:Java2_4"/>
+            <output port="1" stream="out:Sensors_1"/>
+            <output port="2" stream="out:Sensors_2"/>
+            <output port="3" stream="out:Sensors_3"/>
+            <output port="4" stream="out:Sensors_4"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
             <param name="ConnectionManagerName" value="Command"/>
-            <param name="OutputType" value="Raw"/>
-            <param name="Port1Device" value="Touch"/>
-            <param name="Port2Device" value="Color"/>
-            <param name="Port3Device" value="None"/>
-            <param name="Port4Device" value="None"/>
+            <param name="OutputType" value="Percent"/>
+            <param name="Port1Device" value="None"/>
+            <param name="Port2Device" value="None"/>
+            <param name="Port3Device" value="Touch"/>
+            <param name="Port4Device" value="Color"/>
             <param name="PortAMotor" value="true"/>
             <param name="PortBMotor" value="false"/>
             <param name="PortCMotor" value="false"/>
@@ -75,5 +86,21 @@
             <param name="StreamPortC" value="false"/>
             <param name="StreamPortD" value="false"/>
         </box>
+        <output-stream name="OutputStream"/>
+        <box name="#&quot;Colors only&quot;" type="filter">
+            <input port="1" stream="out:Sensors_3"/>
+            <output port="1" stream="out:#&quot;Colors only&quot;_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="not (Color=&quot;NONE&quot; || Color=&quot;BLACK&quot;)"/>
+        </box>
+        <box name="#&quot;Red only&quot;" type="filter">
+            <input port="1" stream="out:#&quot;Colors only&quot;_1"/>
+            <output port="1" stream="SortedObjects"/>
+            <output port="2" stream="out:#&quot;Red only&quot;_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="Color=&quot;RED&quot;"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <output-stream name="SortedObjects"/>
     </add>
 </modify>

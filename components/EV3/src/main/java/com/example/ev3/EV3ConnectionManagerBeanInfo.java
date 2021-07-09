@@ -25,7 +25,7 @@ public class EV3ConnectionManagerBeanInfo extends SBSimpleBeanInfo {
 				// reconnection tries (defaults to one)
 				new SBPropertyDescriptor("ConnectionTries", EV3ConnectionManager.class)
 						.displayName("# of Connection Attempts")
-						.description("Number of times to try reconnecting if the first fails") };
+						.description("Number of times to try reconnecting if the first fails")};
 		return p;
 	}
 

@@ -1,31 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?><application-layout>
-    <component name="CommandInputStream1">
-        <param name="gui:x" value="-369"/>
-        <param name="gui:y" value="32"/>
+    <component name="BlockingMotorInput">
+        <param name="gui:x" value="-482"/>
+        <param name="gui:y" value="69"/>
     </component>
-    <component name="CommandInputStream2">
+    <component name="LEDInput">
         <param name="gui:x" value="-356"/>
         <param name="gui:y" value="128"/>
     </component>
+    <component name="MotorInput">
+        <param name="gui:x" value="-369"/>
+        <param name="gui:y" value="32"/>
+    </component>
     <component name="StatusInputStream">
-        <param name="gui:x" value="-422"/>
-        <param name="gui:y" value="-213"/>
+        <param name="gui:x" value="-482"/>
+        <param name="gui:y" value="-198"/>
     </component>
     <component name="StatusInputStreamCopy">
-        <param name="gui:x" value="-450"/>
-        <param name="gui:y" value="-96"/>
+        <param name="gui:x" value="-482"/>
+        <param name="gui:y" value="-101"/>
+    </component>
+    <component name="#&quot;Colors only&quot;">
+        <param name="gui:x" value="-159"/>
+        <param name="gui:y" value="-164"/>
+    </component>
+    <component name="#&quot;Red only&quot;">
+        <param name="gui:x" value="-62"/>
+        <param name="gui:y" value="-166"/>
     </component>
     <component name="Command">
-        <param name="gui:x" value="33"/>
-        <param name="gui:y" value="-175"/>
+        <param name="gui:x" value="-214"/>
+        <param name="gui:y" value="-292"/>
     </component>
     <component name="Java">
-        <param name="gui:x" value="-122"/>
-        <param name="gui:y" value="56"/>
+        <param name="gui:x" value="-142"/>
+        <param name="gui:y" value="81"/>
     </component>
-    <component name="Java2">
-        <param name="gui:x" value="-245"/>
-        <param name="gui:y" value="-170"/>
+    <component name="Sensors">
+        <param name="gui:x" value="-329"/>
+        <param name="gui:y" value="-175"/>
         <param name="gui:height" value="117"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="-13"/>
+        <param name="gui:y" value="67"/>
+    </component>
+    <component name="SortedObjects">
+        <param name="gui:x" value="292"/>
+        <param name="gui:y" value="-164"/>
     </component>
 </application-layout>

@@ -425,7 +425,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 			try {
 				for (int i = 0; i < botPortsInfo.length; i++) {
 					if (botPortsInfo[i].isStreaming()) {
-						getLogger().info("Requesting tuple from port " + botPortsInfo[i].getName());
 						String target = botPortsInfo[i].getName();
 						int outputPort = outputPortNames.get(target);
 						Tuple out = buildSensorTuple(target);
