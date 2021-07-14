@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-276"/>
+        <param name="gui:y" value="-29"/>
+    </component>
+    <component name="Releaser">
+        <param name="gui:x" value="23"/>
+        <param name="gui:y" value="-30"/>
+    </component>
+    <component name="Sleep">
+        <param name="gui:x" value="-162"/>
+        <param name="gui:y" value="-30"/>
+    </component>
+    <component name="ReleaserOut">
+        <param name="gui:x" value="102"/>
+        <param name="gui:y" value="-30"/>
+    </component>
+    <component name="AfterSleep">
+        <param name="gui:x" value="-57"/>
+        <param name="gui:y" value="-30"/>
+    </component>
+</application-layout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-167"/>
+        <param name="gui:y" value="-109"/>
+    </component>
+    <component name="AsyncWorkRef1">
+        <param name="gui:x" value="332"/>
+        <param name="gui:y" value="-176"/>
+    </component>
+    <component name="Blocker">
+        <param name="gui:x" value="100"/>
+        <param name="gui:y" value="-176"/>
+    </component>
+    <component name="BlockerOut">
+        <param name="gui:x" value="180"/>
+        <param name="gui:y" value="-176"/>
+    </component>
+    <component name="InFirst">
+        <param name="gui:x" value="20"/>
+        <param name="gui:y" value="-176"/>
+    </component>
+    <component name="InSecond">
+        <param name="gui:x" value="20"/>
+        <param name="gui:y" value="-65"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-85"/>
+        <param name="gui:y" value="-109"/>
+    </component>
+</application-layout>
