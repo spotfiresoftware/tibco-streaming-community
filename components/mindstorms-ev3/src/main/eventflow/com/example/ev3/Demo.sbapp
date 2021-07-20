@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.example.ev3.Demo"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="StatusInputStream">
+            <schema>
+                <field name="TargetPort" type="string"/>
+            </schema>
+        </stream>
+        <stream name="StatusInputStreamCopy">
+            <schema>
+                <field name="TargetPort" type="string"/>
+            </schema>
+        </stream>
+        <box name="Command" type="java">
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.example.ev3.EV3ConnectionManager"/>
+            <param name="ConnectionTries" value="1000"/>
+            <param name="MACaddress" value="0016535299F1"/>
+        </box>
+        <box name="Sensors" type="java">
+            <input port="1" stream="StatusInputStream"/>
+            <input port="2" stream="StatusInputStreamCopy"/>
+            <output port="1" stream="out:Sensors_1"/>
+            <output port="2" stream="out:Sensors_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
+            <param name="ConnectionManagerName" value="Command"/>
+            <param name="OutputType" value="Raw"/>
+            <param name="Port1Device" value="None"/>
+            <param name="Port2Device" value="None"/>
+            <param name="Port3Device" value="None"/>
+            <param name="Port4Device" value="Infrared"/>
+            <param name="PortAMotor" value="false"/>
+            <param name="PortBMotor" value="false"/>
+            <param name="PortCMotor" value="false"/>
+            <param name="PortDMotor" value="false"/>
+            <param name="StreamPort1" value="false"/>
+            <param name="StreamPort2" value="false"/>
+            <param name="StreamPort3" value="true"/>
+            <param name="StreamPort4" value="true"/>
+            <param name="StreamPortA" value="false"/>
+            <param name="StreamPortB" value="false"/>
+            <param name="StreamPortC" value="false"/>
+            <param name="StreamPortD" value="false"/>
+        </box>
+    </add>
+</modify>

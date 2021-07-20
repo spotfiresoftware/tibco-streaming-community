@@ -50,7 +50,6 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 			//
 			Map.Entry<ISharableAdapter, EV3SharedObject> entry = matchAgainstLimboList(adapter);
 			if (entry != null) {
-				// TODO make this work for more than one adapter
 				// Ok, so we found two adapters to link together.
 				// Remove the adapter from "limbo" and use its shared object.
 				//

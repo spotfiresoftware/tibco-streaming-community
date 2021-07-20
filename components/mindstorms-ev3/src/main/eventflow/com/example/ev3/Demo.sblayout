@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="StatusInputStream">
+        <param name="gui:x" value="-492"/>
+        <param name="gui:y" value="-164"/>
+    </component>
+    <component name="StatusInputStreamCopy">
+        <param name="gui:x" value="-505"/>
+        <param name="gui:y" value="-68"/>
+    </component>
+    <component name="Command">
+        <param name="gui:x" value="-252"/>
+        <param name="gui:y" value="-228"/>
+    </component>
+    <component name="Sensors">
+        <param name="gui:x" value="-348"/>
+        <param name="gui:y" value="-105"/>
+        <param name="gui:height" value="117"/>
+    </component>
+</application-layout>

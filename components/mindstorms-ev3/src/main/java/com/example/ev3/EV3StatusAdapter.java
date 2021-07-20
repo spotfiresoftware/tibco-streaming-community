@@ -44,6 +44,15 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	private boolean StreamPort2;
 	private boolean StreamPort3;
 	private boolean StreamPort4;
+	
+	private int StreamPortAmode = 0;
+	private int StreamPortBmode = 0;
+	private int StreamPortCmode = 0;
+	private int StreamPortDmode = 0;
+	private int StreamPort1mode = 0;
+	private int StreamPort2mode = 0;
+	private int StreamPort3mode = 0;
+	private int StreamPort4mode = 0;
 
 	private SensorTypeEnum Port1Device;
 	private SensorTypeEnum Port2Device;
@@ -95,6 +104,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	private static String FIELD_ANGLE = "Angle";
 	private static String FIELD_RATE = "Rate";
 	private static String FIELD_PROXIMITY = "Proximity";
+	private static String FIELD_REMOTE = "RemoteControl";
 
 	public EV3StatusAdapter() {
 		super();
@@ -127,7 +137,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		requireInputPortCount(inputPorts);
 
 		if (ConnectionManagerName.length() < 1) {
-			throw new TypecheckException(String.format("The 'Linked Connection Manager Name' must not be left blank."));
+			throw new PropertyTypecheckException("ConnectionManagerName", String.format("The 'Linked Connection Manager Name' must not be left blank."));
 		}
 		if (getInputSchema(0) == null || !getInputSchema(0).hasField(FIELD_TARGET_PORT.getName())) {
 			throw new TypecheckException(
@@ -168,7 +178,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 					ConnectionManagerName));
 		}
 
-		// TODO only the first input port is processed
 		if (inputPort == 0) {
 			String target = tuple.getString(FIELD_TARGET_PORT.getName()).toUpperCase();
 			if (outputPortNames.containsKey(target)) {
@@ -264,7 +273,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		if (!(botPortsInfo[outputPort] instanceof RobotSensorPort)) {
 			try {
 				sensorType = Sensor.TYPE_LARGE_MOTOR;
-				// TODO check that this doesn't cause problems to call both motors "large"
 				out = setFieldByOutputType(out, FIELD_DEGREES, outputPortByte, sensorType, Sensor.LARGE_MOTOR_DEGREE);
 				out = setFieldByOutputType(out, FIELD_ROTATION, outputPortByte, sensorType,
 						Sensor.LARGE_MOTOR_ROTATION);
@@ -279,12 +287,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 				case TOUCH:
 					sensorType = Sensor.TYPE_TOUCH;
 					out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
-					// TODO this one needs to be set as a boolean regardless
-					// TODO actually what ARE these two values, and how do they differ?
 					out = setFieldByOutputType(out, FIELD_BUMPED, outputPortByte, sensorType, Sensor.TOUCH_BUMPS);
-					// boolean isBumped = (connectTo.robot.getSensor().getValueRaw(outputPortByte,
-					// sensorType, Sensor.TOUCH_BUMPS) > 0.5);
-					// out.setField(FIELD_BUMPED, isBumped);
 					break;
 				case COLOR:
 					sensorType = Sensor.TYPE_COLOR;
@@ -311,6 +314,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 				case IR:
 					sensorType = Sensor.TYPE_IR;
 					out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
+					out = setFieldByOutputType(out, FIELD_REMOTE, outputPortByte, sensorType, Sensor.IR_REMOTE);
 				default:
 					break;
 				}
@@ -383,7 +387,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		}
 		botPortsInfo = new RobotPort[outputPorts - 1];// all but the button port
 
-		// map each port name to the port number it connects to TODO
+		// map each port name to the port number it connects to
 		outputPortNames = new HashMap<String, Integer>();
 		int portNumber = 0;
 
@@ -572,7 +576,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT ? CompleteDataType.forInt()
 				: CompleteDataType.forDouble();
 		// if a percentage is requested, it will be an integer; otherwise a double
-		Schema IRSchema = new Schema(SensorTypeEnum.IR.toString(), new Schema.Field(FIELD_PROXIMITY, returnType));
+		Schema IRSchema = new Schema(SensorTypeEnum.IR.toString(),
+				new Schema.Field(FIELD_PROXIMITY, returnType),
+				new Schema.Field(FIELD_REMOTE, returnType)
+				);
 		return IRSchema;
 	}
 

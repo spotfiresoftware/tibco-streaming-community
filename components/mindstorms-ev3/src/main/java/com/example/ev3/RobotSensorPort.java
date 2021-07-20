@@ -9,7 +9,6 @@ public class RobotSensorPort extends RobotPort {
 	public RobotSensorPort(String name, boolean streaming, byte address, Schema scheme, SensorTypeEnum sensor) {
 		super(name, streaming, address, scheme);
 		this.sensor = sensor;
-		// TODO Auto-generated constructor stub
 	}
 
 	public SensorTypeEnum getSensor() {

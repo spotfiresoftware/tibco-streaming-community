@@ -20,7 +20,7 @@ public class EV3CommandAdapterBeanInfo extends SBSimpleBeanInfo {
 	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() throws IntrospectionException {
 		SBPropertyDescriptor[] p = { new SBPropertyDescriptor("ConnectionManagerName", EV3CommandAdapter.class)
 				.displayName("Linked Connection Manager name").description(
-						"Set this to the name of the Connection Manager adapter you wish to share a connection with."),
+						"Name of the Connection Manager adapter to share a connection with."),
 				new SBPropertyDescriptor("error", EV3CommandAdapter.class)
 				.displayName("Acceptable Motor Position Error (Degrees)")
 				.description("Margin of error for blocking motor commands to return success 'true'")};

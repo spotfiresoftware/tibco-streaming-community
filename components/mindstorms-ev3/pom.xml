@@ -7,11 +7,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>EV3</artifactId>
+    <artifactId>mindstorms-ev3</artifactId>
     <packaging>ep-eventflow-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>EV3</name>
+    <name>mindstorms-ev3</name>
     <description>My EventFlow Fragment</description>
+    
+    <licenses>
+    <license>
+        <name>BSD 3-Clause License</name>
+        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+        <distribution>repo</distribution>
+    </license>
+</licenses>
+
+
+<properties>
+    <com.tibco.ep.sb.studio.sample>false</com.tibco.ep.sb.studio.sample>
+</properties>
 
     <!-- common definitions for this version of Streaming -->
     <parent>
@@ -21,12 +34,6 @@
     </parent>
 
     <dependencies>
-    	<dependency>
-    		<groupId>com.tibco.ep.sb.adapter</groupId>
-    		<artifactId>python</artifactId>
-    		<version>10.6.1</version>
-    	</dependency>
-    	
     	<!--  to install j4ev3 from the jar, once downloaded from https://github.com/LLeddy/J4EV3 -->
     	<!--  mvn install:install-file -Dfile="<PATH TO JAR FILE>J4EV3WithDependencies.jar" -DgroupId="github.LLeddy" -DartifactId="J4EV3" -Dversion="17.7.26" -Dpackaging="jar" -->
     	<dependency>

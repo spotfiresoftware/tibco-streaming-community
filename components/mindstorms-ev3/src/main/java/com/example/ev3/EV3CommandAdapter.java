@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 
 import com.j4ev3.core.Sensor;
 import com.streambase.sb.*;
-import com.streambase.sb.adapter.python.PythonInstance;
 import com.streambase.sb.operator.*;
 
 /**
@@ -23,7 +22,14 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
     private int outputPorts = 1;
 
     // Expected motor command schema
-    private static Schema.Field FIELD_COMMAND = Schema.createField(DataType.STRING, "Command");
+    private static Schema.Field FIELD_COMMAND = Schema.createField(DataType.STRING, "Command");	private boolean StreamPortA;
+	private boolean StreamPortB;
+	private boolean StreamPortC;
+	private boolean StreamPortD;
+	private boolean StreamPort1;
+	private boolean StreamPort2;
+	private boolean StreamPort3;
+	private boolean StreamPort4;
     private static Schema.Field FIELD_COMMAND_TARGET = Schema.createField(DataType.STRING, "TargetPort");
     private static Schema.Field FIELD_COMMAND_RATE = Schema.createField(DataType.INT, "Rate");
 
@@ -72,7 +78,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
         requireInputPortCount(inputPorts);
 
         if (ConnectionManagerName.length() < 1) {
-            throw new TypecheckException(String.format("The 'Linked Connection Manager Name' must not be left blank."));
+            throw new PropertyTypecheckException("ConnectionManagerName", String.format("The 'Linked Connection Manager Name' must not be left blank."));
         }
 
         // check motor commands
@@ -120,7 +126,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
     public void processTuple(int inputPort, Tuple tuple) throws StreamBaseException {
         // ensure that it's actually connected to a robot
         if (connectTo.getManager() == null || connectTo.robot == null) {
-            throw new StreamBaseException(String.format("Command Adapter not connected to EV3 robot. Check that a Connection Manager named %s exists.",
+            throw new StreamBaseException(String.format("Command Adapter not connected to EV3 brick. Check that a Connection Manager named %s exists.",
                                                         ConnectionManagerName));
         }
 
@@ -143,7 +149,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
                         int val = tuple.getInt(FIELD_COMMAND_RATE.getName());
                         connectTo.robot.getMotor().turnAtPower(targetPort, val);
                     } else {
-                        getLogger().warn(String.format("Cannot set POWER without a field named %s of type Integer", FIELD_COMMAND_RATE.getName()));
+                    	sendErrorOutput(String.format("Cannot set POWER without a field named %s of type Integer", FIELD_COMMAND_RATE.getName()));
                     }
                     break;
                 case COMMAND_SPEED:
@@ -151,7 +157,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
                         int val = tuple.getInt(FIELD_COMMAND_RATE.getName());
                         connectTo.robot.getMotor().turnAtSpeed(targetPort, val);
                     } else {
-                        getLogger().warn(String.format("Cannot set SPEED without a field named %s of type Integer", FIELD_COMMAND_RATE.getName()));
+                    	sendErrorOutput(String.format("Cannot set SPEED without a field named %s of type Integer", FIELD_COMMAND_RATE.getName()));
                     }
                     break;
                 default:

@@ -34,7 +34,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable, I
 		setDisplayName(displayName);
 		setShortDisplayName(this.getClass().getSimpleName());
 
-		setDisplayName("MINDSTORMS Connection Manager for EV3");
+		setDisplayName("Connection Manager for Lego(R) Mindstorms(R) EV3");
 		setShortDisplayName("EV3 Connection");
 		setDisplayDescription(
 				"The EV3 Connection Manager establishes a shareable Bluetooth connection with the EV3 Brick.");
@@ -48,7 +48,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable, I
 		requireInputPortCount(inputPorts);
 
 		if (!isValid(MACaddress)) {
-			throw new TypecheckException(String.format("The adapter requires a 12-character Bluetooth MAC address."));
+			throw new PropertyTypecheckException("MACaddress", String.format("The adapter requires a 12-character Bluetooth MAC address."));
 		}
 
 	}
