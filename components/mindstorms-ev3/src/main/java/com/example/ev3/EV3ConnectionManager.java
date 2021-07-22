@@ -12,7 +12,7 @@ import com.streambase.sb.operator.*;
  * 
  * @author <a href="mailto:oblaufus@tibco.com">Owen Blaufuss</a>
  */
-public class EV3ConnectionManager extends Operator implements Parameterizable, ISharableAdapter {
+public class EV3ConnectionManager extends Operator implements Parameterizable, ISharableAdapter, Runnable {
 
 	public static final long serialVersionUID = 1623849395795L;
 	private String displayName = "EV3 Connection Manager";
@@ -25,8 +25,9 @@ public class EV3ConnectionManager extends Operator implements Parameterizable, I
 
 	// Local variables
 	private int inputPorts = 0;
-	private int outputPorts = 0;
-	private Schema[] outputSchemas; // caches the Schemas given during init() for use at processTuple()
+	private int outputPorts = 1;
+	private static Schema.Field FIELD_SUCCESS = Schema.createField(DataType.BOOL, "Success");
+	private Schema STATUS = new Schema("", FIELD_SUCCESS);
 
 	public EV3ConnectionManager() {
 		super();
@@ -44,8 +45,7 @@ public class EV3ConnectionManager extends Operator implements Parameterizable, I
 	}
 
 	public void typecheck() throws TypecheckException {
-		// typecheck: require a specific number of input ports
-		requireInputPortCount(inputPorts);
+		setOutputSchema(0, STATUS);
 
 		if (!isValid(MACaddress)) {
 			throw new PropertyTypecheckException("MACaddress", String.format("The adapter requires a 12-character Bluetooth MAC address."));
@@ -75,26 +75,27 @@ public class EV3ConnectionManager extends Operator implements Parameterizable, I
 		super.init();
 		// connect to shared object;
 		connectTo = EV3SharedObject.getSharedObjectInstance(this);
-
-		// for best performance, consider caching input or output Schema.Field objects
-		// for
-		// use later in processTuple()
-		outputSchemas = new Schema[outputPorts];
-
-		for (int i = 0; i < outputPorts; ++i) {
-			outputSchemas[i] = getRuntimeOutputSchema(i);
-		}
-
 		connectTo.run(MACaddress, ConnectionTries);
+		
 		getLogger().info(String.format("Connection to EV3 at Bluetooth MAC address %s successful.", MACaddress));
+		// Register the object so it will be run as a thread managed by StreamBase.
+		registerRunnable(this, true);
+	}
+	
+
+	@Override
+	public void run() {
+		//confirm initialization
+		Tuple status = STATUS.createTuple();
+    	try {
+			status.setBoolean(FIELD_SUCCESS.getName(), true);
+			sendOutput(0,status);
+		} catch (Exception e) {
+			getLogger().error("Error", e);
+		}	
+		
 	}
 
-	/**
-	 * The shutdown method is called when the StreamBase server is in the process of
-	 * shutting down.
-	 */
-	public void shutdown() {
-	}
 
 	// Getters & setters
 	public String getMACaddress() {
