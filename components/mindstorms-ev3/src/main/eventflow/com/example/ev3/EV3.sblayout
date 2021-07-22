@@ -11,6 +11,10 @@
         <param name="gui:x" value="-482"/>
         <param name="gui:y" value="-101"/>
     </component>
+    <component name="SensorColorsExtPt1">
+        <param name="gui:x" value="-352"/>
+        <param name="gui:y" value="-292"/>
+    </component>
     <component name="#&quot;On/Off&quot;">
         <param name="gui:x" value="-148"/>
         <param name="gui:y" value="-183"/>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.example.ev3.SensorModes"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <constant expr="&quot;COLOR_AMBIENT&quot;" name="AmbientLight_Colorsensor"/>
+    <constant expr="&quot;GYRO_ANGLE&quot;" name="Angle_Gyrosensor"/>
+    <constant expr="&quot;TOUCH_BUMPS&quot;" name="Bumps_Touchsensor"/>
+    <constant expr="&quot;ULTRASONIC_CM&quot;" name="Centimeter_Ultrasonicsensor"/>
+    <constant expr="&quot;COLOR_COLOR&quot;" name="Color_Colorsensor"/>
+    <constant expr="&quot;ULTRASONIC_INCH&quot;" name="Inch_Ultrasonicsensor"/>
+    <constant expr="&quot;ULTRASONIC_LISTEN&quot;" name="Listen_Ultrasonicsensor"/>
+    <constant expr="&quot;IR_PROXIMITY&quot;" name="Proximity_Infraredsensor"/>
+    <constant expr="&quot;GYRO_RATE&quot;" name="Rate_Gyrosensor"/>
+    <constant expr="&quot;COLOR_REFLECTED&quot;" name="ReflectedLight_Colorsensor"/>
+    <constant expr="&quot;IR_REMOTE&quot;" name="Remote_Infraredsensor"/>
+    <constant expr="&quot;TOUCH_TOUCH&quot;" name="Touch_Touchsensor"/>
+    <dynamic-variables/>
+</application>
