@@ -87,7 +87,7 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
                 || !getInputSchema(0).hasField(FIELD_COMMAND_TARGET.getName())
                 || getInputSchema(0).getField(getInputSchema(0).getFieldIndex(FIELD_COMMAND_TARGET.getName()))
                                     .getElementType() != FIELD_COMMAND_TARGET.getElementType()) {
-            throw new TypecheckException(String.format("The motor control port schema must at least have fields named %s of type String and %s of type Integer",
+            throw new TypecheckException(String.format("The non-blocking motor control port schema must at least have fields named %s of type String and %s of type Integer",
                                                        FIELD_COMMAND.getName(), FIELD_COMMAND_TARGET.getName()));
         }
         
@@ -95,11 +95,11 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
         if (getInputSchema(1) == null || !getInputSchema(1).hasField(FIELD_COMMAND_TARGET.getName())
                 || getInputSchema(1).getField(getInputSchema(1).getFieldIndex(FIELD_COMMAND_TARGET.getName()))
                                     .getElementType() != FIELD_COMMAND_TARGET.getElementType()) {
-            throw new TypecheckException(String.format("The motor control port schema must at least have a field named %s of type String",
+            throw new TypecheckException(String.format("The blocking motor control port schema must at least have a field named %s of type String",
                                                        FIELD_COMMAND_TARGET.getName()));
         }
         if (getInputSchema(1) == null || !getInputSchema(1).hasField(FIELD_COMMAND_POSE.getName()) || !getInputSchema(1).hasField(FIELD_COMMAND_TIME.getName())  || !getInputSchema(1).hasField(FIELD_COMMAND_RATE.getName()) ) {
-            throw new TypecheckException(String.format("The motor control port schema must at have 3 fields %s, %s, and %s of type Integer",
+            throw new TypecheckException(String.format("The blocking motor control port schema must at have 3 fields %s, %s, and %s of type Integer",
                                                        FIELD_COMMAND_POSE.getName(), FIELD_COMMAND_TIME.getName(), FIELD_COMMAND_RATE.getName()));
         }
         

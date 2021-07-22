@@ -253,6 +253,9 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 	}
 
 	// METHODS FOR COMMUNICATING WITH ROBOT
+	//   These are necessary to let the adapters interface with the j4ev3 code
+	//   without needing direct access to its classes.
+
 	/**
 	 * Translates String ports to their byte values according to j4ev3 Sensor class
 	 * 
@@ -293,6 +296,66 @@ public class EV3SharedObject implements Runnable, Comparable<EV3SharedObject>, P
 			return Motor.PORT_D;
 		default:
 			return Motor.PORT_ALL;
+		}
+	}
+	
+	public int getSensorInt(SensorTypeEnum e) {
+		switch (e) {
+		case TOUCH:
+			return Sensor.TYPE_TOUCH;
+		case COLOR:
+			return Sensor.TYPE_COLOR;
+		case ULTRA:
+			return Sensor.TYPE_ULTRASONIC;
+		case GYRO:
+			return Sensor.TYPE_GYRO;
+		case IR:
+			return Sensor.TYPE_IR;
+		case MOTOR:
+			return Sensor.TYPE_LARGE_MOTOR;
+		default: return Sensor.TYPE_DONT_CHANGE;
+		}
+	}
+	
+	public int getSensorModeInt(String mode) {
+		switch (mode) {
+		//touch modes
+		case EV3StatusAdapter.FIELD_TOUCH:
+			return Sensor.TOUCH_TOUCH;
+		case EV3StatusAdapter.FIELD_BUMPED:
+			return Sensor.TOUCH_BUMPS;
+		//color modes
+		case EV3StatusAdapter.FIELD_COLOR:
+			return Sensor.COLOR_COLOR;
+		case EV3StatusAdapter.FIELD_AMBIENT:
+			return Sensor.COLOR_AMBIENT;
+		case EV3StatusAdapter.FIELD_REFLECT:
+			return Sensor.COLOR_REFLECTED;
+		//ultrasonic modes
+		case EV3StatusAdapter.FIELD_DIST_CM:
+			return Sensor.ULTRASONIC_CM;
+		case EV3StatusAdapter.FIELD_DIST_IN:
+			return Sensor.ULTRASONIC_INCH;
+		case EV3StatusAdapter.FIELD_LISTEN:
+			return Sensor.ULTRASONIC_LISTEN;
+		//gyroscope modes
+		case EV3StatusAdapter.FIELD_ANGLE:
+			return Sensor.GYRO_ANGLE;
+		case EV3StatusAdapter.FIELD_RATE:
+			return Sensor.GYRO_RATE;
+		//IR modes
+		case EV3StatusAdapter.FIELD_PROXIMITY:
+			return Sensor.IR_PROXIMITY;
+		case EV3StatusAdapter.FIELD_REMOTE:
+			return Sensor.IR_REMOTE;
+		//motor modes
+		case EV3StatusAdapter.FIELD_DEGREES:
+			return Sensor.LARGE_MOTOR_DEGREE;
+		case EV3StatusAdapter.FIELD_POWER:
+			return Sensor.LARGE_MOTOR_POWER;
+		case EV3StatusAdapter.FIELD_ROTATION:
+			return Sensor.LARGE_MOTOR_ROTATION;
+		default: return Sensor.MODE_DONT_CHANGE;
 		}
 	}
 

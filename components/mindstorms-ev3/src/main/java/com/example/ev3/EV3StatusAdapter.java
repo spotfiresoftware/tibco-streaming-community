@@ -78,33 +78,34 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 
 	// Input schema definition
 	private static Schema.Field FIELD_TARGET_PORT = Schema.createField(DataType.STRING, "TargetPort");
+	private static Schema.Field FIELD_MODE = Schema.createField(DataType.STRING, "Mode");
 	private static Schema.Field FIELD_STREAM = Schema.createField(DataType.BOOL, "Stream");
 	// private static Schema.Field FIELD_SENSOR_MODE =
 	// Schema.createField(DataType.INT, "SensorMode");
 
 	// Output schema fieldnames
-	private static String FIELD_DEGREES = "Degrees";
-	private static String FIELD_ROTATION = "Rotation";
-	private static String FIELD_POWER = "Power";
+	public static final String FIELD_DEGREES = "Degrees";
+	public static final String FIELD_ROTATION = "Rotation";
+	public static final String FIELD_POWER = "Power";
 
-	private static String FIELD_LEFT = "LeftButton";
-	private static String FIELD_CENTER = "CenterButton";
-	private static String FIELD_RIGHT = "RightButton";
-	private static String FIELD_UP = "UpButton";
-	private static String FIELD_DOWN = "DownButton";
+	public static String FIELD_LEFT = "LeftButton";
+	public static String FIELD_CENTER = "CenterButton";
+	public static String FIELD_RIGHT = "RightButton";
+	public static String FIELD_UP = "UpButton";
+	public static String FIELD_DOWN = "DownButton";
 
-	private static String FIELD_LISTEN = "Listen";
-	private static String FIELD_TOUCH = "Touch";
-	private static String FIELD_BUMPED = "Bumped";
-	private static String FIELD_COLOR = "Color";
-	private static String FIELD_REFLECT = "LightReflected";
-	private static String FIELD_AMBIENT = "LightAmbient";
-	private static String FIELD_DIST_CM = "Distance(cm)";
-	private static String FIELD_DIST_IN = "Distance(in)";
-	private static String FIELD_ANGLE = "Angle";
-	private static String FIELD_RATE = "Rate";
-	private static String FIELD_PROXIMITY = "Proximity";
-	private static String FIELD_REMOTE = "RemoteControl";
+	public static final String FIELD_LISTEN = "Listen";
+	public static final String FIELD_TOUCH = "Touch";
+	public static final String FIELD_BUMPED = "Bumped";
+	public static final String FIELD_COLOR = "Color";
+	public static final String FIELD_REFLECT = "LightReflected";
+	public static final String FIELD_AMBIENT = "LightAmbient";
+	public static final String FIELD_DIST_CM = "Distance(cm)";
+	public static final String FIELD_DIST_IN = "Distance(in)";
+	public static final String FIELD_ANGLE = "Angle";
+	public static final String FIELD_RATE = "Rate";
+	public static final String FIELD_PROXIMITY = "Proximity";
+	public static final String FIELD_REMOTE = "RemoteControl";
 
 	public EV3StatusAdapter() {
 		super();
@@ -144,6 +145,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 					String.format("The control port schema must at least have a field named %s of type String",
 							FIELD_TARGET_PORT.getName()));
 		}
+		
 
 		int portNumber = 0;
 		String[] portNames = { "A", "B", "C", "D", "1", "2", "3", "4" };
@@ -181,13 +183,21 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		if (inputPort == 0) {
 			String target = tuple.getString(FIELD_TARGET_PORT.getName()).toUpperCase();
 			if (outputPortNames.containsKey(target)) {
+				//the target sensor port
 				int outputPort = outputPortNames.get(target);
+				//change sensor mode if need be
+				if (tuple.getSchema().hasField(FIELD_MODE.getName())) {
+					String mode = tuple.getString(FIELD_MODE.getName());
+					if (connectTo.getSensorModeInt(mode) != -1) {//if not "no change" or otherwise invalid
+						botPortsInfo[outputPort].setMode(mode);
+					}
+				}
+				//build tuple
 				Tuple out = buildSensorTuple(target);
 				sendOutput(outputPort, out);
-				// change the streaming value if needed
+				// change the streaming value if need be
 				if (tuple.getSchema().hasField(FIELD_STREAM.getName())) {
 					botPortsInfo[outputPort].setStreaming(tuple.getBoolean(FIELD_STREAM.getName()));
-					;
 				}
 			} else {
 				getLogger().warn(String.format("No output port available for target %s", target));
@@ -233,6 +243,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 			return getPort3Device();
 		case "4":
 			return getPort4Device();
+		case "A":
+		case "B":
+		case "C":
+		case "D":
+			return SensorTypeEnum.MOTOR;
 		default:
 			return SensorTypeEnum.NONE;
 		}
@@ -260,69 +275,41 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 			return false;
 		}
 	}
-
+	
 	public Tuple buildSensorTuple(String targetPort) {
 
 		int outputPort = outputPortNames.get(targetPort);
-		int sensorType;
-
-		// this information is helpfully cached
-		byte outputPortByte = botPortsInfo[outputPort].getAddress();
-		Tuple out = botPortsInfo[outputPort].getSchema().createTuple();
-
-		if (!(botPortsInfo[outputPort] instanceof RobotSensorPort)) {
-			try {
-				sensorType = Sensor.TYPE_LARGE_MOTOR;
-				out = setFieldByOutputType(out, FIELD_DEGREES, outputPortByte, sensorType, Sensor.LARGE_MOTOR_DEGREE);
-				out = setFieldByOutputType(out, FIELD_ROTATION, outputPortByte, sensorType,
-						Sensor.LARGE_MOTOR_ROTATION);
-				out = setFieldByOutputType(out, FIELD_POWER, outputPortByte, sensorType, Sensor.LARGE_MOTOR_POWER);
-			} catch (Exception e) {
-				getLogger().error("Error", e);
-			}
-		} else {
-			SensorTypeEnum sensor = ((RobotSensorPort) botPortsInfo[outputPort]).getSensor();
-			try {
-				switch (sensor) {
-				case TOUCH:
-					sensorType = Sensor.TYPE_TOUCH;
-					out = setFieldByOutputType(out, FIELD_TOUCH, outputPortByte, sensorType, Sensor.TOUCH_TOUCH);
-					out = setFieldByOutputType(out, FIELD_BUMPED, outputPortByte, sensorType, Sensor.TOUCH_BUMPS);
-					break;
-				case COLOR:
-					sensorType = Sensor.TYPE_COLOR;
-					
-					int color = ((int)connectTo.robot.getSensor().getValueSI(outputPortByte, sensorType, Sensor.COLOR_COLOR));
-					String colorName = ColorEnum.values()[color].toString();
-					out.setField(FIELD_COLOR, colorName);
-					out = setFieldByOutputType(out, FIELD_REFLECT, outputPortByte, sensorType, Sensor.COLOR_REFLECTED);
-					out = setFieldByOutputType(out, FIELD_AMBIENT, outputPortByte, sensorType, Sensor.COLOR_AMBIENT);
-					break;
-				case ULTRA:
-					sensorType = Sensor.TYPE_ULTRASONIC;
-					out = setFieldByOutputType(out, FIELD_DIST_CM, outputPortByte, sensorType, Sensor.ULTRASONIC_CM);
-					out = setFieldByOutputType(out, FIELD_DIST_IN, outputPortByte, sensorType, Sensor.ULTRASONIC_INCH);
-
-					boolean listen = (connectTo.robot.getSensor().getValueRaw(outputPortByte, sensorType,
-							Sensor.ULTRASONIC_LISTEN) > 0.5);
-					out.setField(FIELD_LISTEN, listen);
-					break;
-				case GYRO:
-					sensorType = Sensor.TYPE_GYRO;
-					out = setFieldByOutputType(out, FIELD_ANGLE, outputPortByte, sensorType, Sensor.GYRO_ANGLE);
-					out = setFieldByOutputType(out, FIELD_RATE, outputPortByte, sensorType, Sensor.GYRO_RATE);
-				case IR:
-					sensorType = Sensor.TYPE_IR;
-					out = setFieldByOutputType(out, FIELD_PROXIMITY, outputPortByte, sensorType, Sensor.IR_PROXIMITY);
-					out = setFieldByOutputType(out, FIELD_REMOTE, outputPortByte, sensorType, Sensor.IR_REMOTE);
-				default:
-					break;
+		RobotPort port = botPortsInfo[outputPort];
+		
+		// cached information about this port:
+		//its address
+		byte outputPortByte = port.getAddress();
+		//its sensor type
+		SensorTypeEnum sensor = port.getSensor();
+		int sensorType = connectTo.getSensorInt(sensor);
+		//its sensor mode
+		String mode = botPortsInfo[outputPort].getMode();
+		int sensorMode = connectTo.getSensorModeInt(mode);
+		//and finally, what tuple it will return
+		Tuple out = port.getSchema().createTuple();
+		
+		if (sensorMode == -1) { //if no mode specified, fill all fields
+			String[] fields = port.getSchema().getFieldNames();
+			for (int i = 0; i < fields.length; i++) {
+				try {
+					out = setFieldByOutputType(out, fields[i], outputPortByte, sensorType, sensorMode);
+				} catch (TupleException e) {
+					getLogger().error("Error", e);
 				}
-			} catch (Exception e) {
+			}
+		} else { //otherwise fill only the specified field
+			try {
+				out = setFieldByOutputType(out, mode, outputPortByte, sensorType, sensorMode);
+			} catch (TupleException e) {
 				getLogger().error("Error", e);
 			}
 		}
-
+		
 		return out;
 	}
 
@@ -405,7 +392,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		String[] sensorPortNames = { "1", "2", "3", "4" };
 		for (int i = 0; i < sensorPortNames.length; i++) {
 			if (isPort(sensorPortNames[i])) {
-				botPortsInfo[portNumber] = initBotSensorPort(sensorPortNames[i]);
+				botPortsInfo[portNumber] = initBotPort(sensorPortNames[i]);
 				outputPortNames.put(sensorPortNames[i], portNumber);
 				portNumber++;
 			}
@@ -414,15 +401,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	}
 
 	public RobotPort initBotPort(String name) {
-		return new RobotPort(name, getPortStreaming(name), connectTo.getSensorPortByte(name),
-				createMotorOutputSchema());
-	}
-
-	public RobotSensorPort initBotSensorPort(String name) {
 		SensorTypeEnum type = getPortDevice(name);
-		return new RobotSensorPort(name, getPortStreaming(name), connectTo.getSensorPortByte(name),
+		return new RobotPort(name, getPortStreaming(name), connectTo.getSensorPortByte(name),
 				getSchemaForSensorType(type), type);
 	}
+
 
 	public void run() {
 		while (shouldRun()) {
