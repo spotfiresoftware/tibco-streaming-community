@@ -100,8 +100,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	public static final String FIELD_COLOR = "Color";
 	public static final String FIELD_REFLECT = "LightReflected";
 	public static final String FIELD_AMBIENT = "LightAmbient";
-	public static final String FIELD_DIST_CM = "Distance(cm)";
-	public static final String FIELD_DIST_IN = "Distance(in)";
+	public static final String FIELD_DIST_CM = "DistanceCM";
+	public static final String FIELD_DIST_IN = "DistanceIN";
 	public static final String FIELD_ANGLE = "Angle";
 	public static final String FIELD_RATE = "Rate";
 	public static final String FIELD_PROXIMITY = "Proximity";
@@ -188,7 +188,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 				//change sensor mode if need be
 				if (tuple.getSchema().hasField(FIELD_MODE.getName())) {
 					String mode = tuple.getString(FIELD_MODE.getName());
-					if (connectTo.getSensorModeInt(mode) != -1) {//if not "no change" or otherwise invalid
+					//if it's a new valid mode to switch to OR an asterisk (meaning fill all fields in all modes)
+					if (connectTo.getSensorModeInt(mode) != -1 || mode.equals("*")) {
 						botPortsInfo[outputPort].setMode(mode);
 					}
 				}
@@ -297,7 +298,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 			String[] fields = port.getSchema().getFieldNames();
 			for (int i = 0; i < fields.length; i++) {
 				try {
-					out = setFieldByOutputType(out, fields[i], outputPortByte, sensorType, sensorMode);
+					out = setFieldByOutputType(out, fields[i], outputPortByte, sensorType, i);
 				} catch (TupleException e) {
 					getLogger().error("Error", e);
 				}
