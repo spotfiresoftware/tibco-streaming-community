@@ -340,8 +340,23 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	 * @return Tuple with the appropriate field set
 	 * @throws TupleException
 	 */
-	public Tuple setFieldByOutputType(Tuple tuple, String field, byte port, int sensorType, int sensorMode)
-			throws TupleException {
+	public Tuple setFieldByOutputType(Tuple tuple, String field, byte port, int sensorType, int sensorMode) throws TupleException {
+		//TWO EXCEPTIONS WHICH NEED SPECIAL PROCESSING
+		//Color sensor Color mode (returns string)
+		if (field.equals(FIELD_COLOR)) {
+			int color = ((int)connectTo.robot.getSensor().getValueSI(port, sensorType, Sensor.COLOR_COLOR));
+			String colorName = ColorEnum.values()[color].toString();
+			tuple.setField(FIELD_COLOR, colorName);
+			return tuple;
+		}
+		//Ultrasonic sensor Listen mode (returns boolean)
+		if (field.equals(FIELD_LISTEN)) {
+			boolean listen = (connectTo.robot.getSensor().getValueRaw(port, sensorType,Sensor.ULTRASONIC_LISTEN) > 0.5);
+			tuple.setField(FIELD_LISTEN, listen);
+			return tuple;
+		}
+	
+		//for the rest, we use the output type set before runtime:
 		Sensor sensorRead = connectTo.robot.getSensor();
 		switch (OutputType) {
 		case RAW:
@@ -357,6 +372,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 
 		return tuple;
 	}
+	
+	
 
 	public void init() throws StreamBaseException {
 		super.init();
@@ -447,7 +464,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	 * @return Schema
 	 */
 	public Schema createButtonOutputSchema() {
-		Schema buttonSchema = new Schema("buttonSchema", new Schema.Field(FIELD_LEFT, CompleteDataType.forBoolean()),
+		Schema buttonSchema = new Schema("buttonSchema",
+				new Schema.Field(FIELD_LEFT, CompleteDataType.forBoolean()),
 				new Schema.Field(FIELD_CENTER, CompleteDataType.forBoolean()),
 				new Schema.Field(FIELD_RIGHT, CompleteDataType.forBoolean()),
 				new Schema.Field(FIELD_UP, CompleteDataType.forBoolean()),
@@ -462,8 +480,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT ? CompleteDataType.forInt()
 				: CompleteDataType.forDouble();
 		// if a percentage is requested, it will be an integer; otherwise a double
-		Schema motorSchema = new Schema("motorSchema", new Schema.Field(FIELD_DEGREES, returnType),
-				new Schema.Field(FIELD_ROTATION, returnType), new Schema.Field(FIELD_POWER, returnType));
+		Schema motorSchema = new Schema("motorSchema",
+				new Schema.Field(FIELD_DEGREES, returnType),
+				new Schema.Field(FIELD_ROTATION, returnType),
+				new Schema.Field(FIELD_POWER, returnType));
 		return motorSchema;
 	}
 
@@ -495,7 +515,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT ? CompleteDataType.forInt()
 				: CompleteDataType.forDouble();
 		// if a percentage is requested, it will be an integer; otherwise a double
-		Schema touchSchema = new Schema(SensorTypeEnum.TOUCH.toString(), new Schema.Field(FIELD_TOUCH, returnType),
+		Schema touchSchema = new Schema(SensorTypeEnum.TOUCH.toString(),
+				new Schema.Field(FIELD_TOUCH, returnType),
 				new Schema.Field(FIELD_BUMPED, returnType));
 		return touchSchema;
 	}
@@ -509,7 +530,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		// if a percentage is requested, it will be an integer; otherwise a double
 		Schema colorSchema = new Schema(SensorTypeEnum.COLOR.toString(),
 				new Schema.Field(FIELD_COLOR, CompleteDataType.forString()),
-				new Schema.Field(FIELD_REFLECT, returnType), new Schema.Field(FIELD_AMBIENT, returnType));
+				new Schema.Field(FIELD_REFLECT, returnType),
+				new Schema.Field(FIELD_AMBIENT, returnType));
 		return colorSchema;
 	}
 
@@ -535,7 +557,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT ? CompleteDataType.forInt()
 				: CompleteDataType.forDouble();
 		// if a percentage is requested, it will be an integer; otherwise a double
-		Schema ultraSchema = new Schema(SensorTypeEnum.ULTRA.toString(), new Schema.Field(FIELD_DIST_CM, returnType),
+		Schema ultraSchema = new Schema(SensorTypeEnum.ULTRA.toString(),
+				new Schema.Field(FIELD_DIST_CM, returnType),
 				new Schema.Field(FIELD_DIST_IN, returnType),
 				new Schema.Field(FIELD_LISTEN, CompleteDataType.forBoolean()));
 		return ultraSchema;
@@ -548,7 +571,8 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		CompleteDataType returnType = OutputType == OutputTypeEnum.PERCENT ? CompleteDataType.forInt()
 				: CompleteDataType.forDouble();
 		// if a percentage is requested, it will be an integer; otherwise a double
-		Schema gyroSchema = new Schema(SensorTypeEnum.GYRO.toString(), new Schema.Field(FIELD_ANGLE, returnType),
+		Schema gyroSchema = new Schema(SensorTypeEnum.GYRO.toString(),
+				new Schema.Field(FIELD_ANGLE, returnType),
 				new Schema.Field(FIELD_RATE, returnType));
 		return gyroSchema;
 	}
