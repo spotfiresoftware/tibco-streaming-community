@@ -9,6 +9,7 @@
             <param name="fully-qualified-name" value="com.example.ev3.Demo"/>
         </type-metadata>
         <memory-model-settings/>
+        <import from="com.example.ev3.SensorModes"/>
         <dynamic-variables/>
         <stream name="InputStream">
             <schema/>
@@ -49,7 +50,7 @@
         <box name="Sensors" type="java">
             <input port="1" stream="out:SetStartupMode_1"/>
             <input port="2" stream="InputStream"/>
-            <output port="1" stream="out:Sensors_1"/>
+            <output port="1" stream="monitorIR"/>
             <output port="2" stream="out:Sensors_2"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
@@ -72,8 +73,9 @@
             <param name="StreamPortC" value="false"/>
             <param name="StreamPortD" value="false"/>
         </box>
+        <output-stream name="monitorIR"/>
         <box name="DriveSpeed" type="map">
-            <input port="1" stream="out:Sensors_1"/>
+            <input port="1" stream="monitorIR"/>
             <output port="1" stream="out:DriveSpeed_1"/>
             <target-list>
                 <item name="input" selection="all"/>

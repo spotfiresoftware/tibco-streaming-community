@@ -23,7 +23,7 @@
 
 
 <properties>
-    <com.tibco.ep.sb.studio.sample>false</com.tibco.ep.sb.studio.sample>
+    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
 </properties>
 
     <!-- common definitions for this version of Streaming -->
