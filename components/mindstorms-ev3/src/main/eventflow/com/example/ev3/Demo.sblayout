@@ -23,7 +23,7 @@
         <param name="gui:x" value="467"/>
         <param name="gui:y" value="-88"/>
     </component>
-    <component name="Command">
+    <component name="Connection">
         <param name="gui:x" value="-528"/>
         <param name="gui:y" value="-114"/>
     </component>
@@ -79,9 +79,5 @@
     <component name="Union4">
         <param name="gui:x" value="141"/>
         <param name="gui:y" value="17"/>
-    </component>
-    <component name="monitorIR">
-        <param name="gui:x" value="-92"/>
-        <param name="gui:y" value="121"/>
     </component>
 </application-layout>

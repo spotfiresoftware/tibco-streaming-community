@@ -29,15 +29,15 @@
                 <field name="Time" type="int"/>
             </schema>
         </stream>
-        <box name="Command" type="java">
-            <output port="1" stream="out:Command_1"/>
+        <box name="Connection" type="java">
+            <output port="1" stream="out:Connection_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3ConnectionManager"/>
             <param name="ConnectionTries" value="1000"/>
             <param name="MACaddress" value="0016535299F1"/>
         </box>
         <box name="SetStartupMode" type="map">
-            <input port="1" stream="out:Command_1"/>
+            <input port="1" stream="out:Connection_1"/>
             <output port="1" stream="out:SetStartupMode_1"/>
             <target-list>
                 <item name="input" selection="all"/>
@@ -50,11 +50,11 @@
         <box name="Sensors" type="java">
             <input port="1" stream="out:SetStartupMode_1"/>
             <input port="2" stream="InputStream"/>
-            <output port="1" stream="monitorIR"/>
+            <output port="1" stream="out:Sensors_1"/>
             <output port="2" stream="out:Sensors_2"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
-            <param name="ConnectionManagerName" value="Command"/>
+            <param name="ConnectionManagerName" value="Connection"/>
             <param name="OutputType" value="Raw"/>
             <param name="Port1Device" value="None"/>
             <param name="Port2Device" value="None"/>
@@ -73,9 +73,8 @@
             <param name="StreamPortC" value="false"/>
             <param name="StreamPortD" value="false"/>
         </box>
-        <output-stream name="monitorIR"/>
         <box name="DriveSpeed" type="map">
-            <input port="1" stream="monitorIR"/>
+            <input port="1" stream="out:Sensors_1"/>
             <output port="1" stream="out:DriveSpeed_1"/>
             <target-list>
                 <item name="input" selection="all"/>
@@ -199,7 +198,7 @@
             <output port="1" stream="out:Java_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.example.ev3.EV3CommandAdapter"/>
-            <param name="ConnectionManagerName" value="Command"/>
+            <param name="ConnectionManagerName" value="Connection"/>
             <param name="error" value="5"/>
         </box>
     </add>
