@@ -93,6 +93,16 @@
                 </expressions>
             </target-list>
         </box>
+        <box name="MediumMotor" type="map">
+            <input port="1" stream="out:DriveSpeed_1"/>
+            <output port="1" stream="out:MediumMotor_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TargetPort">"A"</include>
+                </expressions>
+            </target-list>
+        </box>
         <box name="RightMotor" type="map">
             <input port="1" stream="out:DriveSpeed_1"/>
             <output port="1" stream="out:RightMotor_1"/>
@@ -113,6 +123,14 @@
             <param name="expression.1" value="(RemoteControl =2 || RemoteControl = 7 || RemoteControl = 8)"/>
             <param name="expression.2" value="true"/>
         </box>
+        <box name="MediumMotorRun" type="filter">
+            <input port="1" stream="out:MediumMotor_1"/>
+            <output port="1" stream="out:MediumMotorRun_1"/>
+            <output port="2" stream="out:MediumMotorRun_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="(RemoteControl = 9)"/>
+            <param name="expression.1" value="true"/>
+        </box>
         <box name="RightMotorDirection" type="filter">
             <input port="1" stream="out:RightMotor_1"/>
             <output port="1" stream="out:RightMotorDirection_1"/>
@@ -126,6 +144,7 @@
         <box name="Union2" type="union">
             <input port="1" stream="out:LeftMotorDirection_1"/>
             <input port="2" stream="out:RightMotorDirection_1"/>
+            <input port="3" stream="out:MediumMotorRun_1"/>
             <output port="1" stream="out:Union2_1"/>
             <param name="strict" value="false"/>
         </box>
@@ -138,6 +157,7 @@
         <box name="Union4" type="union">
             <input port="1" stream="out:LeftMotorDirection_3"/>
             <input port="2" stream="out:RightMotorDirection_3"/>
+            <input port="3" stream="out:MediumMotorRun_2"/>
             <output port="1" stream="out:Union4_1"/>
             <param name="strict" value="false"/>
         </box>

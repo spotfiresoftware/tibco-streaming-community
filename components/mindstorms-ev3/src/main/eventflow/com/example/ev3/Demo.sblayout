@@ -80,4 +80,12 @@
         <param name="gui:x" value="141"/>
         <param name="gui:y" value="17"/>
     </component>
+    <component name="MediumMotor">
+        <param name="gui:x" value="-129"/>
+        <param name="gui:y" value="88"/>
+    </component>
+    <component name="MediumMotorRun">
+        <param name="gui:x" value="-8"/>
+        <param name="gui:y" value="88"/>
+    </component>
 </application-layout>
