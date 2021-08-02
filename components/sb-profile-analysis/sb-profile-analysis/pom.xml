@@ -16,14 +16,14 @@
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-eventflow-fragment</artifactId>
-        <version>10.6.2-SNAPSHOT</version>
+        <version>10.6.1</version>
     </parent>
 
     <dependencies>
     	<dependency>
     		<groupId>com.tibco.ep.sb.adapter</groupId>
     		<artifactId>fileio</artifactId>
-    		<version>10.6.2-SNAPSHOT</version>
+    		<version>10.6.1</version>
     	</dependency>
     </dependencies>
 </project>

@@ -84,7 +84,7 @@ contained no operators that had data flow.
 ## How to run the profile analysis tool
 
 The analysis tool can be run in Studio in a number of ways, or as a deployed application.
-You may wish to configure the summary report file location, no mater how you run the application.
+You may wish to configure the summary report file location, no matter how you run the application.
 The default output is /tmp/ProfileSummary.txt.
 
 To run in studio, navigate to com.sb_profileanalysis.ProfilePerf.sbapp and right click on that application,

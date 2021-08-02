@@ -11,6 +11,8 @@ Samples :
 * [NYC Yellow Cabs: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](nyc-yellow-cabs-demo)
 * [Decode airplane radio and publish plane data to LiveViewTM Server](plane-tracker)
 * [Adapters to send and receive messages from a Redis database, including streaming](redis-adapter)
+* [Blocker and Releaser adapter set to control locking concurrent regions](blocker-releaser-adapters)
+* [Reads StreamBase profile data files and summarizes the data](sb-profile-analysis)
 * [Live Datamart Table Provider example for querying an InfluxDB database](sb-ldm-influxdb-tableprovider)
 * [SMILE Stat and ML library integration operators](smile-operators)
 * [A simple wrapper around epadmin to provide a nicer ux for common development workflows.](uxadmin)

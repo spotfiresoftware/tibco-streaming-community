@@ -49,7 +49,9 @@
         <module>nyc-yellow-cabs-demo</module>
         <module>plane-tracker</module>
         <module>redis-adapter</module>
+        <module>blocker-releaser-adapters</module>
         <module>sb-ldm-influxdb-tableprovider</module>
+        <module>sb-profile-analysis</module>
         <module>smile-operators</module>
         <module>uxadmin</module>
         <module>wikimedia</module>
