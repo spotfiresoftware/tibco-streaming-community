@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015-2021 TIBCO Software Inc.
+ * All rights reserved.
+ *
+ * This software is confidential and proprietary information of TIBCO Software Inc.
+ *
+ */
 package com.tibco.contrib;
 
 import java.beans.*;
