@@ -5,12 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <groupId>com.tibco.ep.community.components</groupId>
     <artifactId>lv-cluster-scaler</artifactId>
     <packaging>ep-eventflow-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>lv-cluster-scaler</name>
-    <description>My EventFlow Fragment</description>
+    <description>LiveView cluster monitor/scaler</description>
 
     <!-- common definitions for this version of Streaming -->
     <parent>
