@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.OperatorProf7"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+            <parameter default=".3" name="TSGapWarnMarginSec"/>
+            <parameter default="1.0" name="MonitorPeriodSec"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="OperatorRollupTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="rollupTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="startSizeTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="SizeStartTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="DoneIn">
+            <schema>
+                <field name="Type" type="string"/>
+            </schema>
+        </stream>
+        <stream name="OperatorIn">
+            <schema>
+                <field name="index" type="long"/>
+                <field name="type" type="string"/>
+                <field name="name" type="string"/>
+                <field name="f2" type="string"/>
+                <field name="f3" type="long"/>
+                <field name="f4" type="string"/>
+                <field name="f5" type="int"/>
+                <field name="f6" type="string"/>
+                <field name="timestamp" type="timestamp"/>
+                <field name="firstTimeStamp" type="timestamp"/>
+                <field name="lastTimeStamp" type="timestamp"/>
+                <field name="startTimeStamp" type="timestamp"/>
+                <field name="endTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="isGap" type="filter">
+            <input port="1" stream="OperatorIn"/>
+            <output port="1" stream="out:isGap_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(notnull(lastTimeStamp) &amp;&amp; notnull(timestamp)) &amp;&amp;  (to_seconds(timestamp) - to_seconds(lastTimeStamp)) &gt; (${MonitorPeriodSec} + ${TSGapWarnMarginSec})"/>
+        </box>
+        <box name="isOorD" type="filter">
+            <input port="1" stream="OperatorIn"/>
+            <output port="1" stream="out:isOorD_1"/>
+            <output port="2" stream="out:isOorD_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="type == &quot;O&quot;"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="isTooShort" type="filter">
+            <input port="1" stream="OperatorIn"/>
+            <output port="1" stream="out:isTooShort_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(notnull(lastTimeStamp) &amp;&amp; notnull(timestamp)) &amp;&amp;&#13;&#10;(to_seconds(timestamp) != to_seconds(lastTimeStamp)) &amp;&amp; &#13;&#10;(to_seconds(timestamp) - to_seconds(lastTimeStamp)) &lt; (${MonitorPeriodSec} - ${TSGapWarnMarginSec})"/>
+        </box>
+        <box name="convertRest" type="map">
+            <input port="1" stream="out:isOorD_1"/>
+            <output port="1" stream="out:convertRest_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                    <include field="type"/>
+                    <include field="name"/>
+                    <include field="timestamp"/>
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                    <include field="startTimeStamp"/>
+                    <include field="endTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="inTPS">long(f2)</include>
+                    <include field="outTPS">f3</include>
+                    <include field="CPU">f5</include>
+                    <include field="Size">if (indexof(f6, "N") == -1) then int(f6) else 0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getGap" type="map">
+            <input port="1" stream="out:isGap_1"/>
+            <output port="1" stream="out:getGap_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="timestamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="GapSecs">round( (to_seconds(timestamp) - to_seconds(lastTimeStamp)) - ${MonitorPeriodSec}, 1)  -- MonitorPeriodSec is the default sbmonitor period of server</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getShort" type="map">
+            <input port="1" stream="out:isTooShort_1"/>
+            <output port="1" stream="out:getShort_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="timestamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="ShortSecs">round(${MonitorPeriodSec} - (to_seconds(timestamp) - to_seconds(lastTimeStamp)), 1)  -- MonitorPeriodSec is the default sbmonitor period of server</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="setOpType" type="query">
+            <input port="1" stream="out:isOorD_2"/>
+            <output port="1" stream="out:setOpType_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-value.0" value="name"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="inTPS">0</set>
+                    <set field="outTPS">0</set>
+                    <set field="Size">0</set>
+                    <set field="CPU">0</set>
+                    <set field="type">f2</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="type">f2</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GapWarnLog" type="outputadapter">
+            <input port="1" stream="out:getGap_1"/>
+            <output port="1" stream="GapWarn"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="WARN: Unexplained {2} second gap - Previous timestamp={1}, This timestamp={0} "/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="GapWarning"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="ShortWarnLog" type="outputadapter">
+            <input port="1" stream="out:getShort_1"/>
+            <output port="1" stream="TooShortWarn"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="WARN: Profile received {2} seconds before expected - Previous timestamp={1}, This timestamp={0} "/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="GapWarning"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="out:convertRest_1"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="GapWarn" scope="public"/>
+        <output-stream name="TooShortWarn" scope="public"/>
+        <box name="rollupUpdate" type="query">
+            <input port="1" stream="out:Split2_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-value.0" value="name"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="region">string(null)</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="Size">input1.Size</set>
+                    <set field="CPU">input1.CPU</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="region">string(null)</set>
+                    <set field="inTPS">input1.inTPS + old.inTPS</set>
+                    <set field="outTPS">input1.outTPS + old.outTPS</set>
+                    <set field="Size">input1.Size + old.Size</set>
+                    <set field="CPU">input1.CPU + old.CPU</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="out:Split3_1"/>
+            <output port="2" stream="out:Split3_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="isNewTick" type="filter">
+            <input port="1" stream="out:Split3_1"/>
+            <output port="1" stream="out:isNewTick_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull(lastTimeStamp) || notnull(lastTimeStamp) &amp;&amp; ( lastTimeStamp != timestamp)"/>
+        </box>
+        <box name="StripFeilds" type="map">
+            <input port="1" stream="out:Split3_2"/>
+            <output port="1" stream="out:StripFeilds_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="startTimeStamp"/>
+                    <remove field="endTimeStamp"/>
+                    <remove field="lastTimeStamp"/>
+                </item>
+            </target-list>
+        </box>
+        <module-reference name="Operator7StatsRef1">
+            <input name="getCountInputStream1" port="1" stream="out:StripFeilds_1"/>
+            <input name="DoneIn" port="2" stream="DoneIn"/>
+            <output name="DoneOut" port="1" stream="DoneOut"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="com.profile_impl.Operator7Stats"/>
+            <table-export name="operatorCPUTable"/>
+            <table-export name="operatorInputTable"/>
+            <table-export name="operatorOutputTable"/>
+            <table-export name="operatorSPITTable"/>
+            <table-export name="operatorSPOTTable"/>
+            <table-export name="operatorSizeTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="UpdateTickCount" type="query">
+            <input port="1" stream="out:isNewTick_1"/>
+            <dataref id="querytable" name="startSizeTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="0"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="totalTicks">if (isnull(old.totalTicks)) then 0 else 1 + old.totalTicks</set>
+                    <set field="firstTimeStamp">old.firstTimeStamp</set>
+                    <set field="lastTimeStamp">old.lastTimeStamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <output-stream name="DoneOut"/>
+    </add>
+</modify>

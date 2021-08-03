@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>com.tibco.ep.community.components</groupId>
+  <artifactId>sb-profile-analysis</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+
+  <name>Summarize StreamBase Profile data</name>
+  <description>Event flow application that reads sbprofile data and summarizes for analysis</description>
+ 
+  <modules>
+    <module>sb-profile-analysis</module>
+    <module>ProfileAnalysisDeploy</module>
+  </modules>
+
+  <licenses>
+    <license>
+      <name>BSD 3-Clause License</name>
+      <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+ 
+  <properties>
+    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+  </properties>
+
+</project>

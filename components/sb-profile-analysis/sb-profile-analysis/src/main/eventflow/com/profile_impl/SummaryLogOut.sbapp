@@ -1,0 +1,1582 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.SummaryLogOut"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <table-schemas>
+            <table-schema name="OperatorTable">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="int"/>
+                    <field name="outTPS" type="int"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+            </table-schema>
+        </table-schemas>
+        <data name="GCInfoTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="GCInfoTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorCPUTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorCPUTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorInputTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorInputTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorOutputTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorOutputTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="OperatorRollupTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="rollupTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSizeTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSizeTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSPITTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSPTTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSPOTTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSPTTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="QueueRollupTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="name" type="string"/>
+                    <field name="size" type="long"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="size"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="queuesTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="QueueTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="RegionTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="RegionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="StreamsInfoTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="StreamsInfoTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="SystemInfoTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="SystemTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="ThreadRollupTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="disk"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ThreadRollupTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="TopThreadTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ThreadTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="Done">
+            <schema>
+                <field name="firstTimeStamp" type="timestamp"/>
+                <field name="lastTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="Split1" type="split">
+            <input port="1" stream="Done"/>
+            <output port="1" stream="out:Split1_1"/>
+            <output port="2" stream="out:Split1_2"/>
+            <output port="3" stream="out:Split1_3"/>
+            <output port="4" stream="out:Split1_4"/>
+            <output port="5" stream="out:Split1_5"/>
+            <output port="6" stream="out:Split1_6"/>
+            <output port="7" stream="out:Split1_7"/>
+            <output port="8" stream="out:Split1_8"/>
+            <output port="9" stream="out:Split1_9"/>
+            <output port="10" stream="out:Split1_10"/>
+            <output port="11" stream="out:Split1_11"/>
+            <output port="12" stream="out:Split1_12"/>
+            <output port="13" stream="out:Split1_13"/>
+            <output port="14" stream="out:Split1_14"/>
+            <output port="15" stream="out:Split1_15"/>
+            <param name="output-count" value="15"/>
+        </box>
+        <box name="aggCPUTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_13"/>
+            <output port="1" stream="out:aggCPUTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Aggregate CPU ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="AggQuSizeTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_7"/>
+            <output port="1" stream="out:AggQuSizeTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="*** Queues with largest Aggregated Sizes ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="AggThreadTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_9"/>
+            <output port="1" stream="out:AggThreadTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Aggregated Threads CPU usage ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="CountAllOps" type="query">
+            <input port="1" stream="out:Split1_1"/>
+            <output port="1" stream="out:CountAllOps_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="NumberOfOperators">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="CountAllThreadsQuery" type="query">
+            <input port="1" stream="out:Split1_8"/>
+            <output port="1" stream="out:CountAllThreadsQuery_1"/>
+            <dataref id="querytable" name="ThreadRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="TotalCount">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="CountQueQuery" type="query">
+            <input port="1" stream="out:Split1_6"/>
+            <output port="1" stream="out:CountQueQuery_1"/>
+            <dataref id="querytable" name="QueueRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="TotalNumber">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GCTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_15"/>
+            <output port="1" stream="out:GCTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Garbarage Collectors ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="StreamsTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_14"/>
+            <output port="1" stream="out:StreamsTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top Streams ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="systemTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_5"/>
+            <output port="1" stream="out:systemTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Highest Memory Usage ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopCPUTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_12"/>
+            <output port="1" stream="out:TopCPUTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top CPU Operators ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopInputTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_2"/>
+            <output port="1" stream="out:TopInputTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="*** Top Input TPS ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopOutputTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_3"/>
+            <output port="1" stream="out:TopOutputTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="*** Top Output TPS ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSizeTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_4"/>
+            <output port="1" stream="out:TopSizeTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top Size Operators ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSPOTTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_11"/>
+            <output port="1" stream="out:TopSPOTTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top Microseconds Per Output Tuple Operators ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSPTTitle" type="outputadapter">
+            <input port="1" stream="out:Split1_10"/>
+            <output port="1" stream="out:TopSPTTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top Microseconds Per Input Tuple Operators ***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="AggCPUQuery" type="query">
+            <input port="1" stream="out:aggCPUTitle_1"/>
+            <output port="1" stream="out:AggCPUQuery_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="CPU"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="aggQueueQuery" type="query">
+            <input port="1" stream="out:AggQuSizeTitle_1"/>
+            <output port="1" stream="out:aggQueueQuery_1"/>
+            <dataref id="querytable" name="QueueRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="size"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="gt"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="size"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="AggThreadQuery" type="query">
+            <input port="1" stream="out:AggThreadTitle_1"/>
+            <output port="1" stream="out:AggThreadQuery_1"/>
+            <dataref id="querytable" name="ThreadRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="totalCPU"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <replace field="userCPU">userCPU/1000</replace>
+                    <replace field="systemCPU">systemCPU/1000</replace>
+                    <replace field="totalCPU">totalCPU/1000</replace>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="CountZeroOps" type="query">
+            <input port="1" stream="out:CountAllOps_1"/>
+            <output port="1" stream="out:CountZeroOps_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="(Size == 0) &amp;&amp; (inTPS == 0) &amp;&amp; (outTPS == 0) &amp;&amp; (CPU == 0)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="NumberOfZeroOperators">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetAllGCs" type="query">
+            <input port="1" stream="out:GCTitle_1"/>
+            <output port="1" stream="out:GetAllGCs_1"/>
+            <dataref id="querytable" name="GCInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="GCTime"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetTopStreams" type="query">
+            <input port="1" stream="out:StreamsTitle_1"/>
+            <output port="1" stream="out:GetTopStreams_1"/>
+            <dataref id="querytable" name="StreamsInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="Count"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="MemoryUsed" type="query">
+            <input port="1" stream="out:systemTitle_1"/>
+            <output port="1" stream="out:MemoryUsed_1"/>
+            <dataref id="querytable" name="SystemInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="usedMemory"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="usedMemory"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="index">null</set>
+                    <set field="maxMemory">null</set>
+                    <set field="usedMemory">null</set>
+                    <set field="freeMemory">null</set>
+                    <set field="totalThreads">null</set>
+                    <set field="dequeueClientCount">null</set>
+                    <set field="timerunning">null</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="TopCPUQuery" type="query">
+            <input port="1" stream="out:TopCPUTitle_1"/>
+            <output port="1" stream="out:TopCPUQuery_1"/>
+            <dataref id="querytable" name="operatorCPUTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="CPU"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                    <replace field="CPU">CPU/1000</replace>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="topInputQuery" type="query">
+            <input port="1" stream="out:TopInputTitle_1"/>
+            <output port="1" stream="out:topInputQuery_1"/>
+            <dataref id="querytable" name="operatorInputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="inTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="inTPS"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="topOpSizeQuery" type="query">
+            <input port="1" stream="out:TopSizeTitle_1"/>
+            <output port="1" stream="out:topOpSizeQuery_1"/>
+            <dataref id="querytable" name="operatorSizeTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="Size"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="gt"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="Size"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="topOutputQuery" type="query">
+            <input port="1" stream="out:TopOutputTitle_1"/>
+            <output port="1" stream="out:topOutputQuery_1"/>
+            <dataref id="querytable" name="operatorOutputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="outTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="outTPS"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TopQuSizeTitle" type="outputadapter">
+            <input port="1" stream="out:CountQueQuery_1"/>
+            <output port="1" stream="out:TopQuSizeTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="customFormat" value="*** Largest Queue Sizes ({0} queues in total)***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSPITQuery" type="query">
+            <input port="1" stream="out:TopSPTTitle_1"/>
+            <output port="1" stream="out:TopSPITQuery_1"/>
+            <dataref id="querytable" name="operatorSPITTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-value.0" value=".1"/>
+            <param name="key-lowerbound-operation.0" value="gt"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                    <replace field="CPU">CPU/1000</replace>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TopSPOTQuery" type="query">
+            <input port="1" stream="out:TopSPOTTitle_1"/>
+            <output port="1" stream="out:TopSPOTQuery_1"/>
+            <dataref id="querytable" name="operatorSPOTTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-value.0" value=".1"/>
+            <param name="key-lowerbound-operation.0" value="gt"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="region"/>
+                    <replace field="CPU">CPU/1000</replace>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TopThreadTitle" type="outputadapter">
+            <input port="1" stream="out:CountAllThreadsQuery_1"/>
+            <output port="1" stream="out:TopThreadTitle_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="*** Top Threads CPU usage ({0} unique managed threads seen)***"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="AggQuSizeLog" type="outputadapter">
+            <input port="1" stream="out:aggQueueQuery_1"/>
+            <output port="1" stream="aggQueueSize"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, Size={1, number,#}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="calcGCPercent" type="map">
+            <input port="1" stream="out:GetAllGCs_1"/>
+            <output port="1" stream="out:calcGCPercent_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="GCMaxTime"/>
+                </item>
+                <expressions>
+                    <include field="name">name</include>
+                    <include field="GCCount">GCCount - FirstGCCount</include>
+                    <include field="GCMillisecond">GCTime - FirstGCTime</include>
+                    <include field="PercentTime">round( (GCTime - FirstGCTime) / (to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp)) , 2)</include>
+                    <include field="AveTime">if ((GCCount - FirstGCCount) &gt; 0) then  (GCTime - FirstGCTime)/(GCCount - FirstGCCount) else 0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CalcOper" type="map">
+            <input port="1" stream="out:CountZeroOps_1"/>
+            <output port="1" stream="out:CalcOper_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="NumberOfZeroOperators">NumberOfZeroOperators-1</replace>
+                </item>
+                <expressions>
+                    <include field="NumberOfNonZeroOperators">NumberOfOperators - (NumberOfZeroOperators-1)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="calcPercent" type="map">
+            <input port="1" stream="out:AggCPUQuery_1"/>
+            <output port="1" stream="out:calcPercent_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="name">name</include>
+                    <include field="CPUMillisecond">round(CPU/1000, 0)</include>
+                    <include field="PercentTime">round(((CPU/1000)/(to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp))) , 2) -- CPU is in microseconds post 7.0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="calcPercent2" type="map">
+            <input port="1" stream="out:AggThreadQuery_1"/>
+            <output port="1" stream="out:calcPercent2_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="name">name</include>
+                    <include field="CPUuS">totalCPU</include>
+                    <include field="PercentTime">round((totalCPU/(to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp))), 2)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Calcs" type="map">
+            <input port="1" stream="out:GetTopStreams_1"/>
+            <output port="1" stream="out:Calcs_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="StreamType">if (type == "IO") then "Input/Output" else if (indexof(type,"I") != -1) then "Input" else "Output"</include>
+                    <include field="AveRate">int((Count-FirstCount)/(to_seconds(lastTimeStamp)-to_seconds(firstTimeStamp)))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetOpType1" type="query">
+            <input port="1" stream="out:topInputQuery_1"/>
+            <output port="1" stream="out:GetOpType1_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">null</set>
+                    <set field="region">null</set>
+                    <set field="inTPS">null</set>
+                    <set field="outTPS">null</set>
+                    <set field="Size">null</set>
+                    <set field="CPU">null</set>
+                    <set field="type">null</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetOpType2" type="query">
+            <input port="1" stream="out:topOutputQuery_1"/>
+            <output port="1" stream="out:GetOpType2_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">null</set>
+                    <set field="region">null</set>
+                    <set field="inTPS">null</set>
+                    <set field="outTPS">null</set>
+                    <set field="Size">null</set>
+                    <set field="CPU">null</set>
+                    <set field="type">null</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetOpType3" type="query">
+            <input port="1" stream="out:topOpSizeQuery_1"/>
+            <output port="1" stream="out:GetOpType3_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">null</set>
+                    <set field="region">null</set>
+                    <set field="inTPS">null</set>
+                    <set field="outTPS">null</set>
+                    <set field="Size">null</set>
+                    <set field="CPU">null</set>
+                    <set field="type">null</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetOpType4" type="query">
+            <input port="1" stream="out:TopCPUQuery_1"/>
+            <output port="1" stream="out:GetOpType4_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetOpType6" type="query">
+            <input port="1" stream="out:TopSPOTQuery_1"/>
+            <output port="1" stream="out:GetOpType6_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetOpType7" type="query">
+            <input port="1" stream="out:TopSPITQuery_1"/>
+            <output port="1" stream="out:GetOpType7_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="ToMB" type="map">
+            <input port="1" stream="out:MemoryUsed_1"/>
+            <output port="1" stream="out:ToMB_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="maxMemory">maxMemory/(1000000)</replace>
+                    <replace field="usedMemory">usedMemory/1000000</replace>
+                    <replace field="freeMemory">freeMemory/1000000</replace>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="topQuSizeQuery" type="query">
+            <input port="1" stream="out:TopQuSizeTitle_1"/>
+            <output port="1" stream="out:topQuSizeQuery_1"/>
+            <dataref id="querytable" name="queuesTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="key-field.0" value="Size"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="gt"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="Size"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none">
+                    <include field="name"/>
+                    <include field="Size"/>
+                    <include field="time"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TopThreadsQuery" type="query">
+            <input port="1" stream="out:TopThreadTitle_1"/>
+            <output port="1" stream="out:TopThreadsQuery_1"/>
+            <dataref id="querytable" name="TopThreadTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="limit" value="${MaxCount}"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="TotalCPU"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                    <remove field="count"/>
+                    <replace field="UserCPU">round(UserCPU/1000, 0)</replace>
+                    <replace field="SystemCPU">round(SystemCPU/1000, 0)</replace>
+                    <replace field="TotalCPU">round(TotalCPU/1000, 0)</replace>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <output-stream name="aggQueueSize" scope="public"/>
+        <box name="AggThreadsLog" type="outputadapter">
+            <input port="1" stream="out:calcPercent2_1"/>
+            <output port="1" stream="aggThreadCPU"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, CPU={1, number,#} ms, CPU={2, number, percent}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="calcDuration" type="map">
+            <input port="1" stream="out:CalcOper_1"/>
+            <output port="1" stream="out:calcDuration_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="lastTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="duration">round((to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp))/(1000 * 60))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GCLog" type="outputadapter">
+            <input port="1" stream="out:calcGCPercent_1"/>
+            <output port="1" stream="AllGC"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="customFormat" value="{1}, Number of Collections={2, number,#}, Total Time={3, number,#} ms, Max Time={0, number,#} ms, Ave Time={5, number,#} ms, Percent of GC time to total time={4, number, percent}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="GetOpType5" type="query">
+            <input port="1" stream="out:calcPercent_1"/>
+            <output port="1" stream="out:GetOpType5_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-lowerbound-value.0" value="name"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="type"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="StreamsLog" type="outputadapter">
+            <input port="1" stream="out:Calcs_1"/>
+            <output port="1" stream="TopStreams"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="customFormat" value="{2}, {8}, Total Count={4, number,#}, Ave Rate={9, number,#} TPS, Max Rate={6, number,#} TPS"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="SystemLog" type="outputadapter">
+            <input port="1" stream="out:ToMB_1"/>
+            <output port="1" stream="MaxMemoryUsed"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="Max={1, number,#} MB,  Used={2, number,#} MB, Free={3, number,#} MB - total Threads={4, number,#}, Dequeue Clients={5, number,#}, Time Running={6, number,#}, {7}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopCPULog" type="outputadapter">
+            <input port="1" stream="out:GetOpType4_1"/>
+            <output port="1" stream="TopCPU"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={6}, {5}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopInputLog" type="outputadapter">
+            <input port="1" stream="out:GetOpType1_1"/>
+            <output port="1" stream="TopInput"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6},  {5}"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopOpSizeLog" type="outputadapter">
+            <input port="1" stream="out:GetOpType3_1"/>
+            <output port="1" stream="TopOpSize"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6}, {5}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopOutputLog" type="outputadapter">
+            <input port="1" stream="out:GetOpType2_1"/>
+            <output port="1" stream="TopOutput"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#},  OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#}uS, Type={6}, {5}"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopQuSizeLog" type="outputadapter">
+            <input port="1" stream="out:topQuSizeQuery_1"/>
+            <output port="1" stream="TopQueueSize"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, Size={1, number,#},  {2}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSPITLog" type="outputadapter">
+            <input port="1" stream="out:GetOpType7_1"/>
+            <output port="1" stream="TopSPIT"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={7}, Time per Tuple={6,number,#.#} uS {5}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopSPOTLog" type="outputadapter">
+            <input port="1" stream="out:GetOpType6_1"/>
+            <output port="1" stream="TopSPOT"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, InTPS={1, number,#}, OutTPS={2, number,#}, Size={3, number,#}, CPU={4, number,#} ms, Type={7}, Time per Tuple={6,number,#.#} uS {5}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TopThreadsLog" type="outputadapter">
+            <input port="1" stream="out:TopThreadsQuery_1"/>
+            <output port="1" stream="TopThread"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, User={1, number,#} ms, System={2, number,#} ms,  Total={3, number,#} ms, {4}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <output-stream name="aggThreadCPU" scope="public"/>
+        <output-stream name="AllGC" scope="public"/>
+        <output-stream name="MaxMemoryUsed" scope="public"/>
+        <output-stream name="TopCPU" scope="public"/>
+        <output-stream name="TopInput" scope="public"/>
+        <output-stream name="TopOpSize" scope="public"/>
+        <output-stream name="TopOutput" scope="public"/>
+        <output-stream name="TopQueueSize" scope="public"/>
+        <output-stream name="TopSPIT"/>
+        <output-stream name="TopSPOT"/>
+        <output-stream name="TopStreams" scope="public"/>
+        <output-stream name="TopThread" scope="public"/>
+        <box name="AggCPULog" type="outputadapter">
+            <input port="1" stream="out:GetOpType5_1"/>
+            <output port="1" stream="aggCPU"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="{0}, total={1, number,#} ms, Type={3}, CPU={2, number, percent}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="GetRegionCount" type="query">
+            <input port="1" stream="out:calcDuration_1"/>
+            <output port="1" stream="out:GetRegionCount_1"/>
+            <dataref id="querytable" name="RegionTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="Count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <output-stream name="aggCPU" scope="public"/>
+        <box name="summaryLog" type="outputadapter">
+            <input port="1" stream="out:GetRegionCount_1"/>
+            <output port="1" stream="ProfileSummary"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="Total Number of Operators={1}, Zero Operators={2}, Non-Zero Operators={3}, Region Count={5}, Start time={0}, profile duration {4} minutes."/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <output-stream name="ProfileSummary" scope="public"/>
+    </add>
+</modify>

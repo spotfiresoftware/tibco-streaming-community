@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ 
+ <!-- Default logging config -->
+ 
+  <appender name="RootConsoleAppender" 
+            class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 
+      <appender name="ProfileLog" class="ch.qos.logback.core.FileAppender">
+        <file>ProfileSummary.txt</file>
+      
+        <append>false</append>
+        
+        <layout class="ch.qos.logback.classic.PatternLayout">
+          <pattern>%msg%n</pattern>
+        </layout>
+      </appender>
+     -->
+     
+        <appender name="ProfileLog" class="ch.qos.logback.core.FileAppender">
+      <file>${sb.profile.analysis.out.path}ProfileSummary.txt</file>
+      <append>false</append>
+      <encoder>
+      <!--  
+         <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+         -->
+          <pattern>%msg%n</pattern>
+      </encoder>
+   </appender>
+   
+   <logger name="ProfileSummaryLog">
+     <level value="info"/>
+     <appender-ref ref="ProfileLog"/>
+   </logger>
+   
+   
+   <!--
+   <logger name="com.tibco.ep.sb.rt.launcher.LiveViewNotifier">
+     <level value="debug"/>
+     <appender-ref ref="SyslogAppender"/>
+     <appender-ref ref="LiveViewAppender"/>
+   </logger>
+  
+   <logger name="com.tibco.ep.security.realm">
+     <level value="debug"/>
+     <appender-ref ref="SyslogAppender"/>
+     <appender-ref ref="LiveViewAppender"/>
+   </logger>
+
+   <logger name="com.tibco.ep.security.comm">
+     <level value="debug"/>
+     <appender-ref ref="SyslogAppender"/>
+     <appender-ref ref="LiveViewAppender"/>
+   </logger>
+      -->
+      
+  <root>
+    <level value="info"/>
+    <!--
+    <appender-ref ref="ProfileLog" />
+     -->
+    <appender-ref ref="RootConsoleAppender"/>
+      
+  </root>
+
+</configuration>

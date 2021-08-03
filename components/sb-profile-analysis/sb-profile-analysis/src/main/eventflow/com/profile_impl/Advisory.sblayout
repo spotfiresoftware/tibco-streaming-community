@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Done">
+        <param name="gui:x" value="-384"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="RegionContentionTable">
+        <param name="gui:x" value="-209"/>
+        <param name="gui:y" value="58"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="AnyTooBig">
+        <param name="gui:x" value="-304"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="GetContentionRegions">
+        <param name="gui:x" value="-63"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="Iterate">
+        <param name="gui:x" value="183"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="RegionNameLog">
+        <param name="gui:x" value="64"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="TooMuchContentionLog">
+        <param name="gui:x" value="-199"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="UpstreamRegionLog">
+        <param name="gui:x" value="280"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+    <component name="TooMuchContention">
+        <param name="gui:x" value="401"/>
+        <param name="gui:y" value="-51"/>
+    </component>
+</application-layout>

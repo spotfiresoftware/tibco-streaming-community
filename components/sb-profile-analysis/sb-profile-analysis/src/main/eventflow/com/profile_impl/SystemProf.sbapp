@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.SystemProf"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="SystemInfoTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="SystemTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="SystemIn">
+            <schema>
+                <field name="index" type="long"/>
+                <field name="f1" type="string"/>
+                <field name="f2" type="string"/>
+                <field name="f3" type="long"/>
+                <field name="f4" type="string"/>
+                <field name="f5" type="int"/>
+                <field name="f6" type="string"/>
+                <field name="f7" type="string"/>
+                <field name="startTimeStamp" type="timestamp"/>
+                <field name="endTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="convertNames" type="map">
+            <input port="1" stream="SystemIn"/>
+            <output port="1" stream="out:convertNames_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                    <include field="startTimeStamp"/>
+                    <include field="endTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="maxMemory">long(f1)</include>
+                    <include field="usedMemory">long(f2)</include>
+                    <include field="freeMemory">f3</include>
+                    <include field="totalThreads">int(f4)</include>
+                    <include field="dequeueClientCount">f5</include>
+                    <include field="timeRunning">int(f6)</include>
+                    <include field="timestamp">timestamp(f7)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterTimeRange2" type="filter">
+            <input port="1" stream="out:convertNames_1"/>
+            <output port="1" stream="out:FilterTimeRange2_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp)) ||&#13;&#10;notnull(startTimeStamp)  &amp;&amp;  (isnull(endTimeStamp) &amp;&amp;  (timestamp &gt; startTimeStamp)) ||&#13;&#10;notnull(endTimeStamp)  &amp;&amp;  (isnull(startTimeStamp) &amp;&amp;  (timestamp &lt; endTimeStamp)) ||&#13;&#10;(notnull(startTimeStamp) &amp;&amp; notnull(endTimeStamp)) &amp;&amp;  (timestamp &lt; endTimeStamp) &amp;&amp; (timestamp &gt; startTimeStamp)"/>
+        </box>
+        <box name="writeSystem" type="query">
+            <input port="1" stream="out:FilterTimeRange2_1"/>
+            <output port="1" stream="out:writeSystem_1"/>
+            <dataref id="querytable" name="SystemInfoTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <param name="insert-field.0" value="maxMemory"/>
+            <param name="insert-field.1" value="usedMemory"/>
+            <param name="insert-field.2" value="freeMemory"/>
+            <param name="insert-field.3" value="totalThreads"/>
+            <param name="insert-field.4" value="dequeueClientCount"/>
+            <param name="insert-field.5" value="timerunning"/>
+            <param name="insert-field.6" value="timestamp"/>
+            <param name="insert-value.0" value="input.maxMemory"/>
+            <param name="insert-value.1" value="input.usedMemory"/>
+            <param name="insert-value.2" value="input.freeMemory"/>
+            <param name="insert-value.3" value="input.totalThreads"/>
+            <param name="insert-value.4" value="input.dequeueClientCount"/>
+            <param name="insert-value.5" value="input.timeRunning"/>
+            <param name="insert-value.6" value="input.timestamp"/>
+        </box>
+        <box name="CountRows" type="query">
+            <input port="1" stream="out:writeSystem_1"/>
+            <output port="1" stream="out:CountRows_1"/>
+            <dataref id="querytable" name="SystemInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <param name="no-match-field.0" value="index"/>
+            <param name="no-match-field.1" value="maxMemory"/>
+            <param name="no-match-field.2" value="usedMemory"/>
+            <param name="no-match-field.3" value="freeMemory"/>
+            <param name="no-match-field.4" value="totalThreads"/>
+            <param name="no-match-field.5" value="dequeueClientCount"/>
+            <param name="no-match-field.6" value="timerunning"/>
+            <param name="no-match-field.7" value="timestamp"/>
+            <param name="no-match-value.0" value="null"/>
+            <param name="no-match-value.1" value="null"/>
+            <param name="no-match-value.2" value="null"/>
+            <param name="no-match-value.3" value="null"/>
+            <param name="no-match-value.4" value="null"/>
+            <param name="no-match-value.5" value="null"/>
+            <param name="no-match-value.6" value="null"/>
+            <param name="no-match-value.7" value="null"/>
+        </box>
+        <box name="LimitSize" type="filter">
+            <input port="1" stream="out:CountRows_1"/>
+            <output port="1" stream="out:LimitSize_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="DeleteLesser" type="query">
+            <input port="1" stream="out:LimitSize_1"/>
+            <output port="1" stream="out:DeleteLesser_1"/>
+            <dataref id="querytable" name="SystemInfoTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="usedMemory"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="usedMemory"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+        </box>
+    </add>
+</modify>

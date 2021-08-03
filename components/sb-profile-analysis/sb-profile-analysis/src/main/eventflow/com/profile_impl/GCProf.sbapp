@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.GCProf"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="GCInfoTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="GCInfoTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="SystemIn">
+            <schema>
+                <field name="index" type="long"/>
+                <field name="f1" type="string"/>
+                <field name="f2" type="string"/>
+                <field name="f3" type="long"/>
+                <field name="f4" type="string"/>
+                <field name="f5" type="int"/>
+                <field name="f6" type="string"/>
+                <field name="f7" type="string"/>
+                <field name="startTimeStamp" type="timestamp"/>
+                <field name="endTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="convertNames" type="map">
+            <input port="1" stream="SystemIn"/>
+            <output port="1" stream="out:convertNames_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                    <include field="startTimeStamp"/>
+                    <include field="endTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="name">f1</include>
+                    <include field="GCCount">int(f2)</include>
+                    <include field="GCTime">long(f3)</include>
+                    <include field="timestamp">timestamp(f4)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterTimeRange2" type="filter">
+            <input port="1" stream="out:convertNames_1"/>
+            <output port="1" stream="out:FilterTimeRange2_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp)) || &#13;&#10;(!isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp) &amp;&amp; (timestamp &gt; startTimeStamp))  ||&#13;&#10;(isnull(startTimeStamp) &amp;&amp; !isnull(endTimeStamp) &amp;&amp; (timestamp &lt; endTimeStamp))  ||&#13;&#10;(!isnull(startTimeStamp) &amp;&amp; !isnull(endTimeStamp) &amp;&amp;  (timestamp &gt; startTimeStamp) &amp;&amp;  (timestamp &lt; endTimeStamp))"/>
+        </box>
+        <box name="writeGC" type="query">
+            <input port="1" stream="out:FilterTimeRange2_1"/>
+            <dataref id="querytable" name="GCInfoTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-value.0" value="input1.name"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="index">input.index</set>
+                    <set field="GCCount">input.GCCount</set>
+                    <set field="GCTime">input.GCTime</set>
+                    <set field="timestamp">input.timestamp</set>
+                    <set field="FirstGCCount">if (isnull(old.FirstGCCount)) then input.GCCount else old.FirstGCCount</set>
+                    <set field="FirstGCTime">if (isnull(old.FirstGCTime)) then input.GCTime else old.FirstGCTime</set>
+                    <set field="GCMaxTime">if (isnull(old.GCTime) || isnull(old.GCMaxTime)) then 0 else  if ((input.GCTime-old.GCTime) &gt; old.GCMaxTime) then (input.GCTime-old.GCTime)  else old.GCMaxTime</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+    </add>
+</modify>

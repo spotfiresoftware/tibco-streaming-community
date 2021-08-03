@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.ExtractModulePaths"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="InputStream">
+            <schema>
+                <field name="name" type="string"/>
+                <field name="Size" type="int"/>
+                <field name="CPU" type="long"/>
+                <field name="TotalIn" type="long"/>
+                <field name="TotalOut" type="long"/>
+                <field name="FullModulePath" type="string"/>
+                <field name="ModuleName" type="string"/>
+            </schema>
+        </stream>
+        <stream name="out:DropOneModule_1">
+            <schema>
+                <field name="name" type="string"/>
+                <field name="Size" type="int"/>
+                <field name="CPU" type="long"/>
+                <field name="TotalIn" type="long"/>
+                <field name="TotalOut" type="long"/>
+                <field name="FullModulePath" type="string"/>
+                <field name="ModuleName" type="string"/>
+            </schema>
+        </stream>
+        <box name="Split" type="split">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:Split_1"/>
+            <input port="2" stream="out:DropOneModule_1"/>
+            <output port="1" stream="OutputStream"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="out:Split_2"/>
+            <input port="2" stream="out:DropOneModule_1"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="OutputStream"/>
+        <box name="IsDone" type="filter">
+            <input port="1" stream="out:Union2_1"/>
+            <output port="1" stream="out:IsDone_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="lastindexof(FullModulePath, &quot;.&quot;) != -1"/>
+        </box>
+        <box name="DropOneModule" type="map">
+            <input port="1" stream="out:IsDone_1"/>
+            <output port="1" stream="out:DropOneModule_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="FullModulePath">substr(FullModulePath, 0, lastindexof(FullModulePath, "."))</replace>
+                </item>
+            </target-list>
+        </box>
+    </add>
+</modify>

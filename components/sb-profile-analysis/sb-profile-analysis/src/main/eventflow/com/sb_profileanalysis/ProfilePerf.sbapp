@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.sb_profileanalysis.ProfilePerf"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="int(systemproperty(&quot;sb.profile.analysis.maxcount&quot;, &quot;10&quot;))" name="MaxCount"/>
+            <parameter default="1.3  -- Numer of seconds between ticks before emitting warning" name="TSGapWarnSec"/>
+            <parameter default="int(systemproperty(&quot;sb.profile.analysis.monitor.period&quot;, &quot;1&quot;))" name="MonitorPeriodSec"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+        </parameter-definitions>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="string(null)" name="ModuleName" setter-expression="moduleName" setter-stream="Filter"/>
+            <dynamic-variable initial-expression="false" name="SentUnknownType" setter-expression="notnull(type)" setter-stream="UnknownProfileType"/>
+        </dynamic-variables>
+        <table-schemas>
+            <table-schema name="OperatorTable">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="int"/>
+                    <field name="outTPS" type="int"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+            </table-schema>
+        </table-schemas>
+        <data name="startSizeTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="SizeStartTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="filename">
+            <schema>
+                <field name="filename" type="string"/>
+                <field name="start" type="timestamp"/>
+                <field name="end" type="timestamp"/>
+            </schema>
+        </stream>
+        <stream name="Filter">
+            <schema>
+                <field name="moduleName" type="string"/>
+            </schema>
+        </stream>
+        <stream name="shutdown">
+            <schema>
+                <field name="noop" type="string"/>
+            </schema>
+        </stream>
+        <box name="Log" type="outputadapter">
+            <input port="1" stream="Filter"/>
+            <output port="1" stream="out:Log_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="*** Operator and Queue data filtered by &quot;{0}&quot; ***"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="FilterLogger"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="filename"/>
+            <output port="1" stream="out:Split3_1"/>
+            <output port="2" stream="out:Split3_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="readProfile" type="inputadapter">
+            <input port="1" stream="out:Split3_2"/>
+            <output port="1" stream="out:readProfile_1"/>
+            <output port="2" stream="out:readProfile_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvreader.CSVReader"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="Delimiter" value=","/>
+            <param name="DiscardEmptyRecords" value="true"/>
+            <param name="EmitTiming" value="Periodic"/>
+            <param name="FileName" value=""/>
+            <param name="HeaderTypeOption" value="No header"/>
+            <param name="MapControlPort" value="false"/>
+            <param name="NullString" value="null"/>
+            <param name="Period" value="0"/>
+            <param name="PreserveWhitespace" value="false"/>
+            <param name="QuoteChar" value=""/>
+            <param name="Repeat" value="1"/>
+            <param name="Schema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;schema name=&quot;schema:readProfile&quot;&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;type&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f1&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f2&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f3&quot; type=&quot;long&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f4&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f5&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f6&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field description=&quot;&quot; name=&quot;f7&quot; type=&quot;string&quot;/&gt;&#13;&#10;&lt;/schema&gt;&#13;&#10;"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="true"/>
+            <param name="TimeBasedEmitField" value=""/>
+            <param name="TimeBasedEmitMode" value="Emission times relative to the first record"/>
+            <param name="TimestampFormat" value="yyyy-MM-dd hh:mm:ss.SSSZ"/>
+            <param name="ignoreExistingRecords" value="true"/>
+            <param name="incompleteRecordsMode" value="Populate with nulls"/>
+            <param name="lenientTimestampParsing" value="true"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="logWarningForIncomplete" value="false"/>
+            <param name="tailMode" value="false"/>
+            <param name="tailUpdateInterval" value="1000"/>
+        </box>
+        <box name="setStartEndTime" type="query">
+            <input port="1" stream="out:Split3_1"/>
+            <output port="1" stream="out:setStartEndTime_1"/>
+            <dataref id="querytable" name="startSizeTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="0"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="start"/>
+                    <include field="end"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="totalTicks">0</set>
+                    <set field="startTimeStamp">input1.start</set>
+                    <set field="endTimeStamp">input1.end</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getIndex" type="seqnum">
+            <input port="1" stream="out:readProfile_1"/>
+            <output port="1" stream="out:getIndex_1"/>
+            <param name="output-field" value="index"/>
+            <param name="sequence-id" value="sequence1id"/>
+            <param name="update-expression" value="sequence1id + 1"/>
+        </box>
+        <box name="IsTime" type="filter">
+            <input port="1" stream="out:setStartEndTime_1"/>
+            <output port="1" stream="out:IsTime_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="notnull(start) || notnull(end)"/>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:readProfile_2"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <output port="3" stream="out:Split_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <box name="DoProgress" type="filter">
+            <input port="1" stream="out:getIndex_1"/>
+            <output port="1" stream="out:DoProgress_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="((index &lt;= 4000000) &amp;&amp; (index % 1000000) == 0 ) || ((index &gt; 4000000) &amp;&amp; (index % 4000000) == 0 )"/>
+        </box>
+        <box name="EndAndBig" type="filter">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:EndAndBig_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(Type == &quot;Close&quot;) &amp;&amp; (Status &gt; 1000000)"/>
+        </box>
+        <box name="getTimeRange" type="query">
+            <input port="1" stream="out:getIndex_1"/>
+            <output port="1" stream="out:getTimeRange_1"/>
+            <dataref id="querytable" name="startSizeTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="IsStarting" type="filter">
+            <input port="1" stream="out:Split_3"/>
+            <output port="1" stream="out:IsStarting_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Type==&quot;Open&quot;"/>
+        </box>
+        <box name="LogStartEnd" type="outputadapter">
+            <input port="1" stream="out:IsTime_1"/>
+            <output port="1" stream="out:LogStartEnd_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="Start time {0}, end time {1}"/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="LogStartEnd"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="isOperator" type="filter">
+            <property name="description" value="Prior to 7.0.1 profile data did not have the type (one of Operator, Thread, or Queue) of profile data identified."/>
+            <input port="1" stream="out:getTimeRange_1"/>
+            <output port="1" stream="out:isOperator_1"/>
+            <output port="2" stream="out:isOperator_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="type == &quot;O&quot; || type == &quot;D&quot;"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="ScaleCount" type="map">
+            <input port="1" stream="out:DoProgress_1"/>
+            <output port="1" stream="out:ScaleCount_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="index">index/1000000</replace>
+                </item>
+            </target-list>
+        </box>
+        <box name="ScaleTotal" type="map">
+            <input port="1" stream="out:EndAndBig_1"/>
+            <output port="1" stream="out:ScaleTotal_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="TotalRows">Status/1000000</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="StartingLog" type="outputadapter">
+            <input port="1" stream="out:IsStarting_1"/>
+            <output port="1" stream="out:StartingLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="true"/>
+        </box>
+        <box name="GetNameTime" type="map">
+            <input port="1" stream="out:isOperator_1"/>
+            <output port="1" stream="out:GetNameTime_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="f1"/>
+                    <remove field="f7"/>
+                </item>
+                <expressions>
+                    <include field="timestamp">if (notnull(f7)) then timestamp(f7) else null</include>
+                    <include field="name">f1</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="LogProgress" type="outputadapter">
+            <input port="1" stream="out:ScaleCount_1"/>
+            <output port="1" stream="out:LogProgress_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value="Processed {8} M records..."/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="LogProgress"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="LogRows" type="outputadapter">
+            <input port="1" stream="out:ScaleTotal_1"/>
+            <output port="1" stream="out:LogRows_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="Processed a total of {0,number,#.#} M records"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="LogProgress"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="WhatType" type="filter">
+            <input port="1" stream="out:isOperator_2"/>
+            <output port="1" stream="out:WhatType_1"/>
+            <output port="2" stream="out:WhatType_2"/>
+            <output port="3" stream="out:WhatType_3"/>
+            <output port="4" stream="out:WhatType_4"/>
+            <output port="5" stream="out:WhatType_5"/>
+            <output port="6" stream="out:WhatType_6"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="type == &quot;Q&quot;"/>
+            <param name="expression.1" value="type == &quot;T&quot;"/>
+            <param name="expression.2" value="type == &quot;S&quot;"/>
+            <param name="expression.3" value="type == &quot;G&quot;"/>
+            <param name="expression.4" value="type ==&quot;s&quot;"/>
+            <param name="expression.5" value="true"/>
+        </box>
+        <box name="FilterTimeRange" type="filter">
+            <input port="1" stream="out:GetNameTime_1"/>
+            <output port="1" stream="out:FilterTimeRange_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp)) || &#13;&#10;(!isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp) &amp;&amp; (timestamp &gt; startTimeStamp))  ||&#13;&#10;(isnull(startTimeStamp) &amp;&amp; !isnull(endTimeStamp) &amp;&amp; (timestamp &lt; endTimeStamp))  ||&#13;&#10;(!isnull(startTimeStamp) &amp;&amp; !isnull(endTimeStamp) &amp;&amp;  (timestamp &gt; startTimeStamp) &amp;&amp;  (timestamp &lt; endTimeStamp))"/>
+        </box>
+        <module-reference name="GCProfRef1">
+            <input name="SystemIn" port="1" stream="out:WhatType_4"/>
+            <param name="file" value="com.profile_impl.GCProf"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="NameFilter2" type="filter">
+            <input port="1" stream="out:WhatType_1"/>
+            <output port="1" stream="out:NameFilter2_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull(ModuleName) || indexof(f1, ModuleName) != -1"/>
+        </box>
+        <box name="SendOne" type="filter">
+            <input port="1" stream="out:WhatType_6"/>
+            <output port="1" stream="out:SendOne_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="!SentUnknownType"/>
+        </box>
+        <module-reference name="StreamsProfRef1">
+            <input name="StreamsIn" port="1" stream="out:WhatType_5"/>
+            <param name="file" value="com.profile_impl.StreamsProf"/>
+            <table-export name="StreamsInfoTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="SystemProfRef1">
+            <input name="SystemIn" port="1" stream="out:WhatType_3"/>
+            <param name="file" value="com.profile_impl.SystemProf"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="ThreadProfRef1">
+            <input name="ThreadIn" port="1" stream="out:WhatType_2"/>
+            <param name="file" value="com.profile_impl.ThreadProf"/>
+            <table-export name="ThreadRollupTable"/>
+            <table-export name="TopThreadTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="NameFilter" type="filter">
+            <input port="1" stream="out:FilterTimeRange_1"/>
+            <output port="1" stream="out:NameFilter_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull(ModuleName) || indexof(name, ModuleName) == 0"/>
+        </box>
+        <module-reference name="QueueProfRef1">
+            <input name="QueueIn" port="1" stream="out:NameFilter2_1"/>
+            <param name="file" value="com.profile_impl.QueueProf7"/>
+            <table-export name="QueueRollupTable"/>
+            <table-export name="queuesTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="UnknownTypeLog" type="outputadapter">
+            <input port="1" stream="out:SendOne_1"/>
+            <output port="1" stream="UnknownProfileType"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value=""/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="UnknownTypeLogger"/>
+            <param name="messagePrefix" value="WARN - UnknownProfileRecordType: "/>
+            <param name="verbose" value="true"/>
+        </box>
+        <output-stream name="UnknownProfileType"/>
+        <box name="updateLastTS" type="query">
+            <input port="1" stream="out:NameFilter_1"/>
+            <output port="1" stream="out:updateLastTS_1"/>
+            <dataref id="querytable" name="startSizeTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="0"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="totalTicks">old.totalTicks</set>
+                    <set field="firstTimeStamp">if (isnull(old.firstTimeStamp)) then input.timestamp else old.firstTimeStamp</set>
+                    <set field="lastTimeStamp">if (notnull(input1.timestamp)) then input1.timestamp else old.lastTimeStamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <module-reference name="OperatorProfRef1">
+            <input name="OperatorIn" port="1" stream="out:updateLastTS_1"/>
+            <input name="DoneIn" port="2" stream="out:Split_2"/>
+            <output name="DoneOut" port="1" stream="out:OperatorProfRef1_1"/>
+            <output name="GapWarn" port="2" stream="out:OperatorProfRef1_2"/>
+            <output name="TooShortWarn" port="3" stream="out:OperatorProfRef1_3"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="com.profile_impl.OperatorProf7"/>
+            <input-dataref name="startSizeTable" table="startSizeTable"/>
+            <table-export name="OperatorRollupTable"/>
+            <table-export name="operatorCPUTable"/>
+            <table-export name="operatorInputTable"/>
+            <table-export name="operatorOutputTable"/>
+            <table-export name="operatorSPITTable"/>
+            <table-export name="operatorSPOTTable"/>
+            <table-export name="operatorSizeTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+                <binding name="MonitorPeriodSec" value="${MonitorPeriodSec}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="DoneFilter" type="filter">
+            <input port="1" stream="out:OperatorProfRef1_1"/>
+            <output port="1" stream="out:DoneFilter_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="Type == &quot;Close&quot;"/>
+        </box>
+        <box name="getDuration" type="query">
+            <input port="1" stream="out:DoneFilter_1"/>
+            <output port="1" stream="out:getDuration_1"/>
+            <dataref id="querytable" name="startSizeTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none">
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="Split1" type="split">
+            <input port="1" stream="out:getDuration_1"/>
+            <output port="1" stream="out:Split1_1"/>
+            <output port="2" stream="out:Split1_2"/>
+            <output port="3" stream="out:Split1_3"/>
+            <output port="4" stream="out:Split1_4"/>
+            <param name="output-count" value="4"/>
+        </box>
+        <box name="setDone" type="map">
+            <input port="1" stream="out:Split1_4"/>
+            <output port="1" stream="out:setDone_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="done">bool(true)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <module-reference name="SummaryFilesRef1">
+            <input name="Split2InputStream1" port="1" stream="out:Split1_1"/>
+            <param name="file" value="com.profile_impl.SummaryFiles"/>
+            <input-dataref name="OperatorRollupTable" table="OperatorProfRef1.OperatorRollupTable"/>
+            <input-dataref name="QueueRollupTable" table="QueueProfRef1.QueueRollupTable"/>
+            <input-dataref name="StreamsInfoTable" table="StreamsProfRef1.StreamsInfoTable"/>
+            <table-export name="RegionContentionTable"/>
+            <table-export name="RegionTable"/>
+        </module-reference>
+        <module-reference name="AdvisoryRef1">
+            <input name="Done" port="1" stream="out:Split1_3"/>
+            <param name="file" value="com.profile_impl.Advisory"/>
+            <input-dataref name="RegionContentionTable" table="SummaryFilesRef1.RegionContentionTable"/>
+            <parameter-bindings>
+                <binding name="RegionThreshold" value="int(systemproperty(&quot;sb.profile.analysis.region.threshold&quot;, &quot;4&quot;))"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="isStudio" type="filter">
+            <input port="1" stream="out:setDone_1"/>
+            <output port="1" stream="done"/>
+            <output port="2" stream="out:isStudio_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="indexof(systemproperty(&quot;com.tibco.ep.dtm.deploy.tool.used&quot;, &quot;&quot;), &quot;true&quot;) != -1"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <module-reference name="SummaryLogOutRef1">
+            <input name="Done" port="1" stream="out:Split1_2"/>
+            <param name="file" value="com.profile_impl.SummaryLogOut"/>
+            <input-dataref name="OperatorRollupTable" table="OperatorProfRef1.OperatorRollupTable"/>
+            <input-dataref name="QueueRollupTable" table="QueueProfRef1.QueueRollupTable"/>
+            <input-dataref name="SystemInfoTable" table="SystemProfRef1.SystemInfoTable"/>
+            <input-dataref name="operatorCPUTable" table="OperatorProfRef1.operatorCPUTable"/>
+            <input-dataref name="operatorInputTable" table="OperatorProfRef1.operatorInputTable"/>
+            <input-dataref name="operatorOutputTable" table="OperatorProfRef1.operatorOutputTable"/>
+            <input-dataref name="operatorSizeTable" table="OperatorProfRef1.operatorSizeTable"/>
+            <input-dataref name="queuesTable" table="QueueProfRef1.queuesTable"/>
+            <input-dataref name="GCInfoTable" table="GCProfRef1.GCInfoTable"/>
+            <input-dataref name="ThreadRollupTable" table="ThreadProfRef1.ThreadRollupTable"/>
+            <input-dataref name="TopThreadTable" table="ThreadProfRef1.TopThreadTable"/>
+            <input-dataref name="operatorSPITTable" table="OperatorProfRef1.operatorSPITTable"/>
+            <input-dataref name="operatorSPOTTable" table="OperatorProfRef1.operatorSPOTTable"/>
+            <input-dataref name="RegionTable" table="SummaryFilesRef1.RegionTable"/>
+            <input-dataref name="StreamsInfoTable" table="StreamsProfRef1.StreamsInfoTable"/>
+            <parameter-bindings>
+                <binding name="MaxCount" value="${MaxCount}"/>
+            </parameter-bindings>
+        </module-reference>
+        <output-stream name="done"/>
+        <box name="Union" type="union">
+            <input port="1" stream="out:isStudio_2"/>
+            <input port="2" stream="shutdown"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="shutdownRequest" type="java">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:shutdownRequest_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.sbadmin.SbAdminOperator"/>
+            <param name="NumWorkerThreads" value="1"/>
+            <param name="addContainerAppFile" value=""/>
+            <param name="command" value="Shutdown Server"/>
+            <param name="containerName" value=""/>
+            <param name="containerOptions" value=""/>
+            <param name="describeName" value=""/>
+            <param name="freeFormCommand" value=""/>
+            <param name="freeFormCommandLine" value=""/>
+            <param name="remote" value="false"/>
+            <param name="serverURI" value=""/>
+            <param name="setLeadershipLeadership" value=""/>
+            <param name="startStopName" value=""/>
+        </box>
+        <gui.note name="HoverOverMe">
+            <property name="description" value="The done output and the shutdown input are primarly for interacting with external scripts.&#13;&#10;&#13;&#10;Avoid shutting down the application when it completes if running in studio."/>
+        </gui.note>
+    </add>
+</modify>

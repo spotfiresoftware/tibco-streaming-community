@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.Advisory"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="8" name="RegionThreshold"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="RegionContentionTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="RegionContentionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="Done">
+            <schema>
+                <field name="done" type="string"/>
+            </schema>
+        </stream>
+        <box name="AnyTooBig" type="query">
+            <input port="1" stream="Done"/>
+            <output port="1" stream="out:AnyTooBig_1"/>
+            <dataref id="querytable" name="RegionContentionTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="limit" value="1"/>
+            <param name="where-expression" value="Count &gt; ${RegionThreshold}"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="ConcurrencyThreshold">${RegionThreshold}</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TooMuchContentionLog" type="outputadapter">
+            <input port="1" stream="out:AnyTooBig_1"/>
+            <output port="1" stream="out:TooMuchContentionLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="*** The following regions have more then {0} threads writing into them"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="GetContentionRegions" type="query">
+            <input port="1" stream="out:TooMuchContentionLog_1"/>
+            <output port="1" stream="out:GetContentionRegions_1"/>
+            <dataref id="querytable" name="RegionContentionTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="Count &gt; ${RegionThreshold}"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="UpStreamList"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="UpStreamList">unique(UpStreamList)</include>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="RegionNameLog" type="outputadapter">
+            <input port="1" stream="out:GetContentionRegions_1"/>
+            <output port="1" stream="out:RegionNameLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="Region name={0}, Size={2, number,#} - The following paths contribute"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="Iterate" type="iterate">
+            <input port="1" stream="out:RegionNameLog_1"/>
+            <output port="1" stream="out:Iterate_1"/>
+            <param name="iterate-expr" value="UpStreamList"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="upRegion">each.element</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="UpstreamRegionLog" type="outputadapter">
+            <input port="1" stream="out:Iterate_1"/>
+            <output port="1" stream="TooMuchContention"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value="        {0}"/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value="ProfileSummaryLog"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <output-stream name="TooMuchContention" scope="public"/>
+    </add>
+</modify>

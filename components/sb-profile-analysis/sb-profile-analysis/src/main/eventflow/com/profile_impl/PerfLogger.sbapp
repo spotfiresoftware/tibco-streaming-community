@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.PerfLogger"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="false" name="ShouldLog"/>
+            <parameter default="PerfLoggerName" name="LoggerName"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="in">
+            <schema>
+                <field name="placeholder" type="string"/>
+            </schema>
+        </stream>
+        <box name="ShouldLog" type="filter">
+            <input port="1" stream="in"/>
+            <output port="1" stream="out:ShouldLog_1"/>
+            <output port="2" stream="out:ShouldLog_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="${ShouldLog}"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="InputLogger" type="outputadapter">
+            <input port="1" stream="out:ShouldLog_1"/>
+            <output port="1" stream="out:InputLogger_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="customFormat" value=""/>
+            <param name="logLevel" value="Info"/>
+            <param name="messageIdentifier" value="${LoggerName}"/>
+            <param name="messagePrefix" value=""/>
+            <param name="verbose" value="true"/>
+        </box>
+        <box name="Union1" type="union">
+            <input port="1" stream="out:InputLogger_1"/>
+            <input port="2" stream="out:ShouldLog_2"/>
+            <output port="1" stream="out:Union1_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Split1" type="split">
+            <input port="1" stream="out:Union1_1"/>
+            <output port="1" stream="out:Split1_1"/>
+            <output port="2" stream="out"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="out"/>
+        <box name="WriteData" type="outputadapter">
+            <input port="1" stream="out:Split1_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="${LoggerName}.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="false"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+    </add>
+</modify>

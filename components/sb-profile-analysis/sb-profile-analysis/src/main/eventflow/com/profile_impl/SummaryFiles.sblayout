@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Split2InputStream1">
+        <param name="gui:x" value="30"/>
+        <param name="gui:y" value="368"/>
+    </component>
+    <component name="ExtractModulePathsRef1">
+        <param name="gui:x" value="1398"/>
+        <param name="gui:y" value="417"/>
+    </component>
+    <component name="ModuleNameTable">
+        <param name="gui:x" value="1265"/>
+        <param name="gui:y" value="553"/>
+        <param name="gui:width" value="192"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="ModulePathTable">
+        <param name="gui:x" value="1031"/>
+        <param name="gui:y" value="547"/>
+        <param name="gui:width" value="176"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="OperatorRollupTable">
+        <param name="gui:x" value="297"/>
+        <param name="gui:y" value="490"/>
+        <param name="gui:width" value="194"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="QueueRollupTable">
+        <param name="gui:x" value="1373"/>
+        <param name="gui:y" value="847"/>
+        <param name="gui:width" value="184"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="RegionContentionTable">
+        <param name="gui:x" value="1968"/>
+        <param name="gui:y" value="878"/>
+        <param name="gui:width" value="214"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="RegionTable">
+        <param name="gui:x" value="1618"/>
+        <param name="gui:y" value="869"/>
+        <param name="gui:width" value="138"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="StreamsInfoTable">
+        <param name="gui:x" value="1224"/>
+        <param name="gui:y" value="1332"/>
+        <param name="gui:width" value="172"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="Calcs">
+        <param name="gui:x" value="1574"/>
+        <param name="gui:y" value="1219"/>
+    </component>
+    <component name="FindRegionEnd">
+        <param name="gui:x" value="1752"/>
+        <param name="gui:y" value="603"/>
+    </component>
+    <component name="FindStartIndex">
+        <param name="gui:x" value="1611"/>
+        <param name="gui:y" value="715"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetBaseContainer">
+        <param name="gui:x" value="1221"/>
+        <param name="gui:y" value="419"/>
+    </component>
+    <component name="GetFullPathCPU">
+        <param name="gui:x" value="396"/>
+        <param name="gui:y" value="682"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetFullPathZeroIO">
+        <param name="gui:x" value="481"/>
+        <param name="gui:y" value="842"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetModule">
+        <param name="gui:x" value="783"/>
+        <param name="gui:y" value="473"/>
+    </component>
+    <component name="GetModuleCPU">
+        <param name="gui:x" value="495"/>
+        <param name="gui:y" value="967"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetModuleZeroIO">
+        <param name="gui:x" value="501"/>
+        <param name="gui:y" value="1133"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetRegionName">
+        <param name="gui:x" value="1902"/>
+        <param name="gui:y" value="603"/>
+    </component>
+    <component name="GetRegions">
+        <param name="gui:x" value="1718"/>
+        <param name="gui:y" value="715"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="GetSSQLModule">
+        <param name="gui:x" value="788"/>
+        <param name="gui:y" value="358"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="GetSSQLPath">
+        <param name="gui:x" value="655"/>
+        <param name="gui:y" value="358"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="GetStreams">
+        <param name="gui:x" value="1471"/>
+        <param name="gui:y" value="1219"/>
+    </component>
+    <component name="GetUpStreamRegions">
+        <param name="gui:x" value="1506"/>
+        <param name="gui:y" value="988"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="IsRegion">
+        <param name="gui:x" value="1491"/>
+        <param name="gui:y" value="699"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="SSQLFilter">
+        <param name="gui:x" value="532"/>
+        <param name="gui:y" value="414"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="SaveFullPathModule">
+        <param name="gui:x" value="873"/>
+        <param name="gui:y" value="720"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="SaveFullPathModuleZero">
+        <param name="gui:x" value="769"/>
+        <param name="gui:y" value="852"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="SaveModuleName">
+        <param name="gui:x" value="965"/>
+        <param name="gui:y" value="987"/>
+        <param name="gui:height" value="74"/>
+    </component>
+    <component name="SaveModuleNameZero">
+        <param name="gui:x" value="798"/>
+        <param name="gui:y" value="1146"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="SaveNonZeroOperators">
+        <param name="gui:x" value="888"/>
+        <param name="gui:y" value="204"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="SaveQueuesName">
+        <param name="gui:x" value="1673"/>
+        <param name="gui:y" value="533"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="SaveRegionName">
+        <param name="gui:x" value="1711"/>
+        <param name="gui:y" value="1001"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="SaveStreams">
+        <param name="gui:x" value="1734"/>
+        <param name="gui:y" value="1134"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="SaveZeroOperators">
+        <param name="gui:x" value="888"/>
+        <param name="gui:y" value="74"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="245"/>
+        <param name="gui:y" value="851"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="160"/>
+        <param name="gui:y" value="362"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="Split3">
+        <param name="gui:x" value="1208"/>
+        <param name="gui:y" value="753"/>
+    </component>
+    <component name="StripZeros">
+        <param name="gui:x" value="726"/>
+        <param name="gui:y" value="15"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="TrimAgain">
+        <param name="gui:x" value="1960"/>
+        <param name="gui:y" value="722"/>
+    </component>
+    <component name="TrimRegion">
+        <param name="gui:x" value="1825"/>
+        <param name="gui:y" value="722"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="919"/>
+        <param name="gui:y" value="414"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="WriteDownstream">
+        <param name="gui:x" value="2091"/>
+        <param name="gui:y" value="718"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="WriteFullPath">
+        <param name="gui:x" value="1090"/>
+        <param name="gui:y" value="415"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="WriteModule">
+        <param name="gui:x" value="1543"/>
+        <param name="gui:y" value="413"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="WriteRegion">
+        <param name="gui:x" value="2030"/>
+        <param name="gui:y" value="603"/>
+    </component>
+    <component name="aggQueueQuery">
+        <param name="gui:x" value="1390"/>
+        <param name="gui:y" value="698"/>
+        <param name="gui:height" value="75"/>
+    </component>
+    <component name="calcPercent1">
+        <param name="gui:x" value="722"/>
+        <param name="gui:y" value="680"/>
+    </component>
+    <component name="calcPercent2">
+        <param name="gui:x" value="812"/>
+        <param name="gui:y" value="963"/>
+        <param name="gui:height" value="74"/>
+    </component>
+    <component name="getBaseName">
+        <param name="gui:x" value="527"/>
+        <param name="gui:y" value="252"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="getFullPathCPUName">
+        <param name="gui:x" value="727"/>
+        <param name="gui:y" value="759"/>
+    </component>
+    <component name="getFullPathZeroName">
+        <param name="gui:x" value="611"/>
+        <param name="gui:y" value="890"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="getModuleName">
+        <param name="gui:x" value="769"/>
+        <param name="gui:y" value="1052"/>
+    </component>
+    <component name="getModuleZeroName">
+        <param name="gui:x" value="642"/>
+        <param name="gui:y" value="1185"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="getNonZeroName">
+        <param name="gui:x" value="726"/>
+        <param name="gui:y" value="252"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="getOperators">
+        <param name="gui:x" value="342"/>
+        <param name="gui:y" value="370"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="getQueuesName">
+        <param name="gui:x" value="1494"/>
+        <param name="gui:y" value="540"/>
+    </component>
+    <component name="getRegionsName">
+        <param name="gui:x" value="1328"/>
+        <param name="gui:y" value="1060"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="getStreamsName">
+        <param name="gui:x" value="1328"/>
+        <param name="gui:y" value="1194"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="getZeroName">
+        <param name="gui:x" value="726"/>
+        <param name="gui:y" value="132"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="isNonZero">
+        <param name="gui:x" value="527"/>
+        <param name="gui:y" value="136"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="isNonZeroTPS">
+        <param name="gui:x" value="541"/>
+        <param name="gui:y" value="684"/>
+    </component>
+    <component name="isNonZeroTPS2">
+        <param name="gui:x" value="640"/>
+        <param name="gui:y" value="969"/>
+    </component>
+    <component name="stripOper">
+        <param name="gui:x" value="656"/>
+        <param name="gui:y" value="471"/>
+        <param name="gui:height" value="71"/>
+    </component>
+</application-layout>

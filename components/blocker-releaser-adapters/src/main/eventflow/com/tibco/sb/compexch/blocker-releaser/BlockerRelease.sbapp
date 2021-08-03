@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_a17fd78165a01b8ebedc28034fb7a6f61a0b04fc">
+    <add>
+        <gui.metadata>
+            <property name="description" value="Title: Delay Operator&#13;&#10;Description: Demonstrates the delay operator&#13;&#10;&#13;&#10;This component demonstrates how to use the delay operator. There are many instances in which delaying the start of a stream in useful. &#13;&#10;For example, one may want to load trading parameters prior to receiving market data. &#13;&#10;Further, a trader may want to build up a trading metric by analyzing market data over an given interval before initiating their trading strategies. &#13;&#10;The delay operator would, in both cases, be useful when creating the respective StreamBase programs. &#13;&#10;The examples implemented here show how one can delay the start of a stream by a constant amount of time (see the DelayFiveSeconds operator) &#13;&#10;or by a variable amount of time (see the DelayVariable operator)."/>
+        </gui.metadata>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.sb.compexch.blocker-releaser.BlockerRelease"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <stream name="InputStream">
+            <schema/>
+        </stream>
+        <box name="Split" type="split">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="InFirst" type="outputadapter">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:InFirst_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="InSecond" type="outputadapter">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:InSecond_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="Blocker" type="inputadapter">
+            <input port="1" stream="out:InFirst_1"/>
+            <output port="1" stream="out:Blocker_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.contrib.Blocker"/>
+            <param name="idName" value="MyLinkedName1"/>
+        </box>
+        <box name="BlockerOut" type="outputadapter">
+            <input port="1" stream="out:Blocker_1"/>
+            <output port="1" stream="out:BlockerOut_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <module-reference name="AsyncWorkRef1">
+            <input name="InputStream" port="1" stream="out:BlockerOut_1"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="com.tibco.sb.compexch.blocker-releaser.AsyncWork"/>
+        </module-reference>
+    </add>
+</modify>

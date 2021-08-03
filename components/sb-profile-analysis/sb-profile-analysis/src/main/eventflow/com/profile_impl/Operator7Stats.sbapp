@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.Operator7Stats"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+            <parameter default="2.0  -- Numer of seconds between ticks before emitting warning (1 second over due)" name="TSGapWarnSec"/>
+            <parameter default="1.0" name="MonitorPeriodSec"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="operatorCPUTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorCPUTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorInputTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorInputTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorOutputTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorOutputTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSizeTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSizeTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSPITTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSPTTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="operatorSPOTTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="OperatorSPTTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="DoneIn">
+            <schema>
+                <field name="Type" type="string"/>
+            </schema>
+        </stream>
+        <stream name="getCountInputStream1">
+            <schema>
+                <field name="index" type="long"/>
+                <field name="type" type="string"/>
+                <field name="name" type="string"/>
+                <field name="inTPS" type="long"/>
+                <field name="outTPS" type="long"/>
+                <field name="CPU" type="int"/>
+                <field name="Size" type="int"/>
+                <field name="timestamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="Split1" type="split">
+            <input port="1" stream="getCountInputStream1"/>
+            <output port="1" stream="out:Split1_1"/>
+            <output port="2" stream="out:Split1_2"/>
+            <output port="3" stream="out:Split1_3"/>
+            <output port="4" stream="out:Split1_4"/>
+            <output port="5" stream="out:Split1_5"/>
+            <output port="6" stream="out:Split1_6"/>
+            <param name="output-count" value="6"/>
+        </box>
+        <box name="Union1" type="union">
+            <input port="1" stream="DoneIn"/>
+            <output port="1" stream="DoneOut"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="DoneOut"/>
+        <box name="CalcSPIT" type="map">
+            <input port="1" stream="out:Split1_5"/>
+            <output port="1" stream="out:CalcSPIT_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="SPT">if  (inTPS  != 0) then CPU/inTPS else CPU</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="CalcSPOT" type="map">
+            <input port="1" stream="out:Split1_6"/>
+            <output port="1" stream="out:CalcSPOT_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="SPT">if  (outTPS  != 0) then CPU/outTPS else CPU</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetLowestCPU" type="query">
+            <input port="1" stream="out:Split1_1"/>
+            <output port="1" stream="out:GetLowestCPU_1"/>
+            <dataref id="querytable" name="operatorCPUTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="CPU"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="CPU"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetLowestInput" type="query">
+            <input port="1" stream="out:Split1_3"/>
+            <output port="1" stream="out:GetLowestInput_1"/>
+            <dataref id="querytable" name="operatorInputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="inTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="inTPS"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="inTPS"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetLowestOutput" type="query">
+            <input port="1" stream="out:Split1_4"/>
+            <output port="1" stream="out:GetLowestOutput_1"/>
+            <dataref id="querytable" name="operatorOutputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="outTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="outTPS"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="outTPS"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetLowestSize" type="query">
+            <input port="1" stream="out:Split1_2"/>
+            <output port="1" stream="out:GetLowestSize_1"/>
+            <dataref id="querytable" name="operatorSizeTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="Size"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="Size"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="Size"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetLowestSPIT" type="query">
+            <input port="1" stream="out:CalcSPIT_1"/>
+            <output port="1" stream="out:GetLowestSPIT_1"/>
+            <dataref id="querytable" name="operatorSPITTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="SPT"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetLowestSPOT" type="query">
+            <input port="1" stream="out:CalcSPOT_1"/>
+            <output port="1" stream="out:GetLowestSPOT_1"/>
+            <dataref id="querytable" name="operatorSPOTTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" prefix="old_" selection="none">
+                    <include field="SPT"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="isCPUBigger" type="filter">
+            <input port="1" stream="out:GetLowestCPU_1"/>
+            <output port="1" stream="out:isCPUBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_CPU) || CPU &gt; old_CPU"/>
+        </box>
+        <box name="isInputTPSBigger" type="filter">
+            <input port="1" stream="out:GetLowestInput_1"/>
+            <output port="1" stream="out:isInputTPSBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_inTPS) || (inTPS &gt; old_inTPS)"/>
+        </box>
+        <box name="isOutTPSBigger" type="filter">
+            <input port="1" stream="out:GetLowestOutput_1"/>
+            <output port="1" stream="out:isOutTPSBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_outTPS) || (outTPS &gt; old_outTPS)"/>
+        </box>
+        <box name="isSizeBigger" type="filter">
+            <input port="1" stream="out:GetLowestSize_1"/>
+            <output port="1" stream="out:isSizeBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_Size) ||  (Size &gt; old_Size)"/>
+        </box>
+        <box name="AddCPUOpers" type="query">
+            <input port="1" stream="out:isCPUBigger_1"/>
+            <output port="1" stream="out:AddCPUOpers_1"/>
+            <dataref id="querytable" name="operatorCPUTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="AddInputOpers" type="query">
+            <input port="1" stream="out:isInputTPSBigger_1"/>
+            <output port="1" stream="out:AddInputOpers_1"/>
+            <dataref id="querytable" name="operatorInputTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="AddOutputOper" type="query">
+            <input port="1" stream="out:isOutTPSBigger_1"/>
+            <output port="1" stream="out:AddOutputOper_1"/>
+            <dataref id="querytable" name="operatorOutputTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="AddSizeOpers" type="query">
+            <input port="1" stream="out:isSizeBigger_1"/>
+            <output port="1" stream="out:AddSizeOpers_1"/>
+            <dataref id="querytable" name="operatorSizeTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="isSPITBigger" type="filter">
+            <input port="1" stream="out:GetLowestSPIT_1"/>
+            <output port="1" stream="out:isSPITBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_SPT) || (SPT &gt; old_SPT)"/>
+        </box>
+        <box name="isSPOTBigger" type="filter">
+            <input port="1" stream="out:GetLowestSPOT_1"/>
+            <output port="1" stream="out:isSPOTBigger_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="isnull (old_SPT) ||  (SPT &gt; old_SPT)"/>
+        </box>
+        <box name="AddSPITOper" type="query">
+            <input port="1" stream="out:isSPITBigger_1"/>
+            <output port="1" stream="out:AddSPITOper_1"/>
+            <dataref id="querytable" name="operatorSPITTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="SPT">input.SPT</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="AddSPOTOper" type="query">
+            <input port="1" stream="out:isSPOTBigger_1"/>
+            <output port="1" stream="out:AddSPOTOper_1"/>
+            <dataref id="querytable" name="operatorSPOTTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="Size">input.Size</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="SPT">input.SPT</set>
+                    <set field="inTPS">input1.inTPS</set>
+                    <set field="outTPS">input1.outTPS</set>
+                    <set field="time">input1.timestamp</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getCPUCount" type="query">
+            <input port="1" stream="out:AddCPUOpers_1"/>
+            <output port="1" stream="out:getCPUCount_1"/>
+            <dataref id="querytable" name="operatorCPUTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getInCount" type="query">
+            <input port="1" stream="out:AddInputOpers_1"/>
+            <output port="1" stream="out:getInCount_1"/>
+            <dataref id="querytable" name="operatorInputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getOutount" type="query">
+            <input port="1" stream="out:AddOutputOper_1"/>
+            <output port="1" stream="out:getOutount_1"/>
+            <dataref id="querytable" name="operatorOutputTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getSizeCount" type="query">
+            <input port="1" stream="out:AddSizeOpers_1"/>
+            <output port="1" stream="out:getSizeCount_1"/>
+            <dataref id="querytable" name="operatorSizeTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getSPITCount" type="query">
+            <input port="1" stream="out:AddSPITOper_1"/>
+            <output port="1" stream="out:getSPITCount_1"/>
+            <dataref id="querytable" name="operatorSPITTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getSPOTCount" type="query">
+            <input port="1" stream="out:AddSPOTOper_1"/>
+            <output port="1" stream="out:getSPOTCount_1"/>
+            <dataref id="querytable" name="operatorSPOTTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="LimitCPUCount" type="filter">
+            <input port="1" stream="out:getCPUCount_1"/>
+            <output port="1" stream="out:LimitCPUCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="LimitInputCount" type="filter">
+            <input port="1" stream="out:getInCount_1"/>
+            <output port="1" stream="out:LimitInputCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="LimitOutputCount" type="filter">
+            <input port="1" stream="out:getOutount_1"/>
+            <output port="1" stream="out:LimitOutputCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="LimitSizeCount" type="filter">
+            <input port="1" stream="out:getSizeCount_1"/>
+            <output port="1" stream="out:LimitSizeCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="DeleteLesserCPU" type="query">
+            <input port="1" stream="out:LimitCPUCount_1"/>
+            <dataref id="querytable" name="operatorCPUTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="CPU"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="DeleteLesserInput" type="query">
+            <input port="1" stream="out:LimitInputCount_1"/>
+            <dataref id="querytable" name="operatorInputTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="inTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="inTPS"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="DeleteLesserOutput" type="query">
+            <input port="1" stream="out:LimitOutputCount_1"/>
+            <dataref id="querytable" name="operatorOutputTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="outTPS"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="outTPS"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="DeleteLesserSize" type="query">
+            <input port="1" stream="out:LimitSizeCount_1"/>
+            <dataref id="querytable" name="operatorSizeTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="Size"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="Size"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="LimitSPITCount" type="filter">
+            <input port="1" stream="out:getSPITCount_1"/>
+            <output port="1" stream="out:LimitSPITCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="LimitSPOTCount" type="filter">
+            <input port="1" stream="out:getSPOTCount_1"/>
+            <output port="1" stream="out:LimitSPOTCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="DeleteLesserSPIT" type="query">
+            <input port="1" stream="out:LimitSPITCount_1"/>
+            <dataref id="querytable" name="operatorSPITTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="DeleteLesserSPOT" type="query">
+            <input port="1" stream="out:LimitSPOTCount_1"/>
+            <dataref id="querytable" name="operatorSPOTTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="SPT"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="SPT"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+    </add>
+</modify>

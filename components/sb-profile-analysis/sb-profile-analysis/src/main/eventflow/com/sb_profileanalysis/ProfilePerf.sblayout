@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Filter">
+        <param name="gui:x" value="-387"/>
+        <param name="gui:y" value="234"/>
+    </component>
+    <component name="filename">
+        <param name="gui:x" value="-428"/>
+        <param name="gui:y" value="91"/>
+    </component>
+    <component name="shutdown">
+        <param name="gui:x" value="1046"/>
+        <param name="gui:y" value="379"/>
+        <param name="gui:width" value="63"/>
+    </component>
+    <component name="AdvisoryRef1">
+        <param name="gui:x" value="1068"/>
+        <param name="gui:y" value="171"/>
+        <param name="gui:width" value="63"/>
+    </component>
+    <component name="GCProfRef1">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="217"/>
+    </component>
+    <component name="OperatorProfRef1">
+        <param name="gui:x" value="726"/>
+        <param name="gui:y" value="-178"/>
+        <param name="gui:height" value="65"/>
+    </component>
+    <component name="QueueProfRef1">
+        <param name="gui:x" value="551"/>
+        <param name="gui:y" value="-80"/>
+    </component>
+    <component name="StreamsProfRef1">
+        <param name="gui:x" value="560"/>
+        <param name="gui:y" value="322"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="SummaryFilesRef1">
+        <param name="gui:x" value="1066"/>
+        <param name="gui:y" value="-172"/>
+        <param name="gui:width" value="63"/>
+        <param name="gui:height" value="74"/>
+    </component>
+    <component name="SummaryLogOutRef1">
+        <param name="gui:x" value="1067"/>
+        <param name="gui:y" value="-48"/>
+        <param name="gui:height" value="157"/>
+    </component>
+    <component name="SystemProfRef1">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="116"/>
+    </component>
+    <component name="ThreadProfRef1">
+        <param name="gui:x" value="550"/>
+        <param name="gui:y" value="11"/>
+    </component>
+    <component name="startSizeTable">
+        <param name="gui:x" value="-123"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="DoProgress">
+        <param name="gui:x" value="58"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="DoneFilter">
+        <param name="gui:x" value="731"/>
+        <param name="gui:y" value="14"/>
+    </component>
+    <component name="EndAndBig">
+        <param name="gui:x" value="25"/>
+        <param name="gui:y" value="-86"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="399"/>
+        <param name="gui:y" value="-198"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="GetNameTime">
+        <param name="gui:x" value="306"/>
+        <param name="gui:y" value="-198"/>
+        <param name="gui:width" value="63"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="IsStarting">
+        <param name="gui:x" value="29"/>
+        <param name="gui:y" value="10"/>
+    </component>
+    <component name="IsTime">
+        <param name="gui:x" value="-67"/>
+        <param name="gui:y" value="-192"/>
+    </component>
+    <component name="Log">
+        <param name="gui:x" value="-276"/>
+        <param name="gui:y" value="239"/>
+    </component>
+    <component name="LogProgress">
+        <param name="gui:x" value="265"/>
+        <param name="gui:y" value="209"/>
+    </component>
+    <component name="LogRows">
+        <param name="gui:x" value="229"/>
+        <param name="gui:y" value="-94"/>
+        <param name="gui:height" value="76"/>
+    </component>
+    <component name="LogStartEnd">
+        <param name="gui:x" value="38"/>
+        <param name="gui:y" value="-192"/>
+    </component>
+    <component name="NameFilter">
+        <param name="gui:x" value="498"/>
+        <param name="gui:y" value="-192"/>
+    </component>
+    <component name="NameFilter2">
+        <param name="gui:x" value="466"/>
+        <param name="gui:y" value="-11"/>
+    </component>
+    <component name="ScaleCount">
+        <param name="gui:x" value="162"/>
+        <param name="gui:y" value="210"/>
+    </component>
+    <component name="ScaleTotal">
+        <param name="gui:x" value="124"/>
+        <param name="gui:y" value="-87"/>
+    </component>
+    <component name="SendOne">
+        <param name="gui:x" value="559"/>
+        <param name="gui:y" value="428"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-78"/>
+        <param name="gui:y" value="-2"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="928"/>
+        <param name="gui:y" value="-14"/>
+        <param name="gui:width" value="63"/>
+        <param name="gui:height" value="118"/>
+    </component>
+    <component name="Split3">
+        <param name="gui:x" value="-308"/>
+        <param name="gui:y" value="89"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="StartingLog">
+        <param name="gui:x" value="133"/>
+        <param name="gui:y" value="10"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="1240"/>
+        <param name="gui:y" value="361"/>
+        <param name="gui:width" value="63"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="UnknownTypeLog">
+        <param name="gui:x" value="663"/>
+        <param name="gui:y" value="427"/>
+    </component>
+    <component name="WhatType">
+        <param name="gui:x" value="359"/>
+        <param name="gui:y" value="98"/>
+        <param name="gui:height" value="66"/>
+    </component>
+    <component name="getDuration">
+        <param name="gui:x" value="821"/>
+        <param name="gui:y" value="9"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="getIndex">
+        <param name="gui:x" value="-31"/>
+        <param name="gui:y" value="92"/>
+    </component>
+    <component name="getTimeRange">
+        <param name="gui:x" value="105"/>
+        <param name="gui:y" value="93"/>
+    </component>
+    <component name="isOperator">
+        <param name="gui:x" value="229"/>
+        <param name="gui:y" value="91"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="isStudio">
+        <param name="gui:x" value="1136"/>
+        <param name="gui:y" value="292"/>
+        <param name="gui:width" value="63"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="readProfile">
+        <param name="gui:x" value="-199"/>
+        <param name="gui:y" value="100"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="setDone">
+        <param name="gui:x" value="1046"/>
+        <param name="gui:y" value="290"/>
+        <param name="gui:width" value="63"/>
+    </component>
+    <component name="setStartEndTime">
+        <param name="gui:x" value="-172"/>
+        <param name="gui:y" value="-192"/>
+    </component>
+    <component name="shutdownRequest">
+        <param name="gui:x" value="1340"/>
+        <param name="gui:y" value="361"/>
+        <param name="gui:width" value="63"/>
+    </component>
+    <component name="updateLastTS">
+        <param name="gui:x" value="615"/>
+        <param name="gui:y" value="-192"/>
+    </component>
+    <component name="UnknownProfileType">
+        <param name="gui:x" value="766"/>
+        <param name="gui:y" value="428"/>
+    </component>
+    <component name="done">
+        <param name="gui:x" value="1245"/>
+        <param name="gui:y" value="284"/>
+        <param name="gui:width" value="63"/>
+    </component>
+    <component name="HoverOverMe">
+        <param name="gui:x" value="954"/>
+        <param name="gui:y" value="381"/>
+        <param name="gui:width" value="75"/>
+        <param name="gui:height" value="74"/>
+    </component>
+</application-layout>

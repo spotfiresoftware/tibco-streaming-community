@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.sb.compexch</groupId>
+    <artifactId>blocker-release</artifactId>
+    <packaging>ep-eventflow-fragment</packaging>
+    <version>0.0.1</version>
+    <name>Blocker Releaser Adapters</name>
+    <description>Forwards and then blocks event flow from returning until signaled to return by the Releaser adapter</description>
+
+    <url>https://github.com/TIBCOSoftware/tibco-streaming-community</url>
+    
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+    </properties>
+
+    <!-- common definitions for this version of StreamBase -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-eventflow-fragment</artifactId>
+        <version>10.6.1</version>
+        <relativePath/>
+    </parent>
+
+</project>

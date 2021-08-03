@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.interfaces.SharedSchemas"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <dynamic-variables/>
+        <table-schemas>
+            <table-schema name="GCInfoTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="name" type="string"/>
+                    <field name="GCCount" type="int"/>
+                    <field name="FirstGCCount" type="int"/>
+                    <field name="GCTime" type="long"/>
+                    <field name="FirstGCTime" type="long"/>
+                    <field name="GCMaxTime" type="long"/>
+                    <field name="timestamp" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="GCTime"/>
+                </index>
+            </table-schema>
+            <table-schema name="ModuleNameTableSchema">
+                <schema>
+                    <field name="FullPathName" type="string"/>
+                    <field name="ModuleName" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="CPU" type="long"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="ModuleName"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="inTPS"/>
+                    <field name="outTPS"/>
+                </index>
+            </table-schema>
+            <table-schema name="ModulePathTableSchema">
+                <schema>
+                    <field name="FullPathName" type="string"/>
+                    <field name="ModuleName" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="CPU" type="long"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="FullPathName"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="ModuleName"/>
+                </index>
+                <index type="btree">
+                    <field name="inTPS"/>
+                    <field name="outTPS"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorCPUTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="long"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="time"/>
+                </index>
+                <index type="btree">
+                    <field name="CPU"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorInputTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="inTPS"/>
+                </index>
+                <index type="btree">
+                    <field name="inTPS"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorOutputTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="outTPS"/>
+                </index>
+                <index type="btree">
+                    <field name="outTPS"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorSPTTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                    <field name="SPT" type="double"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="SPT"/>
+                </index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="SPT"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorSizeTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="int"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="Size"/>
+                </index>
+                <index type="btree">
+                    <field name="Size"/>
+                </index>
+            </table-schema>
+            <table-schema name="OperatorTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="region" type="string"/>
+                    <field name="name" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="long"/>
+                    <field name="time" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="inTPS"/>
+                </index>
+                <index type="btree">
+                    <field name="outTPS"/>
+                </index>
+                <index type="btree">
+                    <field name="Size"/>
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="region"/>
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="name"/>
+                </index>
+            </table-schema>
+            <table-schema name="QueueTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="name" type="string"/>
+                    <field name="region" type="string"/>
+                    <field name="Size" type="long"/>
+                    <field name="RegionLength" type="int"/>
+                    <field name="time" type="timestamp"/>
+                    <field name="count" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="Size"/>
+                </index>
+                <index type="btree">
+                    <field name="Size"/>
+                </index>
+            </table-schema>
+            <table-schema name="RegionContentionTableSchema">
+                <schema>
+                    <field name="DownRegionName" type="string"/>
+                    <field name="FullName" type="string"/>
+                    <field name="Count" type="int"/>
+                    <field name="UpStreamList" type="list">
+                        <element-type type="string"/>
+                    </field>
+                </schema>
+                <primary-index type="btree">
+                    <field name="DownRegionName"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="Count"/>
+                </index>
+            </table-schema>
+            <table-schema name="RegionTableSchema">
+                <schema>
+                    <field name="RegionName" type="string"/>
+                    <field name="FullName" type="string"/>
+                    <field name="Count" type="int"/>
+                    <field name="Size" type="long"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="RegionName"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="Count"/>
+                </index>
+            </table-schema>
+            <table-schema name="SizeStartTableSchema">
+                <schema>
+                    <field name="index" type="int"/>
+                    <field name="totalTicks" type="int"/>
+                    <field name="firstTimeStamp" type="timestamp"/>
+                    <field name="lastTimeStamp" type="timestamp"/>
+                    <field name="startTimeStamp" type="timestamp"/>
+                    <field name="endTimeStamp" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+            </table-schema>
+            <table-schema name="StreamsInfoTableSchema">
+                <schema>
+                    <field name="name" type="string"/>
+                    <field name="type" type="string"/>
+                    <field name="Count" type="long"/>
+                    <field name="FirstCount" type="long"/>
+                    <field name="MaxRate" type="long"/>
+                    <field name="timestamp" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="Count"/>
+                </index>
+            </table-schema>
+            <table-schema name="SystemTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="maxMemory" type="long"/>
+                    <field name="usedMemory" type="long"/>
+                    <field name="freeMemory" type="long"/>
+                    <field name="totalThreads" type="int"/>
+                    <field name="dequeueClientCount" type="int"/>
+                    <field name="timerunning" type="int"/>
+                    <field name="timestamp" type="timestamp"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="usedMemory"/>
+                </index>
+            </table-schema>
+            <table-schema name="ThreadRollupTableSchema">
+                <schema>
+                    <field name="name" type="string"/>
+                    <field name="userCPU" type="long"/>
+                    <field name="systemCPU" type="long"/>
+                    <field name="totalCPU" type="long"/>
+                    <field name="cyclesAlive" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="totalCPU"/>
+                </index>
+                <index type="btree">
+                    <field name="cyclesAlive"/>
+                </index>
+            </table-schema>
+            <table-schema name="ThreadTableSchema">
+                <schema>
+                    <field name="index" type="long"/>
+                    <field name="name" type="string"/>
+                    <field name="UserCPU" type="long"/>
+                    <field name="SystemCPU" type="long"/>
+                    <field name="TotalCPU" type="long"/>
+                    <field name="time" type="timestamp"/>
+                    <field name="count" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="index"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="name"/>
+                    <field name="TotalCPU"/>
+                </index>
+                <index type="btree">
+                    <field name="TotalCPU"/>
+                </index>
+            </table-schema>
+            <table-schema name="UniqueRegionTableSchema">
+                <schema>
+                    <field name="regionName" type="string"/>
+                    <field name="RegionLength" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="regionName"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="RegionLength"/>
+                </index>
+            </table-schema>
+            <table-schema name="rollupTableSchema">
+                <schema>
+                    <field name="name" type="string"/>
+                    <field name="region" type="string"/>
+                    <field name="inTPS" type="long"/>
+                    <field name="outTPS" type="long"/>
+                    <field name="Size" type="int"/>
+                    <field name="CPU" type="long"/>
+                    <field name="type" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="inTPS"/>
+                </index>
+                <index type="btree">
+                    <field name="Size"/>
+                </index>
+                <index type="btree">
+                    <field name="CPU"/>
+                </index>
+                <index type="btree">
+                    <field name="region"/>
+                    <field name="CPU"/>
+                </index>
+            </table-schema>
+        </table-schemas>
+    </add>
+</modify>

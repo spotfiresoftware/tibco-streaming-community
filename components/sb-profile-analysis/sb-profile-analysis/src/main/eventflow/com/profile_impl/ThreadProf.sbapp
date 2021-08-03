@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.ThreadProf"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="ThreadRollupTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ThreadRollupTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="TopThreadTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ThreadTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="ThreadIn">
+            <schema>
+                <field name="index" type="long"/>
+                <field name="f1" type="string"/>
+                <field name="f2" type="string"/>
+                <field name="f3" type="long"/>
+                <field name="f4" type="string"/>
+                <field name="f5" type="int"/>
+                <field name="f6" type="string"/>
+                <field name="f7" type="string"/>
+                <field name="startTimeStamp" type="timestamp"/>
+                <field name="endTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="convertNames" type="map">
+            <input port="1" stream="ThreadIn"/>
+            <output port="1" stream="out:convertNames_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="index"/>
+                    <include field="startTimeStamp"/>
+                    <include field="endTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="name">f1</include>
+                    <include field="userCPU">long(f2)</include>
+                    <include field="systemCPU">f3</include>
+                    <include field="timestamp">timestamp(f4)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FilterTimeRange" type="filter">
+            <input port="1" stream="out:convertNames_1"/>
+            <output port="1" stream="out:FilterTimeRange_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(isnull(startTimeStamp) &amp;&amp; isnull(endTimeStamp)) ||&#13;&#10;notnull(startTimeStamp)  &amp;&amp;  (isnull(endTimeStamp) &amp;&amp;  (timestamp &gt; startTimeStamp)) ||&#13;&#10;notnull(endTimeStamp)  &amp;&amp;  (isnull(startTimeStamp) &amp;&amp;  (timestamp &lt; endTimeStamp)) ||&#13;&#10;(notnull(startTimeStamp) &amp;&amp; notnull(endTimeStamp)) &amp;&amp;  (timestamp &lt; endTimeStamp) &amp;&amp; (timestamp &gt; startTimeStamp)"/>
+        </box>
+        <box name="Split1" type="split">
+            <input port="1" stream="out:FilterTimeRange_1"/>
+            <output port="1" stream="out:Split1_1"/>
+            <output port="2" stream="out:Split1_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="rollupUpdate" type="query">
+            <input port="1" stream="out:Split1_1"/>
+            <dataref id="querytable" name="ThreadRollupTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="name"/>
+            <param name="key-value.0" value="name"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="userCPU">input1.userCPU</set>
+                    <set field="systemCPU">input1.systemCPU</set>
+                    <set field="totalCPU">input1.userCPU + input1.systemCPU</set>
+                    <set field="cyclesAlive">1</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="userCPU">input1.userCPU+ old.userCPU</set>
+                    <set field="systemCPU">old.systemCPU + input1.systemCPU</set>
+                    <set field="totalCPU">old.totalCPU + input1.userCPU + input1.systemCPU</set>
+                    <set field="cyclesAlive">old.cyclesAlive+1</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="writeThread" type="query">
+            <input port="1" stream="out:Split1_2"/>
+            <output port="1" stream="out:writeThread_1"/>
+            <dataref id="querytable" name="TopThreadTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="index"/>
+            <param name="key-value.0" value="input1.index"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="name">input.name</set>
+                    <set field="UserCPU">input1.userCPU</set>
+                    <set field="SystemCPU">input1.systemCPU</set>
+                    <set field="TotalCPU">input1.userCPU + input1.systemCPU</set>
+                    <set field="time">input1.timestamp</set>
+                    <set field="count">null</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="CountSizeThreads" type="query">
+            <input port="1" stream="out:writeThread_1"/>
+            <output port="1" stream="out:CountSizeThreads_1"/>
+            <dataref id="querytable" name="TopThreadTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="count">count()</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="index">null</set>
+                    <set field="name">null</set>
+                    <set field="UserCPU">null</set>
+                    <set field="SystemCPU">null</set>
+                    <set field="TotalCPU">null</set>
+                    <set field="time">null</set>
+                    <set field="count">null</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="LimitSizeCount" type="filter">
+            <input port="1" stream="out:CountSizeThreads_1"/>
+            <output port="1" stream="out:LimitSizeCount_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="count &gt; ${MaxCount}"/>
+        </box>
+        <box name="DeleteLesserSize" type="query">
+            <input port="1" stream="out:LimitSizeCount_1"/>
+            <output port="1" stream="out:DeleteLesserSize_1"/>
+            <dataref id="querytable" name="TopThreadTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="secondary-key"/>
+            <param name="limit" value="1"/>
+            <param name="key-field.0" value="TotalCPU"/>
+            <param name="key-lowerbound-operation.0" value="begin"/>
+            <param name="key-upperbound-operation.0" value="end"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="TotalCPU"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="index">null</set>
+                    <set field="name">null</set>
+                    <set field="UserCPU">null</set>
+                    <set field="SystemCPU">null</set>
+                    <set field="TotalCPU">null</set>
+                    <set field="time">null</set>
+                    <set field="count">null</set>
+                </expressions>
+            </target-list>
+        </box>
+    </add>
+</modify>

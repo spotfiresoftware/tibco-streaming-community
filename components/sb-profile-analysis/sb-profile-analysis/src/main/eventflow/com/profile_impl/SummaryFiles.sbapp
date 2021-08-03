@@ -1,0 +1,1149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_929e061ebbe69d4c4c328ff05a95f71b0e8ef7e6">
+    <add>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.profile_impl.SummaryFiles"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.interfaces.SharedSchemas"/>
+        <parameter-definitions>
+            <parameter default="10" name="MaxCount"/>
+            <parameter default="8" name="OperatorsPerRegion"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="ModuleNameTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ModuleNameTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="ModulePathTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="ModulePathTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="OperatorRollupTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="rollupTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="QueueRollupTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="name" type="string"/>
+                    <field name="size" type="long"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="name"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="size"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="RegionContentionTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="RegionContentionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="RegionTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="RegionTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="StreamsInfoTable" shared="false" source="input" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <param name="table-schema" value="StreamsInfoTableSchema"/>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="Split2InputStream1">
+            <schema>
+                <field name="Type" type="string"/>
+                <field name="Object" type="string"/>
+                <field name="Action" type="string"/>
+                <field name="Status" type="int"/>
+                <field name="Info" type="string"/>
+                <field name="firstTimeStamp" type="timestamp"/>
+                <field name="lastTimeStamp" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="Split2" type="split">
+            <input port="1" stream="Split2InputStream1"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <output port="3" stream="out:Split2_3"/>
+            <output port="4" stream="out:Split2_4"/>
+            <param name="output-count" value="4"/>
+        </box>
+        <box name="getBaseName" type="map">
+            <input port="1" stream="out:Split2_1"/>
+            <output port="1" stream="out:getBaseName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">Object</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getOperators" type="query">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="out:getOperators_1"/>
+            <dataref id="querytable" name="OperatorRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none">
+                    <include field="name"/>
+                    <include field="Size"/>
+                    <include field="CPU"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="TotalIn">inTPS</include>
+                    <include field="TotalOut">outTPS</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Split2_4"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <output port="3" stream="out:Split_3"/>
+            <output port="4" stream="out:Split_4"/>
+            <param name="output-count" value="4"/>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="out:Split2_3"/>
+            <output port="1" stream="out:Split3_1"/>
+            <output port="2" stream="out:Split3_2"/>
+            <output port="3" stream="out:Split3_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <box name="aggQueueQuery" type="query">
+            <input port="1" stream="out:Split3_1"/>
+            <output port="1" stream="out:aggQueueQuery_1"/>
+            <dataref id="querytable" name="QueueRollupTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="name"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="size"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="AggregateSize">size</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetFullPathCPU" type="query">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:GetFullPathCPU_1"/>
+            <dataref id="querytable" name="ModulePathTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <item name="current" selection="all">
+                    <remove field="CPU"/>
+                    <remove field="ModuleName"/>
+                    <remove field="inTPS"/>
+                    <remove field="outTPS"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="CPUms">round(CPU/1000)</include>
+                    <include field="TotalIn">inTPS</include>
+                    <include field="TotalOut">outTPS</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getFullPathCPUName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getFullPathCPUName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-ModuleFullPath-CPU.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetFullPathZeroIO" type="query">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:GetFullPathZeroIO_1"/>
+            <dataref id="querytable" name="ModulePathTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="inTPS"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="key-field.1" value="outTPS"/>
+            <param name="key-lowerbound-value.1" value="0"/>
+            <param name="key-lowerbound-operation.1" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="all">
+                    <remove field="inTPS"/>
+                    <remove field="outTPS"/>
+                    <remove field="CPU"/>
+                    <remove field="ModuleName"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="CPUms">round(CPU/1000)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getFullPathZeroName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getFullPathZeroName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-ModuleFullPath-Zero.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetModuleCPU" type="query">
+            <input port="1" stream="out:Split_3"/>
+            <output port="1" stream="out:GetModuleCPU_1"/>
+            <dataref id="querytable" name="ModuleNameTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="CPU"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="firstTimeStamp"/>
+                    <include field="lastTimeStamp"/>
+                </item>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="ModuleName">ModuleName</include>
+                    <include field="TotalIn">inTPS</include>
+                    <include field="TotalOut">outTPS</include>
+                    <include field="CPUms">round(CPU/1000)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getModuleName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getModuleName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-ModuleName-CPU.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetModuleZeroIO" type="query">
+            <input port="1" stream="out:Split_4"/>
+            <output port="1" stream="out:GetModuleZeroIO_1"/>
+            <dataref id="querytable" name="ModuleNameTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="inTPS"/>
+            <param name="key-lowerbound-value.0" value="0"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="key-field.1" value="outTPS"/>
+            <param name="key-lowerbound-value.1" value="0"/>
+            <param name="key-lowerbound-operation.1" value="eq"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="ModuleName">ModuleName</include>
+                    <include field="CPUms">round(CPU/1000)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getModuleZeroName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getModuleZeroName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-ModuleName-Zero.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getNonZeroName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getNonZeroName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-Operator-NonZero.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getQueuesName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getQueuesName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-Queues.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="getRegionsName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getRegionsName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-Regions.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetStreams" type="query">
+            <input port="1" stream="out:Split3_3"/>
+            <output port="1" stream="out:GetStreams_1"/>
+            <dataref id="querytable" name="StreamsInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="name"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="lastTimeStamp"/>
+                    <include field="firstTimeStamp"/>
+                </item>
+                <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Streams_Info_Table_Schema_" name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="getStreamsName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getStreamsName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-Streams.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetUpStreamRegions" type="query">
+            <input port="1" stream="out:Split3_2"/>
+            <output port="1" stream="out:GetUpStreamRegions_1"/>
+            <dataref id="querytable" name="RegionTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="ascending"/>
+            <param name="order-by-key-field.0" value="RegionName"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none">
+                    <include field="RegionName"/>
+                    <include field="FullName"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="AggregrateSize">Size</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="getZeroName" type="map">
+            <input port="1" stream="out:getBaseName_1"/>
+            <output port="1" stream="out:getZeroName_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="fileName">fileName + "-Operator-Zero.csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="isNonZero" type="filter">
+            <input port="1" stream="out:getOperators_1"/>
+            <output port="1" stream="out:isNonZero_1"/>
+            <output port="2" stream="out:isNonZero_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="(Size == 0) &amp;&amp; (TotalIn == 0) &amp;&amp; (TotalOut == 0) &amp;&amp; (CPU == 0)"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="SSQLFilter" type="filter">
+            <input port="1" stream="out:getOperators_1"/>
+            <output port="1" stream="out:SSQLFilter_1"/>
+            <output port="2" stream="out:SSQLFilter_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="lastindexof(name, &quot;.sql:&quot;) != -1"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="Calcs" type="map">
+            <input port="1" stream="out:GetStreams_1"/>
+            <output port="1" stream="out:Calcs_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="firstTimeStamp"/>
+                    <remove field="lastTimeStamp"/>
+                    <remove field="FirstCount"/>
+                    <remove field="type"/>
+                    <remove field="MaxRate"/>
+                </item>
+                <expressions>
+                    <include field="StreamType">if (type == "IO") then "Input/Output" else if (indexof(type,"I") != -1) then "Input" else "Output"</include>
+                    <include field="MaxRate">MaxRate</include>
+                    <include field="AveRate">int((Count-FirstCount)/(to_seconds(lastTimeStamp)-to_seconds(firstTimeStamp)))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetSSQLPath" type="map">
+            <input port="1" stream="out:SSQLFilter_1"/>
+            <output port="1" stream="out:GetSSQLPath_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="FullModulePath">substr(name, 0, lastindexof(name, ".sql:")+4)</include>
+                    <include field="TrimDotSQL">substr(name, 0, lastindexof(name, ".sql:"))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="isNonZeroTPS" type="filter">
+            <input port="1" stream="out:GetFullPathCPU_1"/>
+            <output port="1" stream="out:isNonZeroTPS_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(TotalIn &gt; 0) || (TotalOut &gt; 0)"/>
+        </box>
+        <box name="isNonZeroTPS2" type="filter">
+            <input port="1" stream="out:GetModuleCPU_1"/>
+            <output port="1" stream="out:isNonZeroTPS2_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(TotalIn &gt; 0) || (TotalOut &gt; 0)"/>
+        </box>
+        <box name="IsRegion" type="filter">
+            <input port="1" stream="out:aggQueueQuery_1"/>
+            <output port="1" stream="out:IsRegion_1"/>
+            <output port="2" stream="out:IsRegion_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="(lastindexof(name, &quot;:ParallelSequence&quot;) != -1) &amp;&amp; (indexof(name, &quot;=&quot;) == -1) -- don't count container connections. 7.3 doesnt have  (indexof(name, &quot;::&quot;) != -1) &amp;&amp;"/>
+            <param name="expression.1" value="(lastindexof(name, &quot;:ParallelSequence&quot;) == -1) &amp;&amp; (indexof(name, &quot;=&quot;) == -1) -- don't count container connections."/>
+        </box>
+        <box name="SaveFullPathModuleZero" type="outputadapter">
+            <input port="1" stream="out:GetFullPathZeroIO_1"/>
+            <input port="2" stream="out:getFullPathZeroName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me4.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveModuleNameZero" type="outputadapter">
+            <input port="1" stream="out:GetModuleZeroIO_1"/>
+            <input port="2" stream="out:getModuleZeroName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me6.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveNonZeroOperators" type="outputadapter">
+            <input port="1" stream="out:isNonZero_2"/>
+            <input port="2" stream="out:getNonZeroName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me1.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveQueuesName" type="outputadapter">
+            <input port="1" stream="out:aggQueueQuery_1"/>
+            <input port="2" stream="out:getQueuesName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me8.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveRegionName" type="outputadapter">
+            <input port="1" stream="out:GetUpStreamRegions_1"/>
+            <input port="2" stream="out:getRegionsName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me7.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="stripOper" type="map">
+            <input port="1" stream="out:SSQLFilter_2"/>
+            <output port="1" stream="out:stripOper_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="FullModulePath">substr(name, 0, lastindexof(name, "."))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="StripZeros" type="map">
+            <input port="1" stream="out:isNonZero_1"/>
+            <output port="1" stream="out:StripZeros_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="name"/>
+                </item>
+            </target-list>
+        </box>
+        <box name="calcPercent1" type="map">
+            <input port="1" stream="out:isNonZeroTPS_1"/>
+            <output port="1" stream="out:calcPercent1_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="firstTimeStamp"/>
+                    <remove field="lastTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="PercentTime">round((CPUms*100/(to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp))))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="calcPercent2" type="map">
+            <input port="1" stream="out:isNonZeroTPS2_1"/>
+            <output port="1" stream="out:calcPercent2_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="firstTimeStamp"/>
+                    <remove field="lastTimeStamp"/>
+                </item>
+                <expressions>
+                    <include field="PercentTime">round((CPUms*100/(to_milliseconds(lastTimeStamp) - to_milliseconds (firstTimeStamp))))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FindRegionEnd" type="map">
+            <input port="1" stream="out:IsRegion_1"/>
+            <output port="1" stream="out:FindRegionEnd_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="RegionEnd">lastindexof(name, ":ParallelSequence")</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="FindStartIndex" type="map">
+            <input port="1" stream="out:IsRegion_2"/>
+            <output port="1" stream="out:FindStartIndex_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="StartIndex">indexof(name, "::") + 2</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetModule" type="map">
+            <input port="1" stream="out:stripOper_1"/>
+            <output port="1" stream="out:GetModule_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="ModuleName">substr(FullModulePath, lastindexof(FullModulePath, ".")+1, (strlen(FullModulePath)-lastindexof(FullModulePath, ".")-1))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetSSQLModule" type="map">
+            <input port="1" stream="out:GetSSQLPath_1"/>
+            <output port="1" stream="out:GetSSQLModule_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="TrimDotSQL"/>
+                </item>
+                <expressions>
+                    <include field="ModuleName">substr(TrimDotSQL, lastindexof(TrimDotSQL, ".")+1, (strlen(TrimDotSQL)-lastindexof(TrimDotSQL, ".")) -1) + ".sql"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="SaveStreams" type="outputadapter">
+            <input port="1" stream="out:Calcs_1"/>
+            <input port="2" stream="out:getStreamsName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="AddTimestamp" value="None"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="Charset" value=""/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me9.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="PassThroughDataToEventPort" value="false"/>
+            <param name="RollHour" value="0"/>
+            <param name="RollMinute" value="0"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="RollSecond" value="0"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TimestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="UseDefaultCharset" value="true"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveZeroOperators" type="outputadapter">
+            <input port="1" stream="out:StripZeros_1"/>
+            <input port="2" stream="out:getZeroName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me2.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="GetRegionName" type="map">
+            <input port="1" stream="out:FindRegionEnd_1"/>
+            <output port="1" stream="out:GetRegionName_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="RegionName">substr(name, 0, RegionEnd)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="GetRegions" type="map">
+            <input port="1" stream="out:FindStartIndex_1"/>
+            <output port="1" stream="out:GetRegions_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="DownRegionName">substr(name, StartIndex, length(name) - StartIndex)</include>
+                    <include field="UpRegionName">substr(name, 0, StartIndex-2)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="SaveFullPathModule" type="outputadapter">
+            <input port="1" stream="out:calcPercent1_1"/>
+            <input port="2" stream="out:getFullPathCPUName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me3.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="SaveModuleName" type="outputadapter">
+            <input port="1" stream="out:calcPercent2_1"/>
+            <input port="2" stream="out:getModuleName_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value="delete_me5.csv"/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Truncate existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value="0"/>
+            <param name="MaxRollSecs" value="0"/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TsFormat" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:GetSSQLModule_1"/>
+            <input port="2" stream="out:GetModule_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="TrimRegion" type="map">
+            <input port="1" stream="out:GetRegions_1"/>
+            <output port="1" stream="out:TrimRegion_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="DownRegionName"/>
+                    <remove field="UpRegionName"/>
+                </item>
+                <expressions>
+                    <include field="DownRegionName">if (indexof(DownRegionName, ":") == -1) then substr(DownRegionName, 0, indexof(DownRegionName, ".")) else DownRegionName</include>
+                    <include field="UpRegionName">if (indexof(UpRegionName, ":") == -1) then substr(UpRegionName, 0, indexof(UpRegionName, ".")) else UpRegionName</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="WriteFullPath" type="query">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:WriteFullPath_1"/>
+            <dataref id="querytable" name="ModulePathTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="FullPathName"/>
+            <param name="key-value.0" value="FullModulePath"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="ModuleName">input.ModuleName</set>
+                    <set field="CPU">input.CPU</set>
+                    <set field="inTPS">input.TotalIn</set>
+                    <set field="outTPS">input.TotalOut</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="ModuleName">input.ModuleName</set>
+                    <set field="inTPS">input.TotalIn + old.inTPS</set>
+                    <set field="outTPS">input.TotalOut + old.outTPS</set>
+                    <set field="CPU">input.CPU + old.CPU</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="WriteRegion" type="query">
+            <input port="1" stream="out:GetRegionName_1"/>
+            <output port="1" stream="out:WriteRegion_1"/>
+            <dataref id="querytable" name="RegionTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="RegionName"/>
+            <param name="key-value.0" value="RegionName"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Table_Schema_" name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="FullName">name</set>
+                    <set field="Count">1</set>
+                    <set field="Size">AggregateSize</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Table_Schema_" name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="Count">old.Count + 1</set>
+                    <set field="Size">if (old.Size &gt; AggregateSize) then old.Size else AggregateSize</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="GetBaseContainer" type="query">
+            <input port="1" stream="out:WriteFullPath_1"/>
+            <output port="1" stream="out:GetBaseContainer_1"/>
+            <dataref id="querytable" name="RegionTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="RegionName"/>
+            <param name="key-value.0" value="substr(name, 0, indexof(name,&quot;.&quot;))"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="FullName">FullModulePath</set>
+                    <set field="Count">1</set>
+                    <set field="Size">0</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="TrimAgain" type="map">
+            <input port="1" stream="out:TrimRegion_1"/>
+            <output port="1" stream="out:TrimAgain_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="DownRegionName">if (lastindexof(DownRegionName, ".") &gt; lastindexof(DownRegionName, ":"))&#13;
+then &#13;
+substr(DownRegionName, 0, indexof(DownRegionName, ":")) + substr(DownRegionName, lastindexof(DownRegionName, ":"), ( lastindexof(DownRegionName, ".") - lastindexof(DownRegionName, ":"))) &#13;
+else &#13;
+DownRegionName</replace>
+                    <replace field="UpRegionName">if (lastindexof(UpRegionName, ".") &gt; lastindexof(UpRegionName, ":"))&#13;
+then &#13;
+substr(UpRegionName, 0, indexof(UpRegionName, ":")) + substr(UpRegionName, lastindexof(UpRegionName, ":"), ( lastindexof(UpRegionName, ".") - lastindexof(UpRegionName, ":"))) &#13;
+else &#13;
+UpRegionName</replace>
+                </item>
+            </target-list>
+        </box>
+        <module-reference name="ExtractModulePathsRef1">
+            <input name="InputStream" port="1" stream="out:GetBaseContainer_1"/>
+            <output name="OutputStream" port="1" stream="out:ExtractModulePathsRef1_1"/>
+            <param name="file" value="com.profile_impl.ExtractModulePaths"/>
+        </module-reference>
+        <box name="WriteDownstream" type="query">
+            <input port="1" stream="out:TrimAgain_1"/>
+            <output port="1" stream="out:WriteDownstream_1"/>
+            <dataref id="querytable" name="RegionContentionTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="DownRegionName"/>
+            <param name="key-value.0" value="DownRegionName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="update"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="FullName">name</set>
+                    <set field="Count">1</set>
+                    <set field="UpStreamList">list(UpRegionName)</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="Count">if (contains(UpStreamList, UpRegionName))&#13;
+then&#13;
+old.Count&#13;
+else&#13;
+ old.Count+1</set>
+                    <set field="UpStreamList">append(UpStreamList, UpRegionName)</set>
+                </expressions>
+            </target-list>
+            <target-list goal-schema="__Shared_Schemas_sbapp_schema__Region_Contention_Table_Schema_" name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+        <box name="WriteModule" type="query">
+            <input port="1" stream="out:ExtractModulePathsRef1_1"/>
+            <dataref id="querytable" name="ModuleNameTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="ModuleName"/>
+            <param name="key-value.0" value="FullModulePath"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="CPU">input.CPU</set>
+                    <set field="FullPathName">FullModulePath</set>
+                    <set field="inTPS">input.TotalIn</set>
+                    <set field="outTPS">input.TotalOut</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="none"/>
+                <expressions>
+                    <set field="FullPathName">old.FullPathName</set>
+                    <set field="inTPS">input.TotalIn + old.inTPS</set>
+                    <set field="outTPS">input.TotalOut + old.outTPS</set>
+                    <set field="CPU">input.CPU + old.CPU</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="none"/>
+            </target-list>
+        </box>
+    </add>
+</modify>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ProfilePerfRef1">
+        <param name="gui:x" value="-169"/>
+        <param name="gui:y" value="22"/>
+    </component>
+    <component name="InputAdapter">
+        <param name="gui:x" value="-834"/>
+        <param name="gui:y" value="23"/>
+    </component>
+    <component name="IsFileNull">
+        <param name="gui:x" value="-689"/>
+        <param name="gui:y" value="22"/>
+    </component>
+    <component name="MakeCmd">
+        <param name="gui:x" value="-410"/>
+        <param name="gui:y" value="69"/>
+        <param name="gui:bends:1" value="-448,68;-445,99"/>
+    </component>
+    <component name="MakeFilter">
+        <param name="gui:x" value="-294"/>
+        <param name="gui:y" value="-11"/>
+    </component>
+    <component name="PathIsNull">
+        <param name="gui:x" value="-515"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-515"/>
+        <param name="gui:y" value="28"/>
+    </component>
+    <component name="IsFilterNull">
+        <param name="gui:x" value="-410"/>
+        <param name="gui:y" value="-11"/>
+    </component>
+</application-layout>

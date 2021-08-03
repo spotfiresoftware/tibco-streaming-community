@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="QueueIn">
+        <param name="gui:x" value="-398"/>
+        <param name="gui:y" value="-18"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="QueueRollupTable">
+        <param name="gui:x" value="449"/>
+        <param name="gui:y" value="-105"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="queuesTable">
+        <param name="gui:x" value="412"/>
+        <param name="gui:y" value="127"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="CountSizeQueue">
+        <param name="gui:x" value="320"/>
+        <param name="gui:y" value="-11"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="DeleteLesserSize">
+        <param name="gui:x" value="569"/>
+        <param name="gui:y" value="-10"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="-82"/>
+        <param name="gui:y" value="-22"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="LimitSizeCount">
+        <param name="gui:x" value="428"/>
+        <param name="gui:y" value="-10"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="73"/>
+        <param name="gui:y" value="-22"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="-255"/>
+        <param name="gui:y" value="-22"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="rollupUpdate">
+        <param name="gui:x" value="286"/>
+        <param name="gui:y" value="-159"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="writeQueue">
+        <param name="gui:x" value="200"/>
+        <param name="gui:y" value="-10"/>
+        <param name="gui:width" value="70"/>
+    </component>
+</application-layout>

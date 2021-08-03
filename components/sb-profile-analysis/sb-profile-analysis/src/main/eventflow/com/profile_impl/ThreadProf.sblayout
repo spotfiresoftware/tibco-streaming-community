@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ThreadIn">
+        <param name="gui:x" value="-48"/>
+        <param name="gui:y" value="170"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="ThreadRollupTable">
+        <param name="gui:x" value="765"/>
+        <param name="gui:y" value="71"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="TopThreadTable">
+        <param name="gui:x" value="732"/>
+        <param name="gui:y" value="318"/>
+        <param name="gui:width" value="150"/>
+        <param name="gui:height" value="70"/>
+    </component>
+    <component name="CountSizeThreads">
+        <param name="gui:x" value="627"/>
+        <param name="gui:y" value="181"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="DeleteLesserSize">
+        <param name="gui:x" value="889"/>
+        <param name="gui:y" value="182"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="248"/>
+        <param name="gui:y" value="166"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="LimitSizeCount">
+        <param name="gui:x" value="748"/>
+        <param name="gui:y" value="182"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="401"/>
+        <param name="gui:y" value="168"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="95"/>
+        <param name="gui:y" value="166"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="rollupUpdate">
+        <param name="gui:x" value="603"/>
+        <param name="gui:y" value="16"/>
+        <param name="gui:width" value="70"/>
+    </component>
+    <component name="writeThread">
+        <param name="gui:x" value="519"/>
+        <param name="gui:y" value="180"/>
+        <param name="gui:width" value="70"/>
+    </component>
+</application-layout>
