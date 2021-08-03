@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.contrib.lv_cluster_scaler.LiveViewStatisics"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="lvinterfaces.LiveViewStatisticsSchemas"/>
+        <parameter-definitions>
+            <parameter default="60" name="WINDOW_SIZE_SEC"/>
+            <parameter default="60" name="CHECK_INTERVAL"/>
+            <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
+            <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="LiveViewStatisticsTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <parent-schemas>
+                        <parent-schema name="LiveViewStatisticsTableSchema"/>
+                    </parent-schemas>
+                    <field name="URI" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="URI"/>
+                    <field name="TableName"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="WindowData" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="sequenceNum" type="long"/>
+                    <field name="eventTime" type="timestamp"/>
+                    <field name="URI" type="string"/>
+                    <field name="tableName" type="string"/>
+                    <field name="queuedTuples" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="sequenceNum"/>
+                </primary-index>
+                <index type="btree">
+                    <field name="eventTime"/>
+                </index>
+                <index type="btree">
+                    <field name="URI"/>
+                </index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="LiveViewStatisticsIn">
+            <schema>
+                <field name="URI" type="string"/>
+                <field name="TableName" type="string"/>
+                <field name="CQSInternalID" type="long"/>
+                <field name="CQSScopeTransition" type="int"/>
+                <field name="Snapshot" type="bool"/>
+                <field name="NewJSON" type="string"/>
+                <field name="OldJSON" type="string"/>
+            </schema>
+        </stream>
+        <stream name="Ping">
+            <schema>
+                <field name="time" type="timestamp"/>
+            </schema>
+        </stream>
+        <box name="IsAddRemove" type="filter">
+            <input port="1" stream="LiveViewStatisticsIn"/>
+            <output port="1" stream="out:IsAddRemove_1"/>
+            <output port="2" stream="out:IsAddRemove_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="CQSScopeTransition==0 || CQSScopeTransition==2"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="Ping"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <output port="3" stream="out:Split2_3"/>
+            <output port="4" stream="out:Split2_4"/>
+            <param name="output-count" value="4"/>
+        </box>
+        <box name="CalcClusterQue" type="query">
+            <input port="1" stream="out:Split2_3"/>
+            <output port="1" stream="out:CalcClusterQue_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="ClusterAvgQueued">sum(queuedTuples)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="GetUIRs" type="query">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="out:GetUIRs_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <expressions>
+                    <include field="URIList">unique(URI, 1000)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="NewLVSInfo" type="map">
+            <input port="1" stream="out:IsAddRemove_1"/>
+            <output port="1" stream="out:NewLVSInfo_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Data">parsejson(LiveViewStatisticsTableSchema(), NewJSON)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="OldLVSInfo" type="map">
+            <input port="1" stream="out:IsAddRemove_2"/>
+            <output port="1" stream="out:OldLVSInfo_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Data">parsejson(LiveViewStatisticsTableSchema(), OldJSON)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="TrimWindow" type="query">
+            <input port="1" stream="out:Split2_1"/>
+            <output port="1" stream="out:TrimWindow_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="eventTime &lt; now()-seconds(${WINDOW_SIZE_SEC})"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="ClusterQueuedLog" type="outputadapter">
+            <input port="1" stream="out:CalcClusterQue_1"/>
+            <output port="1" stream="out:ClusterQueuedLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="DelDL1" type="query">
+            <input port="1" stream="out:OldLVSInfo_1"/>
+            <output port="1" stream="out:DelDL1_1"/>
+            <dataref id="querytable" name="LiveViewStatisticsTable"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="input.URI == current.URI &amp;&amp; input.Data.TableName==current.TableName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Iterate" type="iterate">
+            <input port="1" stream="out:GetUIRs_1"/>
+            <output port="1" stream="out:Iterate_1"/>
+            <param name="iterate-expr" value="URIList"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="element">each.element</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="WriteLVSInfo" type="query">
+            <input port="1" stream="out:NewLVSInfo_1"/>
+            <output port="1" stream="out:WriteLVSInfo_1"/>
+            <dataref id="querytable" name="LiveViewStatisticsTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="URI"/>
+            <param name="key-value.0" value="input.URI"/>
+            <param name="key-field.1" value="TableName"/>
+            <param name="key-value.1" value="Data.TableName"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="RecordCount">Data.RecordCount</set>
+                    <set field="InboundTuplesPerSec">Data.InboundTuplesPerSec</set>
+                    <set field="TotalQueuedTuples">Data.TotalQueuedTuples</set>
+                    <set field="MBMemoryUsed">Data.MBMemoryUsed</set>
+                    <set field="TotalTuplesPublished">Data.TotalTuplesPublished</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="CalcDLQues" type="query">
+            <input port="1" stream="out:Iterate_1"/>
+            <output port="1" stream="out:CalcDLQues_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="(URI==element)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="element"/>
+                </item>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="DLSumQueued">sum(queuedTuples)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="DelDL2" type="query">
+            <input port="1" stream="out:DelDL1_1"/>
+            <output port="1" stream="out:DelDL2_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="input.URI == current.URI &amp;&amp; input.Data.TableName==current.tableName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Sequence" type="seqnum">
+            <input port="1" stream="out:WriteLVSInfo_1"/>
+            <output port="1" stream="out:Sequence_1"/>
+            <param name="output-field" value="sequenceNum"/>
+            <param name="sequence-id" value="sequenceid"/>
+            <param name="update-expression" value="sequenceid + 1"/>
+        </box>
+        <box name="DLTooBusy" type="filter">
+            <input port="1" stream="out:CalcDLQues_1"/>
+            <output port="1" stream="out:DLTooBusy_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="true -- DLAvgCPUload &gt; ${SINGLE_DL_LOAD_THRESHOLD}"/>
+        </box>
+        <box name="WriteData" type="query">
+            <input port="1" stream="out:Sequence_1"/>
+            <output port="1" stream="out:WriteData_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="sequenceNum"/>
+            <param name="key-value.0" value="input.sequenceNum"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="eventTime">now()</set>
+                    <set field="URI">URI</set>
+                    <set field="queuedTuples">TotalQueuedTuples</set>
+                    <set field="tableName">TableName</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="DLQueuedLog" type="outputadapter">
+            <input port="1" stream="out:DLTooBusy_1"/>
+            <output port="1" stream="out:DLQueuedLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+    </add>
+</modify>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.contrib.lv_cluster_scaler.lv-cluster-scaler"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="60" name="WINDOW_SIZE_SEC"/>
+            <parameter default="60" name="CHECK_INTERVAL"/>
+            <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
+            <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="out:LVNodeInfoRef1_1">
+            <schema>
+                <field name="URI" type="string"/>
+                <field name="IsAdd" type="bool"/>
+            </schema>
+        </stream>
+        <stream name="SetSeedServer" scope="public">
+            <schema>
+                <field name="URI" type="string"/>
+                <field name="IsAdd" type="bool"/>
+            </schema>
+        </stream>
+        <box name="Metronome" type="metronome">
+            <output port="1" stream="out:Metronome_1"/>
+            <param name="interval" value="${CHECK_INTERVAL}"/>
+            <param name="timestamp-field" value="time"/>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Metronome_1"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <output port="3" stream="out:Split_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <box name="UpdateURI" type="map">
+            <input port="1" stream="out:LVNodeInfoRef1_1"/>
+            <output port="1" stream="out:UpdateURI_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="URI">"lv://lvadmin:bigdog@" + substr(substr(URI, 0, lastindexof(URI, ":")) + ".dev.tibco.com" + substr(URI, lastindexof(URI, ":")), 5)</include>
+                    <include field="IsAdd">true</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="SetSeedServer"/>
+            <input port="2" stream="out:UpdateURI_1"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="InputAdapter" type="inputadapter">
+            <input port="1" stream="out:Union2_1"/>
+            <output port="1" stream="out:InputAdapter_1"/>
+            <output port="2" stream="out:InputAdapter_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.contrib.lv_cluster_scaler.LVQuery"/>
+        </box>
+        <box name="DataLog" type="outputadapter">
+            <input port="1" stream="out:InputAdapter_2"/>
+            <output port="1" stream="out:DataLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Debug"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="QStatusLog" type="outputadapter">
+            <input port="1" stream="out:InputAdapter_1"/>
+            <output port="1" stream="out:QStatusLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="WhichTable" type="filter">
+            <input port="1" stream="out:DataLog_1"/>
+            <output port="1" stream="out:WhichTable_1"/>
+            <output port="2" stream="out:WhichTable_2"/>
+            <output port="3" stream="out:WhichTable_3"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="TableName=='LVNodeInfo'"/>
+            <param name="expression.1" value="TableName=='LiveViewStatistics'"/>
+            <param name="expression.2" value="TableName=='LVSessionQueries'"/>
+        </box>
+        <module-reference name="LiveViewStatisicsRef1">
+            <input name="LiveViewStatisticsIn" port="1" stream="out:WhichTable_2"/>
+            <input name="Ping" port="2" stream="out:Split_2"/>
+            <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LiveViewStatisics"/>
+            <parameter-bindings>
+                <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="LVNodeInfoRef1">
+            <input name="LVNodeInfoIn" port="1" stream="out:WhichTable_1"/>
+            <input name="Ping" port="2" stream="out:Split_1"/>
+            <output name="RegisterNode" port="1" stream="out:LVNodeInfoRef1_1"/>
+            <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LVNodeInfo"/>
+            <parameter-bindings>
+                <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="LVSessionQueriesRef1">
+            <input name="LVSessionQuriesIn" port="1" stream="out:WhichTable_3"/>
+            <input name="Ping" port="2" stream="out:Split_3"/>
+            <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LVSessionQueries"/>
+            <parameter-bindings>
+                <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
+            </parameter-bindings>
+        </module-reference>
+    </add>
+</modify>

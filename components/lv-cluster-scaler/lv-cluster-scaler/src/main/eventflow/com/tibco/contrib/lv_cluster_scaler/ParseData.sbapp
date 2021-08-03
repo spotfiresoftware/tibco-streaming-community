@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.contrib.lv_cluster_scaler.ParseData"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.contrib.lv_cluster_scaler.lv-cluster-scaler"/>
+        <import from="lvinterfaces.LVNodeInfoSchemas"/>
+        <dynamic-variables/>
+        <stream name="DataIn" schema="LVQueryDataSchema"/>
+        <box name="WhichTable" type="filter">
+            <input port="1" stream="DataIn"/>
+            <output port="1" stream="out:WhichTable_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="TableName=='LVNodeInfo'"/>
+        </box>
+        <box name="LVNodeInfo" type="map">
+            <input port="1" stream="out:WhichTable_1"/>
+            <output port="1" stream="LVNodeInfoOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Data">parsejson(LVNodeInfoSchemas(), NewJSON)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="LVNodeInfoOut"/>
+    </add>
+</modify>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.6.2-SNAPSHOT">
+    <gui.metadata>
+        <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the LVNodeInfo LiveView table."/>
+    </gui.metadata>
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="lvinterfaces.LVNodeInfoSchemas"/>
+    </type-metadata>
+    <named-schemas>
+        <schema name="LVNodeInfoSchemas">
+            <field description="The category of the property" name="Category" type="string"/>
+            <field description="The name of the property" name="Name" type="string"/>
+            <field description="The specific instance or detail of this property" name="Detail" type="string"/>
+            <field description="The value of this property instance" name="Value" type="string"/>
+            <field description="Additional information about this property instance" name="Information" type="string"/>
+            <field description="The last time an update/insert happened" name="UpdateTime" type="timestamp"/>
+        </schema>
+    </named-schemas>
+</application>
