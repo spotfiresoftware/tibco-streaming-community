@@ -12,7 +12,7 @@ Samples :
 * [Maps escaped field names](escaped-identifier-mapper)
 * [Implements the Fast Flower Delivery use case from the Event Processing in Action book](flowershop)
 * [TableProvider classes to add TS tables to a LiveView project](lv-ts-tableprovider)
-* [Adapters for writing programs for a MINDSTORMS EV3 robot with EventFlow](mindstorms-ev3
+* [Adapters for writing programs for a MINDSTORMS EV3 robot with EventFlow](mindstorms-ev3)
 * [NYC Yellow Cabs: Visualize live data in LiveView Web using a LiveView project in StreamBase Studio](nyc-yellow-cabs-demo)
 * [Decode airplane radio and publish plane data to LiveViewTM Server](plane-tracker)
 * [Adapters to send and receive messages from a Redis database, including streaming](redis-adapter)
