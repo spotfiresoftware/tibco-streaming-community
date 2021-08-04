@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <name>LiveView cluster monitor/scaler</name>
-  <description>Streambase application that dynamicaly monitors a LiveView cluster and identifies when the cluster should scaled up and down</description>
+  <description>Streambase application that dynamically monitors a LiveView cluster and identifies when the cluster should scaled up and down</description>
  
 
   <licenses>

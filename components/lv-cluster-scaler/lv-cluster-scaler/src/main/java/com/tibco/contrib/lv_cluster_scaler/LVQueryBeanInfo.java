@@ -1,3 +1,8 @@
+/*
+* Copyright © 2021. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 package com.tibco.contrib.lv_cluster_scaler;
 
 import java.beans.*;
@@ -19,9 +24,6 @@ public class LVQueryBeanInfo extends SBSimpleBeanInfo {
 	*/
 	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() throws IntrospectionException {
 		SBPropertyDescriptor[] p = {  };
-		
-		// new SBPropertyDescriptor("schema0", LVQuery.class),
-		// new SBPropertyDescriptor("schema1", LVQuery.class),
 		return p;
 	}
 
