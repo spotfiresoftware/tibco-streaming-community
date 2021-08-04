@@ -5,7 +5,7 @@
     </annotations>
     <type-metadata>
         <param name="type" value="interface"/>
-        <param name="fully-qualified-name" value="com.tibco.ep.community.components.SensorColors"/>
+        <param name="fully-qualified-name" value="com.tibco.ep.community.components.ev3.SensorColors"/>
     </type-metadata>
     <memory-model-settings/>
     <constant expr="&quot;BLACK&quot;" name="Black"/>

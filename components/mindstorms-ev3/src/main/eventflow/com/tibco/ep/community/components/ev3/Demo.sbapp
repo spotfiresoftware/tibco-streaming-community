@@ -6,10 +6,10 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.tibco.ep.community.components.Demo"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.community.components.ev3.Demo"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.tibco.ep.community.components.SensorModes"/>
+        <import from="com.tibco.ep.community.components.ev3.SensorModes"/>
         <dynamic-variables/>
         <stream name="InputStream">
             <schema/>
