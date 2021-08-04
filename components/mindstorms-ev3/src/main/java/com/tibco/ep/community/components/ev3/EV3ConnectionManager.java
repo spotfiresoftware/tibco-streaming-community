@@ -1,4 +1,4 @@
-package com.example.ev3;
+package com.tibco.ep.community.components.ev3;
 
 import com.streambase.sb.DataType;
 import com.streambase.sb.Schema;

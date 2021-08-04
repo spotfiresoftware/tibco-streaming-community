@@ -6,10 +6,10 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="com.example.ev3.Demo"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.community.components.Demo"/>
         </type-metadata>
         <memory-model-settings/>
-        <import from="com.example.ev3.SensorModes"/>
+        <import from="com.tibco.ep.community.components.SensorModes"/>
         <dynamic-variables/>
         <stream name="InputStream">
             <schema/>
@@ -32,7 +32,7 @@
         <box name="Connection" type="java">
             <output port="1" stream="out:Connection_1"/>
             <param name="start:state" value="true"/>
-            <param name="javaclass" value="com.example.ev3.EV3ConnectionManager"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3ConnectionManager"/>
             <param name="ConnectionTries" value="1000"/>
             <param name="MACaddress" value="0016535299F1"/>
         </box>
@@ -53,7 +53,7 @@
             <output port="1" stream="out:Sensors_1"/>
             <output port="2" stream="out:Sensors_2"/>
             <param name="start:state" value="true"/>
-            <param name="javaclass" value="com.example.ev3.EV3StatusAdapter"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3StatusAdapter"/>
             <param name="ConnectionManagerName" value="Connection"/>
             <param name="OutputType" value="Raw"/>
             <param name="Port1Device" value="None"/>
@@ -217,7 +217,7 @@
             <input port="3" stream="LEDInput"/>
             <output port="1" stream="out:Java_1"/>
             <param name="start:state" value="true"/>
-            <param name="javaclass" value="com.example.ev3.EV3CommandAdapter"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3CommandAdapter"/>
             <param name="ConnectionManagerName" value="Connection"/>
             <param name="error" value="5"/>
         </box>

@@ -5,7 +5,7 @@
     </annotations>
     <type-metadata>
         <param name="type" value="interface"/>
-        <param name="fully-qualified-name" value="com.example.ev3.SensorModes"/>
+        <param name="fully-qualified-name" value="com.tibco.ep.community.components.SensorModes"/>
     </type-metadata>
     <memory-model-settings/>
     <constant expr="&quot;LightAmbient&quot;" name="COLOR_AMBIENT"/>

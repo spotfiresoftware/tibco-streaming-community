@@ -1,4 +1,4 @@
-package com.example.ev3;
+package com.tibco.ep.community.components.ev3;
 
 import java.beans.IntrospectionException;
 

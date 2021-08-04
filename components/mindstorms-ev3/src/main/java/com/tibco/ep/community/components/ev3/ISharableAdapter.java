@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2004-2009 StreamBase Systems, Inc. All rights reserved.
 //
-package com.example.ev3;
+package com.tibco.ep.community.components.ev3;
 
 /**
  * All adapters (Input and Output) looking to become "linked" must implement this interface.

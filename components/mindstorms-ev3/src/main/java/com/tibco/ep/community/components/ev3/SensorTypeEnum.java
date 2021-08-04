@@ -1,4 +1,4 @@
-package com.example.ev3;
+package com.tibco.ep.community.components.ev3;
 
 /**
  * Enumeration of EV3 sensor types.

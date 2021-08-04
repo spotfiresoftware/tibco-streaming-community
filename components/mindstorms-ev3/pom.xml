@@ -6,7 +6,7 @@
    
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <groupId>com.tibco.ep.community.components</groupId>
     <artifactId>mindstorms-ev3</artifactId>
     <packaging>ep-eventflow-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
@@ -14,17 +14,16 @@
     <description></description>
     
     <licenses>
-    <license>
-        <name>BSD 3-Clause License</name>
-        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
-        <distribution>repo</distribution>
-    </license>
-</licenses>
+	    <license>
+	        <name>BSD 3-Clause License</name>
+	        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+	        <distribution>repo</distribution>
+	    </license>
+	</licenses>
 
-
-<properties>
-    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
-</properties>
+	<properties>
+	    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+	</properties>
 
     <!-- common definitions for this version of Streaming -->
     <parent>

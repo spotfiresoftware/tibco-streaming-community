@@ -1,4 +1,4 @@
-package com.example.ev3;
+package com.tibco.ep.community.components.ev3;
 
 import com.j4ev3.core.Sensor;
 import com.streambase.sb.DataType;
