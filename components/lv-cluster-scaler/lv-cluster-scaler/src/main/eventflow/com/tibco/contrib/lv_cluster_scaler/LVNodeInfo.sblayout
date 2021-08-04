@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><application-layout>
     <component name="LVNodeInfoIn">
-        <param name="gui:x" value="-270"/>
-        <param name="gui:y" value="-70"/>
+        <param name="gui:x" value="-319"/>
+        <param name="gui:y" value="-68"/>
     </component>
     <component name="Ping">
         <param name="gui:x" value="596"/>
@@ -20,8 +20,8 @@
         <param name="gui:height" value="56"/>
     </component>
     <component name="AlreadyKnown">
-        <param name="gui:x" value="317"/>
-        <param name="gui:y" value="-70"/>
+        <param name="gui:x" value="268"/>
+        <param name="gui:y" value="-68"/>
     </component>
     <component name="CalcClusterCPULoad">
         <param name="gui:x" value="1028"/>
@@ -80,13 +80,12 @@
         <param name="gui:y" value="51"/>
     </component>
     <component name="IsAddRemove">
-        <param name="gui:x" value="-122"/>
-        <param name="gui:y" value="-71"/>
+        <param name="gui:x" value="-171"/>
+        <param name="gui:y" value="-69"/>
     </component>
     <component name="IsMarkDL">
         <param name="gui:x" value="231"/>
         <param name="gui:y" value="51"/>
-        <param name="gui:bends:1" value="169,-28;195,81"/>
     </component>
     <component name="Iterate">
         <param name="gui:x" value="1016"/>
@@ -104,25 +103,21 @@
         <param name="gui:x" value="462"/>
         <param name="gui:y" value="140"/>
     </component>
-    <component name="MakeAdd">
-        <param name="gui:x" value="620"/>
-        <param name="gui:y" value="-75"/>
-    </component>
     <component name="NewLVNodeInfo">
-        <param name="gui:x" value="5"/>
-        <param name="gui:y" value="-71"/>
+        <param name="gui:x" value="-44"/>
+        <param name="gui:y" value="-69"/>
     </component>
     <component name="NewNode">
-        <param name="gui:x" value="201"/>
-        <param name="gui:y" value="-71"/>
+        <param name="gui:x" value="152"/>
+        <param name="gui:y" value="-69"/>
     </component>
     <component name="NodeAdded">
-        <param name="gui:x" value="505"/>
+        <param name="gui:x" value="531"/>
         <param name="gui:y" value="-72"/>
     </component>
     <component name="NotKnown">
-        <param name="gui:x" value="410"/>
-        <param name="gui:y" value="-73"/>
+        <param name="gui:x" value="361"/>
+        <param name="gui:y" value="-71"/>
     </component>
     <component name="OldGCWrite">
         <param name="gui:x" value="376"/>
@@ -141,12 +136,17 @@
         <param name="gui:y" value="141"/>
     </component>
     <component name="Split">
-        <param name="gui:x" value="86"/>
+        <param name="gui:x" value="37"/>
         <param name="gui:y" value="-71"/>
+        <param name="gui:height" value="65"/>
     </component>
     <component name="Split2">
         <param name="gui:x" value="761"/>
         <param name="gui:y" value="-188"/>
+    </component>
+    <component name="Trim">
+        <param name="gui:x" value="446"/>
+        <param name="gui:y" value="-72"/>
     </component>
     <component name="TrimWindow">
         <param name="gui:x" value="936"/>
@@ -155,6 +155,10 @@
     <component name="Union">
         <param name="gui:x" value="564"/>
         <param name="gui:y" value="140"/>
+    </component>
+    <component name="UpdateURI">
+        <param name="gui:x" value="646"/>
+        <param name="gui:y" value="-75"/>
     </component>
     <component name="WriteData">
         <param name="gui:x" value="747"/>
@@ -173,7 +177,7 @@
         <param name="gui:y" value="-30"/>
     </component>
     <component name="RegisterNode">
-        <param name="gui:x" value="717"/>
+        <param name="gui:x" value="743"/>
         <param name="gui:y" value="-75"/>
     </component>
 </application-layout>

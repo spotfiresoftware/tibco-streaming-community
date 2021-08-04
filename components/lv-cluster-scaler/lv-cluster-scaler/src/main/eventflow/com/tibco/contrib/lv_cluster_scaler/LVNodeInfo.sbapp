@@ -23,7 +23,6 @@
         </named-schemas>
         <parameter-definitions>
             <parameter default="60" name="WINDOW_SIZE_SEC"/>
-            <parameter default="60" name="CHECK_INTERVAL"/>
             <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
             <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
         </parameter-definitions>
@@ -70,6 +69,9 @@
                 </primary-index>
                 <index type="btree">
                     <field name="eventTime"/>
+                </index>
+                <index type="btree">
+                    <field name="URI"/>
                 </index>
             </table-schema>
             <param name="truncate" value="false"/>
@@ -130,6 +132,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="ClusterAvgCPUload">avg(CPUload)</include>
                 </expressions>
@@ -159,6 +162,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="ClusterOldGenCollections">sum(oldCollections)</include>
                 </expressions>
@@ -410,6 +414,7 @@
                 </item>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="DLAvgCPUload">avg(CPUload)</include>
                 </expressions>
@@ -536,12 +541,10 @@
             <output port="1" stream="out:AlreadyKnown_1"/>
             <dataref id="querytable" name="LVNodeInfoTable"/>
             <param name="operation" value="read"/>
-            <param name="where" value="secondary-key"/>
+            <param name="where" value="expression"/>
             <param name="limit" value="1"/>
+            <param name="where-expression" value="Data.Value == Value &amp;&amp; Category=='Cluster' &amp;&amp; Name=='Member'"/>
             <param name="key-field.0" value="URI"/>
-            <param name="key-lowerbound-value.0" value="input.Data.Value"/>
-            <param name="key-lowerbound-operation.0" value="eq"/>
-            <param name="key-upperbound-operation.0" value="none"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
             <param name="no-match-mode" value="output-no-match-null"/>
@@ -551,8 +554,6 @@
                 <item name="current" prefix="Old_" selection="none">
                     <include field="URI"/>
                 </item>
-                <item name="old" selection="none"/>
-                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -680,6 +681,7 @@
             <target-list>
                 <item name="input" selection="all"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="Count">int(current.Value)</include>
                 </expressions>
@@ -794,8 +796,22 @@
                 </expressions>
             </target-list>
         </box>
-        <box name="NodeAdded" type="outputadapter">
+        <box name="Trim" type="map">
             <input port="1" stream="out:NotKnown_1"/>
+            <output port="1" stream="out:Trim_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="URI"/>
+                </item>
+                <expressions>
+                    <include field="UpdateTime">Data.UpdateTime</include>
+                    <include field="NodeName">Data.Detail</include>
+                    <include field="NodeURI">Data.Value</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="NodeAdded" type="outputadapter">
+            <input port="1" stream="out:Trim_1"/>
             <output port="1" stream="out:NodeAdded_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
@@ -821,18 +837,7 @@
             <param name="quoteNullStrings" value="true"/>
             <param name="timestampAsLong" value="false"/>
             <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
-            <param name="verbose" value="false"/>
-        </box>
-        <box name="MakeAdd" type="map">
-            <input port="1" stream="out:NodeAdded_1"/>
-            <output port="1" stream="RegisterNode"/>
-            <target-list>
-                <item name="input" selection="none"/>
-                <expressions>
-                    <include field="URI">"lv://lvadmin:bigdog@" + substr(substr(Data.Value, 0, lastindexof(Data.Value, ":")) + ".dev.tibco.com" + substr(Data.Value, lastindexof(Data.Value, ":")), 5)</include>
-                    <include field="IsAdd">true</include>
-                </expressions>
-            </target-list>
+            <param name="verbose" value="true"/>
         </box>
         <box name="Union" type="union">
             <input port="1" stream="out:LoadWrite_1"/>
@@ -846,6 +851,17 @@
             <param name="output-field" value="sequenceNum"/>
             <param name="sequence-id" value="sequenceid"/>
             <param name="update-expression" value="sequenceid + 1"/>
+        </box>
+        <box name="UpdateURI" type="map">
+            <input port="1" stream="out:NodeAdded_1"/>
+            <output port="1" stream="RegisterNode"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="URI">"lv://lvadmin:bigdog@" + substr(substr(NodeURI, 0, lastindexof(NodeURI, ":")) + ".dev.tibco.com" + substr(NodeURI, lastindexof(NodeURI, ":")), 5)</include>
+                    <include field="IsAdd">true</include>
+                </expressions>
+            </target-list>
         </box>
         <box name="WriteData" type="query">
             <input port="1" stream="out:Sequence_1"/>

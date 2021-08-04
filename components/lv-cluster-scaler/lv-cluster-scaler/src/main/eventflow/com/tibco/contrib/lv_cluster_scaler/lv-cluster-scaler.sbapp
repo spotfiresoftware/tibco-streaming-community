@@ -40,20 +40,9 @@
             <output port="3" stream="out:Split_3"/>
             <param name="output-count" value="3"/>
         </box>
-        <box name="UpdateURI" type="map">
-            <input port="1" stream="out:LVNodeInfoRef1_1"/>
-            <output port="1" stream="out:UpdateURI_1"/>
-            <target-list>
-                <item name="input" selection="none"/>
-                <expressions>
-                    <include field="URI">"lv://lvadmin:bigdog@" + substr(substr(URI, 0, lastindexof(URI, ":")) + ".dev.tibco.com" + substr(URI, lastindexof(URI, ":")), 5)</include>
-                    <include field="IsAdd">true</include>
-                </expressions>
-            </target-list>
-        </box>
         <box name="Union2" type="union">
             <input port="1" stream="SetSeedServer"/>
-            <input port="2" stream="out:UpdateURI_1"/>
+            <input port="2" stream="out:LVNodeInfoRef1_1"/>
             <output port="1" stream="out:Union2_1"/>
             <param name="strict" value="false"/>
         </box>

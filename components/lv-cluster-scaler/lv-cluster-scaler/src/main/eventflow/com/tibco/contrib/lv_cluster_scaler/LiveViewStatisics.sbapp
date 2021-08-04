@@ -12,7 +12,6 @@
         <import from="lvinterfaces.LiveViewStatisticsSchemas"/>
         <parameter-definitions>
             <parameter default="60" name="WINDOW_SIZE_SEC"/>
-            <parameter default="60" name="CHECK_INTERVAL"/>
             <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
             <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
         </parameter-definitions>
@@ -104,6 +103,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="ClusterAvgQueued">sum(queuedTuples)</include>
                 </expressions>
@@ -237,6 +237,7 @@
             <target-list>
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -277,6 +278,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -311,6 +313,7 @@
                     <include field="element"/>
                 </item>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="DLSumQueued">sum(queuedTuples)</include>
                 </expressions>
@@ -339,6 +342,7 @@
             <target-list>
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -379,6 +383,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>

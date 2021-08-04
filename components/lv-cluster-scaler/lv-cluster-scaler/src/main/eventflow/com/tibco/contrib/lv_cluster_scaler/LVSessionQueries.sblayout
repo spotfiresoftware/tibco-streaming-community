@@ -28,12 +28,12 @@
         <param name="gui:y" value="-117"/>
     </component>
     <component name="DLQueryAvg">
-        <param name="gui:x" value="386"/>
-        <param name="gui:y" value="-205"/>
+        <param name="gui:x" value="479"/>
+        <param name="gui:y" value="-206"/>
     </component>
     <component name="DLQueryAvgLog">
-        <param name="gui:x" value="512"/>
-        <param name="gui:y" value="-205"/>
+        <param name="gui:x" value="605"/>
+        <param name="gui:y" value="-206"/>
     </component>
     <component name="DelOldWindow">
         <param name="gui:x" value="221"/>
@@ -56,7 +56,7 @@
         <param name="gui:y" value="-78"/>
     </component>
     <component name="Iterate">
-        <param name="gui:x" value="260"/>
+        <param name="gui:x" value="390"/>
         <param name="gui:y" value="-205"/>
     </component>
     <component name="KeepOneCopy">
@@ -66,6 +66,10 @@
     <component name="NewLVSInfo">
         <param name="gui:x" value="-245"/>
         <param name="gui:y" value="-88"/>
+    </component>
+    <component name="NotNull">
+        <param name="gui:x" value="285"/>
+        <param name="gui:y" value="-205"/>
     </component>
     <component name="OldLVSInfo">
         <param name="gui:x" value="-225"/>

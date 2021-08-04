@@ -110,6 +110,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="ClusterTotalAvg">length(unique(SID + string(QID), 10000))</include>
                 </expressions>
@@ -138,6 +139,7 @@
             <target-list>
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -158,7 +160,7 @@
             <param name="where-expression" value="UpdateTime &lt; now()-seconds(${WINDOW_SIZE_SEC})"/>
             <param name="write-type" value="insert"/>
             <param name="if-write-fails" value="ignore"/>
-            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
             <param name="order-by-direction" value="none"/>
             <target-list>
                 <item name="input" prefix="window_" selection="all"/>
@@ -187,6 +189,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="URIList">unique(URI, 1000)</include>
                 </expressions>
@@ -272,6 +275,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -292,16 +296,11 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
-        <box name="Iterate" type="iterate">
+        <box name="NotNull" type="filter">
             <input port="1" stream="out:GetUIRs_1"/>
-            <output port="1" stream="out:Iterate_1"/>
-            <param name="iterate-expr" value="URIList"/>
-            <target-list>
-                <item name="input" selection="all"/>
-                <expressions>
-                    <include field="element">each.element</include>
-                </expressions>
-            </target-list>
+            <output port="1" stream="out:NotNull_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="notnull(URIList)"/>
         </box>
         <box name="Sequence2" type="seqnum">
             <input port="1" stream="out:GetOldTable_1"/>
@@ -330,6 +329,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -351,34 +351,15 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
-        <box name="DLQueryAvg" type="query">
-            <input port="1" stream="out:Iterate_1"/>
-            <output port="1" stream="out:DLQueryAvg_1"/>
-            <dataref id="querytable" name="WindowData"/>
-            <param name="operation" value="read"/>
-            <param name="where" value="expression"/>
-            <param name="where-expression" value="(URI==element)"/>
-            <param name="write-type" value="insert"/>
-            <param name="if-write-fails" value="ignore"/>
-            <param name="no-match-mode" value="output-no-match-nothing"/>
-            <param name="order-by-direction" value="none"/>
+        <box name="Iterate" type="iterate">
+            <input port="1" stream="out:NotNull_1"/>
+            <output port="1" stream="out:Iterate_1"/>
+            <param name="iterate-expr" value="URIList"/>
             <target-list>
-                <item name="input" selection="none">
-                    <include field="element"/>
-                </item>
-                <item name="current" selection="none"/>
+                <item name="input" selection="all"/>
                 <expressions>
-                    <include field="LDQueryAvg">length(unique(SID + string(QID), 10000))</include>
+                    <include field="element">each.element</include>
                 </expressions>
-            </target-list>
-            <target-list name="insert">
-                <item name="input" selection="all"/>
-            </target-list>
-            <target-list name="update">
-                <item name="input" selection="all"/>
-            </target-list>
-            <target-list name="no-match">
-                <item name="input" selection="all"/>
             </target-list>
         </box>
         <box name="KeepOneCopy" type="query">
@@ -397,6 +378,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -417,6 +399,74 @@
             <param name="output-field" value="sequenceNum"/>
             <param name="sequence-id" value="sequenceid"/>
             <param name="update-expression" value="sequenceid + 1"/>
+        </box>
+        <box name="DLQueryAvg" type="query">
+            <input port="1" stream="out:Iterate_1"/>
+            <output port="1" stream="out:DLQueryAvg_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="(URI==element)"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="element"/>
+                </item>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <expressions>
+                    <include field="LDQueryAvg">length(unique(SID + string(QID), 10000))</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="WriteWindow" type="query">
+            <input port="1" stream="out:Sequence_1"/>
+            <output port="1" stream="out:WriteWindow_1"/>
+            <dataref id="querytable" name="WindowData"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="sequenceNum"/>
+            <param name="key-value.0" value="input.sequenceNum"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="eventTime">now()</set>
+                    <set field="SID">Data.SID</set>
+                    <set field="QID">Data.QID</set>
+                    <set field="User">Data.User</set>
+                    <set field="TableName">Data.TableName</set>
+                    <set field="SnapshotTime">Data.SnapshotTime</set>
+                    <set field="Pending">Data.Pending</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
         </box>
         <box name="DLQueryAvgLog" type="outputadapter">
             <input port="1" stream="out:DLQueryAvg_1"/>
@@ -446,42 +496,6 @@
             <param name="timestampAsLong" value="false"/>
             <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
             <param name="verbose" value="false"/>
-        </box>
-        <box name="WriteWindow" type="query">
-            <input port="1" stream="out:Sequence_1"/>
-            <output port="1" stream="out:WriteWindow_1"/>
-            <dataref id="querytable" name="WindowData"/>
-            <param name="operation" value="write"/>
-            <param name="where" value="primary-key"/>
-            <param name="key-field.0" value="sequenceNum"/>
-            <param name="key-value.0" value="input.sequenceNum"/>
-            <param name="write-type" value="insert"/>
-            <param name="if-write-fails" value="ignore"/>
-            <param name="no-match-mode" value="output-no-match-null"/>
-            <param name="order-by-direction" value="none"/>
-            <target-list>
-                <item name="input" selection="all"/>
-                <item name="old" selection="none"/>
-                <item name="new" selection="none"/>
-            </target-list>
-            <target-list name="insert">
-                <item name="input" selection="all"/>
-                <expressions>
-                    <set field="eventTime">now()</set>
-                    <set field="SID">Data.SID</set>
-                    <set field="QID">Data.QID</set>
-                    <set field="User">Data.User</set>
-                    <set field="TableName">Data.TableName</set>
-                    <set field="SnapshotTime">Data.SnapshotTime</set>
-                    <set field="Pending">Data.Pending</set>
-                </expressions>
-            </target-list>
-            <target-list name="update">
-                <item name="input" selection="all"/>
-            </target-list>
-            <target-list name="no-match">
-                <item name="input" selection="all"/>
-            </target-list>
         </box>
     </add>
 </modify>
