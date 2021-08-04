@@ -19,7 +19,7 @@ public class RobotPort {
     private byte address;
     private Schema schema;
 
-    public RobotPort(String name, String mode, boolean streaming, byte address, Schema schema, SensorTypeEnum sensor) {
+    public RobotPort(String name, boolean streaming, byte address, Schema schema, SensorTypeEnum sensor, String mode) {
         this.name = name;
         this.streaming = streaming;
         this.address = address;
@@ -28,12 +28,12 @@ public class RobotPort {
         this.sensor = sensor;
     }
 
-    public RobotPort(String name, String mode, boolean streaming, byte address, Schema schema) {
-        this(name, mode, streaming, address, schema, SensorTypeEnum.MOTOR);
+    public RobotPort(String name, boolean streaming, byte address, Schema schema, String mode) {
+        this(name, streaming, address, schema, SensorTypeEnum.MOTOR, mode);
     }
 
     public RobotPort(String name, boolean streaming, byte address, Schema schema, SensorTypeEnum sensor) {
-        this(name, "", streaming, address, schema, sensor);
+        this(name, streaming, address, schema, sensor, "");
     }
 
     public RobotPort(String name, boolean streaming, byte address, Schema schema) {
