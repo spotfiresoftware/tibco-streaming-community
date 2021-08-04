@@ -20,8 +20,8 @@ The included adapters can control and read sensor information from a Mindstorms 
 	`$ mvn install:install-file -Dfile="<PATH TO JAR FILE>J4EV3WithDependencies.jar" -DgroupId="github.LLeddy" -DartifactId="J4EV3" -Dversion="17.7.26" -Dpackaging="jar"`
 	* Be sure to replace `<PATH TO JAR FILE>` with the path to your file. For more information on this step, see [here](https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html).
 * In your EV3's Settings tab, ensure that Bluetooth and Visibility are enabled.
-	![Bluetooth option checked](src/site/markdown/images/bt_1.png)
-	![Bluetooth & Visibility options checked](src/site/markdown/images/bt_2.png)
+	![Bluetooth option checked](src/images/bt_1.png)
+	![Bluetooth & Visibility options checked](src/images/bt_2.png)
 * In your computer's Bluetooth settings, add the EV3 as a paired device. This step varies according to OS; see [the LEGO help page on this topic](https://www.lego.com/en-us/service/help/EKB_MINDSTORMS_Email_Form/connecting-your-lego-mindstorms-ev3-to-bluetooth-kA009000001dcjjCAA) for detailed steps.
 * In your computer's devices properties, find the EV3 brick's Bluetooth MAC address. This 12-digit address needs to be entered in the Connection adapter's operator properties.
 * You may now proceed to the demo or begin programming with the adapters.
@@ -35,7 +35,7 @@ This sample is designed to work with the TRACK3R demo bot. It allows the IR beac
 * Turn on the EV3 brick by pressing the central button. Wait until the robot has booted up fully (it will make a sound and the LED will turn green).
 * Run Demo.sbapp as an EventFlow fragment. When the demo is connected to the EV3 brick, its light will turn orange.
 * Ensure that the IR beacon has the red switch pushed all the way forwards, into position "1".
-	![beacon in position 1](src/site/markdown/images/IRbeacon.jpg)
+	![beacon in position 1](src/images/IRbeacon.jpg)
 * Place the robot on a flat surface that's safe to drive around on. Point the black end of the IR beacon towards the robot's IR sensor and begin controlling the robot by pressing the grey buttons.
 
 # EV3 Adapter Documentation
