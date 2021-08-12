@@ -104,8 +104,4 @@
         <param name="gui:bends:2" value="157,-44;175,35"/>
         <param name="gui:bends:3" value="217,55;218,45"/>
     </component>
-    <component name="OutputStream">
-        <param name="gui:x" value="-108"/>
-        <param name="gui:y" value="149"/>
-    </component>
 </application-layout>

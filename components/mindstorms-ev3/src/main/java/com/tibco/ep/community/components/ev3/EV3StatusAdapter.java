@@ -218,6 +218,10 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		if (inputPort == 1) {
 			Tuple out = buildButtonTuple();
 			sendOutput(outputPorts - 1, out);
+			// change the streaming value if need be
+			if (tuple.getSchema().hasField(FIELD_STREAM.getName())) {
+				setStreamButtonPort(tuple.getBoolean(FIELD_STREAM.getName()));
+			}
 		}
 	}
 
@@ -448,7 +452,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 						Tuple out = buildButtonTuple();
 						sendOutput(outputPorts - 1, out);
 					}
-					// TODO add buttons streaming check
 				}
 			} catch (Exception e) {
 				getLogger().error("Error", e);
