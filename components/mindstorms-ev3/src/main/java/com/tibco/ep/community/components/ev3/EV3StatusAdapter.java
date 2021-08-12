@@ -45,6 +45,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		}
 	}
 
+	private boolean StreamButtonPort;
 	private boolean StreamPortA;
 	private boolean StreamPortB;
 	private boolean StreamPortC;
@@ -53,15 +54,6 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 	private boolean StreamPort2;
 	private boolean StreamPort3;
 	private boolean StreamPort4;
-
-	private int StreamPortAmode = 0;
-	private int StreamPortBmode = 0;
-	private int StreamPortCmode = 0;
-	private int StreamPortDmode = 0;
-	private int StreamPort1mode = 0;
-	private int StreamPort2mode = 0;
-	private int StreamPort3mode = 0;
-	private int StreamPort4mode = 0;
 
 	private SensorTypeEnum Port1Device;
 	private SensorTypeEnum Port2Device;
@@ -126,6 +118,7 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 				"The EV3 Status Adapter allows you request sensor readings from the EV3 Brick with a StreamBase module.");
 
 		setConnectionManagerName("");
+		setStreamButtonPort(false);
 		setStreamPortA(false);
 		setStreamPortB(false);
 		setStreamPortC(false);
@@ -411,15 +404,15 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 
 		// map each port name to the port number it connects to
 		outputPortNames = new HashMap<String, Integer>();
-		int portNumber = 0;
+		int outputPorts = 0;
 
 		// for the four motors:
 		String[] motorPortNames = { "A", "B", "C", "D" };
 		for (int i = 0; i < motorPortNames.length; i++) {
 			if (isPort(motorPortNames[i])) {
-				botPortsInfo[portNumber] = initBotPort(motorPortNames[i]);
-				outputPortNames.put(motorPortNames[i], portNumber);
-				portNumber++;
+				botPortsInfo[outputPorts] = initBotPort(motorPortNames[i]);
+				outputPortNames.put(motorPortNames[i], outputPorts);
+				outputPorts++;
 			}
 		}
 
@@ -427,9 +420,9 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 		String[] sensorPortNames = { "1", "2", "3", "4" };
 		for (int i = 0; i < sensorPortNames.length; i++) {
 			if (isPort(sensorPortNames[i])) {
-				botPortsInfo[portNumber] = initBotPort(sensorPortNames[i]);
-				outputPortNames.put(sensorPortNames[i], portNumber);
-				portNumber++;
+				botPortsInfo[outputPorts] = initBotPort(sensorPortNames[i]);
+				outputPortNames.put(sensorPortNames[i], outputPorts);
+				outputPorts++;
 			}
 		}
 
@@ -451,6 +444,11 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 						Tuple out = buildSensorTuple(target);
 						sendOutput(outputPort, out);
 					}
+					if (getStreamButtonPort()) {
+						Tuple out = buildButtonTuple();
+						sendOutput(outputPorts - 1, out);
+					}
+					// TODO add buttons streaming check
 				}
 			} catch (Exception e) {
 				getLogger().error("Error", e);
@@ -610,6 +608,14 @@ public class EV3StatusAdapter extends Operator implements Parameterizable, IShar
 
 	public OutputTypeEnum getOutputType() {
 		return this.OutputType;
+	}
+
+	public boolean getStreamButtonPort() {
+		return this.StreamButtonPort;
+	}
+
+	public void setStreamButtonPort(boolean streamButtonPort) {
+		StreamButtonPort = streamButtonPort;
 	}
 
 	public void setStreamPortA(boolean StreamPortA) {
