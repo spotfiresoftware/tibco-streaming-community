@@ -1,3 +1,8 @@
+/*
+* Copyright © 2021. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 package com.tibco.ep.community.components.ev3;
 
 import java.net.URL;
@@ -16,9 +21,6 @@ import com.streambase.sb.operator.TypecheckException;
  * motors and LEDs connected to the MINDSTORMS EV3 brick.
  * 
  * Requires a {@link EV3ConnectionManager} in the instance to work.
- * 
- * Copyright © 2021. TIBCO Software Inc. This file is subject to the license
- * terms contained in the license file that is distributed with this file.
  */
 public class EV3CommandAdapter extends Operator implements Parameterizable, ISharableAdapter {
 
@@ -403,7 +405,9 @@ public class EV3CommandAdapter extends Operator implements Parameterizable, ISha
 	public void shutdown() {
 		// safely shut off all motors
 		byte targetPort = connectTo.getMotorPortByte("all");
-		connectTo.robot.getMotor().stopMotor(targetPort, false);
+		if (connectTo.robot != null) {
+			connectTo.robot.getMotor().stopMotor(targetPort, false);
+		}
 	}
 
 	@Override

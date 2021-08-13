@@ -1,3 +1,8 @@
+/*
+* Copyright © 2021. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 package com.tibco.ep.community.components.ev3;
 
 import java.net.URL;
@@ -21,8 +26,6 @@ import com.streambase.sb.operator.TypecheckException;
  * 
  * Requires a {@link EV3ConnectionManager} in the instance to work.
  * 
- * Copyright © 2021. TIBCO Software Inc. This file is subject to the license
- * terms contained in the license file that is distributed with this file.
  */
 public class EV3StatusAdapter extends Operator implements Parameterizable, ISharableAdapter, Runnable {
 

@@ -1,3 +1,8 @@
+/*
+* Copyright © 2021. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
 package com.tibco.ep.community.components.ev3;
 
 import java.net.URL;
@@ -16,9 +21,6 @@ import com.streambase.sb.operator.TypecheckException;
  * 
  * No input or output ports; an EV3 Command Adapter or EV3 Status Adapter must
  * be paired with the Connection Manager in order to interact with the robot.
- * 
- * Copyright © 2021. TIBCO Software Inc. This file is subject to the license
- * terms contained in the license file that is distributed with this file.
  */
 public class EV3ConnectionManager extends Operator implements Parameterizable, ISharableAdapter, Runnable {
 
