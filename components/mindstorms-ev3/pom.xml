@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+    
+   
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tibco.ep.community.components</groupId>
+    <artifactId>mindstorms-ev3</artifactId>
+    <packaging>ep-eventflow-fragment</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>mindstorms-ev3</name>
+    <description></description>
+    
+    <licenses>
+	    <license>
+	        <name>BSD 3-Clause License</name>
+	        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+	        <distribution>repo</distribution>
+	    </license>
+	</licenses>
+
+	<properties>
+	    <com.tibco.ep.sb.studio.sample>true</com.tibco.ep.sb.studio.sample>
+	</properties>
+
+    <!-- common definitions for this version of Streaming -->
+    <parent>
+        <groupId>com.tibco.ep.sb.parent</groupId>
+        <artifactId>ep-eventflow-fragment</artifactId>
+        <version>10.6.1</version>
+        <relativePath/>
+    </parent>
+
+    <dependencies>
+    	<!--  to install j4ev3 from the jar, once downloaded from https://github.com/LLeddy/J4EV3 -->
+    	<!--  mvn install:install-file -Dfile="<PATH TO JAR FILE>J4EV3WithDependencies.jar" -DgroupId="github.LLeddy" -DartifactId="J4EV3" -Dversion="17.7.26" -Dpackaging="jar" -->
+    	<dependency>
+    		<groupId>github.LLeddy</groupId>
+    		<artifactId>J4EV3</artifactId>
+    		<version>17.7.26</version>
+    	</dependency>
+    </dependencies>
+</project>

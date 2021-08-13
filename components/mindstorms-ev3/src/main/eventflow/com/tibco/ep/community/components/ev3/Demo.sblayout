@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-396"/>
+        <param name="gui:y" value="78"/>
+    </component>
+    <component name="LEDInput">
+        <param name="gui:x" value="499"/>
+        <param name="gui:y" value="104"/>
+    </component>
+    <component name="LEDInputCopy">
+        <param name="gui:x" value="499"/>
+        <param name="gui:y" value="5"/>
+    </component>
+    <component name="Backwards">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="-94"/>
+    </component>
+    <component name="Brake">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="5"/>
+    </component>
+    <component name="Cleanup">
+        <param name="gui:x" value="499"/>
+        <param name="gui:y" value="-94"/>
+    </component>
+    <component name="Connection">
+        <param name="gui:x" value="-416"/>
+        <param name="gui:y" value="-167"/>
+    </component>
+    <component name="DriveSpeed">
+        <param name="gui:x" value="-223"/>
+        <param name="gui:y" value="15"/>
+        <param name="gui:bends:1" value="-238,28;-236,45"/>
+    </component>
+    <component name="Forwards">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="-193"/>
+    </component>
+    <component name="Java">
+        <param name="gui:x" value="614"/>
+        <param name="gui:y" value="-12"/>
+        <param name="gui:bends:1" value="574,-64;592,8"/>
+        <param name="gui:bends:2" value="581,35;585,18"/>
+        <param name="gui:bends:3" value="583,134;604,28"/>
+    </component>
+    <component name="LeftMotor">
+        <param name="gui:x" value="-71"/>
+        <param name="gui:y" value="-183"/>
+        <param name="gui:bends:1" value="-132,45;-84,-153"/>
+    </component>
+    <component name="LeftMotorDirection">
+        <param name="gui:x" value="48"/>
+        <param name="gui:y" value="-183"/>
+    </component>
+    <component name="MediumMotor">
+        <param name="gui:x" value="-71"/>
+        <param name="gui:y" value="15"/>
+    </component>
+    <component name="MediumMotorRun">
+        <param name="gui:x" value="48"/>
+        <param name="gui:y" value="15"/>
+    </component>
+    <component name="RightMotor">
+        <param name="gui:x" value="-71"/>
+        <param name="gui:y" value="-84"/>
+        <param name="gui:bends:1" value="-107,45;-83,-54"/>
+    </component>
+    <component name="RightMotorDirection">
+        <param name="gui:x" value="48"/>
+        <param name="gui:y" value="-84"/>
+    </component>
+    <component name="Sensors">
+        <param name="gui:x" value="-301"/>
+        <param name="gui:y" value="8"/>
+        <param name="gui:height" value="117"/>
+        <param name="gui:bends:1" value="-148,-137;-148,-30;-362,-30;-362,28"/>
+    </component>
+    <component name="SetStartupMode">
+        <param name="gui:x" value="-320"/>
+        <param name="gui:y" value="-167"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="419"/>
+        <param name="gui:y" value="-94"/>
+        <param name="gui:bends:1" value="377,-163;390,-74"/>
+        <param name="gui:bends:3" value="381,35;403,-54"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="227"/>
+        <param name="gui:y" value="-193"/>
+        <param name="gui:bends:1" value="165,-163;167,-173"/>
+        <param name="gui:bends:2" value="141,-64;165,-163"/>
+        <param name="gui:bends:3" value="131,35;133,48;180,48;217,-153"/>
+    </component>
+    <component name="Union3">
+        <param name="gui:x" value="227"/>
+        <param name="gui:y" value="-94"/>
+        <param name="gui:bends:1" value="170,-153;188,-74"/>
+    </component>
+    <component name="Union4">
+        <param name="gui:x" value="227"/>
+        <param name="gui:y" value="5"/>
+        <param name="gui:bends:1" value="171,-143;213,25"/>
+        <param name="gui:bends:2" value="157,-44;175,35"/>
+        <param name="gui:bends:3" value="217,55;218,45"/>
+    </component>
+</application-layout>

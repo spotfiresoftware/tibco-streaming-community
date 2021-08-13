@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.tibco.ep.community.components.ev3.SensorColors"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <constant expr="&quot;BLACK&quot;" name="Black"/>
+    <constant expr="&quot;BLUE&quot;" name="Blue"/>
+    <constant expr="&quot;BROWN&quot;" name="Brown"/>
+    <constant expr="&quot;GREEN&quot;" name="Green"/>
+    <constant expr="&quot;NONE&quot;" name="None"/>
+    <constant expr="&quot;RED&quot;" name="Red"/>
+    <constant expr="&quot;WHITE&quot;" name="White"/>
+    <constant expr="&quot;YELLOW&quot;" name="Yellow"/>
+    <dynamic-variables/>
+</application>

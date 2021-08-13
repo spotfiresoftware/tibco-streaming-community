@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ep.community.components.ev3.Demo"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <import from="com.tibco.ep.community.components.ev3.SensorModes"/>
+        <dynamic-variables/>
+        <stream name="InputStream">
+            <schema/>
+        </stream>
+        <stream name="LEDInput">
+            <schema>
+                <field name="LED" type="bool"/>
+                <field name="Color" type="string"/>
+                <field name="Blink" type="bool"/>
+            </schema>
+        </stream>
+        <stream name="LEDInputCopy">
+            <schema>
+                <field name="TargetPort" type="string"/>
+                <field name="Position" type="int"/>
+                <field name="Rate" type="int"/>
+                <field name="Time" type="int"/>
+            </schema>
+        </stream>
+        <box name="Connection" type="java">
+            <output port="1" stream="out:Connection_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3ConnectionManager"/>
+            <param name="MACaddress" value="0016535299F1"/>
+        </box>
+        <box name="SetStartupMode" type="map">
+            <input port="1" stream="out:Connection_1"/>
+            <output port="1" stream="out:SetStartupMode_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TargetPort">"4"</include>
+                    <include field="Mode">"RemoteControl"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Sensors" type="java">
+            <input port="1" stream="out:SetStartupMode_1"/>
+            <input port="2" stream="InputStream"/>
+            <output port="1" stream="out:Sensors_1"/>
+            <output port="2" stream="out:Sensors_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3StatusAdapter"/>
+            <param name="ConnectionManagerName" value="Connection"/>
+            <param name="OutputType" value="Raw"/>
+            <param name="Port1Device" value="None"/>
+            <param name="Port2Device" value="None"/>
+            <param name="Port3Device" value="None"/>
+            <param name="Port4Device" value="Infrared"/>
+            <param name="PortAMotor" value="false"/>
+            <param name="PortBMotor" value="false"/>
+            <param name="PortCMotor" value="false"/>
+            <param name="PortDMotor" value="false"/>
+            <param name="StreamButtonPort" value="false"/>
+            <param name="StreamPort1" value="false"/>
+            <param name="StreamPort2" value="false"/>
+            <param name="StreamPort3" value="true"/>
+            <param name="StreamPort4" value="true"/>
+            <param name="StreamPortA" value="false"/>
+            <param name="StreamPortB" value="false"/>
+            <param name="StreamPortC" value="false"/>
+            <param name="StreamPortD" value="false"/>
+        </box>
+        <box name="DriveSpeed" type="map">
+            <input port="1" stream="out:Sensors_1"/>
+            <output port="1" stream="out:DriveSpeed_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Rate">50</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="LeftMotor" type="map">
+            <input port="1" stream="out:DriveSpeed_1"/>
+            <output port="1" stream="out:LeftMotor_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TargetPort">"B"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="MediumMotor" type="map">
+            <input port="1" stream="out:DriveSpeed_1"/>
+            <output port="1" stream="out:MediumMotor_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TargetPort">"A"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="RightMotor" type="map">
+            <input port="1" stream="out:DriveSpeed_1"/>
+            <output port="1" stream="out:RightMotor_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="TargetPort">"C"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="LeftMotorDirection" type="filter">
+            <input port="1" stream="out:LeftMotor_1"/>
+            <output port="1" stream="out:LeftMotorDirection_1"/>
+            <output port="2" stream="out:LeftMotorDirection_2"/>
+            <output port="3" stream="out:LeftMotorDirection_3"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="(RemoteControl = 1|| RemoteControl = 5 || RemoteControl = 6)"/>
+            <param name="expression.1" value="(RemoteControl =2 || RemoteControl = 7 || RemoteControl = 8)"/>
+            <param name="expression.2" value="true"/>
+        </box>
+        <box name="MediumMotorRun" type="filter">
+            <input port="1" stream="out:MediumMotor_1"/>
+            <output port="1" stream="out:MediumMotorRun_1"/>
+            <output port="2" stream="out:MediumMotorRun_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="(RemoteControl = 9)"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="RightMotorDirection" type="filter">
+            <input port="1" stream="out:RightMotor_1"/>
+            <output port="1" stream="out:RightMotorDirection_1"/>
+            <output port="2" stream="out:RightMotorDirection_2"/>
+            <output port="3" stream="out:RightMotorDirection_3"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="(RemoteControl = 3|| RemoteControl = 5 || RemoteControl = 7)"/>
+            <param name="expression.1" value="(RemoteControl = 4 || RemoteControl = 6 || RemoteControl = 8)"/>
+            <param name="expression.2" value="true"/>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="out:LeftMotorDirection_1"/>
+            <input port="2" stream="out:RightMotorDirection_1"/>
+            <input port="3" stream="out:MediumMotorRun_1"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Union3" type="union">
+            <input port="1" stream="out:LeftMotorDirection_2"/>
+            <input port="2" stream="out:RightMotorDirection_2"/>
+            <output port="1" stream="out:Union3_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Union4" type="union">
+            <input port="1" stream="out:LeftMotorDirection_3"/>
+            <input port="2" stream="out:RightMotorDirection_3"/>
+            <input port="3" stream="out:MediumMotorRun_2"/>
+            <output port="1" stream="out:Union4_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Backwards" type="map">
+            <input port="1" stream="out:Union3_1"/>
+            <output port="1" stream="out:Backwards_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="Rate">Rate*(-1)</replace>
+                    <include field="Command">"SPEED"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Brake" type="map">
+            <input port="1" stream="out:Union4_1"/>
+            <output port="1" stream="out:Brake_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <replace field="Rate">0</replace>
+                    <include field="Command">"BRAKE"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Forwards" type="map">
+            <input port="1" stream="out:Union2_1"/>
+            <output port="1" stream="out:Forwards_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Command">"SPEED"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:Forwards_1"/>
+            <input port="2" stream="out:Backwards_1"/>
+            <input port="3" stream="out:Brake_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Cleanup" type="map">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:Cleanup_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <remove field="RemoteControl"/>
+                    <remove field="Proximity"/>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="out:Cleanup_1"/>
+            <input port="2" stream="LEDInputCopy"/>
+            <input port="3" stream="LEDInput"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.tibco.ep.community.components.ev3.EV3CommandAdapter"/>
+            <param name="ConnectionManagerName" value="Connection"/>
+            <param name="error" value="5"/>
+        </box>
+    </add>
+</modify>

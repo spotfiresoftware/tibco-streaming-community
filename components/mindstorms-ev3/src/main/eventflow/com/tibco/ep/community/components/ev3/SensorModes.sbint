@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.tibco.ep.community.components.ev3.SensorModes"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <constant expr="&quot;LightAmbient&quot;" name="COLOR_AMBIENT"/>
+    <constant expr="&quot;Color&quot;" name="COLOR_COLOR"/>
+    <constant expr="&quot;LightReflected&quot;" name="COLOR_REFLECTED"/>
+    <constant expr="&quot;Angle&quot;" name="GYRO_ANGLE"/>
+    <constant expr="&quot;Rate&quot;" name="GYRO_RATE"/>
+    <constant expr="&quot;Proximity&quot;" name="IR_PROXIMITY"/>
+    <constant expr="&quot;Remote&quot;" name="IR_REMOTE"/>
+    <constant expr="&quot;Bumped&quot;" name="TOUCH_BUMPED"/>
+    <constant expr="&quot;Touch&quot;" name="TOUCH_TOUCH"/>
+    <constant expr="&quot;DistanceCM&quot;" name="ULTRASONIC_CENTIMETER"/>
+    <constant expr="&quot;DistanceIN&quot;" name="ULTRASONIC_INCH"/>
+    <constant expr="&quot;Listen&quot;" name="ULTRASONIC_LISTEN"/>
+    <dynamic-variables/>
+</application>
