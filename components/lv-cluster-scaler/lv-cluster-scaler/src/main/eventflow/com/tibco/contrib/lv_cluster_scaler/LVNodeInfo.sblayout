@@ -14,8 +14,8 @@
         <param name="gui:height" value="56"/>
     </component>
     <component name="WindowData">
-        <param name="gui:x" value="1057"/>
-        <param name="gui:y" value="142"/>
+        <param name="gui:x" value="1060"/>
+        <param name="gui:y" value="249"/>
         <param name="gui:width" value="80"/>
         <param name="gui:height" value="56"/>
     </component>
@@ -32,7 +32,7 @@
         <param name="gui:y" value="-154"/>
     </component>
     <component name="CalcDLCPULoad">
-        <param name="gui:x" value="1092"/>
+        <param name="gui:x" value="1146"/>
         <param name="gui:y" value="-351"/>
     </component>
     <component name="ClusterLoadLog">
@@ -44,7 +44,7 @@
         <param name="gui:y" value="-154"/>
     </component>
     <component name="DLLoadLog">
-        <param name="gui:x" value="1255"/>
+        <param name="gui:x" value="1309"/>
         <param name="gui:y" value="-351"/>
     </component>
     <component name="DLLoadOrGC">
@@ -52,7 +52,7 @@
         <param name="gui:y" value="151"/>
     </component>
     <component name="DLTooBusy">
-        <param name="gui:x" value="1173"/>
+        <param name="gui:x" value="1227"/>
         <param name="gui:y" value="-351"/>
     </component>
     <component name="DelDL1">
@@ -64,8 +64,8 @@
         <param name="gui:y" value="315"/>
     </component>
     <component name="GetAllNullsDL">
-        <param name="gui:x" value="1091"/>
-        <param name="gui:y" value="-30"/>
+        <param name="gui:x" value="1227"/>
+        <param name="gui:y" value="-52"/>
     </component>
     <component name="GetCount">
         <param name="gui:x" value="361"/>
@@ -88,16 +88,16 @@
         <param name="gui:y" value="51"/>
     </component>
     <component name="Iterate">
-        <param name="gui:x" value="1016"/>
+        <param name="gui:x" value="1070"/>
         <param name="gui:y" value="-351"/>
     </component>
     <component name="Iterate2">
-        <param name="gui:x" value="934"/>
-        <param name="gui:y" value="-30"/>
+        <param name="gui:x" value="1070"/>
+        <param name="gui:y" value="-52"/>
     </component>
     <component name="ListAllURI">
-        <param name="gui:x" value="854"/>
-        <param name="gui:y" value="-30"/>
+        <param name="gui:x" value="990"/>
+        <param name="gui:y" value="-52"/>
     </component>
     <component name="LoadWrite">
         <param name="gui:x" value="462"/>
@@ -128,8 +128,8 @@
         <param name="gui:y" value="315"/>
     </component>
     <component name="SeeIfNonNull">
-        <param name="gui:x" value="1009"/>
-        <param name="gui:y" value="-30"/>
+        <param name="gui:x" value="1145"/>
+        <param name="gui:y" value="-52"/>
     </component>
     <component name="Sequence">
         <param name="gui:x" value="667"/>
@@ -173,11 +173,27 @@
         <param name="gui:y" value="152"/>
     </component>
     <component name="WriteNonNull">
-        <param name="gui:x" value="1174"/>
-        <param name="gui:y" value="-30"/>
+        <param name="gui:x" value="1310"/>
+        <param name="gui:y" value="-52"/>
+    </component>
+    <component name="CountDLs">
+        <param name="gui:x" value="936"/>
+        <param name="gui:y" value="77"/>
+    </component>
+    <component name="GetCount2">
+        <param name="gui:x" value="1066"/>
+        <param name="gui:y" value="80"/>
+    </component>
+    <component name="ClusterLoadAvg">
+        <param name="gui:x" value="1306"/>
+        <param name="gui:y" value="-255"/>
     </component>
     <component name="RegisterNode">
         <param name="gui:x" value="743"/>
         <param name="gui:y" value="-75"/>
+    </component>
+    <component name="DLCount">
+        <param name="gui:x" value="1196"/>
+        <param name="gui:y" value="83"/>
     </component>
 </application-layout>

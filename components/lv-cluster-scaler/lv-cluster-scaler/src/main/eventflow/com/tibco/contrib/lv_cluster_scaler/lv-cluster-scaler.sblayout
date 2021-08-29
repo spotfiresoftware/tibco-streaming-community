@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ResetScore">
+        <param name="gui:x" value="-359"/>
+        <param name="gui:y" value="224"/>
+    </component>
     <component name="SetSeedServer">
         <param name="gui:x" value="-711"/>
         <param name="gui:y" value="-139"/>
@@ -8,12 +12,48 @@
         <param name="gui:y" value="-172"/>
     </component>
     <component name="LVSessionQueriesRef1">
-        <param name="gui:x" value="5"/>
-        <param name="gui:y" value="144"/>
+        <param name="gui:x" value="-9"/>
+        <param name="gui:y" value="129"/>
     </component>
     <component name="LiveViewStatisicsRef1">
         <param name="gui:x" value="-24"/>
         <param name="gui:y" value="-37"/>
+    </component>
+    <component name="ClusterTotal">
+        <param name="gui:x" value="370"/>
+        <param name="gui:y" value="-19"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="CurrentValues">
+        <param name="gui:x" value="195"/>
+        <param name="gui:y" value="250"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="AjustLoad">
+        <param name="gui:x" value="311"/>
+        <param name="gui:y" value="-222"/>
+    </component>
+    <component name="AjustQueries">
+        <param name="gui:x" value="255"/>
+        <param name="gui:y" value="115"/>
+    </component>
+    <component name="AjustQueued">
+        <param name="gui:x" value="255"/>
+        <param name="gui:y" value="-36"/>
+    </component>
+    <component name="ClearCurrent">
+        <param name="gui:x" value="-191"/>
+        <param name="gui:y" value="223"/>
+    </component>
+    <component name="ClearTotal">
+        <param name="gui:x" value="-43"/>
+        <param name="gui:y" value="231"/>
+    </component>
+    <component name="ClusterScore">
+        <param name="gui:x" value="365"/>
+        <param name="gui:y" value="115"/>
     </component>
     <component name="DataLog">
         <param name="gui:x" value="-376"/>
@@ -31,16 +71,52 @@
         <param name="gui:x" value="-376"/>
         <param name="gui:y" value="-182"/>
     </component>
+    <component name="ScaleDown">
+        <param name="gui:x" value="680"/>
+        <param name="gui:y" value="169"/>
+    </component>
+    <component name="ScaleIf">
+        <param name="gui:x" value="223"/>
+        <param name="gui:y" value="-222"/>
+    </component>
+    <component name="ScaleUp">
+        <param name="gui:x" value="581"/>
+        <param name="gui:y" value="30"/>
+    </component>
     <component name="Split">
         <param name="gui:x" value="-251"/>
         <param name="gui:y" value="49"/>
+    </component>
+    <component name="TwoMin">
+        <param name="gui:x" value="574"/>
+        <param name="gui:y" value="169"/>
     </component>
     <component name="Union2">
         <param name="gui:x" value="-586"/>
         <param name="gui:y" value="-126"/>
     </component>
+    <component name="UpDown">
+        <param name="gui:x" value="464"/>
+        <param name="gui:y" value="115"/>
+    </component>
+    <component name="UpdateLoad">
+        <param name="gui:x" value="135"/>
+        <param name="gui:y" value="-222"/>
+    </component>
+    <component name="UpdateQueries">
+        <param name="gui:x" value="116"/>
+        <param name="gui:y" value="115"/>
+    </component>
+    <component name="UpdateQueued">
+        <param name="gui:x" value="136"/>
+        <param name="gui:y" value="-37"/>
+    </component>
     <component name="WhichTable">
         <param name="gui:x" value="-272"/>
         <param name="gui:y" value="-71"/>
+    </component>
+    <component name="SetDLCount">
+        <param name="gui:x" value="194"/>
+        <param name="gui:y" value="-140"/>
     </component>
 </application-layout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+<modify version="10.6.2-SNAPSHOT_8802c666e7b075469f6601f6a705389e84323806">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -24,7 +24,7 @@
         <parameter-definitions>
             <parameter default="60" name="WINDOW_SIZE_SEC"/>
             <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
-            <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
+            <parameter default="NodeURI" name="URL_DECORATION"/>
         </parameter-definitions>
         <dynamic-variables/>
         <data name="LVNodeInfoTable" shared="false" source="concrete" type="querytable">
@@ -115,7 +115,8 @@
             <output port="3" stream="out:Split2_3"/>
             <output port="4" stream="out:Split2_4"/>
             <output port="5" stream="out:Split2_5"/>
-            <param name="output-count" value="5"/>
+            <output port="6" stream="out:Split2_6"/>
+            <param name="output-count" value="6"/>
         </box>
         <box name="CalcClusterCPULoad" type="query">
             <input port="1" stream="out:Split2_3"/>
@@ -165,6 +166,37 @@
                 <item name="new" selection="none"/>
                 <expressions>
                     <include field="ClusterOldGenCollections">sum(oldCollections)</include>
+                </expressions>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="CountDLs" type="query">
+            <input port="1" stream="out:Split2_6"/>
+            <output port="1" stream="out:CountDLs_1"/>
+            <dataref id="querytable" name="LVNodeInfoTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="secondary-key"/>
+            <param name="key-field.0" value="isDL"/>
+            <param name="key-lowerbound-value.0" value="true"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="key-upperbound-operation.0" value="none"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="current" selection="none"/>
+                <expressions>
+                    <include field="DLList">unique(URI, 1000)</include>
                 </expressions>
             </target-list>
             <target-list name="insert">
@@ -284,7 +316,7 @@
         </box>
         <box name="ClusterLoadLog" type="outputadapter">
             <input port="1" stream="out:CalcClusterCPULoad_1"/>
-            <output port="1" stream="out:ClusterLoadLog_1"/>
+            <output port="1" stream="ClusterLoadAvg"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="CaptureStrategy" value="FLATTEN"/>
@@ -367,6 +399,16 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
+        <box name="GetCount2" type="map">
+            <input port="1" stream="out:CountDLs_1"/>
+            <output port="1" stream="DLCount"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="DLCount">length(DLList)</include>
+                </expressions>
+            </target-list>
+        </box>
         <box name="Iterate" type="iterate">
             <input port="1" stream="out:GetUIRs_1"/>
             <output port="1" stream="out:Iterate_1"/>
@@ -397,6 +439,8 @@
             <output port="4" stream="out:Split_4"/>
             <param name="output-count" value="4"/>
         </box>
+        <output-stream name="ClusterLoadAvg"/>
+        <output-stream name="DLCount"/>
         <box name="CalcDLCPULoad" type="query">
             <input port="1" stream="out:Iterate_1"/>
             <output port="1" stream="out:CalcDLCPULoad_1"/>
@@ -554,6 +598,8 @@
                 <item name="current" prefix="Old_" selection="none">
                     <include field="URI"/>
                 </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -682,6 +728,7 @@
                 <item name="input" selection="all"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="Count">int(current.Value)</include>
                 </expressions>
@@ -858,7 +905,7 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <expressions>
-                    <include field="URI">"lv://lvadmin:bigdog@" + substr(substr(NodeURI, 0, lastindexof(NodeURI, ":")) + ".dev.tibco.com" + substr(NodeURI, lastindexof(NodeURI, ":")), 5)</include>
+                    <include field="URI">${URL_DECORATION}</include>
                     <include field="IsAdd">true</include>
                 </expressions>
             </target-list>

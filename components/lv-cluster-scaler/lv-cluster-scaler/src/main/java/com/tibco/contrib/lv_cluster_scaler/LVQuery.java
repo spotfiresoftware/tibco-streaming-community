@@ -6,7 +6,9 @@
 package com.tibco.contrib.lv_cluster_scaler;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -88,7 +90,9 @@ public class LVQuery extends InputAdapter implements Parameterizable, Runnable {
     private final int SCOPE_DELETE=1;
     private final int SCOPE_UPDATE=2;
 	
+    // BUGBUG need to remove from these when a node goes away
 	private Map<String, LDMServer> ldmMap = new ConcurrentHashMap<String, LDMServer>();
+	private Set<String> nodeSet = new HashSet<String>();
 	
 	private Logger logger=LoggerFactory.getLogger(LVQuery.class);
 
@@ -225,7 +229,6 @@ public class LVQuery extends InputAdapter implements Parameterizable, Runnable {
 	}
 
 	
-//	private class LVListener implements QueryListener {
 	private class LVListener implements QueryListener {
 		private final LDMServer ldmServer;
 		private final String tableName;
@@ -279,17 +282,27 @@ public class LVQuery extends InputAdapter implements Parameterizable, Runnable {
 			sendResult(event.getKey(), SCOPE_ADD, event.getTuple(), null);
 			
 			if (tableName.equals(LVNODEINFO)) {
-				// special case here to add the other tables if the node is a DATA_LAYER
-				Tuple t=event.getTuple();
 				try {
-					if (t.getString("Category").equals("Cluster") && t.getString("Name").equals("Self") && t.getString("Value").equals("DATA_LAYER")) {
-						// This add triggers two more queries 
+					// special case here to add the other tables if the node is a DATA_LAYER or SL
+					Tuple t=event.getTuple();
+					
+					if (t.getString("Category").equals("Cluster") && t.getString("Name").equals("Self"))  {
+						String nodeName=t.getString("Detail");
+						if (!nodeSet.add(nodeName)) {
+							// This node must be known by two URLs
+							return;
+						}
+						
+						// Need to see LVSessionqueries for SL and DL
 						QueryConfig qc = new QueryConfig().setQuery(LVSESSIONQUERIES, "true").setQueryType(LiveViewQueryType.SNAPSHOT_AND_CONTINUOUS);
 						Query q=ldmServer.getLVCon().registerQuery(qc, new LiveResult(new LVListener(ldmServer, LVSESSIONQUERIES)));
-						
-						qc = new QueryConfig().setQuery(LIVEVIEWSTATISTICS, "true").setQueryType(LiveViewQueryType.SNAPSHOT_AND_CONTINUOUS);
-						q=ldmServer.getLVCon().registerQuery(qc, new LiveResult(new LVListener(ldmServer, LIVEVIEWSTATISTICS)));
-
+					
+						if (t.getString("Value").equals("DATA_LAYER")) {
+							// Get the DL LiveViewStatistics
+							qc = new QueryConfig().setQuery(LIVEVIEWSTATISTICS, "true").setQueryType(LiveViewQueryType.SNAPSHOT_AND_CONTINUOUS);
+							q=ldmServer.getLVCon().registerQuery(qc, new LiveResult(new LVListener(ldmServer, LIVEVIEWSTATISTICS)));
+	
+						}
 					}
 				} catch (Exception e) {
 					logger.warn(String.format("Error issueing queries to %s", ldmServer.getURL()));

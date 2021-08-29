@@ -19,7 +19,7 @@
         <param name="gui:width" value="80"/>
         <param name="gui:height" value="56"/>
     </component>
-    <component name="ClusterQueryAvg">
+    <component name="ClusterQueryA">
         <param name="gui:x" value="231"/>
         <param name="gui:y" value="-117"/>
     </component>
@@ -95,5 +95,9 @@
     <component name="WriteWindow">
         <param name="gui:x" value="44"/>
         <param name="gui:y" value="-88"/>
+    </component>
+    <component name="ClusterQueryAvg">
+        <param name="gui:x" value="516"/>
+        <param name="gui:y" value="-116"/>
     </component>
 </application-layout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+<modify version="10.6.2-SNAPSHOT_53a46b129155efb6130f705015c301b8d21e150e">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -97,9 +97,9 @@
             <output port="4" stream="out:Split2_4"/>
             <param name="output-count" value="4"/>
         </box>
-        <box name="ClusterQueryAvg" type="query">
+        <box name="ClusterQueryA" type="query">
             <input port="1" stream="out:Split2_4"/>
-            <output port="1" stream="out:ClusterQueryAvg_1"/>
+            <output port="1" stream="out:ClusterQueryA_1"/>
             <dataref id="querytable" name="WindowData"/>
             <param name="operation" value="read"/>
             <param name="where" value="all-rows"/>
@@ -110,9 +110,8 @@
             <target-list>
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
-                <item name="old" selection="none"/>
                 <expressions>
-                    <include field="ClusterTotalAvg">length(unique(SID + string(QID), 10000))</include>
+                    <include field="ClusterTotalQueryAvg">length(unique(SID + string(QID), 10000))</include>
                 </expressions>
             </target-list>
             <target-list name="insert">
@@ -140,6 +139,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -165,6 +165,7 @@
             <target-list>
                 <item name="input" prefix="window_" selection="all"/>
                 <item name="current" selection="all"/>
+                <item name="old" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -190,6 +191,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="URIList">unique(URI, 1000)</include>
                 </expressions>
@@ -225,8 +227,8 @@
             </target-list>
         </box>
         <box name="ClusterQueryAvgLog" type="outputadapter">
-            <input port="1" stream="out:ClusterQueryAvg_1"/>
-            <output port="1" stream="out:ClusterQueryAvgLog_1"/>
+            <input port="1" stream="out:ClusterQueryA_1"/>
+            <output port="1" stream="ClusterQueryAvg"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="CaptureStrategy" value="FLATTEN"/>
@@ -276,6 +278,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="all"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -351,6 +354,7 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
+        <output-stream name="ClusterQueryAvg"/>
         <box name="Iterate" type="iterate">
             <input port="1" stream="out:NotNull_1"/>
             <output port="1" stream="out:Iterate_1"/>
@@ -417,6 +421,7 @@
                 </item>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="LDQueryAvg">length(unique(SID + string(QID), 10000))</include>
                 </expressions>

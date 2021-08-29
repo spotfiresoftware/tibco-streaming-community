@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+<modify version="10.6.2-SNAPSHOT_53a46b129155efb6130f705015c301b8d21e150e">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -104,6 +104,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="ClusterAvgQueued">sum(queuedTuples)</include>
                 </expressions>
@@ -196,7 +197,7 @@
         </box>
         <box name="ClusterQueuedLog" type="outputadapter">
             <input port="1" stream="out:CalcClusterQue_1"/>
-            <output port="1" stream="out:ClusterQueuedLog_1"/>
+            <output port="1" stream="ClusterQueuedT"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
             <param name="CaptureStrategy" value="FLATTEN"/>
@@ -238,6 +239,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -297,6 +299,7 @@
                 <item name="input" selection="all"/>
             </target-list>
         </box>
+        <output-stream name="ClusterQueuedT"/>
         <box name="CalcDLQues" type="query">
             <input port="1" stream="out:Iterate_1"/>
             <output port="1" stream="out:CalcDLQues_1"/>
@@ -314,6 +317,7 @@
                 </item>
                 <item name="current" selection="none"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
                 <expressions>
                     <include field="DLSumQueued">sum(queuedTuples)</include>
                 </expressions>
@@ -343,6 +347,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.2-SNAPSHOT_df0ac623b762291859ff2a8643925b0a916d3d4f">
+<modify version="10.6.2-SNAPSHOT_8802c666e7b075469f6601f6a705389e84323806">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -10,17 +10,62 @@
         </type-metadata>
         <memory-model-settings/>
         <parameter-definitions>
-            <parameter default="60" name="WINDOW_SIZE_SEC"/>
+            <parameter default="120" name="WINDOW_SIZE_SEC"/>
             <parameter default="60" name="CHECK_INTERVAL"/>
-            <parameter default="2.0" name="SINGLE_DL_LOAD_THRESHOLD"/>
-            <parameter default="2.0" name="CLUSTER_LOAD_THRESHOLD"/>
+            <parameter default="&quot;lv://lvadmin:bigdog@&quot; + substr(substr(NodeURI, 0, lastindexof(NodeURI, &quot;:&quot;)) + &quot;.dev.tibco.com&quot; + substr(NodeURI, lastindexof(NodeURI, &quot;:&quot;)), 5)" name="URL_DECORATION"/>
+            <parameter default="1.0" name="CLUSTER_LOAD_TRIPPOINT"/>
+            <parameter default="1" name="CPUFactor"/>
+            <parameter default="1" name="QueryScale"/>
+            <parameter default="0.01" name="QueuedScale"/>
+            <parameter default="200" name="CPUScale"/>
+            <parameter default="5" name="SCALE_UP_INTERVAL_MIN"/>
+            <parameter default="10" name="SCALE_DOWN_INTERVAL_MIN"/>
+            <parameter default="1300" name="CLUSTER_SCALE_UP_THRESHOLD"/>
+            <parameter default="700" name="CLUSTER_SCALE_DOWN_THRESHOLD"/>
         </parameter-definitions>
-        <dynamic-variables/>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="int(1)" name="DLCountTotal" setter-expression="DLCount" setter-stream="SetDLCount"/>
+        </dynamic-variables>
+        <data name="ClusterTotal" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="pkey" type="string"/>
+                    <field name="ClusterScore" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="pkey"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">pkey,0</preload>
+        </data>
+        <data name="CurrentValues" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="pkey" type="string"/>
+                    <field name="ClusterAvgCPUload" type="double"/>
+                    <field name="ClusterAvgQueued" type="int"/>
+                    <field name="ClusterTotalQueryAvg" type="int"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="pkey"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="text">pkey,0.0,0,0</preload>
+        </data>
         <stream name="out:LVNodeInfoRef1_1">
             <schema>
                 <field name="URI" type="string"/>
                 <field name="IsAdd" type="bool"/>
             </schema>
+        </stream>
+        <stream name="ResetScore" scope="public">
+            <schema/>
         </stream>
         <stream name="SetSeedServer" scope="public">
             <schema>
@@ -32,6 +77,30 @@
             <output port="1" stream="out:Metronome_1"/>
             <param name="interval" value="${CHECK_INTERVAL}"/>
             <param name="timestamp-field" value="time"/>
+        </box>
+        <box name="ClearCurrent" type="query">
+            <input port="1" stream="ResetScore"/>
+            <output port="1" stream="out:ClearCurrent_1"/>
+            <dataref id="querytable" name="CurrentValues"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
         </box>
         <box name="Split" type="split">
             <input port="1" stream="out:Metronome_1"/>
@@ -45,6 +114,30 @@
             <input port="2" stream="out:LVNodeInfoRef1_1"/>
             <output port="1" stream="out:Union2_1"/>
             <param name="strict" value="false"/>
+        </box>
+        <box name="ClearTotal" type="query">
+            <input port="1" stream="out:ClearCurrent_1"/>
+            <output port="1" stream="out:ClearTotal_1"/>
+            <dataref id="querytable" name="ClusterTotal"/>
+            <param name="operation" value="delete"/>
+            <param name="where" value="all-rows"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
         </box>
         <box name="InputAdapter" type="inputadapter">
             <input port="1" stream="out:Union2_1"/>
@@ -124,6 +217,7 @@
         <module-reference name="LiveViewStatisicsRef1">
             <input name="LiveViewStatisticsIn" port="1" stream="out:WhichTable_2"/>
             <input name="Ping" port="2" stream="out:Split_2"/>
+            <output name="ClusterQueuedT" port="1" stream="out:LiveViewStatisicsRef1_1"/>
             <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LiveViewStatisics"/>
             <parameter-bindings>
                 <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
@@ -133,18 +227,347 @@
             <input name="LVNodeInfoIn" port="1" stream="out:WhichTable_1"/>
             <input name="Ping" port="2" stream="out:Split_1"/>
             <output name="RegisterNode" port="1" stream="out:LVNodeInfoRef1_1"/>
+            <output name="ClusterLoadAvg" port="2" stream="out:LVNodeInfoRef1_2"/>
+            <output name="DLCount" port="3" stream="SetDLCount"/>
             <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LVNodeInfo"/>
             <parameter-bindings>
                 <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
+                <binding name="URL_DECORATION" value="${URL_DECORATION}"/>
             </parameter-bindings>
         </module-reference>
         <module-reference name="LVSessionQueriesRef1">
             <input name="LVSessionQuriesIn" port="1" stream="out:WhichTable_3"/>
             <input name="Ping" port="2" stream="out:Split_3"/>
+            <output name="ClusterQueryAvg" port="1" stream="out:LVSessionQueriesRef1_1"/>
             <param name="file" value="com.tibco.contrib.lv_cluster_scaler.LVSessionQueries"/>
             <parameter-bindings>
                 <binding name="WINDOW_SIZE_SEC" value="${WINDOW_SIZE_SEC}"/>
             </parameter-bindings>
         </module-reference>
+        <output-stream name="SetDLCount"/>
+        <box name="UpdateLoad" type="query">
+            <input port="1" stream="out:LVNodeInfoRef1_2"/>
+            <output port="1" stream="out:UpdateLoad_1"/>
+            <dataref id="querytable" name="CurrentValues"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;ClusterTotal&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" prefix="old_" selection="none">
+                    <include field="ClusterAvgCPUload"/>
+                </item>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScale">if (ClusterAvgCPUload &lt; ${CLUSTER_LOAD_TRIPPOINT}) then old.ClusterScale else ClusterAvgCPUload*${CPUScale}</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="UpdateQueries" type="query">
+            <input port="1" stream="out:LVSessionQueriesRef1_1"/>
+            <output port="1" stream="out:UpdateQueries_1"/>
+            <dataref id="querytable" name="CurrentValues"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;ClusterTotal&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" prefix="old_" selection="none">
+                    <include field="ClusterTotalQueryAvg"/>
+                </item>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScale">if (ClusterAvgCPUload &lt; ${CLUSTER_LOAD_TRIPPOINT}) then old.ClusterScale else ClusterAvgCPUload*${CPUScale}</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="UpdateQueued" type="query">
+            <input port="1" stream="out:LiveViewStatisicsRef1_1"/>
+            <output port="1" stream="out:UpdateQueued_1"/>
+            <dataref id="querytable" name="CurrentValues"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;ClusterTotal&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" prefix="old_" selection="none">
+                    <include field="ClusterAvgQueued"/>
+                </item>
+                <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScale">if (ClusterAvgCPUload &lt; ${CLUSTER_LOAD_TRIPPOINT}) then old.ClusterScale else ClusterAvgCPUload*${CPUScale}</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="AjustQueries" type="query">
+            <input port="1" stream="out:UpdateQueries_1"/>
+            <output port="1" stream="out:AjustQueries_1"/>
+            <dataref id="querytable" name="ClusterTotal"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;pkey&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">int(round(ClusterTotalQueryAvg  * ${QueryScale}))</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">old.ClusterScore +int(round(((ClusterTotalQueryAvg/DLCountTotal)  * ${QueryScale}))) - (if (isnull(old_ClusterTotalQueryAvg)) then 0 else int(round(((old_ClusterTotalQueryAvg/DLCountTotal)  * ${QueryScale}))))</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">ClusterAvgCPUload</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="AjustQueued" type="query">
+            <input port="1" stream="out:UpdateQueued_1"/>
+            <output port="1" stream="out:AjustQueued_1"/>
+            <dataref id="querytable" name="ClusterTotal"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;pkey&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">int(round(ClusterAvgQueued  * ${QueuedScale}))</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">old.ClusterScore + int(round((ClusterAvgQueued/DLCountTotal)  * ${QueuedScale})) -  (if (isnull(old_ClusterAvgQueued)) then 0 else int(round((old_ClusterAvgQueued/DLCountTotal)  * ${QueuedScale})))</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">ClusterAvgCPUload</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="ScaleIf" type="map">
+            <input port="1" stream="out:UpdateLoad_1"/>
+            <output port="1" stream="out:ScaleIf_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="old_ClusterAvgCPUload">if (isnull(old_ClusterAvgCPUload)) then 0.0 else old_ClusterAvgCPUload</replace>
+                </item>
+                <expressions>
+                    <include field="ScaledLoadAvg">int(round(ClusterAvgCPUload*${CPUScale}))</include>
+                    <include field="old_ScaledLoadAvg">int(round(old_ClusterAvgCPUload*${CPUScale}))</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="AjustLoad" type="query">
+            <input port="1" stream="out:ScaleIf_1"/>
+            <output port="1" stream="out:AjustLoad_1"/>
+            <dataref id="querytable" name="ClusterTotal"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="pkey"/>
+            <param name="key-value.0" value="&quot;pkey&quot;"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">int(round(ClusterAvgCPUload))</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">if (ClusterAvgCPUload &lt; ${CPUFactor}) then  &#13;
+	if (old_ClusterAvgCPUload &lt;  ${CPUFactor}) then old.ClusterScore  else  old.ClusterScore-old_ScaledLoadAvg&#13;
+	else&#13;
+	if (old_ClusterAvgCPUload &lt;  ${CPUFactor}) then  old.ClusterScore + ScaledLoadAvg else old.ClusterScore-old_ScaledLoadAvg + ScaledLoadAvg</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="ClusterScore">ClusterAvgCPUload</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="ClusterScore" type="outputadapter">
+            <input port="1" stream="out:AjustQueries_1"/>
+            <output port="1" stream="out:ClusterScore_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="UpDown" type="filter">
+            <input port="1" stream="out:ClusterScore_1"/>
+            <output port="1" stream="out:UpDown_1"/>
+            <output port="2" stream="out:UpDown_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="ClusterScore &gt; ${CLUSTER_SCALE_UP_THRESHOLD}"/>
+            <param name="expression.1" value="ClusterScore &lt; ${CLUSTER_SCALE_DOWN_THRESHOLD}"/>
+        </box>
+        <box name="ScaleUp" type="outputadapter">
+            <input port="1" stream="out:UpDown_1"/>
+            <output port="1" stream="out:ScaleUp_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="TwoMin" type="filter">
+            <input port="1" stream="out:UpDown_2"/>
+            <output port="1" stream="out:TwoMin_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="DLCountTotal &gt; 2"/>
+        </box>
+        <box name="ScaleDown" type="outputadapter">
+            <input port="1" stream="out:TwoMin_1"/>
+            <output port="1" stream="out:ScaleDown_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="CSV"/>
+            <param name="messageIdentifier" value=""/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Use EventFlow Name"/>
+            <param name="messagePrefix" value=""/>
+            <param name="moduleQualifiedEventFlowName" value="false"/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
     </add>
 </modify>

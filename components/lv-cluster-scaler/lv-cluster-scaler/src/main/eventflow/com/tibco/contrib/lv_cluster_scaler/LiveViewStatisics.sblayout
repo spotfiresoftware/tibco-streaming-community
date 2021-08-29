@@ -88,4 +88,8 @@
         <param name="gui:x" value="223"/>
         <param name="gui:y" value="-40"/>
     </component>
+    <component name="ClusterQueuedT">
+        <param name="gui:x" value="1154"/>
+        <param name="gui:y" value="5"/>
+    </component>
 </application-layout>
