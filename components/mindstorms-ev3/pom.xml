@@ -10,8 +10,8 @@
     <artifactId>mindstorms-ev3</artifactId>
     <packaging>ep-eventflow-fragment</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mindstorms-ev3</name>
-    <description></description>
+    <name>LEGO MINDSTORMS EV3</name>
+    <description>StreamBase adapters for LEGO MINDSTORMS EV3 robots</description>
     
     <licenses>
 	    <license>
