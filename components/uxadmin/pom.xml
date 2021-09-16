@@ -6,7 +6,7 @@
 	<artifactId>uxadmin</artifactId>
 	<packaging>jar</packaging>
 	<version>0.2</version>
-	<name>uxadmin</name>
+	<name>UXAdmin</name>
 	<description>A simple wrapper around epadmin to provide a nicer ux for common development workflows.</description>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
