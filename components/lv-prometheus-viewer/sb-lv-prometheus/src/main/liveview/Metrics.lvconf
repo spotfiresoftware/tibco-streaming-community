@@ -4,13 +4,15 @@
     <fields>
       <field name="EventTime" type="timestamp"/>
       <field name="Name" type="string"/>
-      <field name="Filter" type="string"/>
+      <field name="code" type="int"/>
+      <field name="job" type="string"/>
+      <field name="OtherLabels" type="string"/>
       <field name="Value" type="double"/>
     </fields>
     <primary-key>
       <field ref="EventTime"/>
       <field ref="Name"/>
-      <field ref="Filter"/>
+      <field ref="OtherLabels"/>
     </primary-key>
     <indices>
       <index>

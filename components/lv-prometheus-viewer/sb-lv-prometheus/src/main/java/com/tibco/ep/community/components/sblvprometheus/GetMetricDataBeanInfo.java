@@ -5,6 +5,8 @@
 */
 package com.tibco.ep.community.components.sblvprometheus;
 
+import java.beans.IntrospectionException;
+
 import com.streambase.sb.operator.parameter.*;
 
 /**
@@ -20,8 +22,11 @@ public class GetMetricDataBeanInfo extends SBSimpleBeanInfo {
 	* The order of properties below determines the order they are displayed within
 	* the StreamBase Studio property view. 
 	*/
-	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() {
-		return new SBPropertyDescriptor[] {};
+	public SBPropertyDescriptor[] getPropertyDescriptorsChecked() throws IntrospectionException {
+		SBPropertyDescriptor[] p = {
+				new SBPropertyDescriptor("tableschema", GetMetricData.class),
+		};
+		return p;
 	}
 
 }
