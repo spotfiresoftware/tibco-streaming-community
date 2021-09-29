@@ -5,9 +5,7 @@
 */
 package com.tibco.ep.community.components.sblvprometheus;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +13,6 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.streambase.sb.CompleteDataType;
 import com.streambase.sb.Schema;
 import com.streambase.sb.StreamBaseException;
 import com.streambase.sb.Tuple;
@@ -25,7 +22,6 @@ import com.streambase.sb.adapter.common.AdapterUtil;
 import com.streambase.sb.operator.Operator;
 import com.streambase.sb.operator.Parameterizable;
 import com.streambase.sb.operator.TypecheckException;
-
 
 /**
  * Operator to parse Prometheus api/v1/metadata URL data
@@ -56,12 +52,9 @@ public class GetMetricData extends Operator implements Parameterizable {
     private static final String PROMETHEUS_NEG_INF = "-Inf";
     private static final String PROMETHEUS_NAN = "NaN";
 
-	private Schema.Field fieldName=new Schema.Field(nameName, CompleteDataType.forString());
 	private Schema.Field fieldOther=null;
-	private Schema.Field fieldValue=new Schema.Field(nameValue, CompleteDataType.forDouble());
 	
 	private Schema outputSchema;
-	
 	private Schema tableSchema;
 	
 	/**
@@ -139,7 +132,6 @@ public class GetMetricData extends Operator implements Parameterizable {
 					if (columnNames.contains(k)) {
 						// Set the known label name
 						setLabel(output, k, (String)metricJO.get(k));
-//						output.setString(k, (String)metricJO.get(k));
 						continue;
 					}
 					
@@ -169,10 +161,6 @@ public class GetMetricData extends Operator implements Parameterizable {
 	private void setLabel(Tuple output, String k, String v) throws TupleException {
 		Schema.Field f = output.getSchema().getField(k);
 		output.setField(f, v);
-		
-//		if (f.getCompleteDataType()==CompleteDataType.forString()) {
-//			output.setField(f, v);
-//		}
 	}
 	
 	/*
@@ -222,7 +210,9 @@ public class GetMetricData extends Operator implements Parameterizable {
 	public void shutdown() {
 	}
 
-	
+	/*
+	 * Property getters/setters
+	 */
 	public Schema getTableschema() {
 		return tableSchema;
 	}

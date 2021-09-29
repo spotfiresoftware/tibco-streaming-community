@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-liveview-fragment</artifactId>
-        <version>10.6.1</version>
+        <version>10.6.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -27,12 +27,17 @@
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>httpclient</artifactId>
-        	<version>10.6.1</version>
+        	<version>10.6.3-SNAPSHOT</version>
         </dependency>
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>fileio</artifactId>
-        	<version>10.6.1</version>
+        	<version>10.6.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.tibco.ep.sb.adapter</groupId>
+        	<artifactId>ldm</artifactId>
+        	<version>10.6.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

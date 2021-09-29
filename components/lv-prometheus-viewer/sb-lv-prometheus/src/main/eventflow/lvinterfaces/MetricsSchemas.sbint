@@ -20,7 +20,6 @@
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
             <field name="code" type="int"/>
-            <field name="job" type="string"/>
             <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
@@ -31,7 +30,6 @@
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
             <field name="code" type="int"/>
-            <field name="job" type="string"/>
             <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
@@ -39,7 +37,6 @@
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
             <field name="code" type="int"/>
-            <field name="job" type="string"/>
             <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
@@ -54,6 +51,7 @@
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
             <field name="OtherLabels" type="string"/>
+            <field name="code" type="int"/>
         </schema>
     </named-schemas>
 </application>

@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
   <data-table id="Metrics" snapshot-parallelism="2">
     <fields>
       <field name="EventTime" type="timestamp"/>
       <field name="Name" type="string"/>
       <field name="code" type="int"/>
-      <field name="job" type="string"/>
       <field name="OtherLabels" type="string"/>
       <field name="Value" type="double"/>
     </fields>
@@ -13,6 +12,7 @@
       <field ref="EventTime"/>
       <field ref="Name"/>
       <field ref="OtherLabels"/>
+      <field ref="code"/>
     </primary-key>
     <indices>
       <index>
@@ -23,6 +23,9 @@
       </index>
       <index>
         <field ref="Name"/>
+      </index>
+      <index>
+        <field ref="code"/>
       </index>
     </indices>
   </data-table>
