@@ -8,13 +8,13 @@
     <groupId>com.tibco.ep.community.components</groupId>
     <artifactId>sb-lv-prometheus</artifactId>
     <packaging>ep-liveview-fragment</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <!-- common definitions for this version of Streaming -->
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-liveview-fragment</artifactId>
-        <version>10.6.3-SNAPSHOT</version>
+        <version>10.6.1</version>
     </parent>
 
     <dependencies>
@@ -27,7 +27,7 @@
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>httpclient</artifactId>
-        	<version>10.6.3-SNAPSHOT</version>
+        	<version>10.6.1</version>
         </dependency>
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
@@ -37,7 +37,7 @@
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>ldm</artifactId>
-        	<version>10.6.3-SNAPSHOT</version>
+        	<version>10.6.1</version>
         </dependency>
     </dependencies>
 

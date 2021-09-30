@@ -9,13 +9,13 @@
     <groupId>com.tibco.ep.community.components</groupId>
     <artifactId>sb-lv-prometheus-deploy</artifactId>
     <packaging>ep-application</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <!-- common definitions for this version of Streaming -->
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-application</artifactId>
-        <version>10.6.3-SNAPSHOT</version>
+        <version>10.6.1</version>
     </parent>
 
     <build>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.tibco.ep.community.components</groupId>
             <artifactId>sb-lv-prometheus</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
             <type>ep-liveview-fragment</type>
         </dependency>
     </dependencies>
