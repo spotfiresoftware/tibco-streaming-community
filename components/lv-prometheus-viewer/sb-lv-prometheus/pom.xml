@@ -32,7 +32,7 @@
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
         	<artifactId>fileio</artifactId>
-        	<version>10.6.3-SNAPSHOT</version>
+        	<version>10.6.1</version>
         </dependency>
         <dependency>
         	<groupId>com.tibco.ep.sb.adapter</groupId>
