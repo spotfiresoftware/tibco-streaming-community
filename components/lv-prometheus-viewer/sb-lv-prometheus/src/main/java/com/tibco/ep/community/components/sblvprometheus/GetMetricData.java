@@ -5,20 +5,23 @@
 */
 package com.tibco.ep.community.components.sblvprometheus;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.streambase.sb.CompleteDataType;
 import com.streambase.sb.Schema;
 import com.streambase.sb.StreamBaseException;
 import com.streambase.sb.Tuple;
+import com.streambase.sb.TupleException;
 import com.streambase.sb.TupleJSONUtil;
 import com.streambase.sb.adapter.common.AdapterUtil;
 import com.streambase.sb.operator.Operator;
 import com.streambase.sb.operator.Parameterizable;
 import com.streambase.sb.operator.TypecheckException;
-
 
 /**
  * Operator to parse Prometheus api/v1/metadata URL data
@@ -36,9 +39,11 @@ public class GetMetricData extends Operator implements Parameterizable {
 	private final String dataName="data";
 	
 	private final String nameName="Name";
-	private final String nameFilter="Filter";
 	private final String nameValue="Value";
+	private final String otherLabels="OtherLabels";
 	
+	private Set<String> columnNames;
+	private Map<String, Schema.Field> columnFields = new HashMap<String, Schema.Field>();
 
 	//
 	// While non-conforming for JSON, Prometheus uses string representation positive and negative infinity and NaN
@@ -47,10 +52,10 @@ public class GetMetricData extends Operator implements Parameterizable {
     private static final String PROMETHEUS_NEG_INF = "-Inf";
     private static final String PROMETHEUS_NAN = "NaN";
 
-	private Schema.Field fieldName=new Schema.Field(nameName, CompleteDataType.forString());
-	private Schema.Field fieldFilter=new Schema.Field(nameFilter, CompleteDataType.forString());
-	private Schema.Field fieldValue=new Schema.Field(nameValue, CompleteDataType.forDouble());
-	private Schema outputSchema = new Schema(null, fieldName, fieldFilter, fieldValue);
+	private Schema.Field fieldOther=null;
+	
+	private Schema outputSchema;
+	private Schema tableSchema;
 	
 	/**
 
@@ -71,6 +76,16 @@ public class GetMetricData extends Operator implements Parameterizable {
 			throw new TypecheckException(String.format("Input port must have %s field", dataName));
 		}
 
+		columnNames = Set.of(getTableschema().getFieldNames());
+				
+		if (!columnNames.contains(nameName)) {
+			throw new TypecheckException("Table must contain a string field Name");
+		}
+		if (!columnNames.contains(nameValue)) {
+			throw new TypecheckException("Table must contain a double field Value");
+		}
+		
+		outputSchema = getTableschema();
 		setOutputSchema(0, outputSchema);
 	}
 
@@ -105,12 +120,21 @@ public class GetMetricData extends Operator implements Parameterizable {
 			StringBuilder mFilter= new StringBuilder();
 			String mName=null;
 			boolean first=true;
+			Tuple output=outputSchema.createTuple();
+			output.setDouble(nameValue, getDouble(value));
+			
 			for (String k: metricJO.keySet()) {
 					if ("__name__".equals(k)) {
 						mName=(String)metricJO.get("__name__");
 						continue;
 					}
 	
+					if (columnNames.contains(k)) {
+						// Set the known label name
+						setLabel(output, k, (String)metricJO.get(k));
+						continue;
+					}
+					
 					if (first) {
 						first=false;
 					} else {
@@ -119,17 +143,24 @@ public class GetMetricData extends Operator implements Parameterizable {
 					// Just build up the filter
 					mFilter.append(k).append("=").append((String)metricJO.get(k));
 			}
-	
-			Tuple output=outputSchema.createTuple();
+			
 			try {
 				output.setString(nameName, mName);
-				output.setString(nameFilter, mFilter.toString());
-				output.setDouble(nameValue, getDouble(value));
+				if (fieldOther!=null && mFilter.length()>0) {
+					output.setString(fieldOther, mFilter.toString());
+				}
+				
 				sendOutput(0,output);
 			} catch (Exception e) {
 				logger.warn(String.format("Failed to set output tuple: %s", e.getMessage()));
 			}
 		}
+	}
+	
+	
+	private void setLabel(Tuple output, String k, String v) throws TupleException {
+		Schema.Field f = output.getSchema().getField(k);
+		output.setField(f, v);
 	}
 	
 	/*
@@ -162,6 +193,15 @@ public class GetMetricData extends Operator implements Parameterizable {
 	public void init() throws StreamBaseException {
 		super.init();
 		outputSchema = getRuntimeOutputSchema(0);
+		
+		if (outputSchema.hasField(otherLabels)) {
+			fieldOther=outputSchema.getField(otherLabels);
+		}
+		
+		// get the label fields out of the output schema
+		for (Schema.Field f : outputSchema.getFields()) {
+			columnFields.put(f.getName(), f);
+		}
 	}
 
 	/**
@@ -170,4 +210,13 @@ public class GetMetricData extends Operator implements Parameterizable {
 	public void shutdown() {
 	}
 
+	/*
+	 * Property getters/setters
+	 */
+	public Schema getTableschema() {
+		return tableSchema;
+	}
+	public void setTableschema(Schema ts) {
+		tableSchema=ts;
+	}
 }

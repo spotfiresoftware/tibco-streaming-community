@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<application version="10.6.2-SNAPSHOT">
+<application version="10.6.3-SNAPSHOT">
     <gui.metadata>
         <property name="description" value="This is a generated file, do not edit. It defines the named schemas for the Metrics LiveView table."/>
     </gui.metadata>
@@ -19,7 +19,8 @@
             <field description="When set to true, means delete operation." name="CQSDelete" type="bool"/>
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
-            <field name="Filter" type="string"/>
+            <field name="code" type="int"/>
+            <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
         <schema name="MetricsDataOutSchema">
@@ -28,13 +29,15 @@
             <field description="An internal reference count. Zero means deleted." name="CQSReferredCount" type="long"/>
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
-            <field name="Filter" type="string"/>
+            <field name="code" type="int"/>
+            <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
         <schema name="MetricsTableSchema">
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
-            <field name="Filter" type="string"/>
+            <field name="code" type="int"/>
+            <field name="OtherLabels" type="string"/>
             <field name="Value" type="double"/>
         </schema>
         <schema name="MetricsInputControlFields">
@@ -47,7 +50,8 @@
         <schema name="MetricsPrimaryKeySchema">
             <field name="EventTime" type="timestamp"/>
             <field name="Name" type="string"/>
-            <field name="Filter" type="string"/>
+            <field name="OtherLabels" type="string"/>
+            <field name="code" type="int"/>
         </schema>
     </named-schemas>
 </application>

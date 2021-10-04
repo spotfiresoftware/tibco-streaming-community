@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+<modify version="10.6.3-SNAPSHOT_aef2fbb50778cc1bd9a60003062d4ef8bfca9bb3">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -376,6 +376,7 @@
                 <item name="input" selection="none"/>
                 <item name="current" selection="all"/>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -566,6 +567,7 @@
             <output port="1" stream="out:GetMetricData_1"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.tibco.ep.community.components.sblvprometheus.GetMetricData"/>
+            <param name="tableschema" value="MetricsTableSchema"/>
         </box>
         <box name="PrePopStatusLog" type="outputadapter">
             <input port="1" stream="out:PrePopSelector_1"/>
@@ -613,6 +615,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -674,6 +677,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>

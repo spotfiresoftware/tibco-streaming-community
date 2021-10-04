@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.6.1_0a0fdf7f8f3d4f25851d53e0e55c97ce2ece3d22">
+<modify version="10.6.3-SNAPSHOT_aef2fbb50778cc1bd9a60003062d4ef8bfca9bb3">
     <add>
         <annotations>
             <annotation name="hygienic"/>
@@ -218,7 +218,7 @@
                 <item name="input" selection="none"/>
                 <expressions>
                     <include field="Name">if (contains(element, "{"))  then  substr(element, 0, indexof(element, "{")) else  substr(element, 0, indexof(element, " "))</include>
-                    <include field="Filter">if (contains(element, "{")) then  substr(element, indexof(element, "{")+1, (length(element) -  indexof(element, "{")) - (length(element) -  indexof(element, "}")) - 1  ) else null</include>
+                    <include field="OtherLabels">if (contains(element, "{")) then  substr(element, indexof(element, "{")+1, (length(element) -  indexof(element, "{")) - (length(element) -  indexof(element, "}")) - 1  ) else null</include>
                     <include field="Value">double(substr(element, indexof(element, " ")))</include>
                 </expressions>
             </target-list>

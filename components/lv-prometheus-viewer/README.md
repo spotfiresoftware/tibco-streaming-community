@@ -10,6 +10,13 @@ are configured by setting a regex expression, one per line, in a file called `Me
 Each regex line in the file is evaluated in turn to see if a particular metric is of interest.
 The default regex is `".*"`, so all metrics are included.
 
+For metrics that have Prometheus labels you can define column names in the Metrics table that match one or more of the labels.
+A metric that contains a label that matches a column name will have that label value set in the field.
+The label column can always be a string type, but you can also define it to be a data type that better matches the label data type.
+This sample has a Metrics column called 'code' of type integer. Some of Prometheus's own metrics have a label called 'code' and if present
+in the metric data being subscribed to, it will be populated with integer values from that label. 
+All non-matching labels will be concatenated and set in the "OtherLabels" field, if it's present.
+
 A third LiveView table called `MetricsSelector` will be initialized to have all the rows
 present in `MetricsWhiteListRegex.txt`. By publishing to the `MetricsSelector` table you can dynamically add a new metric to be included in the `Metrics` table.
 Similarly, you can delete an existing row(s) from the `MetricsSelector` table and the associated metrics will be removed from the `Metrics` table
