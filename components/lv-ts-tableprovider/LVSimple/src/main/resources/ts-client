@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2020 TIBCO Software Inc.
+# Copyright 2020 Cloud Software Group, Inc.
 # ts-client: shell wrapper for Component Exchange TSClient class
 #set -x
 

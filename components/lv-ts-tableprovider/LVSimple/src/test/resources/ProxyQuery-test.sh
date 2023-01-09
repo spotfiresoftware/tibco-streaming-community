@@ -1,4 +1,4 @@
-# Copyright 2020 TIBCO Software Inc.
+# Copyright 2020 Cloud Software Group, Inc.
 # Simple tests for ProxyPublish Table
 
 set -x

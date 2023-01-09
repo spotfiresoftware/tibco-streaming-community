@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2015-2021 TIBCO Software Inc.
+ * Copyright (c) 2015-2021 Cloud Software Group, Inc.
  * All rights reserved.
  *
- * This software is confidential and proprietary information of TIBCO Software Inc.
+ * This software is confidential and proprietary information of Cloud Software Group, Inc.
  *
  */
 package com.tibco.contrib;
