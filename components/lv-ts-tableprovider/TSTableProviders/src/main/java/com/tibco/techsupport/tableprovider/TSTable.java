@@ -672,11 +672,11 @@ public class TSTable implements Table  {
 					// Perform heap dump
 					final String HOTSPOT_BEAN_NAME = "com.sun.management:type=HotSpotDiagnostic";
 					MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-			        HotSpotDiagnosticMXBean bean =  ManagementFactory.newPlatformMXBeanProxy(
-	                        server,
-	                        HOTSPOT_BEAN_NAME,
-	                        HotSpotDiagnosticMXBean.class);
-			        bean.dumpHeap(fileName, true);
+					HotSpotDiagnosticMXBean bean =  ManagementFactory.newPlatformMXBeanProxy(
+						server,
+						HOTSPOT_BEAN_NAME,
+						HotSpotDiagnosticMXBean.class);
+					bean.dumpHeap(fileName, true);
 					// read heap dump back
 					File dumpFile=new File(fileName);
 					long dumpLength=dumpFile.length();
