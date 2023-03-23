@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -22,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.management.MBeanServer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +59,12 @@ import com.streambase.sb.Schema;
 import com.streambase.sb.Timestamp;
 import com.streambase.sb.Tuple;
 import com.streambase.sb.TupleException;
-import com.streambase.sb.util.GetHeapDump;
 import com.streambase.sb.util.GetStackTrace;
 import com.streambase.sb.util.Msg;
 import com.streambase.sb.util.ProcessReader;
 import com.streambase.sb.util.Util;
 import com.streambase.sb.util.Version;
+import com.sun.management.HotSpotDiagnosticMXBean;
 
 /*
  * This is the TSTable implementation. It is intended to expose TS insight into a server in constrained manner
@@ -666,7 +669,15 @@ public class TSTable implements Table  {
 				String fileName = String.format("%s/TSTableHeapDump-%s-%s.hprof", liveviewProjectOut, Util.getHostName(), System.currentTimeMillis());
 				try {
 					sendTuple(idKey++, String.format("Doing heap dump: %s", fileName), null, listener, queryModel);
-					GetHeapDump.getHeap(fileName);
+					// Perform heap dump
+					final String HOTSPOT_BEAN_NAME = "com.sun.management:type=HotSpotDiagnostic";
+					MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+			        HotSpotDiagnosticMXBean bean =  ManagementFactory.newPlatformMXBeanProxy(
+	                        server,
+	                        HOTSPOT_BEAN_NAME,
+	                        HotSpotDiagnosticMXBean.class);
+			        bean.dumpHeap(fileName, true);
+					// read heap dump back
 					File dumpFile=new File(fileName);
 					long dumpLength=dumpFile.length();
 					sendTuple(idKey++, String.format("Completed heap dump, size: %s", dumpLength), null, listener, queryModel);
