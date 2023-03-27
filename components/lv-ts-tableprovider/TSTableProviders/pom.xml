@@ -15,12 +15,12 @@
       <dependency>
         <groupId>com.tibco.ep.ldm</groupId>
         <artifactId>client</artifactId>
-        <version>10.5.1-SNAPSHOT</version>
+        <version>10.5.0</version>
       </dependency>
       <dependency>
         <groupId>com.tibco.ep.ldm</groupId>
         <artifactId>service-layer</artifactId>
-        <version>10.5.1-SNAPSHOT</version>
+        <version>10.5.0</version>
       </dependency>
   </dependencies>
   <artifactId>ts-tableprovider</artifactId>
