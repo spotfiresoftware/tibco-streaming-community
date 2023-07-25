@@ -4,9 +4,9 @@ Projects contributed by the community
 
 Samples :
 
-* [AMS client operator demonstrates the use of the TIBCO Artifact Management Server REST API](ams-client)
+* [AMS client operator demonstrates the use of the Spotfire Artifact Management Server REST API](ams-client)
 * [Automated trading simulation using Bollinger Bands trading indicator](bollinger-bands-signaling)
-* [Illustrates using SMILE operators for correlating sensor readings with failures and presenting a LiveView table of the results for visualizing in TIBCO LiveView Web or TIBCO Spotfire](cramer-view)
+* [Illustrates using SMILE operators for correlating sensor readings with failures and presenting a LiveView table of the results for visualizing in LiveView Web or Spotfire](cramer-view)
 * [Delays the transmission of data along a stream by a specified amount of time](delay-operator)
 * [Demonstrates generating Java wrappers from a decision table model](dt-schema)
 * [Maps escaped field names](escaped-identifier-mapper)

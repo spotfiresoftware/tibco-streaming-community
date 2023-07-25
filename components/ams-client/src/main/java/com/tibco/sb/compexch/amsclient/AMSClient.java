@@ -54,7 +54,7 @@ import com.streambase.sb.operator.Parameterizable;
 import com.streambase.sb.operator.TypecheckException;
 
 /**
- * The AMSClient Java operator demonstrates using several of the key end points of the TIBCO Artifact Management Server's REST API.
+ * The AMSClient Java operator demonstrates using several of the key end points of the Spotfire Artifact Management Server's REST API.
  */
 @SuppressWarnings("serial")
 public class AMSClient extends Operator implements Parameterizable {

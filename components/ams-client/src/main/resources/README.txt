@@ -5,7 +5,7 @@ ______________________________________________________________________________
 Introduction
 ===============
 
-The AMS client operator demonstrates the use of the TIBCO Artifact Management Server's REST API. The operator can be used for 
+The AMS client operator demonstrates the use of the Spotfire Artifact Management Server's REST API. The operator can be used for
 enumerating the AMS projects and their artifacts, and for fetching, adding, updating, and deleting artifacts. More importantly,
 the operator's source code can be used as the starting point for building your own Java AMS client application.
 

@@ -22,7 +22,7 @@ import com.streambase.sb.util.Util;
  * Implementation Notes:
  * <p>
  * <ul>
- * <li>TIBCO LiveView Desktop uses a standard "WHERE TRUE" clause, that InfluxDB does not accept,
+ * <li>Spotfire LiveView Desktop uses a standard "WHERE TRUE" clause, that InfluxDB does not accept,
  *       and thus this is replaced with a different condition that always holds true</li>
  *       
  * <li>influxdb recommends double-quoting all identifiers (in part, they accept spaces, start with numbers, etc.),

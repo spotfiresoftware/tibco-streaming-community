@@ -32,7 +32,7 @@ This sample decodes airplane information using SDR (Software Defined Radio) and 
 	![liveview web dashboard](images/planetracker2.png)
 
 	
-* TIBCO LiveViewTM Web also includes a customized visualization card which can render a third party web site displaying the plane detail once you select a plane from the map or in card "Planes". Look for the custom card's resource file in src/main/liveview/lv-web/plugins/com.tibco.sb.ldm.web.plugins.queryiframe
+* Spotfire LiveViewTM Web also includes a customized visualization card which can render a third party web site displaying the plane detail once you select a plane from the map or in card "Planes". Look for the custom card's resource file in src/main/liveview/lv-web/plugins/com.tibco.sb.ldm.web.plugins.queryiframe
 	
 	![custom card](images/planetracker3.png)
 	  

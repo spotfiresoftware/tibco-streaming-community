@@ -12,7 +12,7 @@ The LiveView server accepts the incoming data into various Tables, and makes the
 
 ## Visualizing LiveView Data
 
-The second step of the demo is to open your web brower to TIBCO LiveView Web and have it connect to the LiveView server started earlier in this demo.
+The second step of the demo is to open your web brower to Spotfire LiveView Web and have it connect to the LiveView server started earlier in this demo.
 
 Once the feed simulation is started, data will begin to flow through the EventFlow module and the visualizations will begin to populate.
 

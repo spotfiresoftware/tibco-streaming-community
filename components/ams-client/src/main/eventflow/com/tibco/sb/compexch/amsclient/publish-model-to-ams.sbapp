@@ -122,7 +122,7 @@
             <note-target name="ReadDataFile"/>
         </gui.note>
         <gui.note name="Note2">
-            <property name="description" value="Publish artifact changes to the TIBCO Artifact Management Server"/>
+            <property name="description" value="Publish artifact changes to the Spotfire Artifact Management Server"/>
             <note-target name="PublishToAMS"/>
         </gui.note>
         <gui.note name="Note3">
