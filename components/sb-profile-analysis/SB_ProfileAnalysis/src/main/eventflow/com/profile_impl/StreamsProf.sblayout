@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="StreamsIn">
+        <param name="gui:x" value="295"/>
+        <param name="gui:y" value="25"/>
+    </component>
+    <component name="StreamsInfoTable">
+        <param name="gui:x" value="580"/>
+        <param name="gui:y" value="155"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="FilterTimeRange2">
+        <param name="gui:x" value="487"/>
+        <param name="gui:y" value="25"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="380"/>
+        <param name="gui:y" value="25"/>
+    </component>
+    <component name="writeStreams">
+        <param name="gui:x" value="590"/>
+        <param name="gui:y" value="25"/>
+    </component>
+</application-layout>

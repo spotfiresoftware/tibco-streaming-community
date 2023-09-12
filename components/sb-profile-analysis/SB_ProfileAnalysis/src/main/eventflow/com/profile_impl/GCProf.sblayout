@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="SystemIn">
+        <param name="gui:x" value="301"/>
+        <param name="gui:y" value="-6"/>
+    </component>
+    <component name="GCInfoTable">
+        <param name="gui:x" value="585"/>
+        <param name="gui:y" value="124"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="FilterTimeRange2">
+        <param name="gui:x" value="492"/>
+        <param name="gui:y" value="-6"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="385"/>
+        <param name="gui:y" value="-6"/>
+    </component>
+    <component name="writeGC">
+        <param name="gui:x" value="595"/>
+        <param name="gui:y" value="-6"/>
+    </component>
+</application-layout>

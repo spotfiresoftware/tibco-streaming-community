@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="QueueIn">
+        <param name="gui:x" value="-274"/>
+        <param name="gui:y" value="-87"/>
+    </component>
+    <component name="QueueRollupTable">
+        <param name="gui:x" value="134"/>
+        <param name="gui:y" value="-68"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="queuesTable">
+        <param name="gui:x" value="230"/>
+        <param name="gui:y" value="168"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="CountSizeQueue">
+        <param name="gui:x" value="240"/>
+        <param name="gui:y" value="23"/>
+    </component>
+    <component name="DeleteLesserSize">
+        <param name="gui:x" value="455"/>
+        <param name="gui:y" value="23"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="-87"/>
+        <param name="gui:y" value="-87"/>
+    </component>
+    <component name="LimitSizeCount">
+        <param name="gui:x" value="347"/>
+        <param name="gui:y" value="23"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="12"/>
+        <param name="gui:y" value="-87"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="-190"/>
+        <param name="gui:y" value="-87"/>
+    </component>
+    <component name="rollupUpdate">
+        <param name="gui:x" value="144"/>
+        <param name="gui:y" value="-198"/>
+        <param name="gui:bends:1" value="88,-67;112,-168"/>
+    </component>
+    <component name="writeQueue">
+        <param name="gui:x" value="144"/>
+        <param name="gui:y" value="23"/>
+        <param name="gui:bends:1" value="101,-47;125,53"/>
+    </component>
+</application-layout>

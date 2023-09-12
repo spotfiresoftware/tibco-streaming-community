@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Filter">
+        <param name="gui:x" value="-835"/>
+        <param name="gui:y" value="272"/>
+    </component>
+    <component name="filename">
+        <param name="gui:x" value="-835"/>
+        <param name="gui:y" value="88"/>
+    </component>
+    <component name="shutdown">
+        <param name="gui:x" value="1375"/>
+        <param name="gui:y" value="481"/>
+    </component>
+    <component name="AdvisoryRef1">
+        <param name="gui:x" value="1375"/>
+        <param name="gui:y" value="-359"/>
+        <param name="gui:bends:1" value="965,-77;1007,-329"/>
+    </component>
+    <component name="GCProfRef1">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="500"/>
+        <param name="gui:bends:1" value="627,258;695,530"/>
+    </component>
+    <component name="OperatorProfRef1">
+        <param name="gui:x" value="377"/>
+        <param name="gui:y" value="-125"/>
+        <param name="gui:height" value="65"/>
+        <param name="gui:bends:1" value="285,107;337,-105"/>
+        <param name="gui:bends:2" value="-354,-135;-323,-387;-6,-387;70,-80"/>
+    </component>
+    <component name="QueueProfRef1">
+        <param name="gui:x" value="895"/>
+        <param name="gui:y" value="64"/>
+    </component>
+    <component name="StreamsProfRef1">
+        <param name="gui:x" value="895"/>
+        <param name="gui:y" value="231"/>
+        <param name="gui:height" value="71"/>
+        <param name="gui:bends:1" value="646,268;650,284;877,284;881,266"/>
+    </component>
+    <component name="SummaryFilesRef1">
+        <param name="gui:x" value="1087"/>
+        <param name="gui:y" value="-105"/>
+        <param name="gui:height" value="74"/>
+        <param name="gui:bends:1" value="995,-129;1009,-68"/>
+    </component>
+    <component name="SummaryLogOutRef1">
+        <param name="gui:x" value="1375"/>
+        <param name="gui:y" value="-131"/>
+        <param name="gui:height" value="157"/>
+        <param name="gui:bends:1" value="965,-103;1014,-305;1182,-305;1244,-53"/>
+    </component>
+    <component name="SystemProfRef1">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="371"/>
+        <param name="gui:bends:1" value="668,248;706,401"/>
+    </component>
+    <component name="ThreadProfRef1">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="193"/>
+        <param name="gui:bends:1" value="700,238;702,223"/>
+    </component>
+    <component name="startSizeTable">
+        <param name="gui:x" value="15"/>
+        <param name="gui:y" value="335"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="DoProgress">
+        <param name="gui:x" value="-306"/>
+        <param name="gui:y" value="-24"/>
+        <param name="gui:bends:1" value="-342,118;-316,6"/>
+    </component>
+    <component name="DoneFilter">
+        <param name="gui:x" value="514"/>
+        <param name="gui:y" value="-120"/>
+        <param name="gui:bends:1" value="467,-105;469,-90"/>
+    </component>
+    <component name="EndAndBig">
+        <param name="gui:x" value="-306"/>
+        <param name="gui:y" value="-267"/>
+        <param name="gui:bends:1" value="-352,-147;-330,-237"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="25"/>
+        <param name="gui:y" value="71"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="GetNameTime">
+        <param name="gui:x" value="-77"/>
+        <param name="gui:y" value="71"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="IsStarting">
+        <param name="gui:x" value="-306"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="IsTime">
+        <param name="gui:x" value="-422"/>
+        <param name="gui:y" value="225"/>
+    </component>
+    <component name="Log">
+        <param name="gui:x" value="-730"/>
+        <param name="gui:y" value="272"/>
+    </component>
+    <component name="LogProgress">
+        <param name="gui:x" value="-77"/>
+        <param name="gui:y" value="-24"/>
+    </component>
+    <component name="LogRows">
+        <param name="gui:x" value="-77"/>
+        <param name="gui:y" value="-275"/>
+        <param name="gui:height" value="76"/>
+    </component>
+    <component name="LogStartEnd">
+        <param name="gui:x" value="-306"/>
+        <param name="gui:y" value="225"/>
+    </component>
+    <component name="NameFilter">
+        <param name="gui:x" value="121"/>
+        <param name="gui:y" value="77"/>
+    </component>
+    <component name="NameFilter2">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="64"/>
+        <param name="gui:bends:1" value="658,228;690,94"/>
+    </component>
+    <component name="ScaleCount">
+        <param name="gui:x" value="-189"/>
+        <param name="gui:y" value="-24"/>
+    </component>
+    <component name="ScaleTotal">
+        <param name="gui:x" value="-189"/>
+        <param name="gui:y" value="-267"/>
+    </component>
+    <component name="SendOne">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="595"/>
+        <param name="gui:bends:1" value="592,279;678,625"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-422"/>
+        <param name="gui:y" value="-167"/>
+        <param name="gui:height" value="64"/>
+        <param name="gui:bends:1" value="-535,126;-471,-135"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="895"/>
+        <param name="gui:y" value="-149"/>
+        <param name="gui:height" value="118"/>
+    </component>
+    <component name="Split3">
+        <param name="gui:x" value="-730"/>
+        <param name="gui:y" value="86"/>
+        <param name="gui:height" value="63"/>
+        <param name="gui:bends:1" value="-760,118;-760,117"/>
+    </component>
+    <component name="StartingLog">
+        <param name="gui:x" value="-189"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="1679"/>
+        <param name="gui:y" value="468"/>
+        <param name="gui:height" value="63"/>
+        <param name="gui:bends:1" value="1445,-205;1594,488"/>
+    </component>
+    <component name="UnknownTypeLog">
+        <param name="gui:x" value="895"/>
+        <param name="gui:y" value="595"/>
+    </component>
+    <component name="WhatType">
+        <param name="gui:x" value="514"/>
+        <param name="gui:y" value="208"/>
+        <param name="gui:height" value="91"/>
+        <param name="gui:bends:1" value="-112,130;-82,253"/>
+    </component>
+    <component name="getDuration">
+        <param name="gui:x" value="746"/>
+        <param name="gui:y" value="-126"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="getIndex">
+        <param name="gui:x" value="-422"/>
+        <param name="gui:y" value="88"/>
+        <param name="gui:bends:1" value="-517,103;-515,118"/>
+    </component>
+    <component name="getTimeRange">
+        <param name="gui:x" value="-306"/>
+        <param name="gui:y" value="88"/>
+    </component>
+    <component name="isOperator">
+        <param name="gui:x" value="-189"/>
+        <param name="gui:y" value="87"/>
+        <param name="gui:height" value="63"/>
+    </component>
+    <component name="isStudio">
+        <param name="gui:x" value="1375"/>
+        <param name="gui:y" value="-249"/>
+        <param name="gui:height" value="64"/>
+    </component>
+    <component name="readProfile">
+        <param name="gui:x" value="-605"/>
+        <param name="gui:y" value="83"/>
+        <param name="gui:height" value="63"/>
+        <param name="gui:bends:1" value="-622,129;-620,114"/>
+    </component>
+    <component name="setDone">
+        <param name="gui:x" value="1087"/>
+        <param name="gui:y" value="-247"/>
+        <param name="gui:bends:1" value="1001,-51;1041,-217"/>
+    </component>
+    <component name="setStartEndTime">
+        <param name="gui:x" value="-605"/>
+        <param name="gui:y" value="225"/>
+        <param name="gui:bends:1" value="-652,106;-616,255"/>
+    </component>
+    <component name="shutdownRequest">
+        <param name="gui:x" value="1792"/>
+        <param name="gui:y" value="469"/>
+    </component>
+    <component name="updateLastTS">
+        <param name="gui:x" value="206"/>
+        <param name="gui:y" value="77"/>
+    </component>
+    <component name="UnknownProfileType">
+        <param name="gui:x" value="1087"/>
+        <param name="gui:y" value="595"/>
+    </component>
+    <component name="done">
+        <param name="gui:x" value="1679"/>
+        <param name="gui:y" value="-259"/>
+    </component>
+    <component name="HoverOverMe">
+        <param name="gui:x" value="-842"/>
+        <param name="gui:y" value="183"/>
+        <param name="gui:width" value="75"/>
+        <param name="gui:height" value="74"/>
+    </component>
+</application-layout>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DoneIn">
+        <param name="gui:x" value="23"/>
+        <param name="gui:y" value="-497"/>
+    </component>
+    <component name="getCountInputStream1">
+        <param name="gui:x" value="23"/>
+        <param name="gui:y" value="218"/>
+    </component>
+    <component name="operatorCPUTable">
+        <param name="gui:x" value="657"/>
+        <param name="gui:y" value="-244"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="operatorInputTable">
+        <param name="gui:x" value="657"/>
+        <param name="gui:y" value="254"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="operatorOutputTable">
+        <param name="gui:x" value="657"/>
+        <param name="gui:y" value="764"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="operatorSPITTable">
+        <param name="gui:x" value="766"/>
+        <param name="gui:y" value="515"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="operatorSPOTTable">
+        <param name="gui:x" value="766"/>
+        <param name="gui:y" value="1024"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="operatorSizeTable">
+        <param name="gui:x" value="657"/>
+        <param name="gui:y" value="5"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="AddCPUOpers">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="-402"/>
+    </component>
+    <component name="AddInputOpers">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="96"/>
+        <param name="gui:bends:1" value="645,125;645,126"/>
+    </component>
+    <component name="AddOutputOper">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="606"/>
+        <param name="gui:bends:1" value="632,635;632,636"/>
+    </component>
+    <component name="AddSPITOper">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="344"/>
+        <param name="gui:height" value="73"/>
+    </component>
+    <component name="AddSPOTOper">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="854"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="AddSizeOpers">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="CalcSPIT">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="345"/>
+        <param name="gui:height" value="71"/>
+        <param name="gui:bends:1" value="339,262;367,380"/>
+    </component>
+    <component name="CalcSPOT">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="855"/>
+        <param name="gui:height" value="71"/>
+        <param name="gui:bends:1" value="263,273;417,890"/>
+    </component>
+    <component name="DeleteLesserCPU">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="-402"/>
+    </component>
+    <component name="DeleteLesserInput">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="DeleteLesserOutput">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="606"/>
+    </component>
+    <component name="DeleteLesserSPIT">
+        <param name="gui:x" value="1126"/>
+        <param name="gui:y" value="344"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="DeleteLesserSPOT">
+        <param name="gui:x" value="1126"/>
+        <param name="gui:y" value="855"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="DeleteLesserSize">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="GetLowestCPU">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="-402"/>
+        <param name="gui:bends:1" value="331,222;426,-372"/>
+    </component>
+    <component name="GetLowestInput">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="90"/>
+        <param name="gui:height" value="71"/>
+        <param name="gui:bends:1" value="365,242;393,125"/>
+    </component>
+    <component name="GetLowestOutput">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="600"/>
+        <param name="gui:height" value="71"/>
+        <param name="gui:bends:1" value="319,252;413,635"/>
+    </component>
+    <component name="GetLowestSPIT">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="345"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="GetLowestSPOT">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="855"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="GetLowestSize">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="-153"/>
+        <param name="gui:bends:1" value="348,232;426,-123"/>
+    </component>
+    <component name="LimitCPUCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="-402"/>
+    </component>
+    <component name="LimitInputCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="LimitOutputCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="606"/>
+    </component>
+    <component name="LimitSPITCount">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="344"/>
+        <param name="gui:height" value="72"/>
+    </component>
+    <component name="LimitSPOTCount">
+        <param name="gui:x" value="1009"/>
+        <param name="gui:y" value="855"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="LimitSizeCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="166"/>
+        <param name="gui:y" value="202"/>
+        <param name="gui:height" value="91"/>
+        <param name="gui:bends:1" value="129,248;129,247"/>
+    </component>
+    <component name="Union1">
+        <param name="gui:x" value="166"/>
+        <param name="gui:y" value="-497"/>
+    </component>
+    <component name="getCPUCount">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="-402"/>
+    </component>
+    <component name="getInCount">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="getOutount">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="606"/>
+    </component>
+    <component name="getSPITCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="350"/>
+    </component>
+    <component name="getSPOTCount">
+        <param name="gui:x" value="884"/>
+        <param name="gui:y" value="860"/>
+    </component>
+    <component name="getSizeCount">
+        <param name="gui:x" value="776"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="isCPUBigger">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="-402"/>
+    </component>
+    <component name="isInputTPSBigger">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="90"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="isOutTPSBigger">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="600"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="isSPITBigger">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="345"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="isSPOTBigger">
+        <param name="gui:x" value="667"/>
+        <param name="gui:y" value="855"/>
+        <param name="gui:height" value="71"/>
+    </component>
+    <component name="isSizeBigger">
+        <param name="gui:x" value="548"/>
+        <param name="gui:y" value="-153"/>
+    </component>
+    <component name="DoneOut">
+        <param name="gui:x" value="436"/>
+        <param name="gui:y" value="-497"/>
+    </component>
+</application-layout>

@@ -13,7 +13,7 @@
   <description>Event flow application that reads sbprofile data and summarizes for analysis</description>
  
   <modules>
-    <module>sb-profile-analysis</module>
+    <module>SB_ProfileAnalysis</module>
     <module>ProfileAnalysisDeploy</module>
   </modules>
 

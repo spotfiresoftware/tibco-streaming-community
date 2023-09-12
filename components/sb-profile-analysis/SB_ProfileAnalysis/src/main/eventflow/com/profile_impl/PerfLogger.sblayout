@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="in">
+        <param name="gui:x" value="-247"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="InputLogger">
+        <param name="gui:x" value="-63"/>
+        <param name="gui:y" value="-29"/>
+        <param name="gui:bends:1" value="-77,16;-75,1"/>
+    </component>
+    <component name="ShouldLog">
+        <param name="gui:x" value="-169"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="129"/>
+        <param name="gui:y" value="19"/>
+    </component>
+    <component name="Union1">
+        <param name="gui:x" value="49"/>
+        <param name="gui:y" value="19"/>
+        <param name="gui:bends:1" value="7,1;15,39"/>
+        <param name="gui:bends:2" value="-91,36;-87,59"/>
+    </component>
+    <component name="WriteData">
+        <param name="gui:x" value="234"/>
+        <param name="gui:y" value="-48"/>
+        <param name="gui:bends:1" value="208,39;222,-18"/>
+    </component>
+    <component name="out">
+        <param name="gui:x" value="234"/>
+        <param name="gui:y" value="47"/>
+        <param name="gui:bends:1" value="213,59;217,77"/>
+    </component>
+</application-layout>

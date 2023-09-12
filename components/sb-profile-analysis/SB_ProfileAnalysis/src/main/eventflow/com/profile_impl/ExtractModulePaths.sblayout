@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="InputStream">
+        <param name="gui:x" value="-282"/>
+        <param name="gui:y" value="-17"/>
+    </component>
+    <component name="DropOneModule">
+        <param name="gui:x" value="72"/>
+        <param name="gui:y" value="3"/>
+    </component>
+    <component name="IsDone">
+        <param name="gui:x" value="-18"/>
+        <param name="gui:y" value="3"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-195"/>
+        <param name="gui:y" value="-17"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="197"/>
+        <param name="gui:y" value="-39"/>
+        <param name="gui:bends:1" value="34,3;38,-19"/>
+        <param name="gui:bends:2" value="168,33;176,1"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="-98"/>
+        <param name="gui:y" value="3"/>
+        <param name="gui:bends:2" value="159,33;159,90;-104,90;-104,43"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="280"/>
+        <param name="gui:y" value="-39"/>
+    </component>
+</application-layout>

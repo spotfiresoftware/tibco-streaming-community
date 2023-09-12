@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ThreadIn">
+        <param name="gui:x" value="55"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="ThreadRollupTable">
+        <param name="gui:x" value="464"/>
+        <param name="gui:y" value="115"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="TopThreadTable">
+        <param name="gui:x" value="566"/>
+        <param name="gui:y" value="351"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="CountSizeThreads">
+        <param name="gui:x" value="576"/>
+        <param name="gui:y" value="206"/>
+    </component>
+    <component name="DeleteLesserSize">
+        <param name="gui:x" value="796"/>
+        <param name="gui:y" value="206"/>
+    </component>
+    <component name="FilterTimeRange">
+        <param name="gui:x" value="242"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="LimitSizeCount">
+        <param name="gui:x" value="687"/>
+        <param name="gui:y" value="206"/>
+    </component>
+    <component name="Split1">
+        <param name="gui:x" value="341"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="convertNames">
+        <param name="gui:x" value="139"/>
+        <param name="gui:y" value="96"/>
+    </component>
+    <component name="rollupUpdate">
+        <param name="gui:x" value="474"/>
+        <param name="gui:y" value="-15"/>
+        <param name="gui:bends:1" value="417,116;441,15"/>
+    </component>
+    <component name="writeThread">
+        <param name="gui:x" value="474"/>
+        <param name="gui:y" value="206"/>
+        <param name="gui:bends:1" value="430,136;454,236"/>
+    </component>
+</application-layout>
