@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+<modify version="11.0.2">
     <add>
         <type-metadata>
             <param name="type" value="module"/>
@@ -18,7 +18,7 @@
                 </field>
             </schema>
             <param name="gui:x" value="29"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:y" value="3"/>
         </stream>
         <box name="TranslateLatLon2CityRegion" type="map">
             <property name="description" value="This does a totally silly transform from lat/lon (assumed degrees from -90 to +90) to a grid system, by just adding 90 to each (so the x,y becomes from 0 to 180)"/>
@@ -33,11 +33,11 @@
                 </expressions>
             </target-list>
             <param name="gui:x" value="156"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:y" value="3"/>
         </box>
         <output-stream name="CityRegionOut">
             <param name="gui:x" value="295"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:y" value="3"/>
         </output-stream>
     </add>
 </modify>

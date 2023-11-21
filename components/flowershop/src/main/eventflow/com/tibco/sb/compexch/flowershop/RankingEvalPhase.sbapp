@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_5a3d853e254e1c51e849f910970514d129ebafdd">
+<modify version="11.0.2">
     <add>
         <gui.metadata>
             <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/RankingModule.png"/>
@@ -26,8 +26,8 @@
             </table-schema>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="157"/>
-            <param name="gui:y" value="338"/>
+            <param name="gui:x" value="156"/>
+            <param name="gui:y" value="336"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
@@ -37,14 +37,14 @@
             <param name="table-schema" value="DriverRankingsTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="534"/>
-            <param name="gui:y" value="340"/>
+            <param name="gui:x" value="533"/>
+            <param name="gui:y" value="338"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
         <stream name="Every20DeliveriesInput" schema="DeliveryConfirmation">
-            <param name="gui:x" value="31"/>
-            <param name="gui:y" value="98"/>
+            <param name="gui:x" value="32"/>
+            <param name="gui:y" value="96"/>
         </stream>
         <stream name="RecordAlertInput">
             <schema>
@@ -54,8 +54,8 @@
                 <field name="delivery_time" type="timestamp"/>
                 <field name="late_delivery_alert_sent" type="bool"/>
             </schema>
-            <param name="gui:x" value="31"/>
-            <param name="gui:y" value="193"/>
+            <param name="gui:x" value="32"/>
+            <param name="gui:y" value="191"/>
         </stream>
         <box name="Every20Deliveries" type="aggregate">
             <input port="1" stream="Every20DeliveriesInput"/>
@@ -68,8 +68,8 @@
             <param name="output-group-by" value="true"/>
             <param name="group-by-name.0" value="driver_id"/>
             <param name="group-by.0" value="driver_id"/>
-            <param name="gui:x" value="167"/>
-            <param name="gui:y" value="98"/>
+            <param name="gui:x" value="166"/>
+            <param name="gui:y" value="96"/>
         </box>
         <box name="RecordAlert" type="query">
             <input port="1" stream="RecordAlertInput"/>
@@ -103,8 +103,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="167"/>
-            <param name="gui:y" value="193"/>
+            <param name="gui:x" value="166"/>
+            <param name="gui:y" value="191"/>
         </box>
         <box name="ResetAndCountAlerts" type="query">
             <input port="1" stream="out:Every20Deliveries_1"/>
@@ -122,6 +122,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
                 <expressions>
                     <include field="num_alerts">if isnull(old.num_alerts) then 0 else old.num_alerts</include>
                 </expressions>
@@ -138,8 +139,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="297"/>
-            <param name="gui:y" value="98"/>
+            <param name="gui:x" value="296"/>
+            <param name="gui:y" value="96"/>
         </box>
         <box name="EvalFilter" type="filter">
             <input port="1" stream="out:ResetAndCountAlerts_1"/>
@@ -148,8 +149,8 @@
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="num_alerts == 0"/>
             <param name="expression.1" value="num_alerts &gt; 5"/>
-            <param name="gui:x" value="412"/>
-            <param name="gui:y" value="98"/>
+            <param name="gui:x" value="411"/>
+            <param name="gui:y" value="96"/>
         </box>
         <box name="DoRankingDecrease" type="query">
             <input port="1" stream="out:EvalFilter_2"/>
@@ -184,9 +185,9 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="544"/>
-            <param name="gui:y" value="195"/>
-            <param name="gui:bends:1" value="496,138;516,225"/>
+            <param name="gui:x" value="543"/>
+            <param name="gui:y" value="193"/>
+            <param name="gui:bends:1" value="495,136;515,223"/>
         </box>
         <box name="DoRankingIncrease" type="query">
             <input port="1" stream="out:EvalFilter_1"/>
@@ -223,22 +224,22 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="544"/>
-            <param name="gui:y" value="85"/>
-            <param name="gui:bends:1" value="519,118;519,115"/>
+            <param name="gui:x" value="543"/>
+            <param name="gui:y" value="83"/>
+            <param name="gui:bends:1" value="518,116;518,113"/>
         </box>
         <output-stream name="RankingDecreaseOutput">
-            <param name="gui:x" value="699"/>
-            <param name="gui:y" value="195"/>
+            <param name="gui:x" value="698"/>
+            <param name="gui:y" value="193"/>
         </output-stream>
         <box name="IsImprovement" type="filter">
             <input port="1" stream="out:DoRankingIncrease_1"/>
             <output port="1" stream="out:IsImprovement_1"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="last_ranking_change == &quot;decrease&quot;"/>
-            <param name="gui:x" value="699"/>
-            <param name="gui:y" value="-10"/>
-            <param name="gui:bends:1" value="644,115;666,20"/>
+            <param name="gui:x" value="698"/>
+            <param name="gui:y" value="-12"/>
+            <param name="gui:bends:1" value="643,113;665,18"/>
         </box>
         <box name="PrepRankingIncreaseEvent" type="map">
             <input port="1" stream="out:DoRankingIncrease_1"/>
@@ -248,12 +249,12 @@
                     <include field="driver_id"/>
                 </item>
             </target-list>
-            <param name="gui:x" value="699"/>
-            <param name="gui:y" value="85"/>
+            <param name="gui:x" value="698"/>
+            <param name="gui:y" value="83"/>
         </box>
         <output-stream name="RankingIncreaseEventOutput">
-            <param name="gui:x" value="878"/>
-            <param name="gui:y" value="85"/>
+            <param name="gui:x" value="877"/>
+            <param name="gui:y" value="83"/>
         </output-stream>
         <box name="PrepImprovementEvent" type="map">
             <input port="1" stream="out:IsImprovement_1"/>
@@ -263,12 +264,12 @@
                     <include field="driver_id"/>
                 </item>
             </target-list>
-            <param name="gui:x" value="878"/>
-            <param name="gui:y" value="-10"/>
+            <param name="gui:x" value="877"/>
+            <param name="gui:y" value="-12"/>
         </box>
         <output-stream name="ImprovementEventOutput">
-            <param name="gui:x" value="1037"/>
-            <param name="gui:y" value="-10"/>
+            <param name="gui:x" value="1036"/>
+            <param name="gui:y" value="-12"/>
         </output-stream>
     </add>
 </modify>

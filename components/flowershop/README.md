@@ -19,14 +19,14 @@ assumptions and simplifications:
  - In Phase 5, assignments are counted on a hourly basis and reports are generated
     every day.
 
- Modules:
+## Modules:
 
   - `com.tibco.sb.compexch.flowershop.SharedSchemas` contains definition of global
     events that are reused by the main application.
   - `com.tibco.sb.compexch.flowershop.RawGPS2CityRegion` defines the simple
     GPS-to-City grid mapping. Other mappings could be authored here.
 
- Additional files:
+## Additional files:
 
   - drivers.csv is loaded by the application on startup and loads an
     in-memory table (driver_id, driver_rank).
@@ -35,7 +35,7 @@ assumptions and simplifications:
   - drivers.sbfs is a feed simulation that can be used to generate driver GPS
     events.
 
-Usage notes:
+## Usage notes:
 
 1. To define stores and drivers manually, use the InsertStore and InsertDriver
    streams.
@@ -44,9 +44,14 @@ Usage notes:
    to match. You can also send driver events manually or programmatically by
    sending tuples to the GPSLocationEvent input stream.
 
-Version History
-  1.0 - upgraded from SB7
-  1.1 - updated email address for this component and removed spec sheet
-  2.0 - updated for SB10
+## Version History
+  2.2 - updated for Streaming 11.0; better arc layouts
+  
   2.1 - updated for SB 10.5 and GitHub release; new maven ID and versioning
+  
+  2.0 - updated for SB10
+  
+  1.1 - updated email address for this component and removed spec sheet
+  
+  1.0 - upgraded from SB7
   

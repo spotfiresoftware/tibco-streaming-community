@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+<modify version="11.0.2">
     <add>
         <gui.metadata>
             <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/BidModule.png"/>
@@ -17,8 +17,8 @@
             <param name="table-schema" value="DeliveryRequestBidTimesTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="627"/>
-            <param name="gui:y" value="249"/>
+            <param name="gui:x" value="930"/>
+            <param name="gui:y" value="322"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
@@ -28,8 +28,8 @@
             <param name="table-schema" value="DriverLocationsTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="970"/>
-            <param name="gui:y" value="60"/>
+            <param name="gui:x" value="930"/>
+            <param name="gui:y" value="111"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
@@ -39,8 +39,8 @@
             <param name="table-schema" value="DriverRankingsTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="626"/>
-            <param name="gui:y" value="85"/>
+            <param name="gui:x" value="514"/>
+            <param name="gui:y" value="121"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
@@ -50,14 +50,14 @@
             <param name="table-schema" value="StoresTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="290"/>
-            <param name="gui:y" value="133"/>
+            <param name="gui:x" value="179"/>
+            <param name="gui:y" value="227"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
         <stream name="AddRequestIDInput" schema="DeliveryRequest">
-            <param name="gui:x" value="74"/>
-            <param name="gui:y" value="43"/>
+            <param name="gui:x" value="-37"/>
+            <param name="gui:y" value="97"/>
         </stream>
         <box name="AddRequestID" type="seqnum">
             <input port="1" stream="AddRequestIDInput"/>
@@ -65,8 +65,8 @@
             <param name="output-field" value="delivery_request_id"/>
             <param name="sequence-id" value="deliveryrequestid"/>
             <param name="update-expression" value="deliveryrequestid + 1"/>
-            <param name="gui:x" value="186"/>
-            <param name="gui:y" value="43"/>
+            <param name="gui:x" value="75"/>
+            <param name="gui:y" value="97"/>
         </box>
         <box name="GetLocAndMinRank" type="query">
             <input port="1" stream="out:AddRequestID_1"/>
@@ -107,8 +107,8 @@
                     <set field="manual_process">null</set>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="300"/>
-            <param name="gui:y" value="43"/>
+            <param name="gui:x" value="189"/>
+            <param name="gui:y" value="97"/>
         </box>
         <box name="ProcessDriversThenCheck" type="split">
             <property name="description" value="This split ensures we first process all drivers for this request, and after that look to see if any bid requests were sent. If none were sent, for any reason, an alert is emitted."/>
@@ -116,8 +116,8 @@
             <output port="1" stream="out:ProcessDriversThenCheck_1"/>
             <output port="2" stream="out:ProcessDriversThenCheck_2"/>
             <param name="output-count" value="2"/>
-            <param name="gui:x" value="460"/>
-            <param name="gui:y" value="43"/>
+            <param name="gui:x" value="339"/>
+            <param name="gui:y" value="97"/>
         </box>
         <box name="FindBidRequestTag4DeliveryRequest" type="query">
             <property name="description" value="By matching against a null-row tuple if no row is found in the delivery request table, and doing a notnull check, it can tell if the branch that collected qualified, nearby drivers ever resulted in a BidRequest"/>
@@ -138,6 +138,7 @@
                     <include field="store_id"/>
                 </item>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="hasAtLeastOneDriverBidRequest">notnull(current.delivery_request_id)</include>
                 </expressions>
@@ -156,9 +157,9 @@
                     <set field="store_id">null</set>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="636"/>
-            <param name="gui:y" value="157"/>
-            <param name="gui:bends:1" value="565,83;591,187"/>
+            <param name="gui:x" value="524"/>
+            <param name="gui:y" value="212"/>
+            <param name="gui:bends:1" value="444,137;470,242"/>
         </box>
         <box name="GetQualifiedDrivers" type="query">
             <property name="description" value="If no drivers qualify, a single output tuple with driver_id null will be output"/>
@@ -197,17 +198,17 @@
                     <set field="last_ranking_change">null</set>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="636"/>
-            <param name="gui:y" value="0"/>
-            <param name="gui:bends:1" value="561,63;569,30"/>
+            <param name="gui:x" value="524"/>
+            <param name="gui:y" value="-9"/>
+            <param name="gui:bends:1" value="432,117;456,21"/>
         </box>
         <box name="DoesItHaveNoBidRequests" type="filter">
             <input port="1" stream="out:FindBidRequestTag4DeliveryRequest_1"/>
             <output port="1" stream="out:DoesItHaveNoBidRequests_1"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="not(hasAtLeastOneDriverBidRequest)"/>
-            <param name="gui:x" value="837"/>
-            <param name="gui:y" value="158"/>
+            <param name="gui:x" value="727"/>
+            <param name="gui:y" value="212"/>
         </box>
         <box name="EnsureQualifedDrivers" type="filter">
             <input port="1" stream="out:GetQualifiedDrivers_1"/>
@@ -216,8 +217,8 @@
             <param name="autogen-nomatch-port" value="true"/>
             <param name="expression.0" value="notnull(driver_id)"/>
             <param name="expression.1" value="true"/>
-            <param name="gui:x" value="800"/>
-            <param name="gui:y" value="1"/>
+            <param name="gui:x" value="727"/>
+            <param name="gui:y" value="-9"/>
         </box>
         <box name="GetDriverStoreDistance" type="query">
             <property name="description" value="Outputs the distance between the current driver and the store location"/>
@@ -235,6 +236,7 @@
             <target-list>
                 <item name="input" selection="all"/>
                 <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
                 <expressions>
                     <include field="distance">sqrt(pow(store_location.x - last_location.x, 2) + pow(store_location.y - last_location.y, 2))</include>
                 </expressions>
@@ -248,19 +250,17 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="980"/>
-            <param name="gui:y" value="-36"/>
-            <param name="gui:bends:1" value="941,21;947,-6"/>
+            <param name="gui:x" value="940"/>
+            <param name="gui:y" value="-19"/>
         </box>
         <box name="NoBidRequestsUnion" type="union">
             <input port="1" stream="out:EnsureQualifedDrivers_2"/>
             <input port="2" stream="out:DoesItHaveNoBidRequests_1"/>
             <output port="1" stream="out:NoBidRequestsUnion_1"/>
             <param name="strict" value="false"/>
-            <param name="gui:x" value="1004"/>
-            <param name="gui:y" value="157"/>
-            <param name="gui:bends:1" value="914,41;948,177"/>
-            <param name="gui:bends:2" value="955,188;957,197"/>
+            <param name="gui:x" value="940"/>
+            <param name="gui:y" value="202"/>
+            <param name="gui:bends:1" value="823,31;869,222"/>
         </box>
         <box name="FormatNoBidRequestsAlert" type="map">
             <input port="1" stream="out:NoBidRequestsUnion_1"/>
@@ -271,8 +271,8 @@
                     <include field="delivery_request_id"/>
                 </item>
             </target-list>
-            <param name="gui:x" value="1166"/>
-            <param name="gui:y" value="157"/>
+            <param name="gui:x" value="1097"/>
+            <param name="gui:y" value="202"/>
         </box>
         <box name="NearbyDriverFilter" type="filter">
             <property name="description" value="Checks for the driver to be nearby (see predicate settings for how this is defined)"/>
@@ -280,12 +280,13 @@
             <output port="1" stream="out:NearbyDriverFilter_1"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="distance &lt; 10"/>
-            <param name="gui:x" value="1115"/>
-            <param name="gui:y" value="-36"/>
+            <param name="gui:x" value="1097"/>
+            <param name="gui:y" value="-19"/>
         </box>
         <output-stream name="NoBidRequestsAlertOutput">
-            <param name="gui:x" value="1341"/>
-            <param name="gui:y" value="157"/>
+            <param name="gui:x" value="1387"/>
+            <param name="gui:y" value="-114"/>
+            <param name="gui:bends:1" value="1275,232;1353,-84"/>
         </output-stream>
         <box name="RecordDeliveryRequestBidStart" type="query">
             <input port="1" stream="out:NearbyDriverFilter_1"/>
@@ -322,8 +323,8 @@
                     <set field="store_id">int(null)</set>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="1276"/>
-            <param name="gui:y" value="-36"/>
+            <param name="gui:x" value="1387"/>
+            <param name="gui:y" value="-19"/>
         </box>
         <box name="MakeBidRequest" type="map">
             <input port="1" stream="out:RecordDeliveryRequestBidStart_1"/>
@@ -334,12 +335,12 @@
                     <include field="bid_request">BidRequest(driver_id, store_id, delivery_request_id)</include>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="1433"/>
-            <param name="gui:y" value="-36"/>
+            <param name="gui:x" value="1543"/>
+            <param name="gui:y" value="-19"/>
         </box>
         <output-stream name="BidRequestOutput">
-            <param name="gui:x" value="1550"/>
-            <param name="gui:y" value="-36"/>
+            <param name="gui:x" value="1660"/>
+            <param name="gui:y" value="-19"/>
         </output-stream>
     </add>
 </modify>

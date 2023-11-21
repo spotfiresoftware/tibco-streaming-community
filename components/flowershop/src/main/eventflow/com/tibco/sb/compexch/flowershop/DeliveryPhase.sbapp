@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+<modify version="11.0.2">
     <add>
         <gui.metadata>
             <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/DeliveryModule.png"/>
@@ -17,32 +17,32 @@
             <param name="table-schema" value="ActiveDeliveriesTableSchema"/>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="434"/>
-            <param name="gui:y" value="166"/>
+            <param name="gui:x" value="52"/>
+            <param name="gui:y" value="406"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
         <stream name="TagDeliveryDoneInput" schema="DeliveryConfirmation">
-            <param name="gui:x" value="133"/>
-            <param name="gui:y" value="190"/>
+            <param name="gui:x" value="-79"/>
+            <param name="gui:y" value="99"/>
         </stream>
         <stream name="TagPickupDoneInput" schema="PickUpConfirmation">
-            <param name="gui:x" value="133"/>
-            <param name="gui:y" value="100"/>
+            <param name="gui:x" value="-79"/>
+            <param name="gui:y" value="209"/>
         </stream>
         <box name="TickDeliveryTimeAlerts" type="metronome">
             <output port="1" stream="out:TickDeliveryTimeAlerts_1"/>
             <param name="interval" value="10"/>
             <param name="timestamp-field" value="now"/>
-            <param name="gui:x" value="-31"/>
-            <param name="gui:y" value="279"/>
+            <param name="gui:x" value="-79"/>
+            <param name="gui:y" value="-11"/>
         </box>
         <box name="TickPickupTimeAlerts" type="metronome">
             <output port="1" stream="out:TickPickupTimeAlerts_1"/>
             <param name="interval" value="10"/>
             <param name="timestamp-field" value="now"/>
-            <param name="gui:x" value="-31"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:x" value="-79"/>
+            <param name="gui:y" value="-121"/>
         </box>
         <box name="FindLateForDelivery" type="query">
             <input port="1" stream="out:TickDeliveryTimeAlerts_1"/>
@@ -70,8 +70,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="133"/>
-            <param name="gui:y" value="279"/>
+            <param name="gui:x" value="62"/>
+            <param name="gui:y" value="-11"/>
         </box>
         <box name="FindLateForPickup" type="query">
             <input port="1" stream="out:TickPickupTimeAlerts_1"/>
@@ -99,8 +99,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="132"/>
-            <param name="gui:y" value="6"/>
+            <param name="gui:x" value="62"/>
+            <param name="gui:y" value="-121"/>
         </box>
         <box name="TagDeliveryDone" type="query">
             <input port="1" stream="TagDeliveryDoneInput"/>
@@ -131,8 +131,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="295"/>
-            <param name="gui:y" value="189"/>
+            <param name="gui:x" value="62"/>
+            <param name="gui:y" value="99"/>
         </box>
         <box name="TagPickupDone" type="query">
             <input port="1" stream="TagPickupDoneInput"/>
@@ -163,8 +163,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="295"/>
-            <param name="gui:y" value="99"/>
+            <param name="gui:x" value="62"/>
+            <param name="gui:y" value="209"/>
         </box>
         <box name="TagDeliveryAlertSent" type="query">
             <input port="1" stream="out:FindLateForDelivery_1"/>
@@ -200,8 +200,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="295"/>
-            <param name="gui:y" value="279"/>
+            <param name="gui:x" value="334"/>
+            <param name="gui:y" value="-11"/>
         </box>
         <box name="TagPickupAlertSent" type="query">
             <input port="1" stream="out:FindLateForPickup_1"/>
@@ -237,16 +237,16 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="295"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:x" value="334"/>
+            <param name="gui:y" value="-121"/>
         </box>
         <output-stream name="TagDeliveryAlertSentOutput">
-            <param name="gui:x" value="444"/>
-            <param name="gui:y" value="279"/>
+            <param name="gui:x" value="492"/>
+            <param name="gui:y" value="-11"/>
         </output-stream>
         <output-stream name="TagPickupAlertSentOutput">
-            <param name="gui:x" value="444"/>
-            <param name="gui:y" value="5"/>
+            <param name="gui:x" value="492"/>
+            <param name="gui:y" value="-121"/>
         </output-stream>
     </add>
 </modify>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_5a3d853e254e1c51e849f910970514d129ebafdd">
+<modify version="11.0.2">
     <add>
         <gui.metadata>
             <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/ActivityMonitoringModule.png"/>
@@ -32,8 +32,8 @@
             </table-schema>
             <param name="truncate" value="false"/>
             <preload format="csv" mode="empty"/>
-            <param name="gui:x" value="268"/>
-            <param name="gui:y" value="354"/>
+            <param name="gui:x" value="262"/>
+            <param name="gui:y" value="352"/>
             <param name="gui:width" value="80"/>
             <param name="gui:height" value="56"/>
         </data>
@@ -44,24 +44,24 @@
                 <field name="driver_id" type="int"/>
                 <field name="committed_time" type="timestamp"/>
             </schema>
-            <param name="gui:x" value="-67"/>
-            <param name="gui:y" value="244"/>
+            <param name="gui:x" value="-84"/>
+            <param name="gui:y" value="242"/>
         </stream>
         <box name="DailyAssignmentReport" type="metronome">
             <property name="description" value="A daily report timer"/>
             <output port="1" stream="out:DailyAssignmentReport_1"/>
             <param name="interval" value="86400"/>
             <param name="timestamp-field" value="time"/>
-            <param name="gui:x" value="-67"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="-84"/>
+            <param name="gui:y" value="9"/>
         </box>
         <box name="HourlyAssignmentCheck" type="metronome">
             <property name="description" value="An hourly report timer"/>
             <output port="1" stream="out:HourlyAssignmentCheck_1"/>
             <param name="interval" value="3600"/>
             <param name="timestamp-field" value="time"/>
-            <param name="gui:x" value="-67"/>
-            <param name="gui:y" value="121"/>
+            <param name="gui:x" value="-84"/>
+            <param name="gui:y" value="119"/>
         </box>
         <box name="GetAssignStatsForAvg" type="query">
             <input port="1" stream="out:DailyAssignmentReport_1"/>
@@ -91,8 +91,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="104"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="88"/>
+            <param name="gui:y" value="9"/>
         </box>
         <box name="UpdateDailyAssignmentTable" type="query">
             <input port="1" stream="RecordAssignmentInput"/>
@@ -134,8 +134,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="104"/>
-            <param name="gui:y" value="244"/>
+            <param name="gui:x" value="88"/>
+            <param name="gui:y" value="242"/>
         </box>
         <box name="UpdateHourlyAssignments" type="query">
             <input port="1" stream="out:HourlyAssignmentCheck_1"/>
@@ -162,8 +162,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="104"/>
-            <param name="gui:y" value="121"/>
+            <param name="gui:x" value="88"/>
+            <param name="gui:y" value="119"/>
         </box>
         <box name="AssignAvgNVariance" type="map">
             <input port="1" stream="out:GetAssignStatsForAvg_1"/>
@@ -176,8 +176,8 @@
                     <remove field="metrics"/>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="278"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="272"/>
+            <param name="gui:y" value="9"/>
         </box>
         <box name="UpdateHourlyStatistics" type="map">
             <input port="1" stream="out:UpdateHourlyAssignments_1"/>
@@ -196,8 +196,8 @@
                     <remove field="assignments"/>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="278"/>
-            <param name="gui:y" value="121"/>
+            <param name="gui:x" value="272"/>
+            <param name="gui:y" value="119"/>
         </box>
         <box name="GetAssignStats" type="query">
             <input port="1" stream="out:AssignAvgNVariance_1"/>
@@ -224,8 +224,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="435"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="439"/>
+            <param name="gui:y" value="9"/>
         </box>
         <box name="WriteHourlyStatistics" type="query">
             <input port="1" stream="out:UpdateHourlyStatistics_1"/>
@@ -262,8 +262,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="435"/>
-            <param name="gui:y" value="121"/>
+            <param name="gui:x" value="439"/>
+            <param name="gui:y" value="119"/>
         </box>
         <box name="ConfidenceIntervals" type="map">
             <input port="1" stream="out:GetAssignStats_1"/>
@@ -277,8 +277,8 @@
                     <remove field="stderror"/>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="553"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="557"/>
+            <param name="gui:y" value="9"/>
         </box>
         <box name="CalculateAvgsPerMonthPerDriver" type="map">
             <input port="1" stream="out:ConfidenceIntervals_1"/>
@@ -294,13 +294,13 @@
                     <include field="IsImproving">improving_driver</include>
                 </expressions>
             </target-list>
-            <param name="gui:x" value="716"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="728"/>
+            <param name="gui:y" value="9"/>
         </box>
         <output-stream name="CalculateAvgsPerDayPerDriverOutput">
-            <param name="gui:x" value="969"/>
-            <param name="gui:y" value="-84"/>
-            <param name="gui:bends:1" value="822,41;844,-54"/>
+            <param name="gui:x" value="987"/>
+            <param name="gui:y" value="-86"/>
+            <param name="gui:bends:1" value="841,39;863,-56"/>
         </output-stream>
         <box name="DeleteDailyStats" type="query">
             <input port="1" stream="CalculateAvgsPerDayPerDriverOutput"/>
@@ -326,8 +326,8 @@
             <target-list name="no-match">
                 <item name="input" selection="none"/>
             </target-list>
-            <param name="gui:x" value="969"/>
-            <param name="gui:y" value="11"/>
+            <param name="gui:x" value="987"/>
+            <param name="gui:y" value="9"/>
         </box>
     </add>
 </modify>

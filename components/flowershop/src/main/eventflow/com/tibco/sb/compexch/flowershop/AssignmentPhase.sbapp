@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<modify version="10.3.0-SNAPSHOT_da9f9a7bc14b4b5f9d13b1913fde8e532b2c7b9f">
+<modify version="11.0.2">
     <add>
         <gui.metadata>
             <property name="icon-canvas-24x24-or-48x48" value="src/main/resources/icons/AssignModule.png"/>
@@ -227,6 +227,7 @@
                 <item name="input" selection="all"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="none"/>
@@ -265,6 +266,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="none"/>
@@ -277,6 +279,7 @@
             </target-list>
             <param name="gui:x" value="786"/>
             <param name="gui:y" value="-155"/>
+            <param name="gui:bends:1" value="754,-126;754,-125"/>
         </box>
         <box name="GetStoreAssignProcess" type="query">
             <input port="1" stream="out:GetAssignableDeliveryRequests_1"/>
@@ -296,6 +299,7 @@
                     <include field="manual_process"/>
                 </item>
                 <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="none"/>
@@ -354,6 +358,7 @@
             </target-list>
             <param name="gui:x" value="764"/>
             <param name="gui:y" value="366"/>
+            <param name="gui:bends:1" value="703,398;703,396"/>
         </box>
         <output-stream name="NoManualAssignmentsAlertOutput">
             <param name="gui:x" value="1891"/>
@@ -434,11 +439,12 @@
             <param name="expression.1" value="!manual_process"/>
             <param name="gui:x" value="1152"/>
             <param name="gui:y" value="13"/>
-            <param name="gui:bends:1" value="1102,130;1122,43"/>
+            <param name="gui:bends:1" value="1101,130;1121,43"/>
         </box>
         <output-stream name="NoBidsAlertOutput">
             <param name="gui:x" value="1304"/>
             <param name="gui:y" value="258"/>
+            <param name="gui:bends:1" value="1257,289;1257,288"/>
         </output-stream>
         <box name="ForEachDriver" type="iterate">
             <property name="description" value="Begins a &quot;foreach&quot; loop, iterating over each driver. Doing this in conjunction with the aggregate downstream allows us to collect each driver's ranking, collect it in a (sorted-by-rank) list in the aggregate window"/>
@@ -470,7 +476,7 @@
             </target-list>
             <param name="gui:x" value="1275"/>
             <param name="gui:y" value="103"/>
-            <param name="gui:bends:1" value="1248,53;1265,133"/>
+            <param name="gui:bends:1" value="1247,53;1265,133"/>
         </box>
         <output-stream name="AutoAssignOutput">
             <param name="gui:x" value="1434"/>
@@ -526,6 +532,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="none"/>

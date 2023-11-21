@@ -8,7 +8,7 @@
     <groupId>com.tibco.ep.community.components</groupId>
     <artifactId>flowershop</artifactId>
     <packaging>ep-eventflow-fragment</packaging>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <name>Fast Flower Delivery Sample Application</name>
     <description>Implements the Fast Flower Delivery use case from the Event Processing in Action book</description>
 
@@ -16,7 +16,7 @@
     <parent>
         <groupId>com.tibco.ep.sb.parent</groupId>
         <artifactId>ep-eventflow-fragment</artifactId>
-        <version>10.5.0</version>
+        <version>11.0.1</version>
         <relativePath/>
     </parent>
 
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.tibco.ep.sb.adapter</groupId>
             <artifactId>fileio</artifactId>
-            <version>10.5.0</version>
+            <version>11.0.1</version>
         </dependency>
     </dependencies>
 </project>

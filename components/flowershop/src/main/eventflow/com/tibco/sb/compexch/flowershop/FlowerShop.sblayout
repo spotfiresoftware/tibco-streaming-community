@@ -38,19 +38,26 @@
     <component name="PhaseFour">
         <param name="gui:x" value="35"/>
         <param name="gui:y" value="-655"/>
+        <param name="gui:bends:1" value="-102,-678;-92,-635"/>
+        <param name="gui:bends:2" value="-345,-624;-341,-608;-150,-608;-150,-615"/>
     </component>
     <component name="PhaseOne">
         <param name="gui:x" value="-250"/>
         <param name="gui:y" value="-1001"/>
+        <param name="gui:bends:1" value="-315,-958;-313,-971"/>
     </component>
     <component name="PhaseThree">
         <param name="gui:x" value="-244"/>
         <param name="gui:y" value="-698"/>
+        <param name="gui:bends:1" value="-361,-704;-355,-678"/>
+        <param name="gui:bends:2" value="-275,-624;-267,-658"/>
     </component>
     <component name="PhaseTwo">
         <param name="gui:x" value="-250"/>
         <param name="gui:y" value="-856"/>
         <param name="gui:height" value="65"/>
+        <param name="gui:bends:1" value="-318,-872;-310,-836"/>
+        <param name="gui:bends:2" value="-290,-788;-286,-811"/>
     </component>
     <component name="RawGPS2CityRegion1">
         <param name="gui:x" value="290"/>
@@ -101,54 +108,68 @@
     <component name="_">
         <param name="gui:x" value="-95"/>
         <param name="gui:y" value="-772"/>
+        <param name="gui:bends:1" value="-159,-811;-145,-752"/>
+        <param name="gui:bends:2" value="-112,-788;-105,-732"/>
     </component>
     <component name="AutoAssignOut">
         <param name="gui:x" value="52"/>
         <param name="gui:y" value="-901"/>
+        <param name="gui:bends:1" value="-82,-811;-68,-871"/>
     </component>
     <component name="BidRequestOut">
         <param name="gui:x" value="53"/>
         <param name="gui:y" value="-1055"/>
+        <param name="gui:bends:1" value="-93,-981;-83,-1025"/>
     </component>
     <component name="DeliveryAlert">
         <param name="gui:x" value="299"/>
         <param name="gui:y" value="-942"/>
+        <param name="gui:bends:1" value="152,-678;210,-912"/>
     </component>
     <component name="ImprovementNote">
         <param name="gui:x" value="257"/>
         <param name="gui:y" value="-592"/>
+        <param name="gui:bends:1" value="127,-625;141,-562"/>
     </component>
     <component name="ManualAssignOut">
         <param name="gui:x" value="52"/>
         <param name="gui:y" value="-982"/>
+        <param name="gui:bends:1" value="-31,-820;1,-952"/>
     </component>
     <component name="MonthlySummary">
         <param name="gui:x" value="269"/>
         <param name="gui:y" value="-694"/>
+        <param name="gui:bends:1" value="192,-742;210,-664"/>
     </component>
     <component name="NoBidRequestsAlert">
         <param name="gui:x" value="396"/>
         <param name="gui:y" value="-1001"/>
+        <param name="gui:bends:1" value="9,-961;33,-1061;374,-1061;386,-971"/>
     </component>
     <component name="NoBiddersAlert">
         <param name="gui:x" value="300"/>
         <param name="gui:y" value="-1047"/>
+        <param name="gui:bends:1" value="-70,-836;-12,-1074;231,-1074;245,-1017"/>
     </component>
     <component name="NoDriversAssignedByStoreAlert">
         <param name="gui:x" value="299"/>
         <param name="gui:y" value="-843"/>
+        <param name="gui:bends:1" value="7,-828;9,-813"/>
     </component>
     <component name="PickupAlert">
         <param name="gui:x" value="396"/>
         <param name="gui:y" value="-891"/>
+        <param name="gui:bends:1" value="191,-658;237,-849;375,-849;377,-861"/>
     </component>
     <component name="RankingDecrease">
         <param name="gui:x" value="412"/>
         <param name="gui:y" value="-694"/>
+        <param name="gui:bends:1" value="240,-635;260,-718;330,-718;342,-664"/>
     </component>
     <component name="RankingIncrease">
         <param name="gui:x" value="400"/>
         <param name="gui:y" value="-593"/>
+        <param name="gui:bends:1" value="120,-615;122,-601;320,-601;328,-563"/>
     </component>
     <component name="Alerts">
         <param name="gui:x" value="215"/>
