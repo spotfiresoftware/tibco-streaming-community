@@ -24,7 +24,7 @@
 	<licenses>
 	    <license>
 	        <name>BSD 3-Clause License</name>
-	        <url>https://raw.githubusercontent.com/TIBCOSoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
+	        <url>https://raw.githubusercontent.com/spotfiresoftware/tibco-streaming-community/master/docs/Components-LICENSE</url>
 	        <distribution>repo</distribution>
 	    </license>
 	</licenses>
