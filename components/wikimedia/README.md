@@ -1,10 +1,10 @@
 # Wikipedia Monitoring
 
-**Visualize live data in LiveView Web using a LiveView project in StreamBase Studio**
+**Visualize live data in TIBCO LiveView&trade; Web using a LiveView project in TIBCO StreamBase&reg; Studio**
 
 This demo uses a recording of the live data feed from the English language Wikipedia. The feed emits a record every time a page is edited, and about 20 minutes of this feed were captured into a CSV file.
 
-A Feed Simulation streams the contents of the CSV file to the input port of a StreamBase EventFlow module.
+A Feed Simulation streams the contents of the CSV file to the input port of a TIBCO StreamBase EventFlow&trade; module.
 
 The EventFlow module transforms the raw Wikipedia data, geo-tagging data when able and pre-processing some of the data prior to sending it to the LiveView server.
 
@@ -12,13 +12,13 @@ The LiveView server accepts the incoming data into various Tables, and makes the
 
 ## Visualizing LiveView Data
 
-The second step of the demo is to open your web browser to LiveView Web, or start Spotfire LiveView Desktop (if you have it installed) and have it connect to the LiveView server started earlier in this demo.
+The second step of the demo is to open your web browser to LiveView Web, or start TIBCO LiveView&trade; Desktop (if you have it installed) and have it connect to the LiveView server started earlier in this demo.
 
 Once the feed simulation is started, data will begin to flow through the EventFlow module and the visualizations will begin to populate.
 
 ## LiveView Details
 
-LiveView Web and LiveView Desktop can both visualize data available on a LiveView Server hundreds of ways, using the full power of LiveQL to issue continuous queries against LiveView tables in order to display simple grids to complex graphical transformations of the data on a map, chart, or even custom visualizations.
+LiveView Web and LiveView Desktop can both visualize data available on a LiveView server hundreds of ways, using the full power of LiveQL to issue continuous queries against LiveView tables in order to display simple grids to complex graphical transformations of the data on a map, chart, or even custom visualizations.
 
 The LiveView Web dashboard contains various tabs (pages):
 

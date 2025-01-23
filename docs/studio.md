@@ -1,15 +1,15 @@
-# Using in Spotfire StreamBase Studio&trade;
+# Using in TIBCO StreamBase&reg; Studio
 
-These samples are kept on-line in github - this allows browsing of the samples on-line,
-support of contributions outside of Spotfire engineering and updates outside of the main
+These samples are kept online in Github - this allows browsing of the samples online,
+support of contributions outside of TIBCO engineering and updates outside of the main
 product release lifecycle.
 
-The samples can also be imported into Spotfire StreamBase Studio&trade; :
+The samples can also be imported into StreamBase Studio.
 
-## Import using Spotfire StreamBase Studio&trade;
+## Import using StreamBase Studio 
 
 * Use **File -> Import Samples and Community Content...** menu option.
-* Agree to Spotfire&reg; Streaming Community terms and conditions.
+* Agree to TIBCO&reg; Streaming Community terms and conditions.
 * Choose what sample(s) to import:
 
 ![smartimport](loadsamples.gif)
@@ -27,12 +27,12 @@ This will create a copy the projects to the workspace and any changes to the imp
 
 ## Working with multiple projects
 
-By default, projects are organized in Spotfire StreamBase Studio&trade; in a flat structure :
+By default, projects are organized in StreamBase Studio in a flat structure:
 
 ![flat](flat.png)
 
 With multiple projects ( such as importing all the samples ) this can become confusing.  Use
-**Projects Presentation -> Hierarchical** for a more structured organization :
+**Projects Presentation -> Hierarchical** for a more structured organization:
 
 ![hierarchical](hierarchical.gif)
 

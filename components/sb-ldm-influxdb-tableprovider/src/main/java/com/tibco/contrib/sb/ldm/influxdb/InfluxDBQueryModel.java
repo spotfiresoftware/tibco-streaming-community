@@ -1,5 +1,5 @@
 /*
-* Copyright © 2019. Cloud Software Group, Inc.
+* Copyright © 2019-2025. Cloud Software Group, Inc.
 * This file is subject to the license terms contained
 * in the license file that is distributed with this file.
 */
@@ -22,7 +22,7 @@ import com.streambase.sb.util.Util;
  * Implementation Notes:
  * <p>
  * <ul>
- * <li>Spotfire LiveView Desktop uses a standard "WHERE TRUE" clause, that InfluxDB does not accept,
+ * <li>TIBCO LiveView Desktop uses a standard "WHERE TRUE" clause, that InfluxDB does not accept,
  *       and thus this is replaced with a different condition that always holds true</li>
  *       
  * <li>influxdb recommends double-quoting all identifiers (in part, they accept spaces, start with numbers, etc.),

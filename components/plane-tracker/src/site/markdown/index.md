@@ -1,17 +1,17 @@
 
-# LiveViewTM Plane Tracker Sample
+# TIBCO LiveView&trade; Plane Tracker Sample
 
-This sample decodes airplane information using SDR (Software Defined Radio) and third party software called dump1090. It parses airplane data into tuples and publishes to LiveViewTM Server using a StreamBase® eventflow application. You can use LiveViewTM Web on localhost:10080 in a web browser to see plane data in your area to be displayed on a live map. You can also view additional details for each plane using a customized LiveViewTM Web card to show airplanes's manufacturing and ownership information if any.
+This sample decodes airplane information using SDR (Software Defined Radio) and third party software called dump1090. It parses airplane data into tuples and publishes to LiveView Server using a TIBCO StreamBase EventFlow&trade; application. You can use LiveView Web on http://localhost:11080 in a web browser to see plane data in your area to be displayed on a live map. You can also view additional details for each plane using a customized LiveView Web card to show airplanes's manufacturing and ownership information if any.
 
 # Prerequisites
 
 * OS: Windows 10
 * JDK: 8
-* StreamBase StudioTM: 10.4.3
+* TIBCO StreamBase&reg; Studio: 10.4.3
 
 # Setup
 
-* Clone this repository https://github.com/tonywang1997/PlaneTracker_TIBCO.git to your local machine (currently only supports Windows) and import into StreamBase StudioTM as Maven project.
+* Clone this repository https://github.com/tonywang1997/PlaneTracker_TIBCO.git to your local machine (currently only supports Windows) and import into StreamBase Studio as Maven project.
 
 * Open PlanePublisher.sbapp in src/main/eventflow and double click the InputAdaptor icon. In the property tab for InputAdaptor, change the Region parameter to your location following the format of NA-Bos (North America - Boston).
 
@@ -25,14 +25,14 @@ This sample decodes airplane information using SDR (Software Defined Radio) and 
 	
 	![command line](images/planetracker1.png)
 	
-* After you can see data showing in the terminal window, from StreamBase Studio right click on PlaneTracker and choose run as LiveViewTM Fragment.
+* After you can see data showing in the terminal window, from StreamBase Studio right click on PlaneTracker and choose run as LiveView Fragment.
 	
-* Once the sample has successfully loaded, run LiveView Web by typing localhost:10080 into a browser. Look for plane data publishing to LiveView server and also planes moving on the embedded GeoMap.
+* Once the sample has successfully loaded, run LiveView Web by visiting http://localhost:11080 in a browser. Look for plane data publishing to LiveView server and also planes moving on the embedded GeoMap.
 
 	![liveview web dashboard](images/planetracker2.png)
 
 	
-* Spotfire LiveViewTM Web also includes a customized visualization card which can render a third party web site displaying the plane detail once you select a plane from the map or in card "Planes". Look for the custom card's resource file in src/main/liveview/lv-web/plugins/com.tibco.sb.ldm.web.plugins.queryiframe
+* LiveView Web also includes a customized visualization card which can render a third party web site displaying the plane detail once you select a plane from the map or in card "Planes". Look for the custom card's resource file in src/main/liveview/lv-web/plugins/com.tibco.sb.ldm.web.plugins.queryiframe
 	
 	![custom card](images/planetracker3.png)
 	  

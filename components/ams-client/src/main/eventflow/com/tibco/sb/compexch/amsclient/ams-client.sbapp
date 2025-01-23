@@ -201,7 +201,7 @@
         </box>
         <output-stream name="AMSOut"/>
         <gui.note name="Note">
-            <property name="description" value="Java operator that demonstates the use of the Spotfire Artifact Management Server's REST API for listing projects and their artifacts and for fetching, adding, updating, and deleting artifacts."/>
+            <property name="description" value="Java operator that demonstates the use of the TIBCO Streaming Artifact Management Server's REST API for listing projects and their artifacts and for fetching, adding, updating, and deleting artifacts."/>
             <note-target name="AMS"/>
         </gui.note>
     </add>

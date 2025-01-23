@@ -1,6 +1,6 @@
 # Escaped Identifier Mapper Operator
 
-This project provides a Spotfire StreamBase Operator that simply maps its input to its output, but renaming any field name that is escaped (those with "#...") according to a simple prefix configured in the properties. 
+This project provides a TIBCO Streaming Operator that simply maps its input to its output, but renaming any field name that is escaped (those with "#...") according to a simple prefix configured in the properties. 
 
 
 # Gotchas

@@ -1,5 +1,5 @@
 /*
-* Copyright © 2019. Cloud Software Group, Inc.
+* Copyright © 2019-2025. Cloud Software Group, Inc.
 * This file is subject to the license terms contained
 * in the license file that is distributed with this file.
 */
@@ -54,7 +54,7 @@ import com.streambase.sb.operator.Parameterizable;
 import com.streambase.sb.operator.TypecheckException;
 
 /**
- * The AMSClient Java operator demonstrates using several of the key end points of the Spotfire Artifact Management Server's REST API.
+ * The AMSClient Java operator demonstrates using several of the key end points of the TIBCO Streaming Artifact Management Server's REST API.
  */
 @SuppressWarnings("serial")
 public class AMSClient extends Operator implements Parameterizable {
